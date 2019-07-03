@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:id="pane" styleClass="card">
+    <HBox styleClass="card__header">
+        <Text fx:id="cardName" styleClass="card__header-title" />
+    </HBox>
+    <HBox styleClass="card__footer" alignment="center_right" spacing="10">
+        <Button text="Edit" onAction="#select" styleClass="btn-secondary" />
+        <Button text="Connect" onAction="#connect" styleClass="btn-primary" />
+    </HBox>
+</VBox>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.collections.*?> 
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox styleClass="card" xmlns:fx="http://javafx.com/fxml">
+     <VBox styleClass="card__header">
+          <Text styleClass="card__header-title," text="Indexes" />
+     </VBox>
+     <TableView fx:id="indexes" editable="false">
+          <columns>
+               <TableColumn text="Name" prefWidth="${(indexes.width-4)*0.5}">
+                    <cellValueFactory><PropertyValueFactory property="name" /></cellValueFactory>
+               </TableColumn>
+               <TableColumn text="Name" prefWidth="${(indexes.width-4)*0.5}">
+                    <cellValueFactory><PropertyValueFactory property="columnsString" /></cellValueFactory>
+               </TableColumn>
+          </columns>
+     </TableView>
+     <HBox styleClass="card__footer" spacing="10">
+          <Button text="+" onAction="#addIndex" styleClass="btn-primary" />
+     </HBox>
+</VBox>

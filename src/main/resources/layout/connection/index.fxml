@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml">
+    <center>
+        <ScrollPane fitToWidth="true">
+            <VBox>
+                <HBox styleClass="container">
+                    <HBox HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                        <Text text="Connections" styleClass="title" />
+                    </HBox>
+                    <Button text="+" onAction="#openCreateConnection" styleClass="btn-primary" />
+                </HBox>
+                <FlowPane styleClass="center-pane" fx:id="connectionsView" vgap="20" hgap="20"></FlowPane>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>

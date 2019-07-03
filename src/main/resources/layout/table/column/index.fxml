@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.collections.*?> 
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox styleClass="card" xmlns:fx="http://javafx.com/fxml">
+     <VBox styleClass="card__header">
+          <Text styleClass="card__header-title," text="Columns" />
+     </VBox>
+     <TableView fx:id="columns" editable="false">
+          <columns>
+               <TableColumn text="Name" prefWidth="${(columns.width-4)*0.55}">
+                    <cellValueFactory><PropertyValueFactory property="name" /></cellValueFactory>
+               </TableColumn>
+               <TableColumn styleClass="column--align-right" text="Format" prefWidth="${(columns.width-4)*0.15}">
+                    <cellValueFactory><PropertyValueFactory property="format" /></cellValueFactory>
+               </TableColumn>
+               <TableColumn styleClass="column--align-right" text="Default" prefWidth="${(columns.width-4)*0.15}">
+                    <cellValueFactory><PropertyValueFactory property="defaultValue" /></cellValueFactory>
+               </TableColumn>
+               <TableColumn styleClass="column--align-right" text="NULL" prefWidth="${(columns.width-4)*0.15}">
+                    <cellValueFactory><PropertyValueFactory property="enableNull" /></cellValueFactory>
+               </TableColumn>
+          </columns>
+     </TableView>
+     <HBox styleClass="card__footer" spacing="10">
+          <Button text="+" onAction="#addColumn" styleClass="btn-primary" />
+     </HBox>
+</VBox>
