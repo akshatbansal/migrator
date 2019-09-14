@@ -28,7 +28,14 @@ dependencies {
     implementation("org.mariadb.jdbc:mariadb-java-client:2.1.2")
 
     // Use JUnit test framework
-    testImplementation("junit:junit:4.12")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.5.2")
+}
+
+tasks.test {
+	useJUnitPlatform()
+	testLogging {
+		events("passed", "skipped", "failed")
+	}
 }
 
 application {

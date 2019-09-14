@@ -8,6 +8,18 @@
             "type": "shell",
             "command": "./gradlew run",
             "problemMatcher": []
+        },
+        {
+            "label": "test",
+            "type": "shell",
+            "command": "gradle test",
+            "problemMatcher": []
+        },
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "gradle build",
+            "problemMatcher": []
         }
     ]
 }

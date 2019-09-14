@@ -50,7 +50,16 @@ public class App extends Application {
         
         Parent root = (Parent) ControllerHelper.createViewNode(mainController, "/layout/main.fxml");        
         Scene scene = new Scene(root, 1280, 720);
-        scene.getStylesheets().add(getClass().getResource("/styles/main.css").toExternalForm());
+        scene.getStylesheets().addAll(
+            getClass().getResource("/styles/layout.css").toExternalForm(),
+            getClass().getResource("/styles/text.css").toExternalForm(),
+            getClass().getResource("/styles/button.css").toExternalForm(),
+            getClass().getResource("/styles/table.css").toExternalForm(),
+            getClass().getResource("/styles/card.css").toExternalForm(),
+            getClass().getResource("/styles/form.css").toExternalForm(),
+            getClass().getResource("/styles/scroll.css").toExternalForm(),
+            getClass().getResource("/styles/main.css").toExternalForm()
+        );
         primaryStage.setTitle("Migrator");
         primaryStage.setScene(scene);
         primaryStage.show();

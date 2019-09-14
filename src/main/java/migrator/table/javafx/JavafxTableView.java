@@ -42,7 +42,7 @@ public class JavafxTableView implements TableView {
 
     @FXML
     public void initialize() {
-        this.title.setText(this.table.getName());
+        this.title.textProperty().bind(this.table.nameProperty());
         ControllerHelper.replaceNode(this.breadcrumpsContainer, this.breadcrumpsComponent);
         ControllerHelper.addNode(this.body, this.tableGuiKit.createColumnList(this.columnService));
         ControllerHelper.addNode(this.body, this.tableGuiKit.createIndexList(this.indexService));

@@ -17,7 +17,7 @@
                <TableColumn text="Name" prefWidth="${(indexes.width-4)*0.5}">
                     <cellValueFactory><PropertyValueFactory property="name" /></cellValueFactory>
                </TableColumn>
-               <TableColumn text="Name" prefWidth="${(indexes.width-4)*0.5}">
+               <TableColumn text="Columns" prefWidth="${(indexes.width-4)*0.5}">
                     <cellValueFactory><PropertyValueFactory property="columnsString" /></cellValueFactory>
                </TableColumn>
           </columns>
