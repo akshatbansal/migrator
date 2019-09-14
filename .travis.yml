@@ -5,7 +5,7 @@ os: linux
 dist: trusty
 jdk: 
   - openjdk12
-  - openjdk11git 
+  - openjdk11
 
 script:
   - ./gradlew build
