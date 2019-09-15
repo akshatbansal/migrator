@@ -1,26 +1,14 @@
 package migrator;
 
-import java.util.Arrays;
-
 import javafx.application.Application;
-import javafx.beans.Observable;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.ListChangeListener.Change;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
-import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
-import javafx.util.Callback;
-import migrator.connection.service.ConnectionService;
-import migrator.database.service.DatabaseService;
+import migrator.database.service.DatabaseServerConnectionFactory;
 import migrator.javafx.Container;
 import migrator.javafx.helpers.ControllerHelper;
-import migrator.persistance.ListPersistance;
 import migrator.router.BasicRouter;
 import migrator.router.Router;
-import migrator.table.service.TableService;
 
 public class App extends Application {
 
@@ -42,7 +30,7 @@ public class App extends Application {
         //     listPersistance.store("Migrator.model.connections", Arrays.asList(connections.toArray()));
         // });
 
-        BusinessLogic businessLogic = new BusinessLogic();
+        BusinessLogic businessLogic = new BusinessLogic(new DatabaseServerConnectionFactory());
         Router router = new BasicRouter();
         Gui gui = new Gui(router, businessLogic);
         Container container = new Container(businessLogic, gui, router);

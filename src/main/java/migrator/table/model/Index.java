@@ -37,6 +37,10 @@ public class Index {
         return this.name;
     }
 
+    public String getName() {
+        return this.name.get();
+    }
+
     public ObservableList<String> columnsProperty() {
         return this.columns;
     }

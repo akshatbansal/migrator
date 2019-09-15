@@ -9,7 +9,6 @@ import migrator.BusinessLogic;
 import migrator.breadcrumps.RouterBreadcrump;
 import migrator.database.model.DatabaseConnection;
 import migrator.database.service.ServerConnection;
-import migrator.database.service.ServerKit;
 import migrator.javafx.Container;
 import migrator.router.Route;
 import migrator.router.Router;
@@ -20,14 +19,12 @@ public class TableRoute implements Route {
     protected MainRenderer renderer;
     protected GuiKit guiKit;
     protected BusinessLogic businessLogic;
-    protected ServerKit serverKit;
     protected Router router;
 
-    public TableRoute(MainRenderer renderer, ServerKit serverKit, Container container) {
+    public TableRoute(MainRenderer renderer, Container container) {
         this.renderer = renderer;
         this.guiKit = container.getGui().getTableKit();
         this.businessLogic = container.getBusinessLogic();
-        this.serverKit = serverKit;
         this.router = container.getRouter();
     }
 

@@ -26,6 +26,10 @@ public class Column {
         return this.name;
     }
 
+    public String getName() {
+        return this.name.get();
+    }
+
     public StringProperty formatProperty() {
         return this.format;
     }

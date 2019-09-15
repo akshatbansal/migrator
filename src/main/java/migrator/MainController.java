@@ -7,8 +7,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.VBox;
 import migrator.component.PaneRenderer;
-import migrator.database.service.MysqlServerKit;
+import migrator.database.service.ServerConnectionFactory;
 import migrator.javafx.Container;
+import migrator.javafx.router.ChangeRoute;
 import migrator.javafx.router.ConnectionsRoute;
 import migrator.javafx.router.DatabasesRoute;
 import migrator.javafx.router.MainRenderer;
@@ -38,13 +39,13 @@ public class MainController implements Initializable {
     }
 
     private void registerRoutes() {
-        MysqlServerKit mysqlServerKit = new MysqlServerKit();
         MainRenderer mainRenderer = new MainRenderer(this.centerPane, this.leftPane);
 
         this.router.connect("connections", new ConnectionsRoute(mainRenderer, this.container));
-        this.router.connect("databases", new DatabasesRoute(mainRenderer, mysqlServerKit, this.container));
-        this.router.connect("tables", new TableRoute(mainRenderer, mysqlServerKit, this.container));
-        this.router.connect("tables.view", new TableViewRoute(mainRenderer, mysqlServerKit, this.container));
+        this.router.connect("databases", new DatabasesRoute(mainRenderer, this.container));
+        this.router.connect("tables", new TableRoute(mainRenderer, this.container));
+        this.router.connect("tables.view", new TableViewRoute(mainRenderer, this.container));
+        this.router.connect("change", new ChangeRoute(mainRenderer, this.container));
         this.router.show("connections");
     }
 

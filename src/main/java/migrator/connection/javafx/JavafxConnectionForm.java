@@ -16,6 +16,7 @@ public class JavafxConnectionForm implements ConnectionForm {
     protected Node node;
     protected ConnectionService connectionsService;
     protected Router router;
+    protected Connection connection;
 
     @FXML protected TextField name;
     @FXML protected ComboBox<String> driver;
@@ -34,6 +35,10 @@ public class JavafxConnectionForm implements ConnectionForm {
     }
 
     protected void setConnection(Connection connection) {
+        this.connection = connection;
+        if (connection == null) {
+            return;
+        }
         this.name.textProperty().bindBidirectional(connection.nameProperty());
         this.host.textProperty().bindBidirectional(connection.hostProperty());
         this.port.textProperty().bindBidirectional(connection.portProperty());
@@ -64,6 +69,7 @@ public class JavafxConnectionForm implements ConnectionForm {
     }
 
     @FXML public void connect() {
-        this.router.show("databases", this.connectionsService.getSelected().get());
+        this.connectionsService.connect(this.connection);
+        this.router.show("databases", this.connection);
     }
 }

@@ -24,12 +24,12 @@ public class JavafxConnectionGuiKit implements ConnectionGuiKit {
     }
 
     @Override
-    public ConnectionForm createForm(ConnectionService connectionService) {
-        return new JavafxConnectionForm(connectionService, this.router);
+    public ConnectionForm createForm() {
+        return new JavafxConnectionForm(this.connectionService, this.router);
     }
 
     @Override
-    public ConnectionList createList(ConnectionService connectionService) {
-        return new JavafxConnectionList(this, connectionService, this.router);
+    public ConnectionList createList() {
+        return new JavafxConnectionList(this, this.connectionService, this.router);
     }
 }

@@ -34,14 +34,6 @@ public class MysqlConnection implements ServerConnection {
         this.indexes = FXCollections.observableArrayList();
     }
 
-    public MysqlConnection(migrator.connection.model.Connection connection) {
-        this(connection.getUrl(), connection.getUser(), connection.getPassword());
-    }
-
-    public MysqlConnection(DatabaseConnection connection) {
-        this(connection.getUrl(), connection.getConnection().getUser(), connection.getConnection().getPassword());
-    }
-
     @Override
     public void connect() {
         try {

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+
+<BorderPane xmlns:fx="http://javafx.com/fxml">
+    <center>
+        <VBox >
+            <HBox styleClass="form__row">
+                <HBox styleClass="form__row-label" alignment="center_left">
+                    <Text text="name" />
+                </HBox>
+                <TextField fx:id="name" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
+            </HBox>
+
+            <HBox styleClass="form__row">
+                <HBox styleClass="form__row-label" alignment="center_left">
+                    <Text text="format" />
+                </HBox>
+                <ComboBox fx:id="format" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
+            </HBox>
+
+            <HBox alignment="center">
+                <Text styleClass="foreground-dark" text="Manage" />
+            </HBox>
+
+            <HBox styleClass="form__row" alignment="center_left" spacing="10">
+                <Button text="Remove" onAction="#delete" styleClass="btn-danger" />
+            </HBox>
+        </VBox>
+    </center>
+    <bottom>
+        <HBox styleClass="form__row" alignment="center_right" spacing="10">
+            <Button text="Close" onAction="#close" styleClass="btn-secondary" />
+            <Button text="Create" onAction="#create" styleClass="btn-primary" />
+        </HBox>
+    </bottom>
+</BorderPane>

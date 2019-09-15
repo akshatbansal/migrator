@@ -5,10 +5,12 @@ import java.io.Serializable;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import migrator.database.model.DatabaseConnection;
+import migrator.migration.TableChange;
 
 public class Table implements Serializable {
     protected StringProperty name;
     protected DatabaseConnection database;
+    protected TableChange change;
 
     public Table(DatabaseConnection database, String name) {
         this.name = new SimpleStringProperty(name);

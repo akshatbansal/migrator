@@ -3,7 +3,6 @@ package migrator.javafx.router;
 import javafx.scene.Node;
 import migrator.BusinessLogic;
 import migrator.breadcrumps.RouterBreadcrump;
-import migrator.database.service.ServerKit;
 import migrator.javafx.Container;
 import migrator.router.Route;
 import migrator.router.Router;
@@ -14,14 +13,12 @@ public class TableViewRoute implements Route {
     protected MainRenderer renderer;
     protected GuiKit guiKit;
     protected BusinessLogic businessLogic;
-    protected ServerKit serverKit;
     protected Router router;
 
-    public TableViewRoute(MainRenderer renderer, ServerKit serverKit, Container container) {
+    public TableViewRoute(MainRenderer renderer, Container container) {
         this.renderer = renderer;
         this.guiKit = container.getGui().getTableKit();
         this.businessLogic = container.getBusinessLogic();
-        this.serverKit = serverKit;
         this.router = container.getRouter();
     }
 
@@ -35,7 +32,7 @@ public class TableViewRoute implements Route {
             new RouterBreadcrump(this.router, table.getName(), "tables.view", table)
         );
         this.businessLogic.getTable().select(table);
-        this.renderer.replaceCenter((Node) this.guiKit.createView(this.businessLogic.getTable(), this.businessLogic.getColumn(), this.businessLogic.getIndex()).getContent());
+        this.renderer.replaceCenter((Node) this.guiKit.createView(this.businessLogic.getTable(), this.businessLogic.getColumn(), this.businessLogic.getIndex(), this.businessLogic.getChange()).getContent());
         this.renderer.replaceLeft((Node) this.guiKit.createForm(this.businessLogic.getTable()).getContent());
     }
 }

@@ -1,7 +1,9 @@
 package migrator.table.javafx;
 
 import migrator.javafx.breadcrumps.BreadcrumpsService;
+import migrator.migration.ChangeService;
 import migrator.router.Router;
+import migrator.table.component.ColumnForm;
 import migrator.table.component.ColumnList;
 import migrator.table.component.IndexList;
 import migrator.table.component.TableCard;
@@ -39,17 +41,22 @@ public class JavafxGuiKit implements GuiKit {
     }
 
     @Override
-    public TableView createView(TableService tableService, ColumnService columnService, IndexService indexService) {
-        return new JavafxTableView(this.breadcrumpsGuiKit, this, tableService, columnService, indexService);
+    public TableView createView(TableService tableService, ColumnService columnService, IndexService indexService, ChangeService changeService) {
+        return new JavafxTableView(this.breadcrumpsGuiKit, this, tableService, columnService, indexService, changeService);
     }
 
     @Override
-    public ColumnList createColumnList(ColumnService columnService) {
-        return new JavafxColumnList(columnService);
+    public ColumnList createColumnList(ColumnService columnService, ChangeService changeService) {
+        return new JavafxColumnList(columnService, changeService, this.router);
     }
 
     @Override
     public IndexList createIndexList(IndexService indexService) {
         return new JavafxIndexList(indexService);
+    }
+
+    @Override
+    public ColumnForm createColumnForm(ChangeService changeService) {
+        return new JavafxColumnForm(changeService);
     }
 }

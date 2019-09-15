@@ -7,6 +7,6 @@ import migrator.connection.model.Connection;
 
 public interface ConnectionGuiKit {
     public ConnectionCard createCard(Connection connection);
-    public ConnectionForm createForm(ConnectionService connectionService);
-    public ConnectionList createList(ConnectionService connectionService);
+    public ConnectionForm createForm();
+    public ConnectionList createList();
 }

@@ -13,17 +13,18 @@ public class ConnectionService {
     protected ObjectProperty<Connection> connected;
 
     public ConnectionService() {
-        Connection test = new Connection("local");
-        test.setDriver("mysql");
-        test.setPort("3306");
-        test.setHost("localhost");
-        this.list = FXCollections.observableArrayList(test);
+        this.list = FXCollections.observableArrayList();
         this.selected = new SimpleObjectProperty<>();
         this.connected = new SimpleObjectProperty<>();
 
         this.list.addListener((Change<? extends Connection> c) -> {
             this.onListChange();
         });
+    }
+
+    public ConnectionService(Connection ... connections) {
+        this();
+        this.list.addAll(connections);
     }
 
     protected void onListChange() {
@@ -52,8 +53,16 @@ public class ConnectionService {
         this.selected.set(connection);
     }
 
+    public void deselect() {
+        this.select(null);
+    }
+
     public void connect(Connection connection) {
         this.connected.set(connection);
+    }
+
+    public void disconnect() {
+        this.connect(null);
     }
 
     public void remove(Connection connection) {
