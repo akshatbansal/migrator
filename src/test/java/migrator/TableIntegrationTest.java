@@ -42,4 +42,31 @@ public class TableIntegrationTest {
         assertEquals(1, businessLogic.getColumn().getList().size());
         assertEquals("column", businessLogic.getColumn().getList().get(0).getName());
     }
+
+    @Test public void testSetIndexesOnTableSelect() {
+        BusinessLogic businessLogic = new BusinessLogic(
+            new FakeServerConnectionFactory(
+                new FakeServerConnection(
+                    Arrays.asList("test_db"),
+                    Arrays.asList("test_table"),
+                    Arrays.asList(
+                        Arrays.asList("column", "string", "NO", "")
+                    ),
+                    Arrays.asList(
+                        Arrays.asList("index_name", "id")
+                    )
+                )
+            )
+        );
+
+        businessLogic.getTable().select(new Table(
+            new DatabaseConnection(
+                new Connection("localhost"),
+                "test_db"
+            ),
+            "test_table"
+        ));
+        assertEquals(1, businessLogic.getIndex().getList().size());
+        assertEquals("index_name", businessLogic.getIndex().getList().get(0).getName());
+    }
 }
