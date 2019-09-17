@@ -4,6 +4,8 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import migrator.migration.ChangeCommand;
+import migrator.migration.ColumnChange;
 
 public class Column {
     protected StringProperty name;
@@ -40,5 +42,10 @@ public class Column {
 
     public BooleanProperty enableNullProperty() {
         return this.enableNull;
+    }
+
+    public ColumnChange getChange() {
+        String[] types = new String[] {"create", "update", "delete"};
+        return new ColumnChange(this.getName(), new ChangeCommand(types[(int) (Math.random() * 3)]));
     }
 }

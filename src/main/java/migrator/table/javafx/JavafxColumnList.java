@@ -3,6 +3,7 @@ package migrator.table.javafx;
 import javafx.collections.ListChangeListener.Change;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import migrator.javafx.helpers.ControllerHelper;
 import migrator.migration.ChangeService;
@@ -35,19 +36,29 @@ public class JavafxColumnList implements ColumnList {
     }
 
     protected void draw() {
-        this.columns.getItems().addAll(this.columnService.getList());
-        this.columns.setPrefHeight(this.columns.getFixedCellSize() * (this.columns.getItems().size() + 1.01));
+        this.columns.getItems().setAll(this.columnService.getList());
+        this.columns.setPrefHeight((this.columns.getFixedCellSize() + 2.1) * (this.columns.getItems().size() + 1));
     }
 
     @FXML
     public void initialize() {
+        this.columns.setRowFactory(tv -> {
+            TableRow<Column> row = new TableRow<>();
+            row.itemProperty().addListener((obs, oldItem, newItem) -> {
+                if (newItem == null) {
+                    return;
+                }
+                row.getStyleClass().add("row--" + newItem.getChange().getCommand().getType());
+            });
+            return row ;
+        });
         this.columns.setFixedCellSize(35.0);
         this.draw();
     }
 
     @FXML
     public void addColumn() {
-        this.changeService.selectColumn("a");
+        this.columnService.add(new Column("new_column"));
         this.router.show("changes", "a");
     }
 }

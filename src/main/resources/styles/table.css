@@ -19,11 +19,32 @@
     -fx-text-fill: #f4f4f4;
     -fx-border-style: solid;
     -fx-border-color: transparent;
-    -fx-border-size: 0;
+    -fx-border-width: 1px 1px 1px 2px;
 }
 .table-view .column-header.column--align-right .label, .table-view .cell.column--align-right {
     -fx-alignment: CENTER_RIGHT;
 }
 .table-view .cell:selected {
     -fx-border-color: #20AAD6;
+}
+
+.table-view .cell.row--create {
+    -fx-border-color: transparent transparent transparent #6FDA80;
+}
+.table-view .cell.row--create:selected {
+    -fx-border-color: #20AAD6 #20AAD6 #20AAD6 #6FDA80;
+}
+
+.table-view .cell.row--update {
+    -fx-border-color: transparent transparent transparent #DAC26F;
+}
+.table-view .cell.row--update:selected {
+    -fx-border-color: #20AAD6 #20AAD6 #20AAD6 #DAC26F;
+}
+
+.table-view .cell.row--delete {
+    -fx-border-color: transparent transparent transparent #DA6F6F;
+}
+.table-view .cell.row--delete:selected {
+    -fx-border-color: #20AAD6 #20AAD6 #20AAD6 #DA6F6F;
 }

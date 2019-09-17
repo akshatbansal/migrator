@@ -22,12 +22,16 @@ public class Connection implements Serializable, Extractable {
     }
 
     public Connection(String name, String user, String password) {
+        this(name, user, password, "localhost", "3306", "mysql");
+    }
+
+    public Connection(String name, String user, String password, String host, String port, String driver) {
         this.name = new SimpleStringProperty(name);
         this.user = new SimpleStringProperty(user);
         this.password = new SimpleStringProperty(password);
-        this.host = new SimpleStringProperty("");
-        this.port = new SimpleStringProperty("");
-        this.driver = new SimpleStringProperty("");
+        this.host = new SimpleStringProperty(host);
+        this.port = new SimpleStringProperty(port);
+        this.driver = new SimpleStringProperty(driver);
         this.url = new SimpleStringProperty("");
         this.url.bind(Bindings.concat(this.driver, "://", this.host, ":", this.port));
     }

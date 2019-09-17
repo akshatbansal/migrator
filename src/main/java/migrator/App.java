@@ -4,6 +4,8 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
+import migrator.connection.model.Connection;
+import migrator.connection.service.ConnectionService;
 import migrator.database.service.DatabaseServerConnectionFactory;
 import migrator.javafx.Container;
 import migrator.javafx.helpers.ControllerHelper;
@@ -30,7 +32,12 @@ public class App extends Application {
         //     listPersistance.store("Migrator.model.connections", Arrays.asList(connections.toArray()));
         // });
 
-        BusinessLogic businessLogic = new BusinessLogic(new DatabaseServerConnectionFactory());
+        BusinessLogic businessLogic = new BusinessLogic(
+            new DatabaseServerConnectionFactory(),
+            new ConnectionService(
+                new Connection("localhost")
+            )
+        );
         Router router = new BasicRouter();
         Gui gui = new Gui(router, businessLogic);
         Container container = new Container(businessLogic, gui, router);

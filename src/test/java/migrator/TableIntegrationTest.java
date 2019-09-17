@@ -9,6 +9,7 @@ import java.util.Arrays;
 import migrator.mock.FakeServerConnectionFactory;
 import migrator.table.model.Table;
 import migrator.connection.model.Connection;
+import migrator.connection.service.ConnectionService;
 import migrator.database.model.DatabaseConnection;
 import migrator.mock.FakeServerConnection;
 

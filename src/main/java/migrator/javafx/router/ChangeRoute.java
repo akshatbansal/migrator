@@ -30,14 +30,14 @@ public class ChangeRoute implements Route {
 
         VBox.setVgrow((Node) this.form.getContent(), Priority.ALWAYS);
 
-        this.changeService.getSelectedColumn().addListener((ObservableValue<? extends Object> observable, Object oldValue, Object newValue) -> {
-            this.changeEditPane(newValue);
-        });
+        // this.changeService.getSelectedColumn().addListener((ObservableValue<? extends Object> observable, Object oldValue, Object newValue) -> {
+        //     this.changeEditPane(newValue);
+        // });
     }
 
     @Override
     public void show(Object routeData) {
-        this.changeEditPane(this.changeService.getSelectedColumn().get());
+        // this.changeEditPane(this.changeService.getSelectedColumn().get());
         
     }
 

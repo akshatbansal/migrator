@@ -33,9 +33,9 @@ public class BusinessLogic {
     protected ChangeService changeService;
     protected ServerConnectionFactory serverConnectionFactory;
  
-    public BusinessLogic(ServerConnectionFactory serverConnectionFactory) {
+    public BusinessLogic(ServerConnectionFactory serverConnectionFactory, ConnectionService connectionService) {
         this.serverConnectionFactory = serverConnectionFactory;
-        this.connectionService = new ConnectionService();
+        this.connectionService = connectionService;
         this.databaseService = new DatabaseService();
         this.tableService = new TableService();
         this.columnService = new ColumnService();
@@ -57,6 +57,10 @@ public class BusinessLogic {
             .addListener((ObservableValue<? extends Table> observable, Table oldValue, Table newValue) -> {
                 this.onTableSelect(newValue);
             });
+    }
+
+    public BusinessLogic(ServerConnectionFactory serverConnectionFactory) {
+        this(serverConnectionFactory, new ConnectionService());
     }
 
     protected void onConnectConnection(Connection connection) {

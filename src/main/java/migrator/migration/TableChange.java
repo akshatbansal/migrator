@@ -42,6 +42,14 @@ public class TableChange {
         return this.indexes;
     }
 
+    public void addColumnChange(ColumnChange columnChange) {
+        this.columns.add(columnChange);
+    }
+
+    public void addIndexChange(IndexChange indexChange) {
+        this.indexes.add(indexChange);
+    }
+
     public ChangeCommand getCommand() {
         return this.command;
     }
