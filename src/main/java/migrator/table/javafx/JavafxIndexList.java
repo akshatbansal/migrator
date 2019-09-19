@@ -19,13 +19,14 @@ public class JavafxIndexList implements IndexList {
     }
 
     protected void draw() {
-        this.indexes.getItems().addAll(this.indexService.getList());
-        this.indexes.setPrefHeight(this.indexes.getFixedCellSize() * (this.indexes.getItems().size() + 1.01));
+        this.indexes.getItems().setAll(this.indexService.getList());
+        this.indexes.setPrefHeight(this.indexes.getFixedCellSize() * (this.indexes.getItems().size() + 1));
     }
 
     @FXML
     public void initialize() {
         this.indexes.setFixedCellSize(35.0);
+        this.indexes.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         this.draw();
     }
 

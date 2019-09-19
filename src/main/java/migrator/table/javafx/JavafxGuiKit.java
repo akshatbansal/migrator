@@ -56,7 +56,7 @@ public class JavafxGuiKit implements GuiKit {
     }
 
     @Override
-    public ColumnForm createColumnForm(ChangeService changeService) {
-        return new JavafxColumnForm(changeService);
+    public ColumnForm createColumnForm(ColumnService columnService) {
+        return new JavafxColumnForm(columnService);
     }
 }

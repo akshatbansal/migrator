@@ -11,6 +11,12 @@ public class PaneRenderer {
     }
 
     public void replace(Node node) {
+        Boolean shouldHide = true;
+        for (Node childNode : this.pane.getChildren()) {
+            if (childNode == node) {
+                
+            }
+        }
         this.hide();
         if (node == null) {
             return;

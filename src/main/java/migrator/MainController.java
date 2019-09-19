@@ -7,9 +7,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.VBox;
 import migrator.component.PaneRenderer;
-import migrator.database.service.ServerConnectionFactory;
 import migrator.javafx.Container;
-import migrator.javafx.router.ChangeRoute;
+import migrator.javafx.router.ColumnRoute;
 import migrator.javafx.router.ConnectionsRoute;
 import migrator.javafx.router.DatabasesRoute;
 import migrator.javafx.router.MainRenderer;
@@ -45,7 +44,7 @@ public class MainController implements Initializable {
         this.router.connect("databases", new DatabasesRoute(mainRenderer, this.container));
         this.router.connect("tables", new TableRoute(mainRenderer, this.container));
         this.router.connect("tables.view", new TableViewRoute(mainRenderer, this.container));
-        this.router.connect("change", new ChangeRoute(mainRenderer, this.container));
+        this.router.connect("column", new ColumnRoute(mainRenderer, this.container));
         this.router.show("connections");
     }
 

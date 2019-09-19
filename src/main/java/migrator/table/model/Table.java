@@ -13,8 +13,13 @@ public class Table implements Serializable {
     protected TableChange change;
 
     public Table(DatabaseConnection database, String name) {
+        this(database, name, null);
+    }
+
+    public Table(DatabaseConnection database, String name, TableChange tableChange) {
         this.name = new SimpleStringProperty(name);
         this.database = database;
+        this.change = tableChange;
     }
 
     public String getName() {

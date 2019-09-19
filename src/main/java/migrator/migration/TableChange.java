@@ -1,6 +1,10 @@
 package migrator.migration;
 
 import java.util.Map;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,8 +12,8 @@ public class TableChange {
     protected String name;
     protected ChangeCommand command;
     protected Map<String, Object> arguments;
-    protected List<ColumnChange> columns;
-    protected List<IndexChange> indexes;
+    protected ObservableList<ColumnChange> columns;
+    protected ObservableList<IndexChange> indexes;
 
     public TableChange(String name) {
         this(name, new ChangeCommand(ChangeCommand.UPDATE));
@@ -26,19 +30,19 @@ public class TableChange {
     public TableChange(String name, ChangeCommand command, List<ColumnChange> columns, List<IndexChange> indexes) {
         this.name = name;
         this.command = command;
-        this.columns = columns;
-        this.indexes = indexes;
+        this.columns = FXCollections.observableArrayList(columns);
+        this.indexes = FXCollections.observableArrayList(indexes);
     }
 
     public String getName() {
         return this.name;
     }
 
-    public List<ColumnChange> getColumnsChanges() {
+    public ObservableList<ColumnChange> getColumnsChanges() {
         return this.columns;
     }
 
-    public List<IndexChange> getIndexesChanges() {
+    public ObservableList<IndexChange> getIndexesChanges() {
         return this.indexes;
     }
 

@@ -5,38 +5,35 @@ import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import migrator.javafx.helpers.ControllerHelper;
-import migrator.migration.ChangeService;
+import migrator.migration.ChangeCommand;
 import migrator.table.component.ColumnForm;
+import migrator.table.model.Column;
+import migrator.table.service.ColumnService;
 
 public class JavafxColumnForm implements ColumnForm {
     protected Node node;
-    protected ChangeService changeService;
+    protected ColumnService columnService;
+    protected Column column;
 
     @FXML protected TextField name;
     @FXML protected ComboBox<String> format;
 
-    public JavafxColumnForm(ChangeService changeService) {
-        this.changeService = changeService;
+    public JavafxColumnForm(ColumnService columnService) {
+        this.columnService = columnService;
         this.node = ControllerHelper.createViewNode(this, "/layout/table/column/form.fxml");
-        // this.changeService.getSelected().addListener((ObservableValue<? extends Connection> observable, Connection oldValue, Connection newValue) -> {
-        //     this.setConnection(newValue);
-        // });
     }
 
-    // protected void setConnection(Connection connection) {
-    //     if (connection == null) {
-    //         return;
-    //     }
-    //     this.name.textProperty().bindBidirectional(connection.nameProperty());
-    //     this.format.valueProperty().bindBidirectional(connection.driverProperty());
-    // }
+    public void setColumn(Column column) {
+        this.column = column;
+        if (column == null) {
+            return;
+        }
+        this.name.textProperty().bindBidirectional(column.nameProperty());
+        this.format.valueProperty().bindBidirectional(column.formatProperty());
+    }
 
     @FXML public void initialize() {
         this.format.getItems().setAll("string", "boolean", "integer", "smallint", "longint");
-        // Connection connection = this.connectionsService.getSelected().get();
-        // if (connection != null) {
-        //     this.setConnection(connection);
-        // }
     }
 
     @Override
@@ -45,7 +42,11 @@ public class JavafxColumnForm implements ColumnForm {
     }
 
     @FXML public void delete() {
-        // this.connectionsService.remove(this.connectionsService.getSelected().get());
+        if (this.column.getChange().getCommand().isType(ChangeCommand.CREATE)) {
+            this.columnService.remove(this.column);
+            return;
+        }
+        this.column.getChange().getCommand().setType(ChangeCommand.DELETE);
     }
 
     @FXML public void close() {

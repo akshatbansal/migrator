@@ -7,6 +7,7 @@
 <?import javafx.scene.control.cell.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import migrator.table.javafx.ChangeCellFactory?>
 
 <VBox styleClass="card" xmlns:fx="http://javafx.com/fxml">
      <VBox styleClass="card__header">
@@ -14,6 +15,11 @@
      </VBox>
      <TableView fx:id="columns" editable="false">
           <columns>
+               <TableColumn text="" prefWidth="2">
+                    <cellFactory>
+                         <ChangeCellFactory />
+                    </cellFactory>
+               </TableColumn>
                <TableColumn text="Name" prefWidth="${(columns.width-4)*0.55}">
                     <cellValueFactory><PropertyValueFactory property="name" /></cellValueFactory>
                </TableColumn>

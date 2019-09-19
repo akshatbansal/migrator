@@ -15,7 +15,11 @@ import migrator.database.service.DatabaseService;
 import migrator.database.service.ServerConnection;
 import migrator.database.service.ServerConnectionFactory;
 import migrator.javafx.breadcrumps.BreadcrumpsService;
+import migrator.migration.ChangeCommand;
 import migrator.migration.ChangeService;
+import migrator.migration.ColumnChange;
+import migrator.migration.IndexChange;
+import migrator.migration.TableChange;
 import migrator.table.model.Column;
 import migrator.table.model.Index;
 import migrator.table.model.Table;
@@ -91,7 +95,7 @@ public class BusinessLogic {
 
         List<Table> tables = new ArrayList<>();
         for (String tableNames : serverConnection.getTables()) {
-            tables.add(new Table(connection, tableNames));
+            tables.add(new Table(connection, tableNames, new TableChange(tableNames)));
         }
         this.tableService.setAll(tables);
     }
@@ -121,7 +125,7 @@ public class BusinessLogic {
         for (List<String> indexValues : rawIndexes) {
             String indexName = indexValues.get(0);
             if (!indexes.containsKey(indexName)) {
-                indexes.put(indexName, new Index(indexName));
+                indexes.put(indexName, new Index(indexName, new IndexChange(indexName)));
             }
             Index index = indexes.get(indexName);
             index.columnsProperty().add(indexValues.get(1));
@@ -137,7 +141,8 @@ public class BusinessLogic {
                     columnName.get(0),
                     columnName.get(1),
                     columnName.get(3),
-                    columnName.get(2) == "YES" ? true : false
+                    columnName.get(2) == "YES" ? true : false,
+                    new ColumnChange(columnName.get(0), new ChangeCommand())
                 )
             );
         }
