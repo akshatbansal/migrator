@@ -22,8 +22,6 @@ public class ChangeCellFactory<S, T> implements Callback<TableColumn<S, T>, Tabl
                 }
                 
                 this.onTypeChange( column.getChange().getCommand().getType());
-                setPrefWidth(4.0);
-
                 column.getChange().getCommand().typeProperty().addListener((ObservableValue<? extends String> obs, String oldValue, String newValue) -> {
                     Column c = (Column) this.getTableRow().getItem();
                     this.onTypeChange(c.getChange().getCommand().getType());

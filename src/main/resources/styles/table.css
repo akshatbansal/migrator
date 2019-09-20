@@ -29,13 +29,20 @@
 }
 
 .table-view .cell.cell--create {
-    -fx-background-color: #6FDA80;
+    -fx-border-width: 2px;
+    -fx-border-color: transparent transparent transparent #6FDA80;
 }
 
 .table-view .cell.cell--update {
-    -fx-background-color: #DAC26F;
+    -fx-border-width: 2px;
+    -fx-border-color: transparent transparent transparent #DAC26F;
 }
 
 .table-view .cell.cell--delete {
-    -fx-background-color: #DA6F6F;
+    -fx-border-width: 2px;
+    -fx-border-color: transparent transparent transparent #DA6F6F;
+}
+
+.table-row-cell {
+    -fx-cell-size: 40px;
 }

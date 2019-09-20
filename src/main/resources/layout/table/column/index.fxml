@@ -15,7 +15,7 @@
      </VBox>
      <TableView fx:id="columns" editable="false">
           <columns>
-               <TableColumn text="" prefWidth="2">
+               <TableColumn text="" maxWidth="1.0">
                     <cellFactory>
                          <ChangeCellFactory />
                     </cellFactory>

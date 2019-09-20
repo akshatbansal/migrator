@@ -45,34 +45,14 @@ public class JavafxColumnList implements ColumnList {
 
     protected void draw() {
         List<Column> columns = this.columnService.getList();
-        this.columns.setPrefHeight((this.columns.getFixedCellSize()) * (columns.size() + 1));
+        this.columns.setPrefHeight((40) * (columns.size() + 1));
         this.columns.getItems().setAll(columns);
     }
 
     @FXML
     public void initialize() {
-        // this.columns.setRowFactory(tv -> {
-        //     TableRow<Column> row = new TableRow<>();
-        //     row.itemProperty().addListener((obs, oldItem, newItem) -> {
-        //         if (newItem == null) {
-        //             if (oldItem != null) {
-        //                 row.getStyleClass().
-        //                 row.getStyleClass().remove("row--" + oldItem.getChange().getCommand().getType());
-        //                 oldItem.getChange().getCommand().typeProperty().removeListener(listener);
-        //             }
-        //             return;
-        //         }
-        //         newItem.getChange().getCommand().typeProperty().addListener((ObservableValue<? extends String> observableValue, String oldValue, String newValue) -> {
-        //             row.getStyleClass().remove("row--" + oldValue);
-        //             row.getStyleClass().add("row--" + newValue);
-        //         });
-        //         row.getStyleClass().add("row--" + newItem.getChange().getCommand().getType());
-        //     });
-        //     return row ;
-        // });
-
-        this.columns.setFixedCellSize(35.0);
         this.columns.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        // this.columns.setFixedCellSize(40.0);
         this.columns.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> obs, Number oldSelection, Number newSelection) -> {
             Column selectedColumn = this.columns.getSelectionModel().getSelectedItem();
             this.router.show("column", selectedColumn);
