@@ -2,6 +2,7 @@ package migrator.table.javafx;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import migrator.javafx.helpers.ControllerHelper;
@@ -17,6 +18,8 @@ public class JavafxColumnForm implements ColumnForm {
 
     @FXML protected TextField name;
     @FXML protected ComboBox<String> format;
+    @FXML protected TextField defaultText;
+    @FXML protected CheckBox nullCheckbox;
 
     public JavafxColumnForm(ColumnService columnService) {
         this.columnService = columnService;
@@ -30,6 +33,8 @@ public class JavafxColumnForm implements ColumnForm {
         }
         this.name.textProperty().bindBidirectional(column.nameProperty());
         this.format.valueProperty().bindBidirectional(column.formatProperty());
+        this.defaultText.textProperty().bindBidirectional(column.defaultValueProperty());
+        this.nullCheckbox.selectedProperty().bindBidirectional(column.enableNullProperty());
     }
 
     @FXML public void initialize() {
@@ -51,9 +56,5 @@ public class JavafxColumnForm implements ColumnForm {
 
     @FXML public void close() {
         // this.connectionsService.select(null);
-    }
-
-    @FXML public void create() {
-        // this.router.show("databases", this.connectionsService.getSelected().get());
     }
 }

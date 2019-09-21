@@ -4,6 +4,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.util.Callback;
+import migrator.table.model.Changable;
 import migrator.table.model.Column;
 
 public class ChangeCellFactory<S, T> implements Callback<TableColumn<S, T>, TableCell<S, T>> {
@@ -16,15 +17,15 @@ public class ChangeCellFactory<S, T> implements Callback<TableColumn<S, T>, Tabl
         TableCell<S, T> cell = new TableCell<S, T>() {
             @Override
             protected void updateItem(Object item, boolean empty) {
-                Column column = (Column) getTableRow().getItem(); 
-                if (column == null) {
+                Changable changable = (Changable) getTableRow().getItem(); 
+                if (changable == null) {
                     return;
                 }
                 
-                this.onTypeChange( column.getChange().getCommand().getType());
-                column.getChange().getCommand().typeProperty().addListener((ObservableValue<? extends String> obs, String oldValue, String newValue) -> {
-                    Column c = (Column) this.getTableRow().getItem();
-                    this.onTypeChange(c.getChange().getCommand().getType());
+                this.onTypeChange(changable.getChangeCommand().getType());
+                changable.getChangeCommand().typeProperty().addListener((ObservableValue<? extends String> obs, String oldValue, String newValue) -> {
+                    Changable c = (Changable) this.getTableRow().getItem();
+                    this.onTypeChange(changable.getChangeCommand().getType());
                 });
             }
 

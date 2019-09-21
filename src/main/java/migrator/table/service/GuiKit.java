@@ -3,6 +3,7 @@ package migrator.table.service;
 import migrator.migration.ChangeService;
 import migrator.table.component.ColumnForm;
 import migrator.table.component.ColumnList;
+import migrator.table.component.IndexForm;
 import migrator.table.component.IndexList;
 import migrator.table.component.TableCard;
 import migrator.table.component.TableForm;
@@ -18,4 +19,5 @@ public interface GuiKit {
     public ColumnList createColumnList(ColumnService columnService, ChangeService changeService);
     public IndexList createIndexList(IndexService indexService);
     public ColumnForm createColumnForm(ColumnService columnService);
+    public IndexForm createIndexForm(IndexService indexService);
 }

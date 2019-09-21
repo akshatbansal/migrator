@@ -28,4 +28,16 @@ public class IndexService {
     public void setAll(Collection<Index> indexes) {
         this.list.setAll(indexes);
     }
+
+    public void select(Index index) {
+        this.selected.set(index);
+    }
+
+    public void add(Index index) {
+        this.list.add(index);
+    }
+
+    public void remove(Index index) {
+        this.list.remove(index);
+    }
 }

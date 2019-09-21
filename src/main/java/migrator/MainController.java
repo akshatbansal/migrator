@@ -11,6 +11,7 @@ import migrator.javafx.Container;
 import migrator.javafx.router.ColumnRoute;
 import migrator.javafx.router.ConnectionsRoute;
 import migrator.javafx.router.DatabasesRoute;
+import migrator.javafx.router.IndexRoute;
 import migrator.javafx.router.MainRenderer;
 import migrator.javafx.router.TableRoute;
 import migrator.javafx.router.TableViewRoute;
@@ -45,6 +46,7 @@ public class MainController implements Initializable {
         this.router.connect("tables", new TableRoute(mainRenderer, this.container));
         this.router.connect("tables.view", new TableViewRoute(mainRenderer, this.container));
         this.router.connect("column", new ColumnRoute(mainRenderer, this.container));
+        this.router.connect("index", new IndexRoute(mainRenderer, this.container));
         this.router.show("connections");
     }
 

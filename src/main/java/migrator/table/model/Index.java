@@ -8,9 +8,10 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ListChangeListener.Change;
+import migrator.migration.ChangeCommand;
 import migrator.migration.IndexChange;
 
-public class Index {
+public class Index implements Changable {
     protected StringProperty name;
     protected ObservableList<String> columns;
     protected StringProperty columnsString;
@@ -54,5 +55,14 @@ public class Index {
 
     public StringProperty columnsStringProperty() {
         return this.columnsString;
+    }
+
+    @Override
+    public ChangeCommand getChangeCommand() {
+        return this.change.getCommand();
+    }
+
+    public IndexChange getChange() {
+        return this.change;
     }
 }

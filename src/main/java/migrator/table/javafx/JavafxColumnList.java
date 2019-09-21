@@ -7,9 +7,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener.Change;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import migrator.javafx.helpers.ControllerHelper;
 import migrator.migration.ChangeCommand;
@@ -52,7 +49,6 @@ public class JavafxColumnList implements ColumnList {
     @FXML
     public void initialize() {
         this.columns.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        // this.columns.setFixedCellSize(40.0);
         this.columns.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> obs, Number oldSelection, Number newSelection) -> {
             Column selectedColumn = this.columns.getSelectionModel().getSelectedItem();
             this.router.show("column", selectedColumn);
@@ -66,11 +62,5 @@ public class JavafxColumnList implements ColumnList {
         this.columnService.add(newColumn);
         this.columnService.select(newColumn);
         this.router.show("column", newColumn);
-    }
-
-    private class ColumnTypeChangeListener implements ChangeListener<String> {
-        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-            
-        }
     }
 }

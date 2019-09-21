@@ -22,3 +22,13 @@
 .background-medium .text-field:focused, .background-medium .combo-box:focused {
     -fx-border-color: #20AAD6;
 }
+
+.check-box .box {
+    -fx-background-color: transparent;
+    -fx-border-color: #ffffff;
+    -fx-border-width: 1px;
+}
+
+.check-box:focused .box {
+    -fx-border-color: #20AAD6;
+}

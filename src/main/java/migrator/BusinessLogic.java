@@ -125,7 +125,7 @@ public class BusinessLogic {
         for (List<String> indexValues : rawIndexes) {
             String indexName = indexValues.get(0);
             if (!indexes.containsKey(indexName)) {
-                indexes.put(indexName, new Index(indexName, new IndexChange(indexName)));
+                indexes.put(indexName, new Index(indexName, new IndexChange(indexName, new ChangeCommand())));
             }
             Index index = indexes.get(indexName);
             index.columnsProperty().add(indexValues.get(1));

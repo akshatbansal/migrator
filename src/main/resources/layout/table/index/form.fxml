@@ -19,23 +19,23 @@
 
             <HBox styleClass="form__row">
                 <HBox styleClass="form__row-label" alignment="center_left">
-                    <Text text="format" />
+                    <Text text="column #1" />
                 </HBox>
-                <ComboBox fx:id="format" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
+                <ComboBox fx:id="column1" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
             </HBox>
 
             <HBox styleClass="form__row">
                 <HBox styleClass="form__row-label" alignment="center_left">
-                    <Text text="default" />
+                    <Text text="column #2" />
                 </HBox>
-                <TextField fx:id="defaultText" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
+                <ComboBox fx:id="column2" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
             </HBox>
 
             <HBox styleClass="form__row">
                 <HBox styleClass="form__row-label" alignment="center_left">
-                    <Text text="null" />
+                    <Text text="column #3" />
                 </HBox>
-                <CheckBox fx:id="nullCheckbox" />
+                <ComboBox fx:id="column3" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
             </HBox>
 
             <HBox alignment="center">

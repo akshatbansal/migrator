@@ -27,4 +27,29 @@ public class IndexServiceTest {
         assertEquals(1, this.indexService.getList().size());
         assertEquals("index_name", this.indexService.getList().get(0).getName());
     }
+
+    @Test public void testSelectSetsSelectedValue() {
+        this.indexService.select(
+            new Index("primary")
+        );
+
+        assertEquals("primary", this.indexService.getSelected().get().getName());
+    }
+
+    @Test public void testAddAddsIndexToList() {
+        this.indexService.add(
+            new Index("primary")
+        );
+
+        assertEquals(1, this.indexService.getList().size());
+        assertEquals("primary", this.indexService.getList().get(0).getName());
+    }
+
+    @Test public void testRemoveRemovesIndexFromList() {
+        Index index = new Index("primary");
+        this.indexService.add(index);
+        this.indexService.remove(index);
+
+        assertEquals(0, this.indexService.getList().size());
+    }
 }

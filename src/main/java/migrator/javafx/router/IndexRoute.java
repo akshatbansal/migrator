@@ -5,21 +5,21 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import migrator.javafx.Container;
 import migrator.router.Route;
-import migrator.table.component.ColumnForm;
-import migrator.table.service.ColumnService;
+import migrator.table.component.IndexForm;
 import migrator.table.service.GuiKit;
-import migrator.table.model.Column;
+import migrator.table.service.IndexService;
+import migrator.table.model.Index;
 
-public class ColumnRoute implements Route {
+public class IndexRoute implements Route {
     protected MainRenderer renerer;
     protected GuiKit tableGuiKit;
-    protected ColumnService columnService;
-    protected ColumnForm form;
+    protected IndexService indexService;
+    protected IndexForm form;
 
-    public ColumnRoute(MainRenderer renderer, Container container) {
+    public IndexRoute(MainRenderer renderer, Container container) {
         this.renerer = renderer;
         this.tableGuiKit = container.getGui().getTableKit();
-        this.columnService = container.getBusinessLogic().getColumn();
+        this.indexService = container.getBusinessLogic().getIndex();
     }
 
     @Override
@@ -28,9 +28,9 @@ public class ColumnRoute implements Route {
             this.renerer.hideLeft();
             return;
         }
-        this.form = this.tableGuiKit.createColumnForm(this.columnService);
+        this.form = this.tableGuiKit.createIndexForm(this.indexService);
         VBox.setVgrow((Node) this.form.getContent(), Priority.ALWAYS);
-        this.form.setColumn((Column) routeData);
+        this.form.setIndex((Index) routeData);
         this.renerer.replaceLeft((Node) this.form.getContent());
     }
 }

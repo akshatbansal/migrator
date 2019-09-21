@@ -4,9 +4,10 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import migrator.migration.ChangeCommand;
 import migrator.migration.ColumnChange;
 
-public class Column {
+public class Column implements Changable {
     protected StringProperty name;
     protected StringProperty format;
     protected StringProperty defaultValue;
@@ -51,5 +52,10 @@ public class Column {
 
     public ColumnChange getChange() {
         return this.change;
+    }
+
+    @Override
+    public ChangeCommand getChangeCommand() {
+        return this.change.getCommand();
     }
 }

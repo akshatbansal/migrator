@@ -1,10 +1,10 @@
 package migrator.table.javafx;
 
-import migrator.javafx.breadcrumps.BreadcrumpsService;
 import migrator.migration.ChangeService;
 import migrator.router.Router;
 import migrator.table.component.ColumnForm;
 import migrator.table.component.ColumnList;
+import migrator.table.component.IndexForm;
 import migrator.table.component.IndexList;
 import migrator.table.component.TableCard;
 import migrator.table.component.TableForm;
@@ -52,11 +52,16 @@ public class JavafxGuiKit implements GuiKit {
 
     @Override
     public IndexList createIndexList(IndexService indexService) {
-        return new JavafxIndexList(indexService);
+        return new JavafxIndexList(indexService, this.router);
     }
 
     @Override
     public ColumnForm createColumnForm(ColumnService columnService) {
         return new JavafxColumnForm(columnService);
+    }
+
+    @Override
+    public IndexForm createIndexForm(IndexService indexService) {
+        return new JavafxIndexForm(indexService);
     }
 }
