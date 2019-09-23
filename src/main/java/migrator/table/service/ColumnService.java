@@ -7,6 +7,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ListChangeListener.Change;
+import migrator.migration.ChangeCommand;
+import migrator.migration.ColumnChange;
 import migrator.table.model.Column;
 
 public class ColumnService {
@@ -54,5 +56,47 @@ public class ColumnService {
 
     public void setAll(Collection<Column> columns) {
         this.list.setAll(columns);
+    }
+
+    public Column create(String name) {
+        return this.create(
+            name,
+            new ColumnChange(name, new ChangeCommand())
+        );
+    }    
+
+    public Column create(String name, String format, String defaultValue, boolean enableNull) {
+        return this.create(
+            name,
+            format,
+            defaultValue,
+            enableNull,
+            new ColumnChange(name, new ChangeCommand())
+        );
+    }
+
+    public Column create(String name, ColumnChange change) {
+        Column column = this.create(
+            name,
+            "string",
+            "",
+            false,
+            change
+        );
+        change.getCommand().argumentProperty("format").set(column.getFormat());
+        change.getCommand().argumentProperty("default").set(column.getDefaultValue());
+        change.getCommand().argumentProperty("null").set(column.isNullEnabled());
+
+        return column;
+    }
+
+    public Column create(String name, String format, String defaultValue, boolean enableNull, ColumnChange change) {
+        return new Column(
+            name,
+            format,
+            defaultValue,
+            enableNull,
+            change
+        );
     }
 }

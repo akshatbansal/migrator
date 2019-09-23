@@ -2,7 +2,6 @@ package migrator.table.javafx;
 
 import java.util.List;
 
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener.Change;
 import javafx.fxml.FXML;
@@ -58,7 +57,10 @@ public class JavafxColumnList implements ColumnList {
 
     @FXML
     public void addColumn() {
-        Column newColumn = new Column("new_column", new ColumnChange("new_column", new ChangeCommand("create")));
+        Column newColumn = this.columnService.create(
+            "new_column",
+            new ColumnChange("new_column", new ChangeCommand("create"))
+        );
         this.columnService.add(newColumn);
         this.columnService.select(newColumn);
         this.router.show("column", newColumn);

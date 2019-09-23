@@ -1,16 +1,23 @@
 package migrator.migration;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 public class ColumnChange {
     protected ChangeCommand command;
-    protected String name;
+    protected StringProperty name;
 
     public ColumnChange(String name, ChangeCommand command) {
-        this.name = name;
+        this.name = new SimpleStringProperty(name);
         this.command = command;
     }
 
     public String getName() {
-        return (String) this.name;
+        return this.name.get();
+    }
+
+    public StringProperty nameProperty() {
+        return this.name;
     }
 
     public String getFormat() {

@@ -14,14 +14,6 @@ public class Column implements Changable {
     protected BooleanProperty enableNull;
     protected ColumnChange change;
 
-    public Column(String name) {
-        this(name, null);
-    }
-
-    public Column(String name, ColumnChange columnChange) {
-        this(name, "varchar(255)", "", false, columnChange);
-    }
-
     public Column(String name, String format, String defaultValue, boolean enableNull, ColumnChange columnChange) {
         this.name = new SimpleStringProperty(name);
         this.format = new SimpleStringProperty(format);
@@ -42,12 +34,24 @@ public class Column implements Changable {
         return this.format;
     }
 
+    public String getFormat() {
+        return this.format.get();
+    }
+
     public StringProperty defaultValueProperty() {
         return this.defaultValue;
     }
 
+    public String getDefaultValue() {
+        return this.defaultValue.get();
+    }
+
     public BooleanProperty enableNullProperty() {
         return this.enableNull;
+    }
+
+    public Boolean isNullEnabled() {
+        return this.enableNull.get();
     }
 
     public ColumnChange getChange() {
