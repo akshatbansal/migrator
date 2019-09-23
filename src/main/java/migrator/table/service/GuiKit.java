@@ -19,5 +19,5 @@ public interface GuiKit {
     public ColumnList createColumnList(ColumnService columnService, ChangeService changeService);
     public IndexList createIndexList(IndexService indexService);
     public ColumnForm createColumnForm(ColumnService columnService);
-    public IndexForm createIndexForm(IndexService indexService);
+    public IndexForm createIndexForm(IndexService indexService, ColumnService columnService);
 }

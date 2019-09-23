@@ -128,7 +128,7 @@ public class BusinessLogic {
                 indexes.put(indexName, new Index(indexName, new IndexChange(indexName, new ChangeCommand())));
             }
             Index index = indexes.get(indexName);
-            index.columnsProperty().add(indexValues.get(1));
+            index.addColumn( indexValues.get(1));
         }
         return indexes.values();
     }

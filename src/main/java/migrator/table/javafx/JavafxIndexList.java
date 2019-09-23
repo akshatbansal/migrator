@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.TableView;
 import migrator.javafx.helpers.ControllerHelper;
+import migrator.javafx.helpers.View;
 import migrator.migration.ChangeCommand;
 import migrator.migration.IndexChange;
 import migrator.router.Router;
@@ -19,10 +20,10 @@ public class JavafxIndexList implements IndexList {
     protected Router router;
     @FXML protected TableView<Index> indexes;
 
-    public JavafxIndexList(IndexService indexService, Router router) {
+    public JavafxIndexList(View view, IndexService indexService, Router router) {
         this.indexService = indexService;
         this.router = router;
-        this.node = ControllerHelper.createViewNode(this, "/layout/table/index/index.fxml");
+        this.node = view.createFromFxml(this, "/layout/table/index/index.fxml");
 
         this.indexService.getList().addListener((Change<? extends Index> change) -> {
             this.draw();

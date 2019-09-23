@@ -4,6 +4,7 @@ import migrator.connection.javafx.JavafxConnectionGuiKit;
 import migrator.connection.service.ConnectionGuiKit;
 import migrator.database.javafx.JavafxGuiKit;
 import migrator.database.service.GuiKit;
+import migrator.javafx.helpers.View;
 import migrator.router.Router;
 
 public class Gui {
@@ -12,11 +13,11 @@ public class Gui {
     protected migrator.table.service.GuiKit tableGuiKit;
     protected migrator.breadcrumps.GuiKit breadcrumpsGuiKit;
 
-    public Gui(Router router, BusinessLogic businessLogic) {
+    public Gui(View view, Router router, BusinessLogic businessLogic) {
         this.breadcrumpsGuiKit = new migrator.javafx.breadcrumps.JavafxGuiKit(businessLogic.getBreadcrumps());
         this.connectionGuiKit = new JavafxConnectionGuiKit(businessLogic.getConnection(), router);
         this.databaseGuiKit = new JavafxGuiKit(businessLogic.getDatabase(), router, this.breadcrumpsGuiKit);
-        this.tableGuiKit = new migrator.table.javafx.JavafxGuiKit(this.breadcrumpsGuiKit, router);
+        this.tableGuiKit = new migrator.table.javafx.JavafxGuiKit(this.breadcrumpsGuiKit, router, view);
     }
 
     public ConnectionGuiKit getConnectionKit() {

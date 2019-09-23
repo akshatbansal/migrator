@@ -9,6 +9,7 @@ import migrator.connection.service.ConnectionService;
 import migrator.database.service.DatabaseServerConnectionFactory;
 import migrator.javafx.Container;
 import migrator.javafx.helpers.ControllerHelper;
+import migrator.javafx.helpers.ResourceView;
 import migrator.router.BasicRouter;
 import migrator.router.Router;
 
@@ -39,7 +40,7 @@ public class App extends Application {
             )
         );
         Router router = new BasicRouter();
-        Gui gui = new Gui(router, businessLogic);
+        Gui gui = new Gui(new ResourceView(), router, businessLogic);
         Container container = new Container(businessLogic, gui, router);
         MainController mainController = new MainController(container);
         
