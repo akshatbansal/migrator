@@ -136,13 +136,16 @@ public class BusinessLogic {
     private Collection<Column> getTransformedColumns(ObservableList<List<String>> rawColumns) {
         List<Column> columns = new ArrayList<>();
         for (List<String> columnName : rawColumns) {
+            String defaultValue = columnName.get(3);
+            if (defaultValue == null) {
+                defaultValue = "";
+            }
             columns.add(
-                new Column(
+                this.columnService.create(
                     columnName.get(0),
                     columnName.get(1),
-                    columnName.get(3),
-                    columnName.get(2) == "YES" ? true : false,
-                    new ColumnChange(columnName.get(0), new ChangeCommand())
+                    defaultValue,
+                    columnName.get(2) == "YES" ? true : false
                 )
             );
         }

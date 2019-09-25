@@ -66,28 +66,32 @@ public class ColumnService {
     }    
 
     public Column create(String name, String format, String defaultValue, boolean enableNull) {
+        ColumnChange change = new ColumnChange(name, new ChangeCommand());
+        change.formaProperty().set(format);
+        change.defaultValueProperty().set(defaultValue);
+        change.nullProperty().set(enableNull);
+
         return this.create(
             name,
             format,
             defaultValue,
             enableNull,
-            new ColumnChange(name, new ChangeCommand())
+            change
         );
     }
 
     public Column create(String name, ColumnChange change) {
-        Column column = this.create(
+        change.formaProperty().set("string");
+        change.defaultValueProperty().set("");
+        change.nullProperty().set(false);
+
+        return this.create(
             name,
             "string",
             "",
             false,
             change
         );
-        change.getCommand().argumentProperty("format").set(column.getFormat());
-        change.getCommand().argumentProperty("default").set(column.getDefaultValue());
-        change.getCommand().argumentProperty("null").set(column.isNullEnabled());
-
-        return column;
     }
 
     public Column create(String name, String format, String defaultValue, boolean enableNull, ColumnChange change) {

@@ -2,6 +2,7 @@ package migrator.phpphinx;
 
 import org.junit.jupiter.api.Test;
 
+import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
@@ -26,8 +27,8 @@ public class PhinxMigrationTest {
     protected PhinxMigration migrator;
     protected FileStorage storage;
 
-    protected Map<String, ObjectProperty<Object>> createArguments(Object[] ... argsPair) {
-        Map<String, ObjectProperty<Object>> args = new Hashtable<>();
+    protected Map<String, Observable> createArguments(Object[] ... argsPair) {
+        Map<String, Observable> args = new Hashtable<>();
         for (Object[] pair : argsPair) {
             args.put((String) pair[0], new SimpleObjectProperty(pair[1]));
         }
@@ -41,7 +42,7 @@ public class PhinxMigrationTest {
     }
 
     @Test public void testPhpMigrationCreateTableWithColumn() {
-        Map<String, ObjectProperty<Object>> args = this.createArguments(
+        Map<String, Observable> args = this.createArguments(
             new Object[]{"name", "name"},
             new Object[]{"format", "string"}
         );
@@ -61,7 +62,7 @@ public class PhinxMigrationTest {
     }
 
     @Test public void testPhpMigrationUpdateTableRenameTable() {
-        Map<String, ObjectProperty<Object>> args = this.createArguments(
+        Map<String, Observable> args = this.createArguments(
             new Object[]{"name", "new_table_name"}
         );
 
@@ -79,7 +80,7 @@ public class PhinxMigrationTest {
     }
 
     @Test public void testPhpMigrationUpdateTableAddColumn() {
-        Map<String, ObjectProperty<Object>> args = this.createArguments(
+        Map<String, Observable> args = this.createArguments(
             new Object[]{"name", "column_name"},
             new Object[]{"format", "column_format"}
         );
@@ -114,7 +115,7 @@ public class PhinxMigrationTest {
     }
 
     @Test public void testPhpMigrationUpdateTableRenameColumn() {
-        Map<String, ObjectProperty<Object>> args = this.createArguments(
+        Map<String, Observable> args = this.createArguments(
             new Object[]{"name", "new_column_name"}
         );
 
@@ -142,7 +143,7 @@ public class PhinxMigrationTest {
     }
 
     @Test public void testPhpMigrationCreateTableWithColumnAndIndex() {
-        List<Map<String, ObjectProperty<Object>>> args = Arrays.asList(
+        List<Map<String, Observable>> args = Arrays.asList(
             this.createArguments(
                 new Object[]{"name", "id"},
                 new Object[]{"format", "integer"},

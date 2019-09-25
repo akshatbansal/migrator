@@ -1,5 +1,6 @@
 package migrator.migration;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -21,7 +22,27 @@ public class ColumnChange {
     }
 
     public String getFormat() {
-        return (String) this.command.getArgument("format");
+        return this.formaProperty().get();
+    }
+
+    public StringProperty formaProperty() {
+        return  this.command.argumentPropertyString("format");
+    }
+
+    public String getDefaultValue() {
+        return this.defaultValueProperty().get();
+    }
+
+    public StringProperty defaultValueProperty() {
+        return this.command.argumentPropertyString("default");
+    }
+
+    public Boolean isNullEnabled() {
+        return this.nullProperty().get();
+    }
+
+    public BooleanProperty nullProperty() {
+        return this.command.argumentPropertyBoolean("null");
     }
 
     public ChangeCommand getCommand() {
