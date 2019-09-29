@@ -31,6 +31,9 @@ public class JavafxIndexList implements IndexList {
     }
 
     protected void draw() {
+        if (this.indexes == null) {
+            return;
+        }
         this.indexes.getItems().setAll(this.indexService.getList());
         this.indexes.setPrefHeight(40 * (this.indexes.getItems().size() + 1));
     }

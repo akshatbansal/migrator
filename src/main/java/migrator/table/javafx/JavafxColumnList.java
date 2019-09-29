@@ -40,6 +40,9 @@ public class JavafxColumnList implements ColumnList {
     }
 
     protected void draw() {
+        if (this.columns == null) {
+            return;
+        }
         List<Column> columns = this.columnService.getList();
         this.columns.setPrefHeight((40) * (columns.size() + 1));
         this.columns.getItems().setAll(columns);
