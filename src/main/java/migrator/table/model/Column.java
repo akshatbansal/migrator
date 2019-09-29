@@ -101,8 +101,24 @@ public class Column implements Changable {
         return this.change;
     }
 
+    public StringProperty changeTypeProperty() {
+        return this.change.getCommand().typeProperty();
+    }
+
     @Override
     public ChangeCommand getChangeCommand() {
         return this.change.getCommand();
+    }
+
+    public void delete() {
+        this.getChangeCommand().setType(ChangeCommand.DELETE);
+    }
+
+    public void restore() {
+        this.changedColumn.nameProperty().set(this.originalColumn.getName());
+        this.changedColumn.formatProperty().set(this.originalColumn.getFormat());
+        this.changedColumn.defaultValueProperty().set(this.originalColumn.getDefaultValue());
+        this.changedColumn.nullProperty().setValue(this.originalColumn.isNullEnabled());
+        this.change.clear();
     }
 }

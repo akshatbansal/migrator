@@ -8,9 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.TableView;
 import migrator.javafx.helpers.ControllerHelper;
-import migrator.migration.ChangeCommand;
 import migrator.migration.ChangeService;
-import migrator.migration.ColumnChange;
 import migrator.router.Router;
 import migrator.table.component.ColumnList;
 import migrator.table.model.Column;
@@ -64,6 +62,7 @@ public class JavafxColumnList implements ColumnList {
             .createWithCreateChange("new_column");
         this.columnService.add(newColumn);
         this.columnService.select(newColumn);
+        this.columns.getSelectionModel().select(newColumn);
         this.router.show("column", newColumn);
     }
 }

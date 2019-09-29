@@ -60,10 +60,12 @@ public class JavafxColumnForm implements ColumnForm {
     }
 
     protected void onChangeTypeChange(String changeType) {
-        if (changeType == ChangeCommand.DELETE) {
-            this.manageBox.getChildren().setAll(this.restoreButton);
-        } else {
-            this.manageBox.getChildren().setAll(this.removeButton);
+        this.manageBox.getChildren().clear();
+        if (changeType != ChangeCommand.DELETE) {
+            this.manageBox.getChildren().add(this.removeButton);
+        }
+        if (changeType == ChangeCommand.DELETE || changeType == ChangeCommand.UPDATE) {
+            this.manageBox.getChildren().add(this.restoreButton);
         }
     }
 
@@ -73,7 +75,8 @@ public class JavafxColumnForm implements ColumnForm {
             "boolean",
             "integer",
             "smallint",
-            "longint"
+            "longint",
+            "datetime"
         );
     }
 
@@ -83,16 +86,15 @@ public class JavafxColumnForm implements ColumnForm {
     }
 
     public void delete() {
-        if (this.column.getChange().getCommand().isType(ChangeCommand.CREATE)) {
+        if (this.column.getChangeCommand().isType(ChangeCommand.CREATE)) {
             this.columnService.remove(this.column);
             return;
         }
-        this.column.getChange().getCommand().setType(ChangeCommand.DELETE);
+        this.column.delete();
     }
 
     public void restore() {
-        this.column.getChangeCommand().setType(ChangeCommand.NONE);
-        // this.column.onChange();
+        this.column.restore();
     }
 
     @FXML public void close() {

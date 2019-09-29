@@ -4,9 +4,9 @@ import javafx.beans.property.Property;
 import javafx.beans.property.StringProperty;
 
 public class SimpleColumnChange implements ColumnChange {
-    protected ChangeCommand command;
     protected String columnName;
     protected ColumnProperty columnProperty;
+    protected ChangeCommand command;
 
     public SimpleColumnChange(String columnName, ColumnProperty columnProperty, ChangeCommand command) {
         this.columnName = columnName;
@@ -85,7 +85,16 @@ public class SimpleColumnChange implements ColumnChange {
         return this.command;
     }
 
-    protected Boolean isAnyPropertyChanged() {
+    @Override
+    public void clear() {
+        this.columnProperty.nameProperty().set(null);
+        this.columnProperty.formatProperty().set(null);
+        this.columnProperty.defaultValueProperty().set(null);
+        this.columnProperty.nullProperty().setValue(null);
+        this.command.setType(ChangeCommand.NONE);
+    }
+
+    public Boolean isAnyPropertyChanged() {
         return this.getName() != null ||
             this.getFormat() != null ||
             this.getDefaultValue() != null ||
@@ -93,9 +102,15 @@ public class SimpleColumnChange implements ColumnChange {
     }
 
     public void evalCommadType() {
-        if (this.command.isType(ChangeCommand.NONE) && this.isAnyPropertyChanged()) {
+        if (this.command.isType(ChangeCommand.DELETE)) {
+            return;
+        }
+        if (this.command.isType(ChangeCommand.CREATE)) {
+            return;
+        }
+        if (this.isAnyPropertyChanged()) {
             this.command.setType(ChangeCommand.UPDATE);
-        } else if (this.command.isType(ChangeCommand.UPDATE) && !this.isAnyPropertyChanged()) {
+        } else if (!this.isAnyPropertyChanged()) {
             this.command.setType(ChangeCommand.NONE);
         }
     }
