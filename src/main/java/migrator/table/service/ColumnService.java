@@ -7,15 +7,15 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ListChangeListener.Change;
-import migrator.migration.ChangeCommand;
-import migrator.migration.ColumnChange;
 import migrator.table.model.Column;
 
 public class ColumnService {
+    protected ColumnFactory columnFactory;
     protected ObservableList<Column> list;
     protected ObjectProperty<Column> selected;
 
-    public ColumnService() {
+    public ColumnService(ColumnFactory columnFactory) {
+        this.columnFactory = columnFactory;
         this.list = FXCollections.observableArrayList();
         this.selected = new SimpleObjectProperty<>();
 
@@ -58,49 +58,7 @@ public class ColumnService {
         this.list.setAll(columns);
     }
 
-    public Column create(String name) {
-        return this.create(
-            name,
-            new ColumnChange(name, new ChangeCommand())
-        );
-    }    
-
-    public Column create(String name, String format, String defaultValue, boolean enableNull) {
-        ColumnChange change = new ColumnChange(name, new ChangeCommand());
-        change.formaProperty().set(format);
-        change.defaultValueProperty().set(defaultValue);
-        change.nullProperty().set(enableNull);
-
-        return this.create(
-            name,
-            format,
-            defaultValue,
-            enableNull,
-            change
-        );
-    }
-
-    public Column create(String name, ColumnChange change) {
-        change.formaProperty().set("string");
-        change.defaultValueProperty().set("");
-        change.nullProperty().set(false);
-
-        return this.create(
-            name,
-            "string",
-            "",
-            false,
-            change
-        );
-    }
-
-    public Column create(String name, String format, String defaultValue, boolean enableNull, ColumnChange change) {
-        return new Column(
-            name,
-            format,
-            defaultValue,
-            enableNull,
-            change
-        );
+    public ColumnFactory getFactory() {
+        return this.columnFactory;
     }
 }

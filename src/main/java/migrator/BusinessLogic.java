@@ -23,6 +23,7 @@ import migrator.migration.TableChange;
 import migrator.table.model.Column;
 import migrator.table.model.Index;
 import migrator.table.model.Table;
+import migrator.table.service.ColumnFactory;
 import migrator.table.service.ColumnService;
 import migrator.table.service.IndexService;
 import migrator.table.service.TableService;
@@ -36,13 +37,15 @@ public class BusinessLogic {
     protected IndexService indexService;
     protected ChangeService changeService;
     protected ServerConnectionFactory serverConnectionFactory;
+    protected ColumnFactory columnFactory;
  
     public BusinessLogic(ServerConnectionFactory serverConnectionFactory, ConnectionService connectionService) {
         this.serverConnectionFactory = serverConnectionFactory;
         this.connectionService = connectionService;
+        this.columnFactory = new ColumnFactory();
         this.databaseService = new DatabaseService();
         this.tableService = new TableService();
-        this.columnService = new ColumnService();
+        this.columnService = new ColumnService(this.columnFactory);
         this.indexService = new IndexService();
         this.breadcrumpsService = new BreadcrumpsService();
         this.changeService = new ChangeService();
@@ -141,7 +144,7 @@ public class BusinessLogic {
                 defaultValue = "";
             }
             columns.add(
-                this.columnService.create(
+                this.columnFactory.createNotChanged(
                     columnName.get(0),
                     columnName.get(1),
                     defaultValue,

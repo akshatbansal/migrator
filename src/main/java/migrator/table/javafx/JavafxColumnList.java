@@ -60,10 +60,8 @@ public class JavafxColumnList implements ColumnList {
 
     @FXML
     public void addColumn() {
-        Column newColumn = this.columnService.create(
-            "new_column",
-            new ColumnChange("new_column", new ChangeCommand("create"))
-        );
+        Column newColumn = this.columnService.getFactory()
+            .createWithCreateChange("new_column");
         this.columnService.add(newColumn);
         this.columnService.select(newColumn);
         this.router.show("column", newColumn);

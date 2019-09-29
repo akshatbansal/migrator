@@ -93,7 +93,7 @@ public class JavafxColumnForm implements ColumnForm {
 
     public void restore() {
         this.column.getChangeCommand().setType(ChangeCommand.NONE);
-        this.column.onChange();
+        // this.column.onChange();
     }
 
     @FXML public void close() {

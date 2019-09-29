@@ -19,6 +19,8 @@ import java.util.Map;
 import migrator.migration.ChangeCommand;
 import migrator.migration.ColumnChange;
 import migrator.migration.IndexChange;
+import migrator.migration.SimpleColumnChange;
+import migrator.migration.SimpleColumnProperty;
 import migrator.migration.TableChange;
 import migrator.phpphinx.PhinxMigration;
 import migrator.phpphinx.mock.FileStorage;
@@ -42,20 +44,21 @@ public class PhinxMigrationTest {
     }
 
     @Test public void testPhpMigrationCreateTableWithColumn() {
-        Map<String, Observable> args = this.createArguments(
-            new Object[]{"name", "name"},
-            new Object[]{"format", "string"}
-        );
-
         TableChange change = new TableChange(
             "table_name", 
             new ChangeCommand("create"),
-            Arrays.asList(new ColumnChange("name", new ChangeCommand("create", args)))
+            Arrays.asList(
+                new SimpleColumnChange(
+                    "column_name",
+                    new SimpleColumnProperty("column_name", "string", null, false),
+                    new ChangeCommand("create")
+                )
+            )
         );
         this.migrator.create(change);
         assertEquals(
             "$this->table('table_name')\n" +
-                "\t->addColumn('name', 'string')\n" +
+                "\t->addColumn('column_name', 'string')\n" +
                 "\t->save();\n",
             this.storage.load()
         );
@@ -80,15 +83,16 @@ public class PhinxMigrationTest {
     }
 
     @Test public void testPhpMigrationUpdateTableAddColumn() {
-        Map<String, Observable> args = this.createArguments(
-            new Object[]{"name", "column_name"},
-            new Object[]{"format", "column_format"}
-        );
-
         TableChange change = new TableChange(
             "table_name", 
             new ChangeCommand("update"),
-            Arrays.asList(new ColumnChange("column_name", new ChangeCommand("create", args)))
+            Arrays.asList(
+                new SimpleColumnChange(
+                    "column_name",
+                    new SimpleColumnProperty("column_name", "column_format", null, false),
+                    new ChangeCommand("create")
+                )
+            )
         );
         this.migrator.create(change);
         assertEquals(
@@ -103,7 +107,13 @@ public class PhinxMigrationTest {
         TableChange change = new TableChange(
             "table_name", 
             new ChangeCommand("update"),
-            Arrays.asList(new ColumnChange("column_name", new ChangeCommand("delete")))
+            Arrays.asList(
+                new SimpleColumnChange(
+                    "column_name",
+                    new SimpleColumnProperty("column_name", null, null, false),
+                    new ChangeCommand("delete")
+                )
+            )
         );
         this.migrator.create(change);
         assertEquals(
@@ -115,14 +125,16 @@ public class PhinxMigrationTest {
     }
 
     @Test public void testPhpMigrationUpdateTableRenameColumn() {
-        Map<String, Observable> args = this.createArguments(
-            new Object[]{"name", "new_column_name"}
-        );
-
         TableChange change = new TableChange(
             "table_name", 
             new ChangeCommand("update"),
-            Arrays.asList(new ColumnChange("column_name", new ChangeCommand("update", args)))
+            Arrays.asList(
+                new SimpleColumnChange(
+                    "column_name",
+                    new SimpleColumnProperty("new_column_name", null, null, false),
+                    new ChangeCommand("update")
+                )
+            )
         );
         this.migrator.create(change);
         assertEquals(
@@ -143,31 +155,27 @@ public class PhinxMigrationTest {
     }
 
     @Test public void testPhpMigrationCreateTableWithColumnAndIndex() {
-        List<Map<String, Observable>> args = Arrays.asList(
-            this.createArguments(
-                new Object[]{"name", "id"},
-                new Object[]{"format", "integer"},
-                new Object[]{"unsigned", true},
-                new Object[]{"auto_increment", true}
-            ),
-            this.createArguments(
-                new Object[]{"name", "name"},
-                new Object[]{"format", "string"}
-            ),
-            this.createArguments(
-                new Object[]{"columns", Arrays.asList("id", "name")}
-            )
+        Map<String, Observable> args = this.createArguments(
+            new Object[]{"columns", Arrays.asList("id", "name")}
         );
 
         TableChange change = new TableChange(
             "table_name", 
             new ChangeCommand("create"),
             Arrays.asList(
-                new ColumnChange("id", new ChangeCommand("create", args.get(0))),
-                new ColumnChange("name", new ChangeCommand("create", args.get(1)))
+                new SimpleColumnChange(
+                    "id",
+                    new SimpleColumnProperty("id", "integer", null, false),
+                    new ChangeCommand("create")
+                ),
+                new SimpleColumnChange(
+                    "name",
+                    new SimpleColumnProperty("name", "string", null, false),
+                    new ChangeCommand("create")
+                )
             ),
             Arrays.asList(
-                new IndexChange("id_name", new ChangeCommand("create", args.get(2)))
+                new IndexChange("id_name", new ChangeCommand("create", args))
             )
         );
         this.migrator.create(change);
