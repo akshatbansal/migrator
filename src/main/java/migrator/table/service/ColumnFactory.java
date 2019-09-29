@@ -15,7 +15,7 @@ public class ColumnFactory {
         return new Column(
             new SimpleColumnProperty(columnName, format, defaultValue, enableNull), // original
             new SimpleColumnProperty(columnName, format, defaultValue, enableNull), // changed
-            new SimpleColumnChange(columnName, this.simpleColumnProperty(null, null, null, false), new ChangeCommand(ChangeCommand.NONE))
+            new SimpleColumnChange(columnName, this.simpleColumnProperty(null, null, null, null), new ChangeCommand(ChangeCommand.NONE))
         );
     }
 
@@ -23,7 +23,7 @@ public class ColumnFactory {
         return new Column(
             new SimpleColumnProperty(columnName, "string", "", false), // original
             new SimpleColumnProperty(columnName, "string", "", false), // changed
-            new SimpleColumnChange(columnName, this.simpleColumnProperty(null, null, null, false), new ChangeCommand(ChangeCommand.CREATE))
+            new SimpleColumnChange(columnName, this.simpleColumnProperty(null, null, null, null), new ChangeCommand(ChangeCommand.CREATE))
         );
     }
 }

@@ -1,6 +1,6 @@
 package migrator.migration;
 
-import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.StringProperty;
 
 public interface ColumnProperty {
@@ -10,6 +10,6 @@ public interface ColumnProperty {
     public String getFormat();
     public StringProperty defaultValueProperty();
     public String getDefaultValue();
-    public BooleanProperty nullProperty();
+    public Property<Boolean> nullProperty();
     public Boolean isNullEnabled();
 }

@@ -1,7 +1,8 @@
 package migrator.migration;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -9,13 +10,13 @@ public class SimpleColumnProperty implements ColumnProperty {
     protected StringProperty name;
     protected StringProperty format;
     protected StringProperty defaultValue;
-    protected BooleanProperty enableNull;
+    protected Property<Boolean> enableNull;
 
-    public SimpleColumnProperty(String name, String format, String defaultValue, boolean enableNull) {
+    public SimpleColumnProperty(String name, String format, String defaultValue, Boolean enableNull) {
         this.name = new SimpleStringProperty(name);
         this.format = new SimpleStringProperty(format);
         this.defaultValue = new SimpleStringProperty(defaultValue);
-        this.enableNull = new SimpleBooleanProperty(enableNull);
+        this.enableNull = new SimpleObjectProperty<>(enableNull);
     }
 
     @Override
@@ -49,12 +50,12 @@ public class SimpleColumnProperty implements ColumnProperty {
     }
 
     @Override
-    public BooleanProperty nullProperty() {
+    public Property<Boolean> nullProperty() {
         return this.enableNull;
     }
 
     @Override
     public Boolean isNullEnabled() {
-        return this.nullProperty().get();
+        return this.nullProperty().getValue();
     }
 }

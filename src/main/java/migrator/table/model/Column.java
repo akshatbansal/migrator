@@ -1,8 +1,6 @@
 package migrator.table.model;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.StringProperty;
 import migrator.migration.ChangeCommand;
 import migrator.migration.ColumnChange;
@@ -23,6 +21,30 @@ public class Column implements Changable {
                 this.change.nameProperty().set(null);
             } else {
                 this.change.nameProperty().set(this.changedColumn.getName());
+            }
+         });
+
+         this.changedColumn.formatProperty().addListener((obs, ol, ne) -> {
+            if (this.originalColumn.getFormat().equals(this.changedColumn.getFormat())) {
+                this.change.formatProperty().set(null);
+            } else {
+                this.change.formatProperty().set(this.changedColumn.getFormat());
+            }
+         });
+
+         this.changedColumn.defaultValueProperty().addListener((obs, ol, ne) -> {
+            if (this.originalColumn.getDefaultValue().equals(this.changedColumn.getDefaultValue())) {
+                this.change.defaultValueProperty().set(null);
+            } else {
+                this.change.defaultValueProperty().set(this.changedColumn.getDefaultValue());
+            }
+         });
+
+         this.changedColumn.nullProperty().addListener((obs, ol, ne) -> {
+            if (this.originalColumn.isNullEnabled().equals(this.changedColumn.isNullEnabled())) {
+                this.change.nullProperty().setValue(null);
+            } else {
+                this.change.nullProperty().setValue(this.changedColumn.isNullEnabled());
             }
          });
     }
@@ -63,12 +85,12 @@ public class Column implements Changable {
         return this.originalColumn.getDefaultValue();
     }
 
-    public BooleanProperty enableNullProperty() {
+    public Property<Boolean> enableNullProperty() {
         return this.changedColumn.nullProperty();
     }
 
     public Boolean isNullEnabled() {
-        return this.enableNullProperty().get();
+        return this.enableNullProperty().getValue();
     }
 
     public Boolean isNullEnabledOriginal() {

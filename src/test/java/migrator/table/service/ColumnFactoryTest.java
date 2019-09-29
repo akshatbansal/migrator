@@ -21,7 +21,7 @@ public class ColumnFactoryTest {
         assertNull(column.getChange().getName());
         assertNull(column.getChange().getFormat());
         assertNull(column.getChange().getDefaultValue());
-        assertFalse(column.getChange().isNullEnabled());
+        assertNull(column.getChange().isNullEnabled());
     }
 
     @Test public void testCreateNotChangedIsNoneType() {
@@ -56,7 +56,7 @@ public class ColumnFactoryTest {
         assertNull(column.getChange().getName());
         assertNull(column.getChange().getFormat());
         assertNull(column.getChange().getDefaultValue());
-        assertFalse(column.getChange().isNullEnabled());
+        assertNull(column.getChange().isNullEnabled());
     }
 
     @Test public void testCreateWithCreateChangeByNameIsCreateType() {

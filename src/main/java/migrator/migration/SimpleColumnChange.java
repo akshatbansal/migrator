@@ -1,6 +1,6 @@
 package migrator.migration;
 
-import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.StringProperty;
 
 public class SimpleColumnChange implements ColumnChange {
@@ -12,6 +12,22 @@ public class SimpleColumnChange implements ColumnChange {
         this.columnName = columnName;
         this.columnProperty = columnProperty;
         this.command = command;
+
+        this.columnProperty.nameProperty().addListener((obs, ol, ne) -> {
+            this.evalCommadType();
+        });
+
+        this.columnProperty.formatProperty().addListener((obs, ol, ne) -> {
+            this.evalCommadType();
+        });
+
+        this.columnProperty.defaultValueProperty().addListener((obs, ol, ne) -> {
+            this.evalCommadType();
+        });
+
+        this.columnProperty.nullProperty().addListener((obs, ol, ne) -> {
+            this.evalCommadType();
+        });
     }
 
     @Override
@@ -60,12 +76,27 @@ public class SimpleColumnChange implements ColumnChange {
     }
 
     @Override
-    public BooleanProperty nullProperty() {
+    public Property<Boolean> nullProperty() {
         return this.columnProperty.nullProperty();
     }
 
     @Override
     public ChangeCommand getCommand() {
         return this.command;
+    }
+
+    protected Boolean isAnyPropertyChanged() {
+        return this.getName() != null ||
+            this.getFormat() != null ||
+            this.getDefaultValue() != null ||
+            this.isNullEnabled() != null;
+    }
+
+    public void evalCommadType() {
+        if (this.command.isType(ChangeCommand.NONE) && this.isAnyPropertyChanged()) {
+            this.command.setType(ChangeCommand.UPDATE);
+        } else if (this.command.isType(ChangeCommand.UPDATE) && !this.isAnyPropertyChanged()) {
+            this.command.setType(ChangeCommand.NONE);
+        }
     }
 }

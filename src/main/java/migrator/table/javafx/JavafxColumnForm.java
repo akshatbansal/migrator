@@ -8,7 +8,6 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import migrator.javafx.helpers.ControllerHelper;
 import migrator.migration.ChangeCommand;
 import migrator.table.component.ColumnForm;
