@@ -3,6 +3,7 @@ package migrator.table.javafx;
 import org.junit.jupiter.api.Test;
 
 import migrator.router.BasicRouter;
+import migrator.table.service.IndexFactory;
 import migrator.table.service.IndexService;
 import migrator.mock.FakeView;
 
@@ -15,7 +16,9 @@ public class JavafxIndexListTest {
     }
 
     @Test public void testAddIndexAddIndexObjectToIndexService() {
-        IndexService indexService = new IndexService();
+        IndexService indexService = new IndexService(
+            new IndexFactory()
+        );
         JavafxIndexList javafxIndexList = new JavafxIndexList(
             new FakeView(),
             indexService,
@@ -27,7 +30,9 @@ public class JavafxIndexListTest {
     }
 
     @Test public void testAddIndexAddIndexWithChangeTypeCreated() {
-        IndexService indexService = new IndexService();
+        IndexService indexService = new IndexService(
+            new IndexFactory()
+        );
         JavafxIndexList javafxIndexList = new JavafxIndexList(
             new FakeView(),
             indexService,

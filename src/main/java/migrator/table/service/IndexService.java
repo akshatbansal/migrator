@@ -9,10 +9,12 @@ import javafx.collections.ObservableList;
 import migrator.table.model.Index;
 
 public class IndexService {
+    protected IndexFactory indexFactory;
     protected ObservableList<Index> list;
     protected ObjectProperty<Index> selected;
 
-    public IndexService() {
+    public IndexService(IndexFactory indexFactory) {
+        this.indexFactory = indexFactory;
         this.list = FXCollections.observableArrayList();
         this.selected = new SimpleObjectProperty<>();
     }
@@ -39,5 +41,9 @@ public class IndexService {
 
     public void remove(Index index) {
         this.list.remove(index);
+    }
+
+    public IndexFactory getFactory() {
+        return this.indexFactory;
     }
 }

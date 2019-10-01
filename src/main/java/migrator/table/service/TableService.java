@@ -10,10 +10,12 @@ import javafx.collections.ListChangeListener.Change;
 import migrator.table.model.Table;
 
 public class TableService {
+    protected TableFactory tableFactory;
     protected ObservableList<Table> list;
     protected ObjectProperty<Table> selected;
 
-    public TableService() {
+    public TableService(TableFactory tableFactory) {
+        this.tableFactory = tableFactory;
         this.list = FXCollections.observableArrayList();
         this.selected = new SimpleObjectProperty<>();
 
@@ -54,5 +56,9 @@ public class TableService {
 
     public void setAll(List<Table> tables) {
         this.list.setAll(tables);
+    }
+
+    public TableFactory getFactory() {
+        return this.tableFactory;
     }
 }

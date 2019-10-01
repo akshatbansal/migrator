@@ -1,7 +1,9 @@
 package migrator.phpphinx.command;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javafx.beans.property.StringProperty;
 import migrator.migration.IndexChange;
 
 public class AddIndex implements PhpCommand {
@@ -16,7 +18,11 @@ public class AddIndex implements PhpCommand {
     }
 
     private String getColumns() {
-        List<String> columns = (List<String>) this.indexChange.getCommand().getArgument("columns");
+        List<StringProperty> columnsProperty = this.indexChange.columnsProperty();
+        List<String> columns = new ArrayList<>();
+        for (StringProperty columnProperty : columnsProperty) {
+            columns.add(columnProperty.get());
+        }
         String columnsString = String.join("', '", columns);
         if (!columnsString.isEmpty()) {
             columnsString = "['" + columnsString + "']";

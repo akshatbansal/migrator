@@ -11,8 +11,8 @@ public class ChangeColumn implements PhpCommand {
 
     public String toPhp() {
         String php = "";
-        if (this.columnChange.getCommand().hasArgument("name")) {
-            php += "\t->renameColumn('" + this.columnChange.getName() + "', '" + this.columnChange.getCommand().getArgument("name") + "')\n";
+        if (this.columnChange.hasNameChanged()) {
+            php += "\t->renameColumn('" + this.columnChange.getOriginalName() + "', '" + this.columnChange.getName() + "')\n";
         }
 
         return php;

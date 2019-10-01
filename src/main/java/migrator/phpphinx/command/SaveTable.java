@@ -15,7 +15,7 @@ public class SaveTable implements PhpCommand {
     }
 
     public String toPhp() {
-        String php = "$this->table('" + this.tableChange.getName() + "')\n";
+        String php = "$this->table('" + this.tableChange.getOriginalName() + "')\n";
         for (ColumnChange columnChange : this.tableChange.getColumnsChanges()) {
             PhpCommand columnPhpCommand = this.commandFactory.column(columnChange);
             php += columnPhpCommand.toPhp();

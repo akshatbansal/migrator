@@ -16,18 +16,21 @@ public class TableServiceTest {
 
     @BeforeEach
     public void setUp() {
-        this.tableService = new TableService();
+        this.tableService = new TableService(
+            new TableFactory()
+        );
     }
 
     @Test public void testSelectSetsSelectedValue() {
         this.tableService.select(
-            new Table(
-                new DatabaseConnection(
-                    new Connection("localhost"),
-                    "test_db"
-                ),
-                "test_table"
-            )
+            this.tableService.getFactory()
+                .createNotChanged(
+                    new DatabaseConnection(
+                        new Connection("localhost"),
+                        "test_db"
+                    ),
+                    "test_table"
+                )
         );
 
         assertEquals("test_table", this.tableService.getSelected().get().getName());
@@ -35,13 +38,14 @@ public class TableServiceTest {
 
     @Test public void testAddAddsTableToList() {
         this.tableService.add(
-            new Table(
-                new DatabaseConnection(
-                    new Connection("localhost"),
-                    "test_db"
-                ),
-                "test_table"
-            )
+            this.tableService.getFactory()
+                .createNotChanged(
+                    new DatabaseConnection(
+                        new Connection("localhost"),
+                        "test_db"
+                    ),
+                    "test_table"
+                )
         );
 
         assertEquals(1, this.tableService.getList().size());
@@ -49,7 +53,8 @@ public class TableServiceTest {
     }
 
     @Test public void testRemoveRemovesTableFromList() {
-        Table table = new Table(
+        Table table = this.tableService.getFactory()
+        .createNotChanged(
             new DatabaseConnection(
                 new Connection("localhost"),
                 "test_db"
@@ -63,7 +68,8 @@ public class TableServiceTest {
     }
 
     @Test public void testSetAllSetsListValues() {
-        Table table = new Table(
+        Table table = this.tableService.getFactory()
+        .createNotChanged(
             new DatabaseConnection(
                 new Connection("localhost"),
                 "test_db"
@@ -77,7 +83,8 @@ public class TableServiceTest {
     }
 
     @Test public void testRemoveRemovesSelectedIfNotInTheList() {
-        Table table = new Table(
+        Table table = this.tableService.getFactory()
+        .createNotChanged(
             new DatabaseConnection(
                 new Connection("localhost"),
                 "test_db"

@@ -1,50 +1,56 @@
 package migrator.table.model;
 
-import javafx.beans.Observable;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ObservableValue;
 import migrator.migration.ChangeCommand;
 import migrator.migration.ColumnChange;
+import migrator.migration.ColumnProperty;
 
 public class Column implements Changable {
-    protected StringProperty name;
-    protected StringProperty format;
-    protected StringProperty defaultValue;
-    protected BooleanProperty enableNull;
+    protected ColumnProperty originalColumn;
+    protected ColumnProperty changedColumn;
     protected ColumnChange change;
 
-    public Column(String name, String format, String defaultValue, boolean enableNull, ColumnChange columnChange) {
-        this.name = new SimpleStringProperty(name);
-        this.format = new SimpleStringProperty(format);
-        this.defaultValue = new SimpleStringProperty(defaultValue);
-        this.enableNull = new SimpleBooleanProperty(enableNull);
+    public Column(ColumnProperty originalColumn, ColumnProperty changedColumn, ColumnChange columnChange) {
+        this.originalColumn = originalColumn;
+        this.changedColumn = changedColumn;
         this.change = columnChange;
-        System.out.println("default: " + this.defaultValue.get());
-        System.out.println("default string: " + defaultValue);
 
-        this.change.nameProperty().addListener((obs, ol, ne) -> {
-            this.onChange();
-        });
-        this.change.formaProperty().addListener((obs, ol, ne) -> {
-            this.onChange();
-        });
-        this.change.defaultValueProperty().addListener((obs, ol, ne) -> {
-            this.onChange();
-        });
-        this.change.nullProperty().addListener((obs, ol, ne) -> {
-            this.onChange();
-        });
+        this.changedColumn.nameProperty().addListener((obs, ol, ne) -> {
+            if (this.originalColumn.getName().equals(this.changedColumn.getName())) {
+                this.change.nameProperty().set(null);
+            } else {
+                this.change.nameProperty().set(this.changedColumn.getName());
+            }
+         });
+
+         this.changedColumn.formatProperty().addListener((obs, ol, ne) -> {
+            if (this.originalColumn.getFormat().equals(this.changedColumn.getFormat())) {
+                this.change.formatProperty().set(null);
+            } else {
+                this.change.formatProperty().set(this.changedColumn.getFormat());
+            }
+         });
+
+         this.changedColumn.defaultValueProperty().addListener((obs, ol, ne) -> {
+            if (this.originalColumn.getDefaultValue().equals(this.changedColumn.getDefaultValue())) {
+                this.change.defaultValueProperty().set(null);
+            } else {
+                this.change.defaultValueProperty().set(this.changedColumn.getDefaultValue());
+            }
+         });
+
+         this.changedColumn.nullProperty().addListener((obs, ol, ne) -> {
+            if (this.originalColumn.isNullEnabled().equals(this.changedColumn.isNullEnabled())) {
+                this.change.nullProperty().setValue(null);
+            } else {
+                this.change.nullProperty().setValue(this.changedColumn.isNullEnabled());
+            }
+         });
     }
 
     public StringProperty nameProperty() {
-        if (this.change != null) {
-            return this.change.nameProperty();
-        }
-        return this.name;
+        return this.changedColumn.nameProperty();
     }
 
     public String getName() {
@@ -52,14 +58,11 @@ public class Column implements Changable {
     }
 
     public String getOriginalName() {
-        return this.name.get();
+        return this.originalColumn.getName();
     }
 
     public StringProperty formatProperty() {
-        if (this.change != null) {
-            return this.change.formaProperty();
-        }
-        return this.format;
+        return this.changedColumn.formatProperty();
     }
 
     public String getFormat() {
@@ -67,14 +70,11 @@ public class Column implements Changable {
     }
 
     public String getOriginalFormat() {
-        return this.format.get();
+        return this.originalColumn.getFormat();
     }
 
     public StringProperty defaultValueProperty() {
-        if (this.change != null) {
-            return this.change.defaultValueProperty();
-        }
-        return this.defaultValue;
+        return this.changedColumn.defaultValueProperty();
     }
 
     public String getDefaultValue() {
@@ -82,26 +82,27 @@ public class Column implements Changable {
     }
 
     public String getOriginalDefaultValue() {
-        return this.defaultValue.get();
+        return this.originalColumn.getDefaultValue();
     }
 
-    public BooleanProperty enableNullProperty() {
-        if (this.change != null) {
-            return this.change.nullProperty();
-        }
-        return this.enableNull;
+    public Property<Boolean> enableNullProperty() {
+        return this.changedColumn.nullProperty();
     }
 
     public Boolean isNullEnabled() {
-        return this.enableNullProperty().get();
+        return this.enableNullProperty().getValue();
     }
 
     public Boolean isNullEnabledOriginal() {
-        return this.enableNull.get();
+        return this.originalColumn.isNullEnabled();
     }
 
     public ColumnChange getChange() {
         return this.change;
+    }
+
+    public StringProperty changeTypeProperty() {
+        return this.change.getCommand().typeProperty();
     }
 
     @Override
@@ -109,20 +110,15 @@ public class Column implements Changable {
         return this.change.getCommand();
     }
 
-    protected Boolean originalEqualsChange() {
-        System.out.println(this.getOriginalDefaultValue());
-        System.out.println(this.change.defaultValueProperty().get());
-        return this.change.nameProperty().get().equals(this.getOriginalName()) &&
-            this.change.formaProperty().get().equals(this.getOriginalFormat()) &&
-            this.change.defaultValueProperty().get().equals(this.getOriginalDefaultValue()) &&
-            this.change.nullProperty().get() == this.isNullEnabledOriginal();
+    public void delete() {
+        this.getChangeCommand().setType(ChangeCommand.DELETE);
     }
 
-    public void onChange() {
-        if (this.originalEqualsChange() && this.change.getCommand().isType(ChangeCommand.UPDATE)) {
-            this.change.getCommand().setType(null);
-        } else if (!this.originalEqualsChange() && this.change.getCommand().isType(null)) {
-            this.change.getCommand().setType(ChangeCommand.UPDATE);
-        }
+    public void restore() {
+        this.changedColumn.nameProperty().set(this.originalColumn.getName());
+        this.changedColumn.formatProperty().set(this.originalColumn.getFormat());
+        this.changedColumn.defaultValueProperty().set(this.originalColumn.getDefaultValue());
+        this.changedColumn.nullProperty().setValue(this.originalColumn.isNullEnabled());
+        this.change.clear();
     }
 }

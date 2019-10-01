@@ -15,9 +15,9 @@ public class UpdateTable implements PhpCommand {
     }
 
     public String toPhp() {
-        String php = "$this->table('" + this.tableChange.getName() + "')\n";
-        if (this.tableChange.getCommand().hasArgument("name")) {
-            php += "\t->renameTable('" + this.tableChange.getCommand().getArgument("name") + "')\n";
+        String php = "$this->table('" + this.tableChange.getOriginalName() + "')\n";
+        if (this.tableChange.isNameChanged()) {
+            php += "\t->renameTable('" + this.tableChange.getName() + "')\n";
         }
         for (ColumnChange columnChange : this.tableChange.getColumnsChanges()) {
             PhpCommand columnPhpCommand = this.commandFactory.column(columnChange);
