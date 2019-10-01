@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,6 +22,8 @@ import migrator.migration.ColumnChange;
 import migrator.migration.IndexChange;
 import migrator.migration.SimpleColumnChange;
 import migrator.migration.SimpleColumnProperty;
+import migrator.migration.SimpleIndexChange;
+import migrator.migration.SimpleIndexProperty;
 import migrator.migration.TableChange;
 import migrator.phpphinx.PhinxMigration;
 import migrator.phpphinx.mock.FileStorage;
@@ -155,10 +158,6 @@ public class PhinxMigrationTest {
     }
 
     @Test public void testPhpMigrationCreateTableWithColumnAndIndex() {
-        Map<String, Observable> args = this.createArguments(
-            new Object[]{"columns", Arrays.asList("id", "name")}
-        );
-
         TableChange change = new TableChange(
             "table_name", 
             new ChangeCommand("create"),
@@ -175,7 +174,10 @@ public class PhinxMigrationTest {
                 )
             ),
             Arrays.asList(
-                new IndexChange("id_name", new ChangeCommand("create", args))
+                new SimpleIndexChange(
+                    new SimpleIndexProperty("id_name", Arrays.asList(new SimpleStringProperty("id"), new SimpleStringProperty("name"))),
+                    new ChangeCommand("create")
+                )
             )
         );
         this.migrator.create(change);
@@ -195,7 +197,10 @@ public class PhinxMigrationTest {
             new ChangeCommand("create"),
             new ArrayList(),
             Arrays.asList(
-                new IndexChange("id_name", new ChangeCommand("delete"))
+                new SimpleIndexChange(
+                    new SimpleIndexProperty("id_name", new ArrayList<>()),
+                    new ChangeCommand("delete")
+                )
             )
         );
         this.migrator.create(change);

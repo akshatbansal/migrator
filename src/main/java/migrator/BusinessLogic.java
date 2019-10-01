@@ -2,9 +2,11 @@ package migrator;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -25,6 +27,7 @@ import migrator.table.model.Index;
 import migrator.table.model.Table;
 import migrator.table.service.ColumnFactory;
 import migrator.table.service.ColumnService;
+import migrator.table.service.IndexFactory;
 import migrator.table.service.IndexService;
 import migrator.table.service.TableService;
 
@@ -38,15 +41,17 @@ public class BusinessLogic {
     protected ChangeService changeService;
     protected ServerConnectionFactory serverConnectionFactory;
     protected ColumnFactory columnFactory;
+    protected IndexFactory indexFactory;
  
     public BusinessLogic(ServerConnectionFactory serverConnectionFactory, ConnectionService connectionService) {
         this.serverConnectionFactory = serverConnectionFactory;
         this.connectionService = connectionService;
         this.columnFactory = new ColumnFactory();
+        this.indexFactory = new IndexFactory();
         this.databaseService = new DatabaseService();
         this.tableService = new TableService();
         this.columnService = new ColumnService(this.columnFactory);
-        this.indexService = new IndexService();
+        this.indexService = new IndexService(this.indexFactory);
         this.breadcrumpsService = new BreadcrumpsService();
         this.changeService = new ChangeService();
 
@@ -124,16 +129,24 @@ public class BusinessLogic {
     }
 
     private Collection<Index> getTransformedIndexes(ObservableList<List<String>> rawIndexes) {
-        Map<String, Index> indexes = new LinkedHashMap<>();
+        Map<String, List<String>> indexColumnsMap = new LinkedHashMap<>();
         for (List<String> indexValues : rawIndexes) {
             String indexName = indexValues.get(0);
-            if (!indexes.containsKey(indexName)) {
-                indexes.put(indexName, new Index(indexName, new IndexChange(indexName, new ChangeCommand())));
+            if (!indexColumnsMap.containsKey(indexName)) {
+                indexColumnsMap.put(indexName, new ArrayList<>());
             }
-            Index index = indexes.get(indexName);
-            index.addColumn( indexValues.get(1));
+            indexColumnsMap.get(indexName).add(indexValues.get(1));
         }
-        return indexes.values();
+
+        List<Index> indexes = new ArrayList<>();
+        Iterator<Entry<String, List<String>>> entryIterator = indexColumnsMap.entrySet().iterator();
+        while (entryIterator.hasNext()) {
+            Entry<String, List<String>> entry = entryIterator.next();
+            indexes.add(
+                this.indexFactory.createNotChanged(entry.getKey(), entry.getValue())
+            );
+        }
+        return indexes;
     }
 
     private Collection<Column> getTransformedColumns(ObservableList<List<String>> rawColumns) {

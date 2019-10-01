@@ -55,7 +55,8 @@ public class JavafxIndexList implements IndexList {
 
     @FXML
     public void addIndex() {
-        Index newIndex = new Index("new_index", new IndexChange("new_index", new ChangeCommand("create")));
+        Index newIndex = this.indexService.getFactory()
+            .createWithCreateChange("new_index");
         this.indexService.add(newIndex);
         this.indexService.select(newIndex);
         this.router.show("index", newIndex);

@@ -10,6 +10,7 @@ import migrator.table.model.Table;
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class IndexServiceTest {
@@ -17,11 +18,14 @@ public class IndexServiceTest {
 
     @BeforeEach
     public void setUp() {
-        this.indexService = new IndexService();
+        this.indexService = new IndexService(
+            new IndexFactory()
+        );
     }
 
     @Test public void testSetAllSetsListValues() {
-        Index index = new Index("index_name");
+        Index index = this.indexService.getFactory()
+            .createNotChanged("index_name", new ArrayList<>());
         this.indexService.setAll(Arrays.asList(index));
 
         assertEquals(1, this.indexService.getList().size());
@@ -30,7 +34,8 @@ public class IndexServiceTest {
 
     @Test public void testSelectSetsSelectedValue() {
         this.indexService.select(
-            new Index("primary")
+            this.indexService.getFactory()
+                .createNotChanged("primary", new ArrayList<>())
         );
 
         assertEquals("primary", this.indexService.getSelected().get().getName());
@@ -38,7 +43,8 @@ public class IndexServiceTest {
 
     @Test public void testAddAddsIndexToList() {
         this.indexService.add(
-            new Index("primary")
+            this.indexService.getFactory()
+                .createNotChanged("primary", new ArrayList<>())
         );
 
         assertEquals(1, this.indexService.getList().size());
@@ -46,7 +52,8 @@ public class IndexServiceTest {
     }
 
     @Test public void testRemoveRemovesIndexFromList() {
-        Index index = new Index("primary");
+        Index index = this.indexService.getFactory()
+            .createNotChanged("primary", new ArrayList<>());
         this.indexService.add(index);
         this.indexService.remove(index);
 
