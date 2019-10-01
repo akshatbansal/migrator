@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import migrator.breadcrumps.BreadcrumpsComponent;
+import migrator.database.service.DatabaseService;
 import migrator.emitter.Subscription;
 import migrator.javafx.helpers.ControllerHelper;
 import migrator.router.Router;
@@ -23,14 +24,16 @@ public class JavafxTableList implements TableList {
     protected Node node;
     protected List<Subscription> subscriptions;
     protected TableService tableService;
+    protected DatabaseService databaseService;
     protected GuiKit guiKit;
     protected BreadcrumpsComponent breadcrumpsComponent;
     protected Router router;
     @FXML protected FlowPane tables;
     @FXML protected VBox breadcrumpsContainer;
 
-    public JavafxTableList(TableService tableService, GuiKit guiKit, migrator.breadcrumps.GuiKit breadcrumpsGuiKit, Router router) {
+    public JavafxTableList(TableService tableService, DatabaseService databaseService,  GuiKit guiKit, migrator.breadcrumps.GuiKit breadcrumpsGuiKit, Router router) {
         this.tableService = tableService;
+        this.databaseService = databaseService;
         this.guiKit = guiKit;
         this.breadcrumpsComponent = breadcrumpsGuiKit.createBreadcrumps();
         this.router = router;
@@ -70,5 +73,12 @@ public class JavafxTableList implements TableList {
     public void initialize() {
         this.draw();
         ControllerHelper.replaceNode(this.breadcrumpsContainer, this.breadcrumpsComponent);
+    }
+
+    @FXML public void addTable() {
+        Table newTable = this.tableService.getFactory()
+            .createWithCreateChange(this.databaseService.getConnected().get(), "new_table");
+        this.tableService.add(newTable);
+        this.router.show("table", newTable);
     }
 }

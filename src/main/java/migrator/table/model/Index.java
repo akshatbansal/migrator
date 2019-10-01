@@ -1,6 +1,8 @@
 package migrator.table.model;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import migrator.migration.ChangeCommand;
 import migrator.migration.IndexChange;
@@ -55,6 +57,11 @@ public class Index implements Changable {
         return this.columnsProperty().get(index);
     }
 
+    public StringProperty columnPropertyOrCreate(int index) {
+        this.fillColumnsTo(index);
+        return this.columnProperty(index);
+    }
+
     @Override
     public ChangeCommand getChangeCommand() {
         return this.change.getCommand();
@@ -64,17 +71,9 @@ public class Index implements Changable {
         return this.change;
     }
 
-    // protected void fillColumnsTo(int index) {
-    //     while (this.columnsProperty().size() <= index) {
-    //         this.columnsProperty().add(this.addColumn(""));
-    //     }
-    // }
-
-    // public StringProperty addColumn(String column) {
-        // StringProperty newColumn = new SimpleStringProperty(column);
-        // newColumn.addListener((ObservableValue<? extends String> obs, String oldValue, String newValue) -> {
-        //     this.onColumnsChange();
-        // });
-        // return newColumn;
-    // }
+    protected void fillColumnsTo(int index) {
+        while (this.columnsProperty().size() <= index) {
+            this.changedIndex.addColumn("");
+        }
+    }
 }

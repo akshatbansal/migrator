@@ -17,7 +17,7 @@ public class Gui {
         this.breadcrumpsGuiKit = new migrator.javafx.breadcrumps.JavafxGuiKit(businessLogic.getBreadcrumps());
         this.connectionGuiKit = new JavafxConnectionGuiKit(businessLogic.getConnection(), router);
         this.databaseGuiKit = new JavafxGuiKit(businessLogic.getDatabase(), router, this.breadcrumpsGuiKit);
-        this.tableGuiKit = new migrator.table.javafx.JavafxGuiKit(this.breadcrumpsGuiKit, router, view);
+        this.tableGuiKit = new migrator.table.javafx.JavafxGuiKit(this.breadcrumpsGuiKit, router, view, businessLogic.getDatabase());
     }
 
     public ConnectionGuiKit getConnectionKit() {

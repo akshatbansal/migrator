@@ -1,14 +1,9 @@
 package migrator.javafx.router;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
 import migrator.BusinessLogic;
 import migrator.breadcrumps.RouterBreadcrump;
 import migrator.database.model.DatabaseConnection;
-import migrator.database.service.ServerConnection;
 import migrator.javafx.Container;
 import migrator.router.Route;
 import migrator.router.Router;

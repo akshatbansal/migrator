@@ -8,4 +8,5 @@ public interface IndexProperty {
     public String getName();
     public ObservableList<StringProperty> columnsProperty();
     public StringProperty columnsStringProperty();
+    public void addColumn(String columnName);
 }

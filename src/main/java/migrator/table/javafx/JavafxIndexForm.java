@@ -1,7 +1,6 @@
 package migrator.table.javafx;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javafx.fxml.FXML;
@@ -39,9 +38,9 @@ public class JavafxIndexForm implements IndexForm {
             return;
         }
         this.name.textProperty().bindBidirectional(index.nameProperty());
-        this.column1.valueProperty().bindBidirectional(index.columnProperty(0));
-        this.column2.valueProperty().bindBidirectional(index.columnProperty(1));
-        this.column3.valueProperty().bindBidirectional(index.columnProperty(2));
+        this.column1.valueProperty().bindBidirectional(index.columnPropertyOrCreate(0));
+        this.column2.valueProperty().bindBidirectional(index.columnPropertyOrCreate(1));
+        this.column3.valueProperty().bindBidirectional(index.columnPropertyOrCreate(2));
     }
 
     @FXML public void initialize() {

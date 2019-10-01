@@ -11,7 +11,10 @@
         <ScrollPane styleClass="background-light" fitToWidth="true">
             <VBox>
                 <HBox styleClass="container">
-                    <Text text="Tables" styleClass="title" />
+                    <HBox HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                        <Text text="Tables" styleClass="title" />
+                    </HBox>
+                    <Button text="+" onAction="#addTable" styleClass="btn-primary" />
                 </HBox>
                 <VBox fx:id="breadcrumpsContainer"></VBox>
                 <FlowPane styleClass="center-pane" fx:id="tables" vgap="20" hgap="20"></FlowPane>
