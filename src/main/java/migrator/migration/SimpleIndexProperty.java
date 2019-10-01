@@ -4,6 +4,7 @@ import java.util.List;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ListChangeListener.Change;
@@ -60,5 +61,14 @@ public class SimpleIndexProperty implements IndexProperty {
 
     public StringProperty columnProperty(int index) {
         return this.columns.get(index);
+    }
+
+    @Override
+    public void addColumn(String columnName) {
+        StringProperty newColumn = new SimpleStringProperty(columnName);
+        newColumn.addListener((ObservableValue<? extends String> obs, String oldValue, String newValue) -> {
+            this.onColumnsChange();
+        });
+        this.columns.add(newColumn);
     }
 }

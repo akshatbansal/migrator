@@ -1,6 +1,6 @@
 package migrator.table.javafx;
 
-import migrator.javafx.helpers.ResourceView;
+import migrator.database.service.DatabaseService;
 import migrator.javafx.helpers.View;
 import migrator.migration.ChangeService;
 import migrator.router.Router;
@@ -22,9 +22,11 @@ public class JavafxGuiKit implements GuiKit {
     protected migrator.breadcrumps.GuiKit breadcrumpsGuiKit;
     protected Router router;
     protected View view;
+    protected DatabaseService databaseService;
 
-    public JavafxGuiKit(migrator.breadcrumps.GuiKit breadcrumpsGuiKit, Router router, View view) {
+    public JavafxGuiKit(migrator.breadcrumps.GuiKit breadcrumpsGuiKit, Router router, View view, DatabaseService databaseService) {
         this.breadcrumpsGuiKit = breadcrumpsGuiKit;
+        this.databaseService = databaseService;
         this.router = router;
         this.view  = view;
     }
@@ -36,7 +38,7 @@ public class JavafxGuiKit implements GuiKit {
 
     @Override
     public TableList createList(TableService tableService) {
-        return new JavafxTableList(tableService, this, this.breadcrumpsGuiKit, this.router);
+        return new JavafxTableList(tableService, this.databaseService, this, this.breadcrumpsGuiKit, this.router);
     }
 
     @Override

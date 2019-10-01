@@ -1,6 +1,7 @@
 package migrator.database.service;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -114,6 +115,11 @@ public class MysqlConnection implements ServerConnection {
             return;
         }
 
+        if (!this.tableExists(tableName)) {
+            this.columns.clear();
+            return;
+        }
+
         List<List<String>> currentColumns = new LinkedList<>();
         Statement statement = this.mysql.createStatement();
         String sql = "DESCRIBE " + tableName;
@@ -131,7 +137,12 @@ public class MysqlConnection implements ServerConnection {
 
     protected void refreshIndexes(String tableName) throws SQLException {
         if (this.mysql == null) {
-            this.columns.clear();
+            this.indexes.clear();
+            return;
+        }
+
+        if (!this.tableExists(tableName)) {
+            this.indexes.clear();
             return;
         }
 
@@ -158,6 +169,12 @@ public class MysqlConnection implements ServerConnection {
         }
         
         return this.columns;
+    }
+
+    protected boolean tableExists(String tableName) throws SQLException {
+        DatabaseMetaData meta = this.mysql.getMetaData();
+        ResultSet result = meta.getTables(null, null, tableName, new String[] {"TABLE"});
+        return result.next();
     }
 
     @Override

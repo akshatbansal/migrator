@@ -41,4 +41,9 @@ public class SimpleIndexChange implements IndexChange {
     public void clear() {
         
     }
+
+    @Override
+    public void addColumn(String columnName) {
+        this.index.addColumn(columnName);
+    }
 }
