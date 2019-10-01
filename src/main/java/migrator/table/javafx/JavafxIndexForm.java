@@ -9,16 +9,20 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import migrator.javafx.helpers.ControllerHelper;
 import migrator.migration.ChangeCommand;
+import migrator.router.Router;
 import migrator.table.component.IndexForm;
 import migrator.table.model.Column;
 import migrator.table.model.Index;
 import migrator.table.service.ColumnService;
 import migrator.table.service.IndexService;
+import migrator.table.service.TableService;
 
 public class JavafxIndexForm implements IndexForm {
     protected Node node;
     protected IndexService indexService;
     protected ColumnService columnService;
+    protected TableService tableService;
+    protected Router router;
     protected Index index;
 
     @FXML protected TextField name;
@@ -26,9 +30,11 @@ public class JavafxIndexForm implements IndexForm {
     @FXML protected ComboBox<String> column2;
     @FXML protected ComboBox<String> column3;
 
-    public JavafxIndexForm(IndexService indexService, ColumnService columnService) {
+    public JavafxIndexForm(IndexService indexService, ColumnService columnService, TableService tableService, Router router) {
         this.indexService = indexService;
         this.columnService = columnService;
+        this.tableService = tableService;
+        this.router = router;
         this.node = ControllerHelper.createViewNode(this, "/layout/table/index/form.fxml");
     }
 
@@ -68,6 +74,6 @@ public class JavafxIndexForm implements IndexForm {
     }
 
     @FXML public void close() {
-        // this.connectionsService.select(null);
+        this.router.show("tables.view", this.tableService.getSelected().get());
     }
 }

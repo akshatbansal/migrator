@@ -23,10 +23,12 @@ public class JavafxGuiKit implements GuiKit {
     protected Router router;
     protected View view;
     protected DatabaseService databaseService;
+    protected TableService tableService;
 
-    public JavafxGuiKit(migrator.breadcrumps.GuiKit breadcrumpsGuiKit, Router router, View view, DatabaseService databaseService) {
+    public JavafxGuiKit(migrator.breadcrumps.GuiKit breadcrumpsGuiKit, Router router, View view, DatabaseService databaseService, TableService tableService) {
         this.breadcrumpsGuiKit = breadcrumpsGuiKit;
         this.databaseService = databaseService;
+        this.tableService = tableService;
         this.router = router;
         this.view  = view;
     }
@@ -63,11 +65,11 @@ public class JavafxGuiKit implements GuiKit {
 
     @Override
     public ColumnForm createColumnForm(ColumnService columnService) {
-        return new JavafxColumnForm(columnService);
+        return new JavafxColumnForm(columnService, this.tableService, this.router);
     }
 
     @Override
     public IndexForm createIndexForm(IndexService indexService, ColumnService columnService) {
-        return new JavafxIndexForm(indexService, columnService);
+        return new JavafxIndexForm(indexService, columnService, this.tableService, this.router);
     }
 }

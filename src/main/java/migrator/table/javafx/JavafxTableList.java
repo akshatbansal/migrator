@@ -79,6 +79,6 @@ public class JavafxTableList implements TableList {
         Table newTable = this.tableService.getFactory()
             .createWithCreateChange(this.databaseService.getConnected().get(), "new_table");
         this.tableService.add(newTable);
-        this.router.show("table", newTable);
+        this.router.show("tables.view", newTable);
     }
 }
