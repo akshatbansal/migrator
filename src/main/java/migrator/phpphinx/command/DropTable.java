@@ -9,6 +9,6 @@ public class DropTable implements PhpCommand {
         this.tableChange = tableChange;
     }
     public String toPhp() {
-        return "$this->dropTable('" + this.tableChange.getName() + "');\n";
+        return "$this->dropTable('" + this.tableChange.getOriginalName() + "');\n";
     }
 }

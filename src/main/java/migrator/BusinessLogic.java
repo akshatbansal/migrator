@@ -17,11 +17,7 @@ import migrator.database.service.DatabaseService;
 import migrator.database.service.ServerConnection;
 import migrator.database.service.ServerConnectionFactory;
 import migrator.javafx.breadcrumps.BreadcrumpsService;
-import migrator.migration.ChangeCommand;
 import migrator.migration.ChangeService;
-import migrator.migration.ColumnChange;
-import migrator.migration.IndexChange;
-import migrator.migration.TableChange;
 import migrator.table.model.Column;
 import migrator.table.model.Index;
 import migrator.table.model.Table;
@@ -29,6 +25,7 @@ import migrator.table.service.ColumnFactory;
 import migrator.table.service.ColumnService;
 import migrator.table.service.IndexFactory;
 import migrator.table.service.IndexService;
+import migrator.table.service.TableFactory;
 import migrator.table.service.TableService;
 
 public class BusinessLogic {
@@ -42,14 +39,16 @@ public class BusinessLogic {
     protected ServerConnectionFactory serverConnectionFactory;
     protected ColumnFactory columnFactory;
     protected IndexFactory indexFactory;
+    protected TableFactory tableFactory;
  
     public BusinessLogic(ServerConnectionFactory serverConnectionFactory, ConnectionService connectionService) {
         this.serverConnectionFactory = serverConnectionFactory;
         this.connectionService = connectionService;
         this.columnFactory = new ColumnFactory();
         this.indexFactory = new IndexFactory();
+        this.tableFactory = new TableFactory();
         this.databaseService = new DatabaseService();
-        this.tableService = new TableService();
+        this.tableService = new TableService(this.tableFactory);
         this.columnService = new ColumnService(this.columnFactory);
         this.indexService = new IndexService(this.indexFactory);
         this.breadcrumpsService = new BreadcrumpsService();
@@ -102,8 +101,10 @@ public class BusinessLogic {
         serverConnection.connect();
 
         List<Table> tables = new ArrayList<>();
-        for (String tableNames : serverConnection.getTables()) {
-            tables.add(new Table(connection, tableNames, new TableChange(tableNames)));
+        for (String tableName : serverConnection.getTables()) {
+            tables.add(
+                this.tableFactory.createNotChanged(connection, tableName)
+            );
         }
         this.tableService.setAll(tables);
     }

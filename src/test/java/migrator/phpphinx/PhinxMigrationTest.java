@@ -24,6 +24,8 @@ import migrator.migration.SimpleColumnChange;
 import migrator.migration.SimpleColumnProperty;
 import migrator.migration.SimpleIndexChange;
 import migrator.migration.SimpleIndexProperty;
+import migrator.migration.SimpleTableChange;
+import migrator.migration.SimpleTableProperty;
 import migrator.migration.TableChange;
 import migrator.phpphinx.PhinxMigration;
 import migrator.phpphinx.mock.FileStorage;
@@ -47,8 +49,9 @@ public class PhinxMigrationTest {
     }
 
     @Test public void testPhpMigrationCreateTableWithColumn() {
-        TableChange change = new TableChange(
-            "table_name", 
+        TableChange change = new SimpleTableChange(
+            "table_name",
+            new SimpleTableProperty(null),
             new ChangeCommand("create"),
             Arrays.asList(
                 new SimpleColumnChange(
@@ -56,7 +59,8 @@ public class PhinxMigrationTest {
                     new SimpleColumnProperty("column_name", "string", null, false),
                     new ChangeCommand("create")
                 )
-            )
+            ),
+            new ArrayList<>()
         );
         this.migrator.create(change);
         assertEquals(
@@ -68,13 +72,10 @@ public class PhinxMigrationTest {
     }
 
     @Test public void testPhpMigrationUpdateTableRenameTable() {
-        Map<String, Observable> args = this.createArguments(
-            new Object[]{"name", "new_table_name"}
-        );
-
-        TableChange change = new TableChange(
-            "table_name", 
-            new ChangeCommand("update", args)
+        TableChange change = new SimpleTableChange(
+            "table_name",
+            new SimpleTableProperty("new_table_name"),
+            new ChangeCommand("update")
         );
         this.migrator.create(change);
         assertEquals(
@@ -86,8 +87,9 @@ public class PhinxMigrationTest {
     }
 
     @Test public void testPhpMigrationUpdateTableAddColumn() {
-        TableChange change = new TableChange(
+        TableChange change = new SimpleTableChange(
             "table_name", 
+            new SimpleTableProperty(null),
             new ChangeCommand("update"),
             Arrays.asList(
                 new SimpleColumnChange(
@@ -95,7 +97,8 @@ public class PhinxMigrationTest {
                     new SimpleColumnProperty("column_name", "column_format", null, false),
                     new ChangeCommand("create")
                 )
-            )
+            ),
+            new ArrayList<>()
         );
         this.migrator.create(change);
         assertEquals(
@@ -107,8 +110,9 @@ public class PhinxMigrationTest {
     }
 
     @Test public void testPhpMigrationUpdateTableRemoveColumn() {
-        TableChange change = new TableChange(
-            "table_name", 
+        TableChange change = new SimpleTableChange(
+            "table_name",
+            new SimpleTableProperty(null),
             new ChangeCommand("update"),
             Arrays.asList(
                 new SimpleColumnChange(
@@ -116,7 +120,8 @@ public class PhinxMigrationTest {
                     new SimpleColumnProperty("column_name", null, null, false),
                     new ChangeCommand("delete")
                 )
-            )
+            ),
+            new ArrayList<>()
         );
         this.migrator.create(change);
         assertEquals(
@@ -128,8 +133,9 @@ public class PhinxMigrationTest {
     }
 
     @Test public void testPhpMigrationUpdateTableRenameColumn() {
-        TableChange change = new TableChange(
+        TableChange change = new SimpleTableChange(
             "table_name", 
+            new SimpleTableProperty(null),
             new ChangeCommand("update"),
             Arrays.asList(
                 new SimpleColumnChange(
@@ -137,7 +143,8 @@ public class PhinxMigrationTest {
                     new SimpleColumnProperty("new_column_name", null, null, false),
                     new ChangeCommand("update")
                 )
-            )
+            ),
+            new ArrayList<>()
         );
         this.migrator.create(change);
         assertEquals(
@@ -149,7 +156,11 @@ public class PhinxMigrationTest {
     }
 
     @Test public void testPhpMigrationDeleteTable() {
-        TableChange change = new TableChange("table_name", new ChangeCommand("delete"));
+        TableChange change = new SimpleTableChange(
+            "table_name",
+            new SimpleTableProperty(null),
+            new ChangeCommand("delete")
+        );
         this.migrator.create(change);
         assertEquals(
             "$this->dropTable('table_name');\n",
@@ -158,8 +169,9 @@ public class PhinxMigrationTest {
     }
 
     @Test public void testPhpMigrationCreateTableWithColumnAndIndex() {
-        TableChange change = new TableChange(
-            "table_name", 
+        TableChange change = new SimpleTableChange(
+            "table_name",
+            new SimpleTableProperty(null),
             new ChangeCommand("create"),
             Arrays.asList(
                 new SimpleColumnChange(
@@ -192,8 +204,9 @@ public class PhinxMigrationTest {
     }
 
     @Test public void testPhpMigrationCreateTableWithColumnRemoveIndex() {
-        TableChange change = new TableChange(
-            "table_name", 
+        TableChange change = new SimpleTableChange(
+            "table_name",
+            new SimpleTableProperty(null),
             new ChangeCommand("create"),
             new ArrayList(),
             Arrays.asList(

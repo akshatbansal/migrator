@@ -22,19 +22,19 @@ public class ChangeService {
         this.list.add(tableChange);
     }
 
-    public void addColumnChange(String table, ColumnChange columnChange) {
-        TableChange tableChange = this.getOrCreateTable(table);
-        tableChange.addColumnChange(columnChange);
-    }
+    // public void addColumnChange(String table, ColumnChange columnChange) {
+    //     TableChange tableChange = this.getOrCreateTable(table);
+    //     tableChange.addColumnChange(columnChange);
+    // }
 
-    public TableChange getOrCreateTable(String table) {
-        TableChange tableChange = this.getTable(table);
-        if (tableChange == null) {
-            tableChange = new TableChange(table);
-            this.addTableChange(tableChange);
-        }
-        return tableChange;
-    }
+    // public TableChange getOrCreateTable(String table) {
+    //     TableChange tableChange = this.getTable(table);
+    //     if (tableChange == null) {
+    //         tableChange = new TableChange(table);
+    //         this.addTableChange(tableChange);
+    //     }
+    //     return tableChange;
+    // }
 
     public TableChange getTable(String table) {
         for (TableChange tableChange : this.list) {

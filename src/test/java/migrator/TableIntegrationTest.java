@@ -33,13 +33,16 @@ public class TableIntegrationTest {
             )
         );
 
-        businessLogic.getTable().select(new Table(
-            new DatabaseConnection(
-                new Connection("localhost"),
-                "test_db"
-            ),
-            "test_table"
-        ));
+        businessLogic.getTable().select(
+            businessLogic.getTable().getFactory()
+                .createNotChanged(
+                    new DatabaseConnection(
+                        new Connection("localhost"),
+                        "test_db"
+                    ),
+                    "test_table"
+                )
+        );
         assertEquals(1, businessLogic.getColumn().getList().size());
         assertEquals("column", businessLogic.getColumn().getList().get(0).getName());
     }
@@ -60,13 +63,16 @@ public class TableIntegrationTest {
             )
         );
 
-        businessLogic.getTable().select(new Table(
-            new DatabaseConnection(
-                new Connection("localhost"),
-                "test_db"
-            ),
-            "test_table"
-        ));
+        businessLogic.getTable().select(
+            businessLogic.getTable().getFactory()
+                .createNotChanged(
+                    new DatabaseConnection(
+                        new Connection("localhost"),
+                        "test_db"
+                    ),
+                    "test_table"
+                )
+        );
         assertEquals(1, businessLogic.getIndex().getList().size());
         assertEquals("index_name", businessLogic.getIndex().getList().get(0).getName());
     }
