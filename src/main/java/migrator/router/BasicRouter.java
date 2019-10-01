@@ -38,7 +38,7 @@ public class BasicRouter implements Router {
     @Override
     public void show(String routeName, Object routeData) {
         if (!this.routes.containsKey(routeName)) {
-            System.out.println("Route does not exists.");
+            System.out.println("Route '" + routeName + "' does not exists.");
             return;
         }
         this.routes.get(routeName).show(routeData);

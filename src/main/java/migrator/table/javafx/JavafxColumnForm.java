@@ -10,13 +10,17 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import migrator.javafx.helpers.ControllerHelper;
 import migrator.migration.ChangeCommand;
+import migrator.router.Router;
 import migrator.table.component.ColumnForm;
 import migrator.table.model.Column;
 import migrator.table.service.ColumnService;
+import migrator.table.service.TableService;
 
 public class JavafxColumnForm implements ColumnForm {
     protected Node node;
     protected ColumnService columnService;
+    protected Router router;
+    protected TableService tableService;
     protected Column column;
 
     @FXML protected TextField name;
@@ -27,8 +31,10 @@ public class JavafxColumnForm implements ColumnForm {
     protected Button removeButton;
     protected Button restoreButton;
 
-    public JavafxColumnForm(ColumnService columnService) {
+    public JavafxColumnForm(ColumnService columnService, TableService tableService, Router router) {
         this.columnService = columnService;
+        this.tableService = tableService;
+        this.router = router;
         this.node = ControllerHelper.createViewNode(this, "/layout/table/column/form.fxml");
 
         this.removeButton = new Button("Remove");
@@ -98,6 +104,6 @@ public class JavafxColumnForm implements ColumnForm {
     }
 
     @FXML public void close() {
-        // this.connectionsService.select(null);
+        this.router.show("tables.view", this.tableService.getSelected().get());
     }
 }
