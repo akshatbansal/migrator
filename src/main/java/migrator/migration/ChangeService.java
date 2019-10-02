@@ -14,43 +14,12 @@ public class ChangeService {
         this.tables = new HashMap<>();
     }
 
-    // public ChangeService(TableChange ... changes) {
-    //     this.list = FXCollections.observableArrayList(changes);
-    // }
-
-    // public ObservableList<TableChange> getChanges() {
-    //     return this.list;
-    // }
-
     public void addTableChange(String databaseName, TableChange tableChange) {
         if (!this.tables.containsKey(databaseName)) {
             this.tables.put(databaseName, new ArrayList<>());
         }
         this.tables.get(databaseName).add(tableChange);
     }
-
-    // public void addColumnChange(String table, ColumnChange columnChange) {
-    //     TableChange tableChange = this.getOrCreateTable(table);
-    //     tableChange.addColumnChange(columnChange);
-    // }
-
-    // public TableChange getOrCreateTable(String table) {
-    //     TableChange tableChange = this.getTable(table);
-    //     if (tableChange == null) {
-    //         tableChange = new TableChange(table);
-    //         this.addTableChange(tableChange);
-    //     }
-    //     return tableChange;
-    // }
-
-    // public TableChange getTable(String table) {
-    //     for (TableChange tableChange : this.list) {
-    //         if (tableChange.getName() == table) {
-    //             return tableChange;
-    //         }
-    //     }
-    //     return null;
-    // }
 
     public List<TableChange> getTables(String databaseName) {
         if (!this.tables.containsKey(databaseName)) {
