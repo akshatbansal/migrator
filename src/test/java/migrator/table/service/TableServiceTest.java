@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 
 import migrator.connection.model.Connection;
 import migrator.database.model.DatabaseConnection;
+import migrator.migration.ChangeService;
+import migrator.migration.TableChangeFactory;
 import migrator.table.model.Table;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -16,8 +18,10 @@ public class TableServiceTest {
 
     @BeforeEach
     public void setUp() {
+        TableChangeFactory tableChangeFactory = new TableChangeFactory();
         this.tableService = new TableService(
-            new TableFactory()
+            new ChangeService(tableChangeFactory),
+            new TableFactory(tableChangeFactory)
         );
     }
 
