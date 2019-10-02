@@ -31,11 +31,17 @@ public class Table implements Serializable {
     public String getName() {
         return this.changedTable.getName();
     }
+
     public void setName(String value) {
         this.changedTable.nameProperty().set(value);
     }
+
     public StringProperty nameProperty() {
         return this.changedTable.nameProperty();
+    }
+
+    public String getOriginalName() {
+        return this.originalTable.getName();
     }
 
     public DatabaseConnection getDatabase() {
