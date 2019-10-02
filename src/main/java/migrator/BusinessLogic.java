@@ -18,6 +18,8 @@ import migrator.database.service.ServerConnection;
 import migrator.database.service.ServerConnectionFactory;
 import migrator.javafx.breadcrumps.BreadcrumpsService;
 import migrator.migration.ChangeService;
+import migrator.migration.TableChange;
+import migrator.migration.TableChangeFactory;
 import migrator.table.model.Column;
 import migrator.table.model.Index;
 import migrator.table.model.Table;
@@ -40,19 +42,22 @@ public class BusinessLogic {
     protected ColumnFactory columnFactory;
     protected IndexFactory indexFactory;
     protected TableFactory tableFactory;
+    protected TableChangeFactory tableChangeFactory;
  
     public BusinessLogic(ServerConnectionFactory serverConnectionFactory, ConnectionService connectionService) {
         this.serverConnectionFactory = serverConnectionFactory;
         this.connectionService = connectionService;
+        this.tableChangeFactory = new TableChangeFactory();
+        this.changeService = new ChangeService(this.tableChangeFactory);
         this.columnFactory = new ColumnFactory();
         this.indexFactory = new IndexFactory();
-        this.tableFactory = new TableFactory();
+        this.tableFactory = new TableFactory(this.tableChangeFactory);
         this.databaseService = new DatabaseService();
-        this.tableService = new TableService(this.tableFactory);
+        this.tableService = new TableService(this.changeService, this.tableFactory);
         this.columnService = new ColumnService(this.columnFactory);
         this.indexService = new IndexService(this.indexFactory);
         this.breadcrumpsService = new BreadcrumpsService();
-        this.changeService = new ChangeService();
+        
 
         this.connectionService.getConnected()
             .addListener((ObservableValue<? extends Connection> observable, Connection oldValue, Connection newValue) -> {
@@ -100,10 +105,22 @@ public class BusinessLogic {
         ServerConnection serverConnection = this.serverConnectionFactory.createConnection(connection);
         serverConnection.connect();
 
+        String databaseDotString = connection.getConnection().getName() + "." + connection.getDatabase();
         List<Table> tables = new ArrayList<>();
         for (String tableName : serverConnection.getTables()) {
+            TableChange tableChange = this.changeService.getTableChange(databaseDotString, tableName);
+            if (tableChange == null) {
+                tableChange = this.changeService.getTableChangeFactory()
+                    .createNotChanged(tableName);
+                this.changeService.addTableChange(databaseDotString, tableChange);
+            }
+            Table table = this.tableFactory.create(connection, tableName, tableChange);
+            tables.add(table);
+        }
+        List<TableChange> createdTableChanges = this.changeService.getCreatedTableChanges(databaseDotString);
+        for (TableChange tableChange : createdTableChanges) {
             tables.add(
-                this.tableFactory.createNotChanged(connection, tableName)
+                this.tableFactory.create(connection, tableChange.getOriginalName(), tableChange)
             );
         }
         this.tableService.setAll(tables);

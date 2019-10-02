@@ -1,25 +1,32 @@
 package migrator.migration;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ChangeService {
-    protected ObservableList<TableChange> list;
+    protected TableChangeFactory tableChangeFactory;
+    protected Map<String, List<TableChange>> tables;
 
-    public ChangeService() {
-        this.list = FXCollections.observableArrayList();
+    public ChangeService(TableChangeFactory tableChangeFactory) {
+        this.tableChangeFactory = tableChangeFactory;
+        this.tables = new HashMap<>();
     }
 
-    public ChangeService(TableChange ... changes) {
-        this.list = FXCollections.observableArrayList(changes);
-    }
+    // public ChangeService(TableChange ... changes) {
+    //     this.list = FXCollections.observableArrayList(changes);
+    // }
 
-    public ObservableList<TableChange> getChanges() {
-        return this.list;
-    }
+    // public ObservableList<TableChange> getChanges() {
+    //     return this.list;
+    // }
 
-    public void addTableChange(TableChange tableChange) {
-        this.list.add(tableChange);
+    public void addTableChange(String databaseName, TableChange tableChange) {
+        if (!this.tables.containsKey(databaseName)) {
+            this.tables.put(databaseName, new ArrayList<>());
+        }
+        this.tables.get(databaseName).add(tableChange);
     }
 
     // public void addColumnChange(String table, ColumnChange columnChange) {
@@ -36,12 +43,45 @@ public class ChangeService {
     //     return tableChange;
     // }
 
-    public TableChange getTable(String table) {
-        for (TableChange tableChange : this.list) {
-            if (tableChange.getName() == table) {
+    // public TableChange getTable(String table) {
+    //     for (TableChange tableChange : this.list) {
+    //         if (tableChange.getName() == table) {
+    //             return tableChange;
+    //         }
+    //     }
+    //     return null;
+    // }
+
+    public List<TableChange> getTables(String databaseName) {
+        if (!this.tables.containsKey(databaseName)) {
+            this.tables.put(databaseName, new ArrayList<>());
+        }
+        return this.tables.get(databaseName);
+    }
+
+    public TableChange getTableChange(String databaseName, String tableName) {
+        List<TableChange> tables = this.getTables(databaseName);
+        for (TableChange tableChange : tables) {
+            if (tableName.equals(tableChange.getOriginalName())) {
                 return tableChange;
             }
         }
         return null;
+    }
+
+    public TableChangeFactory getTableChangeFactory() {
+        return this.tableChangeFactory;
+    }
+
+    public List<TableChange> getCreatedTableChanges(String databaseName) {
+        List<TableChange> created = new ArrayList<>();
+        List<TableChange> tables = this.getTables(databaseName);
+        for (TableChange tableChange : tables) {
+            if (!tableChange.getCommand().isType(ChangeCommand.CREATE)) {
+                continue;
+            }
+            created.add(tableChange);
+        }
+        return created;
     }
 }

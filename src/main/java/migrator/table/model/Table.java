@@ -3,6 +3,7 @@ package migrator.table.model;
 import java.io.Serializable;
 
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 import migrator.database.model.DatabaseConnection;
 import migrator.migration.TableChange;
 import migrator.migration.TableProperty;
@@ -18,6 +19,13 @@ public class Table implements Serializable {
         this.changedTable = changedProperty;
         this.database = database;
         this.change = tableChange;
+
+        this.changedTable.nameProperty().addListener(
+            new ChangeStringPropertyListener(
+                this.originalTable.nameProperty(),
+                this.change.nameProperty()
+            )
+        );
     }
 
     public String getName() {
@@ -36,5 +44,9 @@ public class Table implements Serializable {
 
     public String toString() {
         return this.getName();
+    }
+
+    public TableChange getChange() {
+        return this.change;
     }
 }

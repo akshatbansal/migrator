@@ -9,7 +9,9 @@ public class ChangeServiceTest {
 
     @BeforeEach
     public void setUp() {
-        this.changeService = new ChangeService();
+        this.changeService = new ChangeService(
+            new TableChangeFactory()
+        );
     }
 
     // @Test public void testAddingTableChange() {

@@ -7,15 +7,18 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ListChangeListener.Change;
+import migrator.migration.ChangeService;
 import migrator.table.model.Table;
 
 public class TableService {
     protected TableFactory tableFactory;
+    protected ChangeService changeService;
     protected ObservableList<Table> list;
     protected ObjectProperty<Table> selected;
 
-    public TableService(TableFactory tableFactory) {
+    public TableService(ChangeService changeService, TableFactory tableFactory) {
         this.tableFactory = tableFactory;
+        this.changeService = changeService;
         this.list = FXCollections.observableArrayList();
         this.selected = new SimpleObjectProperty<>();
 
@@ -52,6 +55,12 @@ public class TableService {
 
     public void add(Table connection) {
         this.list.add(connection);
+    }
+
+    public void register(Table table) {
+        this.list.add(table);
+        String dbName = table.getDatabase().getConnection().getName() + "." + table.getDatabase().getDatabase();
+        this.changeService.addTableChange(dbName, table.getChange());
     }
 
     public void setAll(List<Table> tables) {

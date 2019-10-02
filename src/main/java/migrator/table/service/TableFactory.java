@@ -1,26 +1,25 @@
 package migrator.table.service;
 
-import java.util.ArrayList;
-
 import migrator.database.model.DatabaseConnection;
-import migrator.migration.ChangeCommand;
-import migrator.migration.SimpleTableChange;
 import migrator.migration.SimpleTableProperty;
+import migrator.migration.TableChange;
+import migrator.migration.TableChangeFactory;
+import migrator.migration.TableProperty;
 import migrator.table.model.Table;
 
 public class TableFactory {
+    protected TableChangeFactory tableChangeFactory;
+
+    public TableFactory(TableChangeFactory tableChangeFactory) {
+        this.tableChangeFactory = tableChangeFactory;
+    }
+
     public Table createNotChanged(DatabaseConnection connection, String tableName) {
         return new Table(
             connection,
             new SimpleTableProperty(tableName), // original
             new SimpleTableProperty(tableName), // changed
-            new SimpleTableChange(
-                tableName,
-                new SimpleTableProperty(null),
-                new ChangeCommand(ChangeCommand.NONE),
-                new ArrayList<>(),
-                new ArrayList<>()
-            )
+            this.tableChangeFactory.createNotChanged(tableName)
         );
     }
 
@@ -29,13 +28,20 @@ public class TableFactory {
             connection,
             new SimpleTableProperty(tableName), // original
             new SimpleTableProperty(tableName), // changed
-            new SimpleTableChange(
-                tableName,
-                new SimpleTableProperty(tableName),
-                new ChangeCommand(ChangeCommand.CREATE),
-                new ArrayList<>(),
-                new ArrayList<>()
-            )
+            this.tableChangeFactory.createWithCreateChange(tableName)
+        );
+    }
+
+    public Table create(DatabaseConnection connection, String tableName, TableChange change) {
+        TableProperty tableProperty = new SimpleTableProperty(tableName);
+        if (change.getName() != null) {
+            tableProperty.nameProperty().set(change.getName());
+        }
+        return new Table(
+            connection,
+            new SimpleTableProperty(tableName),
+            tableProperty,
+            change
         );
     }
 }
