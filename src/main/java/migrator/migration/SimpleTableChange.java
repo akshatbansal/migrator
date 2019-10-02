@@ -1,6 +1,7 @@
 package migrator.migration;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javafx.beans.property.StringProperty;
@@ -24,6 +25,14 @@ public class SimpleTableChange implements TableChange {
         this.command = command;
         this.columns = FXCollections.observableArrayList(columns);
         this.indexes = FXCollections.observableArrayList(indexes);
+
+        UpdateCommandListener updateCommandListener = new UpdateCommandListener(
+            this.command,
+            Arrays.asList(
+                this.tableProperty.nameProperty()
+            )
+        );
+        this.tableProperty.nameProperty().addListener(updateCommandListener);
     }
 
     @Override
@@ -68,5 +77,9 @@ public class SimpleTableChange implements TableChange {
     @Override
     public Boolean isNameChanged() {
         return this.getName() != null && !this.getOriginalName().equals(this.getName());
+    }
+
+    public void clear() {
+        this.command.setType(ChangeCommand.NONE);
     }
 }
