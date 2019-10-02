@@ -78,7 +78,7 @@ public class JavafxTableList implements TableList {
     @FXML public void addTable() {
         Table newTable = this.tableService.getFactory()
             .createWithCreateChange(this.databaseService.getConnected().get(), "new_table");
-        this.tableService.add(newTable);
+        this.tableService.register(newTable);
         this.router.show("tables.view", newTable);
     }
 }
