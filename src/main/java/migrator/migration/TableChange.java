@@ -8,4 +8,5 @@ public interface TableChange extends TableProperty {
     public ObservableList<IndexChange> getIndexesChanges();
     public ChangeCommand getCommand();
     public Boolean isNameChanged();
+    public void clear();
 }

@@ -55,4 +55,9 @@ public class Table implements Serializable {
     public TableChange getChange() {
         return this.change;
     }
+
+    public void restore() {
+        this.changedTable.nameProperty().set(this.originalTable.getName());
+        this.change.clear();
+    }
 }

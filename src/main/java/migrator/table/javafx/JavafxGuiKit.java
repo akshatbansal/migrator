@@ -45,7 +45,7 @@ public class JavafxGuiKit implements GuiKit {
 
     @Override
     public TableForm createForm(TableService tableService) {
-        return new JavafxTableForm(tableService);
+        return new JavafxTableForm(tableService, this.router);
     }
 
     @Override

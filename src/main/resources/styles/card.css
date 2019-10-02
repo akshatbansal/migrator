@@ -12,6 +12,21 @@
     -fx-effect: 0;
 }
 
+.card.card--create {
+    -fx-border-width: 0px 0px 0px 2px;
+    -fx-border-color: #6FDA80;
+}
+
+.card.card--delete {
+    -fx-border-width: 0px 0px 0px 2px;
+    -fx-border-color: #DA6F6F;
+}
+
+.card.card--update {
+    -fx-border-width: 0px 0px 0px 2px;
+    -fx-border-color: #DAC26F;
+}
+
 .card__header {
     -fx-padding: 10 10 10 10;
 }

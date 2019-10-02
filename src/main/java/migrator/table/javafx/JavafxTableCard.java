@@ -2,6 +2,7 @@ package migrator.table.javafx;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import migrator.emitter.Emitter;
 import migrator.emitter.EventEmitter;
@@ -13,6 +14,7 @@ import migrator.table.model.Table;
 
 public class JavafxTableCard implements TableCard {
     @FXML protected Text cardName;
+    @FXML protected VBox pane;
     protected Table table;
     protected Node node;
     protected Emitter emitter;
@@ -30,6 +32,9 @@ public class JavafxTableCard implements TableCard {
 
     @FXML public void initialize() {
         this.cardName.textProperty().bind(this.table.nameProperty());
+        if (this.table.getChange().getCommand().getType() != null) {
+            this.pane.getStyleClass().add("card--" + this.table.getChange().getCommand().getType());
+        }
     }
 
     @FXML public void select() {

@@ -1,5 +1,7 @@
 package migrator.migration;
 
+import java.util.Arrays;
+
 import javafx.beans.property.Property;
 import javafx.beans.property.StringProperty;
 
@@ -13,21 +15,19 @@ public class SimpleColumnChange implements ColumnChange {
         this.columnProperty = columnProperty;
         this.command = command;
 
-        this.columnProperty.nameProperty().addListener((obs, ol, ne) -> {
-            this.evalCommadType();
-        });
-
-        this.columnProperty.formatProperty().addListener((obs, ol, ne) -> {
-            this.evalCommadType();
-        });
-
-        this.columnProperty.defaultValueProperty().addListener((obs, ol, ne) -> {
-            this.evalCommadType();
-        });
-
-        this.columnProperty.nullProperty().addListener((obs, ol, ne) -> {
-            this.evalCommadType();
-        });
+        UpdateCommandListener updateCommandListener = new UpdateCommandListener(
+            this.command,
+            Arrays.asList(
+                this.columnProperty.nameProperty(),
+                this.columnProperty.formatProperty(),
+                this.columnProperty.defaultValueProperty(),
+                this.columnProperty.nullProperty()
+            )
+        );
+        this.columnProperty.nameProperty().addListener(updateCommandListener);
+        this.columnProperty.formatProperty().addListener(updateCommandListener);
+        this.columnProperty.defaultValueProperty().addListener(updateCommandListener);
+        this.columnProperty.nullProperty().addListener(updateCommandListener);
     }
 
     @Override
