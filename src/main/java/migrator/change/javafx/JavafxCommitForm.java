@@ -9,7 +9,7 @@ import migrator.change.component.CommitForm;
 import migrator.javafx.controller.ViewController;
 import migrator.javafx.helpers.View;
 import migrator.migration.ChangeService;
-import migrator.migration.Migration;
+import migrator.migration.MigrationGenerator;
 import migrator.migration.TableChange;
 import migrator.phpphinx.PhinxMigration;
 import migrator.phpphinx.PhpCommandFactory;
@@ -38,12 +38,12 @@ public class JavafxCommitForm extends ViewController implements CommitForm {
 
     @Override
     public void commit() {
-        Migration migration = new PhinxMigration(
+        MigrationGenerator migrationGenerator = new PhinxMigration(
             new ConsoleStorage(),
             new PhpCommandFactory()
         );
         List<TableChange> changes = this.changeService.getTables("localhost.ovaldo");
-        migration.create(changes);
+        migrationGenerator.generateMigration(changes);
     }
 
     @FXML public void close() {
