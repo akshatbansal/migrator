@@ -5,10 +5,7 @@ import javafx.collections.ListChangeListener.Change;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.TableView;
-import migrator.javafx.helpers.ControllerHelper;
 import migrator.javafx.helpers.View;
-import migrator.migration.ChangeCommand;
-import migrator.migration.IndexChange;
 import migrator.router.Router;
 import migrator.table.component.IndexList;
 import migrator.table.model.Index;
@@ -59,6 +56,7 @@ public class JavafxIndexList implements IndexList {
             .createWithCreateChange("new_index");
         this.indexService.add(newIndex);
         this.indexService.select(newIndex);
+        this.indexes.getSelectionModel().select(newIndex);
         this.router.show("index", newIndex);
     }
 }

@@ -16,29 +16,26 @@ public class Column implements Changable {
         this.changedColumn = changedColumn;
         this.change = columnChange;
 
-        this.changedColumn.nameProperty().addListener((obs, ol, ne) -> {
-            if (this.originalColumn.getName().equals(this.changedColumn.getName())) {
-                this.change.nameProperty().set(null);
-            } else {
-                this.change.nameProperty().set(this.changedColumn.getName());
-            }
-         });
+        this.changedColumn.nameProperty().addListener(
+            new ChangeStringPropertyListener(
+                this.originalColumn.nameProperty(),
+                this.change.nameProperty()
+            )
+        );
 
-         this.changedColumn.formatProperty().addListener((obs, ol, ne) -> {
-            if (this.originalColumn.getFormat().equals(this.changedColumn.getFormat())) {
-                this.change.formatProperty().set(null);
-            } else {
-                this.change.formatProperty().set(this.changedColumn.getFormat());
-            }
-         });
+         this.changedColumn.formatProperty().addListener(
+             new ChangeStringPropertyListener(
+                 this.originalColumn.formatProperty(),
+                 this.change.formatProperty()
+             )
+         );
 
-         this.changedColumn.defaultValueProperty().addListener((obs, ol, ne) -> {
-            if (this.originalColumn.getDefaultValue().equals(this.changedColumn.getDefaultValue())) {
-                this.change.defaultValueProperty().set(null);
-            } else {
-                this.change.defaultValueProperty().set(this.changedColumn.getDefaultValue());
-            }
-         });
+         this.changedColumn.defaultValueProperty().addListener(
+             new ChangeStringPropertyListener(
+                 this.originalColumn.defaultValueProperty(),
+                 this.change.defaultValueProperty()
+             )
+         );
 
          this.changedColumn.nullProperty().addListener((obs, ol, ne) -> {
             if (this.originalColumn.isNullEnabled().equals(this.changedColumn.isNullEnabled())) {

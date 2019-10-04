@@ -35,7 +35,6 @@ public class JavafxColumnForm implements ColumnForm {
         this.columnService = columnService;
         this.tableService = tableService;
         this.router = router;
-        this.node = ControllerHelper.createViewNode(this, "/layout/table/column/form.fxml");
 
         this.removeButton = new Button("Remove");
         this.removeButton.getStyleClass().addAll("btn-danger");
@@ -48,6 +47,8 @@ public class JavafxColumnForm implements ColumnForm {
         this.restoreButton.setOnAction((event) -> {
             this.restore();
         });
+
+        this.node = ControllerHelper.createViewNode(this, "/layout/table/column/form.fxml");
     }
 
     public void setColumn(Column column) {
