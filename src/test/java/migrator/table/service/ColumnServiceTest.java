@@ -2,12 +2,15 @@ package migrator.table.service;
 
 import org.junit.jupiter.api.Test;
 
+import javafx.beans.property.SimpleObjectProperty;
 import migrator.connection.model.Connection;
 import migrator.database.model.DatabaseConnection;
 import migrator.migration.ChangeCommand;
+import migrator.migration.ChangeService;
 import migrator.migration.ColumnChange;
 import migrator.migration.SimpleColumnChange;
 import migrator.migration.SimpleColumnProperty;
+import migrator.migration.TableChangeFactory;
 import migrator.table.model.Column;
 import migrator.table.model.Table;
 
@@ -22,7 +25,11 @@ public class ColumnServiceTest {
     @BeforeEach
     public void setUp() {
         this.columnService = new ColumnService(
-            new ColumnFactory()
+            new ColumnFactory(),
+            new ChangeService(
+                new TableChangeFactory()
+            ),
+            new SimpleObjectProperty<>()
         );
     }
 

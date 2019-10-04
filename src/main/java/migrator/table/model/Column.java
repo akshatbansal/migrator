@@ -38,6 +38,10 @@ public class Column implements Changable {
          );
 
          this.changedColumn.nullProperty().addListener((obs, ol, ne) -> {
+             if (this.originalColumn.isNullEnabled() == null) {
+                this.change.nullProperty().setValue(this.changedColumn.isNullEnabled());
+                return;
+             }
             if (this.originalColumn.isNullEnabled().equals(this.changedColumn.isNullEnabled())) {
                 this.change.nullProperty().setValue(null);
             } else {

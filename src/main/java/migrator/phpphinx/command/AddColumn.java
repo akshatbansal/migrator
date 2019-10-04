@@ -13,7 +13,7 @@ public class AddColumn implements PhpCommand {
         String php = "\t->addColumn('" + this.getName() + "', '" + this.getFormat() + "'";
         String options = this.getOptions();
         if (!options.isEmpty()) {
-            options += ", " + options; 
+            php += ", " + options; 
         }
         return php + ")\n";
     }
@@ -32,6 +32,10 @@ public class AddColumn implements PhpCommand {
         // null
         // default
         // comment
-        return "";
+        String options = "";
+        if (this.columnChange.isNullEnabled() != null) {
+            options = "'null' => " + this.columnChange.isNullEnabled();
+        }
+        return "[" + options + "]";
     }
 }

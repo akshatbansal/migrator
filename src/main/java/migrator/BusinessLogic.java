@@ -54,7 +54,7 @@ public class BusinessLogic {
         this.tableFactory = new TableFactory(this.tableChangeFactory);
         this.databaseService = new DatabaseService();
         this.tableService = new TableService(this.changeService, this.tableFactory);
-        this.columnService = new ColumnService(this.columnFactory);
+        this.columnService = new ColumnService(this.columnFactory, this.changeService, this.tableService.getSelected());
         this.indexService = new IndexService(this.indexFactory);
         this.breadcrumpsService = new BreadcrumpsService();
         

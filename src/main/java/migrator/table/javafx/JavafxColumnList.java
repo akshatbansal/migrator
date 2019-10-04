@@ -60,7 +60,7 @@ public class JavafxColumnList implements ColumnList {
     public void addColumn() {
         Column newColumn = this.columnService.getFactory()
             .createWithCreateChange("new_column");
-        this.columnService.add(newColumn);
+        this.columnService.register(newColumn);
         this.columnService.select(newColumn);
         this.columns.getSelectionModel().select(newColumn);
         this.router.show("column", newColumn);

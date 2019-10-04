@@ -25,7 +25,11 @@ public class Gui {
             businessLogic.getDatabase(),
             businessLogic.getTable()
         );
-        this.changeGuiKit = new migrator.change.javafx.JavafxGuiKit(view);
+        this.changeGuiKit = new migrator.change.javafx.JavafxGuiKit(
+            view,
+            router,
+            businessLogic.getChange()
+        );
     }
 
     public ConnectionGuiKit getConnectionKit() {

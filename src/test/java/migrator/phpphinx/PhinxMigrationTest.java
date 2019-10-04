@@ -65,7 +65,7 @@ public class PhinxMigrationTest {
         this.migrator.create(change);
         assertEquals(
             "$this->table('table_name')\n" +
-                "\t->addColumn('column_name', 'string')\n" +
+                "\t->addColumn('column_name', 'string', ['null' => false])\n" +
                 "\t->save();\n",
             this.storage.load()
         );
@@ -103,7 +103,7 @@ public class PhinxMigrationTest {
         this.migrator.create(change);
         assertEquals(
             "$this->table('table_name')\n" +
-                "\t->addColumn('column_name', 'column_format')\n" +
+                "\t->addColumn('column_name', 'column_format', ['null' => false])\n" +
                 "\t->update();\n",
             this.storage.load()
         );
@@ -195,8 +195,8 @@ public class PhinxMigrationTest {
         this.migrator.create(change);
         assertEquals(
             "$this->table('table_name')\n" +
-                "\t->addColumn('id', 'integer')\n" +
-                "\t->addColumn('name', 'string')\n" +
+                "\t->addColumn('id', 'integer', ['null' => false])\n" +
+                "\t->addColumn('name', 'string', ['null' => false])\n" +
                 "\t->addIndex(['id', 'name'], ['name' => 'id_name'])\n" +
                 "\t->save();\n",
             this.storage.load()
@@ -221,6 +221,18 @@ public class PhinxMigrationTest {
             "$this->table('table_name')\n" +
                 "\t->removeIndexByName('id_name')\n" +
                 "\t->save();\n",
+            this.storage.load()
+        );
+    }
+
+    public void testPhpMigrationCreateTablaWithoutChangeRetunrnsEmptyCommand() {
+        TableChange change = new SimpleTableChange(
+            "table_name",
+            new SimpleTableProperty(null),
+            new ChangeCommand(null)
+        );
+        this.migrator.create(change);
+        assertEquals("",
             this.storage.load()
         );
     }
