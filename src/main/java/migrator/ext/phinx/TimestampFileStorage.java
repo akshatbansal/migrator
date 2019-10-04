@@ -1,4 +1,4 @@
-package migrator.phpphinx;
+package migrator.ext.phinx;
 
 import java.io.File;
 import java.io.FileWriter;

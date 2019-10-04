@@ -3,7 +3,7 @@ package migrator.javafx.router;
 import javafx.scene.Node;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import migrator.javafx.Container;
+import migrator.app.Container;
 import migrator.router.Route;
 import migrator.table.component.IndexForm;
 import migrator.table.service.ColumnService;

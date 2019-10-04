@@ -1,4 +1,4 @@
-package migrator.phpphinx.command;
+package migrator.lib.php.command;
 
 import migrator.migration.IndexChange;
 

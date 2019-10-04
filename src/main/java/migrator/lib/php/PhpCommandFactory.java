@@ -1,18 +1,18 @@
-package migrator.phpphinx;
+package migrator.lib.php;
 
 import migrator.migration.ChangeCommand;
 import migrator.migration.ColumnChange;
 import migrator.migration.IndexChange;
 import migrator.migration.TableChange;
-import migrator.phpphinx.command.AddColumn;
-import migrator.phpphinx.command.AddIndex;
-import migrator.phpphinx.command.ChangeColumn;
-import migrator.phpphinx.command.DropTable;
-import migrator.phpphinx.command.PhpCommand;
-import migrator.phpphinx.command.RemoveColumn;
-import migrator.phpphinx.command.RemoveIndexByName;
-import migrator.phpphinx.command.SaveTable;
-import migrator.phpphinx.command.UpdateTable;
+import migrator.lib.php.command.AddColumn;
+import migrator.lib.php.command.AddIndex;
+import migrator.lib.php.command.ChangeColumn;
+import migrator.lib.php.command.DropTable;
+import migrator.lib.php.command.PhpCommand;
+import migrator.lib.php.command.RemoveColumn;
+import migrator.lib.php.command.RemoveIndexByName;
+import migrator.lib.php.command.SaveTable;
+import migrator.lib.php.command.UpdateTable;
 
 public class PhpCommandFactory {
     public DropTable dropTable(TableChange tableChange) {

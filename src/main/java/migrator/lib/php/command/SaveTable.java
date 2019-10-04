@@ -1,10 +1,10 @@
-package migrator.phpphinx.command;
+package migrator.lib.php.command;
 
 import migrator.migration.ChangeCommand;
 import migrator.migration.ColumnChange;
 import migrator.migration.IndexChange;
 import migrator.migration.TableChange;
-import migrator.phpphinx.PhpCommandFactory;
+import migrator.lib.php.PhpCommandFactory;
 
 public class SaveTable implements PhpCommand {
     protected TableChange tableChange;

@@ -1,4 +1,4 @@
-package migrator.phpphinx;
+package migrator.ext.phinx;
 
 import java.util.Arrays;
 import java.util.List;
@@ -6,13 +6,14 @@ import java.util.List;
 import migrator.common.Storage;
 import migrator.migration.MigrationGenerator;
 import migrator.migration.TableChange;
-import migrator.phpphinx.command.PhpCommand;
+import migrator.lib.php.PhpCommandFactory;
+import migrator.lib.php.command.PhpCommand;
 
-public class PhinxMigration implements MigrationGenerator {
+public class PhinxMigrationGenerator implements MigrationGenerator {
     protected Storage storage;
     protected PhpCommandFactory commandFactory;
 
-    public PhinxMigration(Storage storage, PhpCommandFactory commandFactory) {
+    public PhinxMigrationGenerator(Storage storage, PhpCommandFactory commandFactory) {
         this.storage = storage;
         this.commandFactory = commandFactory;
     }

@@ -1,6 +1,4 @@
-package migrator.phpphinx.command;
-
-import migrator.common.Storage;
+package migrator.common;
 
 public class ConsoleStorage implements Storage {
     @Override

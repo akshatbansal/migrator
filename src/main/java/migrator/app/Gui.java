@@ -1,5 +1,6 @@
-package migrator;
+package migrator.app;
 
+import migrator.app.migration.Migration;
 import migrator.connection.javafx.JavafxConnectionGuiKit;
 import migrator.connection.service.ConnectionGuiKit;
 import migrator.database.javafx.JavafxGuiKit;
@@ -14,7 +15,7 @@ public class Gui {
     protected migrator.breadcrumps.GuiKit breadcrumpsGuiKit;
     protected migrator.change.service.GuiKit changeGuiKit;
 
-    public Gui(View view, Router router, BusinessLogic businessLogic) {
+    public Gui(View view, Router router, BusinessLogic businessLogic, Migration migration) {
         this.breadcrumpsGuiKit = new migrator.javafx.breadcrumps.JavafxGuiKit(businessLogic.getBreadcrumps());
         this.connectionGuiKit = new JavafxConnectionGuiKit(businessLogic.getConnection(), router);
         this.databaseGuiKit = new JavafxGuiKit(businessLogic.getDatabase(), router, this.breadcrumpsGuiKit);
@@ -28,7 +29,8 @@ public class Gui {
         this.changeGuiKit = new migrator.change.javafx.JavafxGuiKit(
             view,
             router,
-            businessLogic.getChange()
+            businessLogic.getChange(),
+            migration
         );
     }
 

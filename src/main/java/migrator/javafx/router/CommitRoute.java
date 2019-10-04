@@ -4,7 +4,7 @@ import javafx.scene.Node;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import migrator.change.service.GuiKit;
-import migrator.javafx.Container;
+import migrator.app.Container;
 import migrator.router.Route;
 
 public class CommitRoute implements Route {

@@ -1,12 +1,12 @@
 package migrator.javafx.router;
 
 import javafx.scene.Node;
-import migrator.BusinessLogic;
+import migrator.app.BusinessLogic;
 import migrator.breadcrumps.RouterBreadcrump;
 import migrator.connection.model.Connection;
 import migrator.database.component.DatabaseList;
 import migrator.database.service.GuiKit;
-import migrator.javafx.Container;
+import migrator.app.Container;
 import migrator.router.Route;
 import migrator.router.Router;
 

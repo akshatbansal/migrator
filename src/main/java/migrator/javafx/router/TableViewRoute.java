@@ -1,9 +1,9 @@
 package migrator.javafx.router;
 
 import javafx.scene.Node;
-import migrator.BusinessLogic;
+import migrator.app.BusinessLogic;
 import migrator.breadcrumps.RouterBreadcrump;
-import migrator.javafx.Container;
+import migrator.app.Container;
 import migrator.router.Route;
 import migrator.router.Router;
 import migrator.table.model.Table;

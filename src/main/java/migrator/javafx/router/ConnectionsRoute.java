@@ -9,7 +9,7 @@ import migrator.connection.component.ConnectionList;
 import migrator.connection.model.Connection;
 import migrator.connection.service.ConnectionGuiKit;
 import migrator.connection.service.ConnectionService;
-import migrator.javafx.Container;
+import migrator.app.Container;
 import migrator.router.Route;
 
 public class ConnectionsRoute implements Route {

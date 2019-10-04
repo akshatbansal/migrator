@@ -1,4 +1,4 @@
-package migrator.phpphinx.command;
+package migrator.lib.php.command;
 
 import java.util.ArrayList;
 import java.util.List;
