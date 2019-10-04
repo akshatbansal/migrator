@@ -1,7 +1,7 @@
 package migrator.javafx.controller;
 
 import javafx.scene.Node;
-import migrator.gui.GuiNode;
+import migrator.app.gui.GuiNode;
 import migrator.javafx.helpers.View;
 
 abstract public class ViewController implements GuiNode {

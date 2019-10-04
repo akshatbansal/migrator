@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.connection.component.ConnectionForm;
 import migrator.connection.model.Connection;
 import migrator.connection.service.ConnectionService;
@@ -15,6 +16,7 @@ import migrator.router.Router;
 public class JavafxConnectionForm implements ConnectionForm {
     protected Node node;
     protected ConnectionService connectionsService;
+    protected DatabaseDriverManager databaseDriverManager;
     protected Router router;
     protected Connection connection;
 
@@ -25,9 +27,10 @@ public class JavafxConnectionForm implements ConnectionForm {
     @FXML protected TextField user;
     @FXML protected PasswordField password;
 
-    public JavafxConnectionForm(ConnectionService connectionService, Router router) {
+    public JavafxConnectionForm(ConnectionService connectionService, Router router, DatabaseDriverManager databaseDriverManager) {
         this.connectionsService = connectionService;
         this.router = router;
+        this.databaseDriverManager = databaseDriverManager;
         this.node = ControllerHelper.createViewNode(this, "/layout/connection/form.fxml");
         this.connectionsService.getSelected().addListener((ObservableValue<? extends Connection> observable, Connection oldValue, Connection newValue) -> {
             this.setConnection(newValue);
@@ -48,7 +51,7 @@ public class JavafxConnectionForm implements ConnectionForm {
     }
 
     @FXML public void initialize() {
-        this.driver.getItems().setAll("mysql", "mariadb");
+        this.driver.getItems().setAll(this.databaseDriverManager.getDriverNames());
         Connection connection = this.connectionsService.getSelected().get();
         if (connection != null) {
             this.setConnection(connection);

@@ -1,4 +1,4 @@
-package migrator.database.service;
+package migrator.ext.mysql;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -6,15 +6,14 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import migrator.database.model.DatabaseConnection;
+import migrator.app.database.driver.DatabaseDriver;
 
-public class MysqlConnection implements ServerConnection {
+public class MysqlDatabaseDriver implements DatabaseDriver {
     protected String url;
     protected String user;
     protected String password;
@@ -24,7 +23,7 @@ public class MysqlConnection implements ServerConnection {
     protected ObservableList<List<String>> columns;
     protected ObservableList<List<String>> indexes;
 
-    public MysqlConnection(String url, String user, String password) {        
+    public MysqlDatabaseDriver(String url, String user, String password) {        
         this.url = url;
         this.user = user;
         this.password = password;

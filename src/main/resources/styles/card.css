@@ -9,7 +9,6 @@
 
 .card.card--active {
     -fx-border-color: #20AAD6;
-    -fx-effect: 0;
 }
 
 .card.card--create {

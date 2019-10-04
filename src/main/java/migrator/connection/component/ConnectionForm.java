@@ -1,6 +1,6 @@
 package migrator.connection.component;
 
-import migrator.gui.GuiNode;
+import migrator.app.gui.GuiNode;
 
 public interface ConnectionForm extends GuiNode {
     

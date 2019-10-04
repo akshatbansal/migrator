@@ -11,8 +11,6 @@ import migrator.database.model.DatabaseConnection;
 public class DatabaseService {
     protected ObservableList<DatabaseConnection> list;
     protected ObjectProperty<DatabaseConnection> connected;
-    protected ObjectProperty<ServerConnection> serverConnection;
-    protected ServerConnectionFactory serverConnectionFactory;
 
     public DatabaseService() {
         this.list = FXCollections.observableArrayList();

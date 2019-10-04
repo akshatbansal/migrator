@@ -6,7 +6,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import migrator.change.component.CommitForm;
-import migrator.ext.phinx.PhinxMigrationGenerator;
 import migrator.javafx.controller.ViewController;
 import migrator.javafx.helpers.View;
 import migrator.migration.ChangeService;

@@ -1,4 +1,4 @@
-package migrator.common;
+package migrator.lib.storage;
 
 public class ConsoleStorage implements Storage {
     @Override

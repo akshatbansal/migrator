@@ -5,7 +5,6 @@ import migrator.database.component.DatabaseList;
 import migrator.database.model.DatabaseConnection;
 import migrator.database.service.DatabaseService;
 import migrator.database.service.GuiKit;
-import migrator.javafx.breadcrumps.BreadcrumpsService;
 import migrator.router.Router;
 
 public class JavafxGuiKit implements GuiKit {

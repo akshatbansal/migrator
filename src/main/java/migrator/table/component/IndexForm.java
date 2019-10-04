@@ -1,6 +1,6 @@
 package migrator.table.component;
 
-import migrator.gui.GuiNode;
+import migrator.app.gui.GuiNode;
 import migrator.table.model.Index;
 
 public interface IndexForm extends GuiNode {

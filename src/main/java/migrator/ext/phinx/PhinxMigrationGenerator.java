@@ -3,7 +3,7 @@ package migrator.ext.phinx;
 import java.util.Arrays;
 import java.util.List;
 
-import migrator.common.Storage;
+import migrator.lib.storage.Storage;
 import migrator.migration.MigrationGenerator;
 import migrator.migration.TableChange;
 import migrator.lib.php.PhpCommandFactory;

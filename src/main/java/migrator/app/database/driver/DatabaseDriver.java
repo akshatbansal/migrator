@@ -1,10 +1,10 @@
-package migrator.database.service;
+package migrator.app.database.driver;
 
 import java.util.List;
 
 import javafx.collections.ObservableList;
 
-public interface ServerConnection {
+public interface DatabaseDriver {
     public void connect();
     public void disconnect();
     public ObservableList<String> getDatabases();

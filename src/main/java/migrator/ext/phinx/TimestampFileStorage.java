@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import migrator.common.Storage;
+import migrator.lib.storage.Storage;
 
 public class TimestampFileStorage implements Storage {
     protected String folder;

@@ -10,12 +10,12 @@ import java.util.Map.Entry;
 
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import migrator.app.database.driver.DatabaseDriver;
+import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.connection.model.Connection;
 import migrator.connection.service.ConnectionService;
 import migrator.database.model.DatabaseConnection;
 import migrator.database.service.DatabaseService;
-import migrator.database.service.ServerConnection;
-import migrator.database.service.ServerConnectionFactory;
 import migrator.javafx.breadcrumps.BreadcrumpsService;
 import migrator.migration.ChangeService;
 import migrator.migration.TableChange;
@@ -32,20 +32,20 @@ import migrator.table.service.TableService;
 
 public class BusinessLogic {
     protected ConnectionService connectionService;
+    protected DatabaseDriverManager databaseDriverManager;
     protected DatabaseService databaseService;
     protected TableService tableService;
     protected BreadcrumpsService breadcrumpsService;
     protected ColumnService columnService;
     protected IndexService indexService;
     protected ChangeService changeService;
-    protected ServerConnectionFactory serverConnectionFactory;
     protected ColumnFactory columnFactory;
     protected IndexFactory indexFactory;
     protected TableFactory tableFactory;
     protected TableChangeFactory tableChangeFactory;
  
-    public BusinessLogic(ServerConnectionFactory serverConnectionFactory, ConnectionService connectionService) {
-        this.serverConnectionFactory = serverConnectionFactory;
+    public BusinessLogic(DatabaseDriverManager databaseDriverManager, ConnectionService connectionService) {
+        this.databaseDriverManager = databaseDriverManager;
         this.connectionService = connectionService;
         this.tableChangeFactory = new TableChangeFactory();
         this.changeService = new ChangeService(this.tableChangeFactory);
@@ -75,8 +75,8 @@ public class BusinessLogic {
             });
     }
 
-    public BusinessLogic(ServerConnectionFactory serverConnectionFactory) {
-        this(serverConnectionFactory, new ConnectionService());
+    public BusinessLogic(DatabaseDriverManager databaseDriverManager) {
+        this(databaseDriverManager, new ConnectionService());
     }
 
     protected void onConnectConnection(Connection connection) {
@@ -85,11 +85,11 @@ public class BusinessLogic {
             return;
         }
 
-        ServerConnection serverConnection = this.serverConnectionFactory.createConnection(connection);
-        serverConnection.connect();
+        DatabaseDriver databaseDriver  = this.databaseDriverManager.createDriver(connection);
+        databaseDriver.connect();
 
         List<DatabaseConnection> databases = new ArrayList<>();
-        for (String databaseName : serverConnection.getDatabases()) {
+        for (String databaseName : databaseDriver.getDatabases()) {
             databases.add(new DatabaseConnection(connection, databaseName));
         }
 
@@ -102,12 +102,12 @@ public class BusinessLogic {
             return;
         }
 
-        ServerConnection serverConnection = this.serverConnectionFactory.createConnection(connection);
-        serverConnection.connect();
+        DatabaseDriver databaseDriver = this.databaseDriverManager.createDriver(connection);
+        databaseDriver.connect();
 
         String databaseDotString = connection.getConnection().getName() + "." + connection.getDatabase();
         List<Table> tables = new ArrayList<>();
-        for (String tableName : serverConnection.getTables()) {
+        for (String tableName : databaseDriver.getTables()) {
             TableChange tableChange = this.changeService.getTableChange(databaseDotString, tableName);
             if (tableChange == null) {
                 tableChange = this.changeService.getTableChangeFactory()
@@ -131,17 +131,17 @@ public class BusinessLogic {
             return;
         }
 
-        ServerConnection serverConnection = this.serverConnectionFactory.createConnection(table.getDatabase());
+        DatabaseDriver databaseDriver = this.databaseDriverManager.createDriver(table.getDatabase());
 
         this.indexService.setAll(
             this.getTransformedIndexes(
-                serverConnection.getIndexes(table.getOriginalName())
+                databaseDriver.getIndexes(table.getOriginalName())
             )
         );
         
         this.columnService.setAll(
             this.getTransformedColumns(
-                serverConnection.getColumns(table.getOriginalName())
+                databaseDriver.getColumns(table.getOriginalName())
             )
         );
     }

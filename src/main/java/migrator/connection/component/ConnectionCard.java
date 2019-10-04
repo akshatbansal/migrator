@@ -2,7 +2,7 @@ package migrator.connection.component;
 
 import migrator.emitter.Subscriber;
 import migrator.emitter.Subscription;
-import migrator.gui.GuiNode;
+import migrator.app.gui.GuiNode;
 
 public interface ConnectionCard extends GuiNode {
     public Subscription onSelect(Subscriber subscriber);

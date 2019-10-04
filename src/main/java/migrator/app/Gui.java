@@ -1,5 +1,6 @@
 package migrator.app;
 
+import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.migration.Migration;
 import migrator.connection.javafx.JavafxConnectionGuiKit;
 import migrator.connection.service.ConnectionGuiKit;
@@ -15,9 +16,9 @@ public class Gui {
     protected migrator.breadcrumps.GuiKit breadcrumpsGuiKit;
     protected migrator.change.service.GuiKit changeGuiKit;
 
-    public Gui(View view, Router router, BusinessLogic businessLogic, Migration migration) {
+    public Gui(View view, Router router, BusinessLogic businessLogic, Migration migration, DatabaseDriverManager databaseDriverManager) {
         this.breadcrumpsGuiKit = new migrator.javafx.breadcrumps.JavafxGuiKit(businessLogic.getBreadcrumps());
-        this.connectionGuiKit = new JavafxConnectionGuiKit(businessLogic.getConnection(), router);
+        this.connectionGuiKit = new JavafxConnectionGuiKit(businessLogic.getConnection(), router, databaseDriverManager);
         this.databaseGuiKit = new JavafxGuiKit(businessLogic.getDatabase(), router, this.breadcrumpsGuiKit);
         this.tableGuiKit = new migrator.table.javafx.JavafxGuiKit(
             this.breadcrumpsGuiKit,

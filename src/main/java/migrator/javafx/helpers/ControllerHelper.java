@@ -8,7 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import migrator.gui.GuiNode;
+import migrator.app.gui.GuiNode;
 
 public class ControllerHelper {
     public static Node createViewNode(Object controller, String view) {

@@ -9,12 +9,13 @@ import javafx.scene.Parent;
 import javafx.stage.Stage;
 import migrator.app.BusinessLogic;
 import migrator.app.Gui;
+import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.extension.ConfigContainer;
 import migrator.app.extension.Extension;
 import migrator.app.migration.Migration;
 import migrator.connection.model.Connection;
 import migrator.connection.service.ConnectionService;
-import migrator.database.service.DatabaseServerConnectionFactory;
+import migrator.ext.mysql.MysqlExtension;
 import migrator.ext.phinx.PhinxExtension;
 import migrator.app.Container;
 import migrator.javafx.helpers.ControllerHelper;
@@ -30,24 +31,33 @@ public class App extends Application {
 
         List<Extension> extensions = new ArrayList<>();
         extensions.add(new PhinxExtension());
+        extensions.add(new MysqlExtension());
         for (Extension extension : extensions) {
             extension.load(configContainer);
         }
 
         Migration migration = new Migration(configContainer.getMigrationConfig());
+        DatabaseDriverManager databaseDriverManager = new DatabaseDriverManager(configContainer.getDatabaseDriverConfig());
         BusinessLogic businessLogic = new BusinessLogic(
-            new DatabaseServerConnectionFactory(),
+            databaseDriverManager,
             new ConnectionService(
                 new Connection("localhost")
             )
         );
         Router router = new BasicRouter();
-        Gui gui = new Gui(new ResourceView(), router, businessLogic, migration);
+        Gui gui = new Gui(
+            new ResourceView(),
+            router,
+            businessLogic,
+            migration,
+            databaseDriverManager
+        );
         Container container = new Container(
             businessLogic,
             gui,
             router,
-            migration
+            migration,
+            databaseDriverManager
         );
         MainController mainController = new MainController(container);
         
