@@ -9,6 +9,7 @@ import javafx.scene.layout.VBox;
 import migrator.component.PaneRenderer;
 import migrator.javafx.Container;
 import migrator.javafx.router.ColumnRoute;
+import migrator.javafx.router.CommitRoute;
 import migrator.javafx.router.ConnectionsRoute;
 import migrator.javafx.router.DatabasesRoute;
 import migrator.javafx.router.IndexRoute;
@@ -47,7 +48,9 @@ public class MainController implements Initializable {
         this.router.connect("tables.view", new TableViewRoute(mainRenderer, this.container));
         this.router.connect("column", new ColumnRoute(mainRenderer, this.container));
         this.router.connect("index", new IndexRoute(mainRenderer, this.container));
+        this.router.connect("commit", new CommitRoute(mainRenderer, this.container));
         this.router.show("connections");
+        
     }
 
     @Override

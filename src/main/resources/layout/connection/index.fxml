@@ -15,6 +15,7 @@
                         <Text text="Connections" styleClass="title" />
                     </HBox>
                     <Button text="+" onAction="#openCreateConnection" styleClass="btn-primary" />
+                    <Button text="c" onAction="#openCommit" styleClass="btn-secondary" />
                 </HBox>
                 <FlowPane styleClass="center-pane" fx:id="connectionsView" vgap="20" hgap="20"></FlowPane>
             </VBox>

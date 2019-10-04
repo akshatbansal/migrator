@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+
+<BorderPane xmlns:fx="http://javafx.com/fxml">
+    <center>
+        <VBox >
+            <HBox styleClass="form__row">
+                <HBox styleClass="form__row-label" alignment="center_left">
+                    <Text text="output" />
+                </HBox>
+                <ComboBox fx:id="output" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
+            </HBox>
+
+            <HBox styleClass="form__row">
+                <HBox styleClass="form__row-label" alignment="center_left">
+                    <Text text="project" />
+                </HBox>
+                <TextField fx:id="project" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
+            </HBox>
+        </VBox>
+    </center>
+    <bottom>
+        <HBox styleClass="form__row" alignment="center_right" spacing="10">
+            <Button text="Commit" onAction="#commit" styleClass="btn-primary" />
+        </HBox>
+    </bottom>
+</BorderPane>

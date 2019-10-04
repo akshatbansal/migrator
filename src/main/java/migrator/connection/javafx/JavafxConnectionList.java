@@ -13,13 +13,11 @@ import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
 import migrator.emitter.Subscription;
-import migrator.breadcrumps.Breadcrump;
 import migrator.connection.component.ConnectionCard;
 import migrator.connection.component.ConnectionList;
 import migrator.connection.model.Connection;
 import migrator.connection.service.ConnectionGuiKit;
 import migrator.connection.service.ConnectionService;
-import migrator.javafx.breadcrumps.BreadcrumpsService;
 import migrator.javafx.helpers.ControllerHelper;
 import migrator.router.Router;
 
@@ -108,8 +106,7 @@ public class JavafxConnectionList implements ConnectionList {
         this.setSelectedCardByConnection(this.connectionService.getSelected().get());
     }
 
-    @FXML
-    public void openCreateConnection() {
+    @FXML public void openCreateConnection() {
         Connection newConnection = new Connection("New Connection");
         newConnection.setPort("3306");
         newConnection.setDriver("mysql");
@@ -117,8 +114,7 @@ public class JavafxConnectionList implements ConnectionList {
         this.connectionService.select(newConnection);
     }
 
-    @FXML
-    public void clearConnections() {
-        this.connectionService.clear();
+    @FXML public void openCommit() {
+        this.router.show("commit");
     }
 }
