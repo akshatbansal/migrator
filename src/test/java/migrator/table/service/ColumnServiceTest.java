@@ -52,13 +52,23 @@ public class ColumnServiceTest {
         assertEquals("id", this.columnService.getList().get(0).getName());
     }
 
-    @Test public void testRemoveRemovesColumnFromList() {
+    @Test public void testRemoveRemovesColumnFromListIfCreated() {
         Column column = this.columnService.getFactory()
             .createWithCreateChange("id");
         this.columnService.add(column);
         this.columnService.remove(column);
 
         assertEquals(0, this.columnService.getList().size());
+    }
+
+    @Test public void testRemoveMarkAsRemovedIfExisting() {
+        Column column = this.columnService.getFactory()
+            .createNotChanged("id", "string", "", false);
+        this.columnService.add(column);
+        this.columnService.remove(column);
+
+        assertEquals(1, this.columnService.getList().size());
+        assertEquals("delete", column.getChange().getCommand().getType());
     }
 
     @Test public void testSetAllSetsListValues() {

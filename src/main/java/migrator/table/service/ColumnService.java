@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ListChangeListener.Change;
+import migrator.migration.ChangeCommand;
 import migrator.migration.ChangeService;
 import migrator.migration.TableChange;
 import migrator.table.model.Column;
@@ -54,10 +55,12 @@ public class ColumnService {
     }
 
     public void remove(Column column) {
-        this.list.remove(column);
+        if (column.getChangeCommand().isType(ChangeCommand.CREATE)) {
+            this.list.remove(column);
+        } else {
+            column.delete();
+        }
     }
-
-    // TODO: remove by table, to remove columnChange from table change
 
     public void add(Column column) {
         this.list.add(column);
@@ -80,5 +83,16 @@ public class ColumnService {
 
     public void register(Column column) {
         this.register(column, this.activeTable.get());
+    }
+
+    protected void unregister(Column column, Table table) {
+        String dbName = table.getDatabase().getConnection().getName() + "." + table.getDatabase().getDatabase();
+        TableChange tableChange = this.changeService.getTableChange(dbName, table.getOriginalName());
+        tableChange.getColumnsChanges().remove(column.getChange());
+        this.remove(column);
+    }
+
+    public void unregister(Column column) {
+        this.unregister(column, this.activeTable.get());
     }
 }
