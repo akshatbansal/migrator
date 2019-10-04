@@ -6,10 +6,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
 
-import migrator.mock.FakeServerConnectionFactory;
+import migrator.app.BusinessLogic;
 import migrator.connection.model.Connection;
 import migrator.database.model.DatabaseConnection;
-import migrator.mock.FakeServerConnection;
+import migrator.mock.FakeDatabaseDriver;
+import migrator.mock.FakeDatabaseDriverManager;
 
 public class ConnectionIntegrationTest {
     @BeforeEach
@@ -17,8 +18,8 @@ public class ConnectionIntegrationTest {
 
     @Test public void testSetDatabaseListOnConnectionConnect() {
         BusinessLogic businessLogic = new BusinessLogic(
-            new FakeServerConnectionFactory(
-                new FakeServerConnection(
+            new FakeDatabaseDriverManager(
+                new FakeDatabaseDriver(
                     Arrays.asList("test_db"),
                     Arrays.asList("test_table"),
                     Arrays.asList(
@@ -38,8 +39,8 @@ public class ConnectionIntegrationTest {
 
     @Test public void testSetTableListOnDatabaseConnect() {
         BusinessLogic businessLogic = new BusinessLogic(
-            new FakeServerConnectionFactory(
-                new FakeServerConnection(
+            new FakeDatabaseDriverManager(
+                new FakeDatabaseDriver(
                     Arrays.asList("test_db"),
                     Arrays.asList("test_table"),
                     Arrays.asList(

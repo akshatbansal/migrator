@@ -4,15 +4,15 @@ import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import migrator.database.service.ServerConnection;
+import migrator.app.database.driver.DatabaseDriver;
 
-public class FakeServerConnection implements ServerConnection {
+public class FakeDatabaseDriver implements DatabaseDriver {
     protected ObservableList<List<String>> columns;
     protected ObservableList<String> databases;
     protected ObservableList<List<String>> indexes;
     protected ObservableList<String> tables;
 
-    public FakeServerConnection(List<String> databases, List<String> tables, List<List<String>> columns, List<List<String>> indexes) {
+    public FakeDatabaseDriver(List<String> databases, List<String> tables, List<List<String>> columns, List<List<String>> indexes) {
         this.databases = FXCollections.observableArrayList(databases);
         this.tables = FXCollections.observableArrayList(tables);
         this.columns = FXCollections.observableArrayList(columns);

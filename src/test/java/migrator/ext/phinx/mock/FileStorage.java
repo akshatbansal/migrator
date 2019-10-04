@@ -1,6 +1,6 @@
-package migrator.phpphinx.mock;
+package migrator.ext.phinx.mock;
 
-import migrator.common.Storage;
+import migrator.lib.storage.Storage;
 
 public class FileStorage implements Storage {
     protected String data;

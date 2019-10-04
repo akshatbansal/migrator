@@ -1,4 +1,4 @@
-package migrator.phpphinx;
+package migrator.ext.phinx;
 
 import org.junit.jupiter.api.Test;
 
@@ -27,25 +27,18 @@ import migrator.migration.SimpleIndexProperty;
 import migrator.migration.SimpleTableChange;
 import migrator.migration.SimpleTableProperty;
 import migrator.migration.TableChange;
-import migrator.phpphinx.PhinxMigration;
-import migrator.phpphinx.mock.FileStorage;
+import migrator.ext.phinx.PhinxMigrationGenerator;
+import migrator.ext.phinx.mock.FileStorage;
+import migrator.lib.php.PhpCommandFactory;
 
-public class PhinxMigrationTest {
-    protected PhinxMigration migrator;
+public class PhinxMigrationGeneratorTest {
+    protected PhinxMigrationGenerator migrator;
     protected FileStorage storage;
-
-    protected Map<String, Observable> createArguments(Object[] ... argsPair) {
-        Map<String, Observable> args = new Hashtable<>();
-        for (Object[] pair : argsPair) {
-            args.put((String) pair[0], new SimpleObjectProperty(pair[1]));
-        }
-        return args;
-    }
 
     @BeforeEach
     public void setUp() {
         this.storage = new FileStorage();
-        this.migrator = new PhinxMigration(this.storage, new PhpCommandFactory());
+        this.migrator = new PhinxMigrationGenerator(this.storage, new PhpCommandFactory());
     }
 
     @Test public void testPhpMigrationCreateTableWithColumn() {
