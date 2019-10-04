@@ -4,11 +4,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import migrator.common.Storage;
-import migrator.migration.Migration;
+import migrator.migration.MigrationGenerator;
 import migrator.migration.TableChange;
 import migrator.phpphinx.command.PhpCommand;
 
-public class PhinxMigration implements Migration {
+public class PhinxMigration implements MigrationGenerator {
     protected Storage storage;
     protected PhpCommandFactory commandFactory;
 
@@ -17,22 +17,44 @@ public class PhinxMigration implements Migration {
         this.commandFactory = commandFactory;
     }
 
-    public Boolean create(List<TableChange> changes) {
+    public Boolean generateMigration(List<TableChange> changes) {
         String phinxContent = "";
         for (TableChange tableChange : changes) {
             phinxContent += this.toPhinxFormat(tableChange);
         }
-        this.storage.store(phinxContent);
+        if (phinxContent.isEmpty()) {
+            return true;
+        }
+
+        this.storage.store(
+            this.wrapToPhinxClass(phinxContent)
+        );
 
         return true;
     }
 
-    public Boolean create(TableChange ... changes) {
-        return this.create(Arrays.asList(changes));
+    public Boolean generateMigration(TableChange ... changes) {
+        return this.generateMigration(Arrays.asList(changes));
     }
 
     private String toPhinxFormat(TableChange tableChange) {
         PhpCommand phpCommand = this.commandFactory.table(tableChange);
         return phpCommand.toPhp();
+    }
+
+    private String wrapToPhinxClass(String changeContent) {
+        String tabedContent = "";
+        for (String line : changeContent.split("\n")) {
+            tabedContent += "\t\t" + line + "\n";
+        }
+        return "<?php\n\n" +
+            "use Phinx\\Migration\\AbstractMigration;\n\n" +
+            "class MigrationByMigrator extends AbstractMigration\n" +
+            "{\n" +
+                "\tpublic function change()\n" +
+                "\t{\n" +
+                    tabedContent +
+                "\t}\n" +
+            "}\n";
     }
 }

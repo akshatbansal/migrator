@@ -1,5 +1,6 @@
 package migrator.phpphinx.command;
 
+import migrator.migration.ChangeCommand;
 import migrator.migration.ColumnChange;
 import migrator.migration.IndexChange;
 import migrator.migration.TableChange;
@@ -15,6 +16,9 @@ public class SaveTable implements PhpCommand {
     }
 
     public String toPhp() {
+        if (this.tableChange.getCommand().isType(ChangeCommand.NONE) && this.tableChange.getColumnsChanges().size() == 0 && this.tableChange.getIndexesChanges().size() == 0) {
+            return "";
+        }
         String php = "$this->table('" + this.tableChange.getOriginalName() + "')\n";
         for (ColumnChange columnChange : this.tableChange.getColumnsChanges()) {
             PhpCommand columnPhpCommand = this.commandFactory.column(columnChange);

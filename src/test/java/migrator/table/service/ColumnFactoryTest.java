@@ -50,13 +50,10 @@ public class ColumnFactoryTest {
         assertTrue(column.isNullEnabled());
     }
 
-    @Test public void testCreateWithCreateChangeByNameHasNullValuesAsValuesInChangeCommand() {
+    @Test public void testCreateWithCreateChangeByNameHasSetValuesInChangeCommand() {
         Column column = this.columnFactory.createWithCreateChange("column_name");
     
-        assertNull(column.getChange().getName());
-        assertNull(column.getChange().getFormat());
-        assertNull(column.getChange().getDefaultValue());
-        assertNull(column.getChange().isNullEnabled());
+        assertEquals("column_name", column.getChange().getName());        
     }
 
     @Test public void testCreateWithCreateChangeByNameIsCreateType() {

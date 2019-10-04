@@ -1,6 +1,5 @@
 package migrator.javafx.router;
 
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.layout.Priority;

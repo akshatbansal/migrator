@@ -12,6 +12,7 @@ public class Gui {
     protected GuiKit databaseGuiKit;
     protected migrator.table.service.GuiKit tableGuiKit;
     protected migrator.breadcrumps.GuiKit breadcrumpsGuiKit;
+    protected migrator.change.service.GuiKit changeGuiKit;
 
     public Gui(View view, Router router, BusinessLogic businessLogic) {
         this.breadcrumpsGuiKit = new migrator.javafx.breadcrumps.JavafxGuiKit(businessLogic.getBreadcrumps());
@@ -23,6 +24,11 @@ public class Gui {
             view,
             businessLogic.getDatabase(),
             businessLogic.getTable()
+        );
+        this.changeGuiKit = new migrator.change.javafx.JavafxGuiKit(
+            view,
+            router,
+            businessLogic.getChange()
         );
     }
 
@@ -40,5 +46,9 @@ public class Gui {
 
     public migrator.breadcrumps.GuiKit getBreadcrumps() {
         return this.breadcrumpsGuiKit;
+    }
+
+    public migrator.change.service.GuiKit getChangeKit() {
+        return this.changeGuiKit;
     }
 }

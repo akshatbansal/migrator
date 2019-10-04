@@ -21,9 +21,9 @@ public class ColumnFactory {
 
     public Column createWithCreateChange(String columnName) {
         return new Column(
-            new SimpleColumnProperty(columnName, "string", "", false), // original
+            new SimpleColumnProperty(columnName, null, null, null), // original
             new SimpleColumnProperty(columnName, "string", "", false), // changed
-            new SimpleColumnChange(columnName, this.simpleColumnProperty(null, null, null, null), new ChangeCommand(ChangeCommand.CREATE))
+            new SimpleColumnChange(columnName, this.simpleColumnProperty(columnName, "string", "", false), new ChangeCommand(ChangeCommand.CREATE))
         );
     }
 }

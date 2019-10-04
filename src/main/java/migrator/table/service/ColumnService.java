@@ -7,15 +7,23 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ListChangeListener.Change;
+import migrator.migration.ChangeCommand;
+import migrator.migration.ChangeService;
+import migrator.migration.TableChange;
 import migrator.table.model.Column;
+import migrator.table.model.Table;
 
 public class ColumnService {
+    protected ChangeService changeService;
+    protected ObjectProperty<Table> activeTable;
     protected ColumnFactory columnFactory;
     protected ObservableList<Column> list;
     protected ObjectProperty<Column> selected;
 
-    public ColumnService(ColumnFactory columnFactory) {
+    public ColumnService(ColumnFactory columnFactory, ChangeService changeService, ObjectProperty<Table> activeTable) {
         this.columnFactory = columnFactory;
+        this.changeService = changeService;
+        this.activeTable = activeTable;
         this.list = FXCollections.observableArrayList();
         this.selected = new SimpleObjectProperty<>();
 
@@ -47,7 +55,11 @@ public class ColumnService {
     }
 
     public void remove(Column column) {
-        this.list.remove(column);
+        if (column.getChangeCommand().isType(ChangeCommand.CREATE)) {
+            this.list.remove(column);
+        } else {
+            column.delete();
+        }
     }
 
     public void add(Column column) {
@@ -60,5 +72,27 @@ public class ColumnService {
 
     public ColumnFactory getFactory() {
         return this.columnFactory;
+    }
+
+    protected void register(Column column, Table table) {
+        this.add(column);
+        String dbName = table.getDatabase().getConnection().getName() + "." + table.getDatabase().getDatabase();
+        TableChange tableChange = this.changeService.getTableChange(dbName, table.getOriginalName());
+        tableChange.getColumnsChanges().add(column.getChange());
+    }
+
+    public void register(Column column) {
+        this.register(column, this.activeTable.get());
+    }
+
+    protected void unregister(Column column, Table table) {
+        String dbName = table.getDatabase().getConnection().getName() + "." + table.getDatabase().getDatabase();
+        TableChange tableChange = this.changeService.getTableChange(dbName, table.getOriginalName());
+        tableChange.getColumnsChanges().remove(column.getChange());
+        this.remove(column);
+    }
+
+    public void unregister(Column column) {
+        this.unregister(column, this.activeTable.get());
     }
 }
