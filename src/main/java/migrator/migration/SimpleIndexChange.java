@@ -1,5 +1,7 @@
 package migrator.migration;
 
+import java.util.Arrays;
+
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 
@@ -10,6 +12,17 @@ public class SimpleIndexChange implements IndexChange {
     public SimpleIndexChange(IndexProperty index, ChangeCommand command) {
         this.index = index;
         this.command = command;
+
+        UpdateCommandListener updateCommandListener = new UpdateCommandListener(
+            this.command,
+            Arrays.asList(
+                this.index.nameProperty(),
+                this.index.columnsStringProperty()
+            )
+        );
+
+        this.index.nameProperty().addListener(updateCommandListener);
+        this.index.columnsStringProperty().addListener(updateCommandListener);
     }
 
     @Override
@@ -39,7 +52,7 @@ public class SimpleIndexChange implements IndexChange {
 
     @Override
     public void clear() {
-        
+        this.command.setType(ChangeCommand.NONE);
     }
 
     @Override

@@ -36,6 +36,9 @@ public class SimpleIndexProperty implements IndexProperty {
             }
             newColumnString += column.get();
         }
+        if (newColumnString.isEmpty()) {
+            newColumnString = null;
+        }
         this.columnsString.set(newColumnString);
     }
 

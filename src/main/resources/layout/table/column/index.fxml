@@ -19,7 +19,9 @@
                     <cellFactory>
                          <ChangeCellFactory />
                     </cellFactory>
-                    <cellValueFactory><PropertyValueFactory property="changeType" /></cellValueFactory>
+                    <cellValueFactory>
+                         <PropertyValueFactory property="changeType" />
+                    </cellValueFactory>
                </TableColumn>
                <TableColumn text="Name" prefWidth="${(columns.width-4)*0.55}">
                     <cellValueFactory><PropertyValueFactory property="name" /></cellValueFactory>
