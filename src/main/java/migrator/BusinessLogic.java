@@ -135,13 +135,13 @@ public class BusinessLogic {
 
         this.indexService.setAll(
             this.getTransformedIndexes(
-                serverConnection.getIndexes(table.getName())
+                serverConnection.getIndexes(table.getOriginalName())
             )
         );
         
         this.columnService.setAll(
             this.getTransformedColumns(
-                serverConnection.getColumns(table.getName())
+                serverConnection.getColumns(table.getOriginalName())
             )
         );
     }
