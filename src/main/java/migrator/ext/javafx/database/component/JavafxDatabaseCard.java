@@ -1,31 +1,28 @@
-package migrator.database.javafx;
+package migrator.ext.javafx.database.component;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.text.Text;
+import migrator.app.domain.database.component.DatabaseCard;
+import migrator.app.domain.database.model.DatabaseConnection;
 import migrator.emitter.Emitter;
 import migrator.emitter.EventEmitter;
 import migrator.emitter.Subscriber;
 import migrator.emitter.Subscription;
-import migrator.database.component.DatabaseCard;
-import migrator.database.model.DatabaseConnection;
-import migrator.javafx.helpers.ControllerHelper;
+import migrator.ext.javafx.component.ViewComponent;
+import migrator.ext.javafx.component.ViewLoader;
 
-public class JavafxDatabaseCard implements DatabaseCard {
+public class JavafxDatabaseCard extends ViewComponent implements DatabaseCard {
     @FXML protected Text cardName;
     protected DatabaseConnection connection;
-    protected Node node;
     protected Emitter emitter;
 
-    public JavafxDatabaseCard(DatabaseConnection connection) {
+    public JavafxDatabaseCard(ViewLoader viewLoader, DatabaseConnection connection) {
+        super(viewLoader);
         this.connection = connection;
         this.emitter = new EventEmitter();
-        this.node = ControllerHelper.createViewNode(this, "/layout/database/card.fxml");
-    }
 
-    @Override
-    public Object getContent() {
-        return this.node;
+        this.loadView("/layout/database/card.fxml");
     }
 
     @FXML public void initialize() {

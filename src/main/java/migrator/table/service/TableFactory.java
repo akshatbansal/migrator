@@ -1,6 +1,6 @@
 package migrator.table.service;
 
-import migrator.database.model.DatabaseConnection;
+import migrator.app.domain.database.model.DatabaseConnection;
 import migrator.migration.SimpleTableProperty;
 import migrator.migration.TableChange;
 import migrator.migration.TableChangeFactory;

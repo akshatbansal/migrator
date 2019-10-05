@@ -1,6 +1,6 @@
 package migrator.table.javafx;
 
-import migrator.database.service.DatabaseService;
+import migrator.app.domain.database.service.DatabaseService;
 import migrator.javafx.helpers.View;
 import migrator.migration.ChangeService;
 import migrator.router.Router;

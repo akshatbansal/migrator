@@ -3,10 +3,10 @@ package migrator.javafx.router;
 import javafx.scene.Node;
 import migrator.app.BusinessLogic;
 import migrator.breadcrumps.RouterBreadcrump;
-import migrator.database.component.DatabaseList;
-import migrator.database.service.GuiKit;
 import migrator.app.Container;
 import migrator.app.domain.connection.model.Connection;
+import migrator.app.domain.database.component.DatabaseList;
+import migrator.app.domain.database.service.GuiKit;
 import migrator.router.Route;
 import migrator.router.Router;
 

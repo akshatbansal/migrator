@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
-import migrator.database.model.DatabaseConnection;
+import migrator.app.domain.database.model.DatabaseConnection;
 import migrator.migration.TableChange;
 import migrator.migration.TableProperty;
 

@@ -1,7 +1,7 @@
 package migrator.app;
 
 import migrator.app.domain.connection.service.ConnectionGuiKit;
-import migrator.database.service.GuiKit;
+import migrator.app.domain.database.service.GuiKit;
 
 public interface Gui {
     public ConnectionGuiKit getConnectionKit();

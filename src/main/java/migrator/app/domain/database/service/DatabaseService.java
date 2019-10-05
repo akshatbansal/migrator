@@ -1,4 +1,4 @@
-package migrator.database.service;
+package migrator.app.domain.database.service;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import migrator.database.model.DatabaseConnection;
+import migrator.app.domain.database.model.DatabaseConnection;
 
 public class DatabaseService {
     protected ObservableList<DatabaseConnection> list;

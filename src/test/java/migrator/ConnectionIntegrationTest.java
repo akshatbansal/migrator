@@ -7,8 +7,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.Arrays;
 
 import migrator.app.BusinessLogic;
-import migrator.connection.model.Connection;
-import migrator.database.model.DatabaseConnection;
+import migrator.app.domain.connection.model.Connection;
+import migrator.app.domain.database.model.DatabaseConnection;
 import migrator.mock.FakeDatabaseDriver;
 import migrator.mock.FakeDatabaseDriverManager;
 

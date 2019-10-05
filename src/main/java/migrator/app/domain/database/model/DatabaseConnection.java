@@ -1,4 +1,4 @@
-package migrator.database.model;
+package migrator.app.domain.database.model;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;

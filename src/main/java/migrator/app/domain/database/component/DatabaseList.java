@@ -1,4 +1,4 @@
-package migrator.database.component;
+package migrator.app.domain.database.component;
 
 import migrator.app.gui.GuiNode;
 

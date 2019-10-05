@@ -1,4 +1,4 @@
-package migrator.database.javafx;
+package migrator.ext.javafx.database.component;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -9,18 +9,19 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
+import migrator.app.domain.database.component.DatabaseCard;
+import migrator.app.domain.database.component.DatabaseList;
+import migrator.app.domain.database.model.DatabaseConnection;
+import migrator.app.domain.database.service.DatabaseService;
+import migrator.app.domain.database.service.GuiKit;
 import migrator.breadcrumps.BreadcrumpsComponent;
-import migrator.database.component.DatabaseCard;
-import migrator.database.component.DatabaseList;
-import migrator.database.model.DatabaseConnection;
-import migrator.database.service.DatabaseService;
-import migrator.database.service.GuiKit;
 import migrator.emitter.Subscription;
+import migrator.ext.javafx.component.ViewComponent;
+import migrator.ext.javafx.component.ViewLoader;
 import migrator.javafx.helpers.ControllerHelper;
 import migrator.router.Router;
 
-public class JavafxDatabaseList implements DatabaseList {
-    protected Node node;
+public class JavafxDatabaseList extends ViewComponent implements DatabaseList {
     protected List<Subscription> subscriptions;
     protected DatabaseService databaseService;
     protected GuiKit guiKit;
@@ -30,13 +31,15 @@ public class JavafxDatabaseList implements DatabaseList {
     @FXML protected FlowPane databasesView;
     @FXML protected VBox breadcrumpsContainer;
 
-    public JavafxDatabaseList(DatabaseService databaseService, GuiKit guiKit, Router router, migrator.breadcrumps.GuiKit breadcrumpsGuiKit) {
+    public JavafxDatabaseList(ViewLoader viewLoader, DatabaseService databaseService, GuiKit guiKit, Router router, migrator.breadcrumps.GuiKit breadcrumpsGuiKit) {
+        super(viewLoader);
         this.databaseService = databaseService;
         this.guiKit = guiKit;
         this.router = router;
         this.subscriptions = new LinkedList<>();
         this.breadcrumpsController = breadcrumpsGuiKit.createBreadcrumps();
-        this.node = ControllerHelper.createViewNode(this, "/layout/database/index.fxml");
+
+        this.loadView("/layout/database/index.fxml");
 
         this.databaseService.getList().addListener((Change<? extends DatabaseConnection> change) -> {
             this.draw();

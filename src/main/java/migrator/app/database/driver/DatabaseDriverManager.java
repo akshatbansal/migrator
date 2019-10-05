@@ -3,7 +3,7 @@ package migrator.app.database.driver;
 import java.util.Collection;
 
 import migrator.app.domain.connection.model.Connection;
-import migrator.database.model.DatabaseConnection;
+import migrator.app.domain.database.model.DatabaseConnection;
 
 public class DatabaseDriverManager {
     protected DatabaseDriverConfig config;

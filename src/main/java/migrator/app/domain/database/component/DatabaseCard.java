@@ -1,4 +1,4 @@
-package migrator.database.component;
+package migrator.app.domain.database.component;
 
 import migrator.emitter.Subscriber;
 import migrator.emitter.Subscription;
