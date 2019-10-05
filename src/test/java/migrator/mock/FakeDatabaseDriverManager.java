@@ -3,8 +3,8 @@ package migrator.mock;
 import migrator.app.database.driver.DatabaseDriver;
 import migrator.app.database.driver.DatabaseDriverConfig;
 import migrator.app.database.driver.DatabaseDriverManager;
-import migrator.connection.model.Connection;
-import migrator.database.model.DatabaseConnection;
+import migrator.app.domain.connection.model.Connection;
+import migrator.app.domain.database.model.DatabaseConnection;
 
 public class FakeDatabaseDriverManager extends DatabaseDriverManager {
     protected DatabaseDriver driver;

@@ -4,8 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
 
-import migrator.connection.model.Connection;
-import migrator.connection.service.ConnectionService;
+import migrator.app.domain.connection.model.Connection;
+import migrator.app.domain.connection.service.ConnectionService;
 
 public class ConnectionServiceTest {
     protected ConnectionService connectionService;

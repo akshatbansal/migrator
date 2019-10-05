@@ -8,9 +8,9 @@ import java.util.Arrays;
 
 import migrator.table.model.Table;
 import migrator.app.BusinessLogic;
-import migrator.connection.model.Connection;
-import migrator.connection.service.ConnectionService;
-import migrator.database.model.DatabaseConnection;
+import migrator.app.domain.connection.model.Connection;
+import migrator.app.domain.connection.service.ConnectionService;
+import migrator.app.domain.database.model.DatabaseConnection;
 import migrator.mock.FakeDatabaseDriver;
 import migrator.mock.FakeDatabaseDriverManager;
 

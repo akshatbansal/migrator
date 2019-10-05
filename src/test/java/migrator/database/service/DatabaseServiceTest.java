@@ -6,9 +6,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
 
-import migrator.connection.model.Connection;
-import migrator.database.model.DatabaseConnection;
-import migrator.database.service.DatabaseService;
+import migrator.app.domain.connection.model.Connection;
+import migrator.app.domain.database.model.DatabaseConnection;
+import migrator.app.domain.database.service.DatabaseService;
 
 public class DatabaseServiceTest {
     protected DatabaseService databaseService;

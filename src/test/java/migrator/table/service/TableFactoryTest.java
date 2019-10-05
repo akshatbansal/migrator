@@ -2,8 +2,8 @@ package migrator.migration;
 
 import org.junit.jupiter.api.Test;
 
-import migrator.connection.model.Connection;
-import migrator.database.model.DatabaseConnection;
+import migrator.app.domain.connection.model.Connection;
+import migrator.app.domain.database.model.DatabaseConnection;
 import migrator.table.model.Table;
 import migrator.table.service.TableFactory;
 
