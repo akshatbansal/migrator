@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
 
-import migrator.table.model.Table;
+import migrator.app.domain.table.model.Table;
 import migrator.app.BusinessLogic;
 import migrator.app.domain.connection.model.Connection;
 import migrator.app.domain.connection.service.ConnectionService;

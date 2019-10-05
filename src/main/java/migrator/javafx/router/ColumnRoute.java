@@ -4,15 +4,15 @@ import javafx.scene.Node;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import migrator.app.Container;
+import migrator.app.domain.table.component.ColumnForm;
+import migrator.app.domain.table.model.Column;
+import migrator.app.domain.table.service.ColumnService;
+import migrator.app.domain.table.service.TableGuiKit;
 import migrator.router.Route;
-import migrator.table.component.ColumnForm;
-import migrator.table.service.ColumnService;
-import migrator.table.service.GuiKit;
-import migrator.table.model.Column;
 
 public class ColumnRoute implements Route {
     protected MainRenderer renerer;
-    protected GuiKit tableGuiKit;
+    protected TableGuiKit tableGuiKit;
     protected ColumnService columnService;
     protected ColumnForm form;
 

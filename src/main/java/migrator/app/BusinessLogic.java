@@ -16,19 +16,19 @@ import migrator.app.domain.connection.model.Connection;
 import migrator.app.domain.connection.service.ConnectionService;
 import migrator.app.domain.database.model.DatabaseConnection;
 import migrator.app.domain.database.service.DatabaseService;
+import migrator.app.domain.table.model.Column;
+import migrator.app.domain.table.model.Index;
+import migrator.app.domain.table.model.Table;
+import migrator.app.domain.table.service.ColumnFactory;
+import migrator.app.domain.table.service.ColumnService;
+import migrator.app.domain.table.service.IndexFactory;
+import migrator.app.domain.table.service.IndexService;
+import migrator.app.domain.table.service.TableFactory;
+import migrator.app.domain.table.service.TableService;
 import migrator.javafx.breadcrumps.BreadcrumpsService;
 import migrator.migration.ChangeService;
 import migrator.migration.TableChange;
 import migrator.migration.TableChangeFactory;
-import migrator.table.model.Column;
-import migrator.table.model.Index;
-import migrator.table.model.Table;
-import migrator.table.service.ColumnFactory;
-import migrator.table.service.ColumnService;
-import migrator.table.service.IndexFactory;
-import migrator.table.service.IndexService;
-import migrator.table.service.TableFactory;
-import migrator.table.service.TableService;
 
 public class BusinessLogic {
     protected ConnectionService connectionService;
