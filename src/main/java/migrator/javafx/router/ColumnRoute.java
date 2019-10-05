@@ -4,6 +4,7 @@ import javafx.scene.Node;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import migrator.app.Container;
+import migrator.app.Gui;
 import migrator.app.domain.table.component.ColumnForm;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.service.ColumnService;
@@ -16,10 +17,10 @@ public class ColumnRoute implements Route {
     protected ColumnService columnService;
     protected ColumnForm form;
 
-    public ColumnRoute(MainRenderer renderer, Container container) {
+    public ColumnRoute(MainRenderer renderer, Container container, Gui gui) {
         this.renerer = renderer;
-        this.tableGuiKit = container.getGui().getTableKit();
-        this.columnService = container.getBusinessLogic().getColumn();
+        this.tableGuiKit = gui.getTableKit();
+        this.columnService = container.getColumnService();
     }
 
     @Override

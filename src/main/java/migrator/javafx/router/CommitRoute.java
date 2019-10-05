@@ -4,6 +4,7 @@ import javafx.scene.Node;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import migrator.app.Container;
+import migrator.app.Gui;
 import migrator.app.domain.change.service.ChangeGuiKit;
 import migrator.router.Route;
 
@@ -11,9 +12,9 @@ public class CommitRoute implements Route {
     protected MainRenderer renderer;
     protected ChangeGuiKit guiKit;
 
-    public CommitRoute(MainRenderer renderer, Container container) {
+    public CommitRoute(MainRenderer renderer, Container container, Gui gui) {
         this.renderer = renderer;
-        this.guiKit = container.getGui().getChangeKit();
+        this.guiKit = gui.getChangeKit();
     }
 
     @Override

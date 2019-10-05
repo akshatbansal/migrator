@@ -4,6 +4,7 @@ import javafx.scene.Node;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import migrator.app.Container;
+import migrator.app.Gui;
 import migrator.app.domain.table.component.IndexForm;
 import migrator.app.domain.table.model.Index;
 import migrator.app.domain.table.service.ColumnService;
@@ -18,11 +19,11 @@ public class IndexRoute implements Route {
     protected ColumnService columnService;
     protected IndexForm form;
 
-    public IndexRoute(MainRenderer renderer, Container container) {
+    public IndexRoute(MainRenderer renderer, Container container, Gui gui) {
         this.renerer = renderer;
-        this.tableGuiKit = container.getGui().getTableKit();
-        this.indexService = container.getBusinessLogic().getIndex();
-        this.columnService = container.getBusinessLogic().getColumn();
+        this.tableGuiKit = gui.getTableKit();
+        this.indexService = container.getIndexService();
+        this.columnService = container.getColumnService();
     }
 
     @Override

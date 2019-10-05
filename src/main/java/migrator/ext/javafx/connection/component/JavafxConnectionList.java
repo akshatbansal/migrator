@@ -6,49 +6,42 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener.Change;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
+import migrator.app.Container;
 import migrator.app.domain.connection.component.ConnectionCard;
 import migrator.app.domain.connection.component.ConnectionList;
 import migrator.app.domain.connection.model.Connection;
 import migrator.app.domain.connection.service.ConnectionGuiKit;
 import migrator.app.domain.connection.service.ConnectionService;
+import migrator.app.router.ActiveRoute;
+import migrator.ext.javafx.component.ViewComponent;
+import migrator.ext.javafx.component.ViewLoader;
 import migrator.lib.emitter.Subscription;
-import migrator.javafx.helpers.ControllerHelper;
-import migrator.router.Router;
 
-public class JavafxConnectionList implements ConnectionList {
+public class JavafxConnectionList extends ViewComponent implements ConnectionList {
     protected ConnectionGuiKit connectionGuiKit;
-    protected Node node;
     protected List<Subscription> subscriptions;
     protected ConnectionService connectionService;
     protected ConnectionCard selectedCard;
     protected Map<Connection, ConnectionCard> cards;
-    protected Router router;
+    protected ActiveRoute activeRoute;
 
     @FXML protected FlowPane connectionsView;
     @FXML protected ScrollPane scrollPane;
 
-    public JavafxConnectionList(ConnectionGuiKit connectionGuiKit, ConnectionService connectionService, Router router) {
+    public JavafxConnectionList(ViewLoader viewLoader, ConnectionGuiKit connectionGuiKit, Container container) {
+        super(viewLoader);
         this.connectionGuiKit = connectionGuiKit;
-        this.connectionService = connectionService;
-        this.router = router;
+        this.connectionService = container.getConnectionService();
+        this.activeRoute = container.getActiveRoute();
         this.subscriptions = new LinkedList<>();
         this.cards = new HashMap<>();
-        this.node = ControllerHelper.createViewNode(this, "/layout/connection/index.fxml");
         
-        this.connectionService.getSelected().addListener((ObservableValue<? extends Connection> observable, Connection oldValue, Connection newValue) -> {
-            this.setSelectedCardByConnection(newValue);
-        });
-    }
-
-    @Override
-    public Object getContent() {
-        return this.node;
+        this.loadView("/layout/connection/index.fxml");
     }
 
     protected void draw() {
@@ -65,13 +58,15 @@ public class JavafxConnectionList implements ConnectionList {
             this.cards.put(connection, card);
             this.subscriptions.add(
                 card.onSelect((Object o) -> {
-                    this.connectionService.select((Connection) o);
+                    Connection c = (Connection) o;
+                    this.connectionService.select(c);
+                    this.setSelectedCardByConnection(c);
                 })
             );
             this.subscriptions.add(
                 card.onConnect((Object o) -> {
                     this.connectionService.connect((Connection) o);
-                    this.router.show("databases", o);
+                    this.activeRoute.changeTo("connection.view", o);
                 })
             );
             this.connectionsView.getChildren().add((Node) card.getContent());
@@ -115,6 +110,6 @@ public class JavafxConnectionList implements ConnectionList {
     }
 
     @FXML public void openCommit() {
-        this.router.show("commit");
+        this.activeRoute.changeTo("commit");
     }
 }

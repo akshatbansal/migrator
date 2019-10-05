@@ -1,21 +1,26 @@
 package migrator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
+import migrator.app.Bootstrap;
 import migrator.app.BusinessLogic;
 import migrator.app.Gui;
 import migrator.app.code.CodeManager;
 import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.domain.connection.model.Connection;
+import migrator.app.domain.connection.route.ConnectionIndexRoute;
+import migrator.app.domain.connection.route.ConnectionRoute;
 import migrator.app.domain.connection.service.ConnectionService;
-import migrator.app.extension.ConfigContainer;
+import migrator.app.ConfigContainer;
 import migrator.app.extension.Extension;
 import migrator.app.migration.Migration;
+import migrator.app.router.ActiveRoute;
 import migrator.ext.javafx.JavafxGui;
 import migrator.ext.mysql.MysqlExtension;
 import migrator.ext.phinx.PhinxExtension;
@@ -30,41 +35,38 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        ConfigContainer configContainer = new ConfigContainer();
-        Migration migration = new Migration(configContainer.getMigrationConfig());
-        DatabaseDriverManager databaseDriverManager = new DatabaseDriverManager(configContainer.getDatabaseDriverConfig());
-        CodeManager codeManager = new CodeManager(configContainer.getCodeConfig());
-
-        List<Extension> extensions = new ArrayList<>();
-        extensions.add(new PhinxExtension(codeManager));
-        extensions.add(new MysqlExtension());
-        extensions.add(new PhpExtension());
-        for (Extension extension : extensions) {
-            extension.load(configContainer);
-        }
-        
-        BusinessLogic businessLogic = new BusinessLogic(
-            databaseDriverManager,
-            new ConnectionService(
-                new Connection("localhost")
+        Bootstrap bootstrap = new Bootstrap(
+            Arrays.asList(
+                new PhinxExtension(),
+                new MysqlExtension(),
+                new PhpExtension()
             )
         );
+
+        Container container = bootstrap.getContainer();
+
+        // Seed data
+        container.getConnectionService()
+            .add(new Connection("localhost"));
+        
         Router router = new BasicRouter();
         Gui gui = new JavafxGui(
             new ResourceView(),
             router,
-            businessLogic,
-            migration,
-            databaseDriverManager
+            container
         );
-        Container container = new Container(
-            businessLogic,
-            gui,
-            router,
-            migration,
-            databaseDriverManager
-        );
-        MainController mainController = new MainController(container);
+
+        container.getActiveRoute().routeProperty()
+            .addListener((obs, ol, ne) -> {
+                router.show(ne.getName(), ne.getValue());
+            });
+
+        // migrator.app.Router appRouter = new migrator.app.Router(
+        //     new ConnectionRoute(
+        //         new ConnectionIndexRoute(gui.getConnectionKit(), )
+        //     )
+        // )
+        MainController mainController = new MainController(container, gui, router);
         
         Parent root = (Parent) ControllerHelper.createViewNode(mainController, "/layout/main.fxml");        
         Scene scene = new Scene(root, 1280, 720);

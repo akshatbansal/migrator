@@ -5,6 +5,7 @@ import javafx.scene.Node;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import migrator.app.Container;
+import migrator.app.Gui;
 import migrator.app.domain.connection.component.ConnectionForm;
 import migrator.app.domain.connection.component.ConnectionList;
 import migrator.app.domain.connection.model.Connection;
@@ -19,12 +20,12 @@ public class ConnectionsRoute implements Route {
     protected ConnectionList list;
     protected ConnectionForm form;
 
-    public ConnectionsRoute(MainRenderer renderer, Container container) {
+    public ConnectionsRoute(MainRenderer renderer, Container container, Gui gui) {
         this.renerer = renderer;
-        this.connectionGuiKit = container.getGui().getConnectionKit();
-        this.connectionService = container.getBusinessLogic().getConnection();
-        this.list = this.connectionGuiKit.createList();
-        this.form = this.connectionGuiKit.createForm();
+        this.connectionGuiKit = gui.getConnectionKit();
+        this.connectionService = container.getConnectionService();
+        this.list = this.connectionGuiKit.createList(null);
+        this.form = this.connectionGuiKit.createForm(null);
 
         VBox.setVgrow((Node) this.form.getContent(), Priority.ALWAYS);
 
