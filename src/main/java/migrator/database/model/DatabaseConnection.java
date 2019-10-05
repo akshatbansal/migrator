@@ -3,7 +3,7 @@ package migrator.database.model;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import migrator.connection.model.Connection;
+import migrator.app.domain.connection.model.Connection;
 
 public class DatabaseConnection {
     protected StringProperty database;

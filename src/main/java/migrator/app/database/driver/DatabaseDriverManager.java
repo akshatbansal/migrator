@@ -2,7 +2,7 @@ package migrator.app.database.driver;
 
 import java.util.Collection;
 
-import migrator.connection.model.Connection;
+import migrator.app.domain.connection.model.Connection;
 import migrator.database.model.DatabaseConnection;
 
 public class DatabaseDriverManager {

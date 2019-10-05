@@ -1,12 +1,15 @@
-package migrator.connection.javafx;
+package migrator.ext.javafx.connection.service;
 
 import migrator.app.database.driver.DatabaseDriverManager;
-import migrator.connection.component.ConnectionCard;
-import migrator.connection.component.ConnectionForm;
-import migrator.connection.component.ConnectionList;
-import migrator.connection.model.Connection;
-import migrator.connection.service.ConnectionGuiKit;
-import migrator.connection.service.ConnectionService;
+import migrator.app.domain.connection.component.ConnectionCard;
+import migrator.app.domain.connection.component.ConnectionForm;
+import migrator.app.domain.connection.component.ConnectionList;
+import migrator.app.domain.connection.model.Connection;
+import migrator.app.domain.connection.service.ConnectionGuiKit;
+import migrator.app.domain.connection.service.ConnectionService;
+import migrator.ext.javafx.connection.component.JavafxConnectionCard;
+import migrator.ext.javafx.connection.component.JavafxConnectionForm;
+import migrator.ext.javafx.connection.component.JavafxConnectionList;
 import migrator.router.Router;
 
 public class JavafxConnectionGuiKit implements ConnectionGuiKit {

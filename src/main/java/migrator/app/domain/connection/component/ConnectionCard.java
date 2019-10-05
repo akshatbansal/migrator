@@ -1,4 +1,4 @@
-package migrator.connection.component;
+package migrator.app.domain.connection.component;
 
 import migrator.emitter.Subscriber;
 import migrator.emitter.Subscription;

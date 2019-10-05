@@ -1,4 +1,4 @@
-package migrator.connection.javafx;
+package migrator.ext.javafx.connection.component;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -12,12 +12,12 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
+import migrator.app.domain.connection.component.ConnectionCard;
+import migrator.app.domain.connection.component.ConnectionList;
+import migrator.app.domain.connection.model.Connection;
+import migrator.app.domain.connection.service.ConnectionGuiKit;
+import migrator.app.domain.connection.service.ConnectionService;
 import migrator.emitter.Subscription;
-import migrator.connection.component.ConnectionCard;
-import migrator.connection.component.ConnectionList;
-import migrator.connection.model.Connection;
-import migrator.connection.service.ConnectionGuiKit;
-import migrator.connection.service.ConnectionService;
 import migrator.javafx.helpers.ControllerHelper;
 import migrator.router.Router;
 

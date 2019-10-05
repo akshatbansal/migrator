@@ -10,11 +10,12 @@ import javafx.stage.Stage;
 import migrator.app.BusinessLogic;
 import migrator.app.Gui;
 import migrator.app.database.driver.DatabaseDriverManager;
+import migrator.app.domain.connection.model.Connection;
+import migrator.app.domain.connection.service.ConnectionService;
 import migrator.app.extension.ConfigContainer;
 import migrator.app.extension.Extension;
 import migrator.app.migration.Migration;
-import migrator.connection.model.Connection;
-import migrator.connection.service.ConnectionService;
+import migrator.ext.javafx.JavafxGui;
 import migrator.ext.mysql.MysqlExtension;
 import migrator.ext.phinx.PhinxExtension;
 import migrator.app.Container;
@@ -45,7 +46,7 @@ public class App extends Application {
             )
         );
         Router router = new BasicRouter();
-        Gui gui = new Gui(
+        Gui gui = new JavafxGui(
             new ResourceView(),
             router,
             businessLogic,

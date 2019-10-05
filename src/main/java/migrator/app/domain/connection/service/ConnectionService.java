@@ -1,11 +1,11 @@
-package migrator.connection.service;
+package migrator.app.domain.connection.service;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ListChangeListener.Change;
-import migrator.connection.model.Connection;
+import migrator.app.domain.connection.model.Connection;
 
 public class ConnectionService {
     protected ObservableList<Connection> list;

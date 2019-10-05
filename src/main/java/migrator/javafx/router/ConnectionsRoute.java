@@ -4,12 +4,12 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import migrator.connection.component.ConnectionForm;
-import migrator.connection.component.ConnectionList;
-import migrator.connection.model.Connection;
-import migrator.connection.service.ConnectionGuiKit;
-import migrator.connection.service.ConnectionService;
 import migrator.app.Container;
+import migrator.app.domain.connection.component.ConnectionForm;
+import migrator.app.domain.connection.component.ConnectionList;
+import migrator.app.domain.connection.model.Connection;
+import migrator.app.domain.connection.service.ConnectionGuiKit;
+import migrator.app.domain.connection.service.ConnectionService;
 import migrator.router.Route;
 
 public class ConnectionsRoute implements Route {

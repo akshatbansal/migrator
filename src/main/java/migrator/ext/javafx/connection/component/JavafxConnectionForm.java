@@ -1,4 +1,4 @@
-package migrator.connection.javafx;
+package migrator.ext.javafx.connection.component;
 
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -7,9 +7,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import migrator.app.database.driver.DatabaseDriverManager;
-import migrator.connection.component.ConnectionForm;
-import migrator.connection.model.Connection;
-import migrator.connection.service.ConnectionService;
+import migrator.app.domain.connection.component.ConnectionForm;
+import migrator.app.domain.connection.model.Connection;
+import migrator.app.domain.connection.service.ConnectionService;
 import migrator.javafx.helpers.ControllerHelper;
 import migrator.router.Router;
 

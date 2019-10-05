@@ -1,14 +1,14 @@
-package migrator.connection.javafx;
+package migrator.ext.javafx.connection.component;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.text.Text;
+import migrator.app.domain.connection.component.ConnectionCard;
+import migrator.app.domain.connection.model.Connection;
 import migrator.emitter.Emitter;
 import migrator.emitter.EventEmitter;
 import migrator.emitter.Subscriber;
 import migrator.emitter.Subscription;
-import migrator.connection.component.ConnectionCard;
-import migrator.connection.model.Connection;
 import migrator.javafx.helpers.ControllerHelper;
 
 public class JavafxConnectionCard implements ConnectionCard {

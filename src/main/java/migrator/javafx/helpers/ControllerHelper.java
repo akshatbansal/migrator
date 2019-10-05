@@ -1,12 +1,9 @@
 package migrator.javafx.helpers;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import migrator.app.gui.GuiNode;
 

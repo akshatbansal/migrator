@@ -1,4 +1,4 @@
-package migrator.connection.model;
+package migrator.app.domain.connection.model;
 
 import java.io.Serializable;
 
