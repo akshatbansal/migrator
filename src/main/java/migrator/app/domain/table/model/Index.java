@@ -2,9 +2,9 @@ package migrator.app.domain.table.model;
 
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
-import migrator.migration.ChangeCommand;
-import migrator.migration.IndexChange;
-import migrator.migration.IndexProperty;
+import migrator.app.migration.model.ChangeCommand;
+import migrator.app.migration.model.IndexChange;
+import migrator.app.migration.model.IndexProperty;
 
 public class Index implements Changable {
     protected IndexProperty originalIndex;

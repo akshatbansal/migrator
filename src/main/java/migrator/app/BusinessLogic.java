@@ -12,6 +12,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import migrator.app.database.driver.DatabaseDriver;
 import migrator.app.database.driver.DatabaseDriverManager;
+import migrator.app.domain.change.service.ChangeService;
+import migrator.app.domain.change.service.TableChangeFactory;
 import migrator.app.domain.connection.model.Connection;
 import migrator.app.domain.connection.service.ConnectionService;
 import migrator.app.domain.database.model.DatabaseConnection;
@@ -25,10 +27,8 @@ import migrator.app.domain.table.service.IndexFactory;
 import migrator.app.domain.table.service.IndexService;
 import migrator.app.domain.table.service.TableFactory;
 import migrator.app.domain.table.service.TableService;
+import migrator.app.migration.model.TableChange;
 import migrator.javafx.breadcrumps.BreadcrumpsService;
-import migrator.migration.ChangeService;
-import migrator.migration.TableChange;
-import migrator.migration.TableChangeFactory;
 
 public class BusinessLogic {
     protected ConnectionService connectionService;

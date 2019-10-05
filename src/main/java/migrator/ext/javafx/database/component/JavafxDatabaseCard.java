@@ -1,14 +1,13 @@
 package migrator.ext.javafx.database.component;
 
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.text.Text;
 import migrator.app.domain.database.component.DatabaseCard;
 import migrator.app.domain.database.model.DatabaseConnection;
-import migrator.emitter.Emitter;
-import migrator.emitter.EventEmitter;
-import migrator.emitter.Subscriber;
-import migrator.emitter.Subscription;
+import migrator.lib.emitter.Emitter;
+import migrator.lib.emitter.EventEmitter;
+import migrator.lib.emitter.Subscriber;
+import migrator.lib.emitter.Subscription;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
 

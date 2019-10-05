@@ -5,12 +5,12 @@ import org.junit.jupiter.api.Test;
 import javafx.beans.property.SimpleObjectProperty;
 import migrator.app.domain.connection.model.Connection;
 import migrator.app.domain.database.model.DatabaseConnection;
-import migrator.migration.ChangeCommand;
-import migrator.migration.ChangeService;
-import migrator.migration.ColumnChange;
-import migrator.migration.SimpleColumnChange;
-import migrator.migration.SimpleColumnProperty;
-import migrator.migration.TableChangeFactory;
+import migrator.app.migration.model.ChangeCommand;
+import migrator.app.domain.change.service.ChangeService;
+import migrator.app.migration.model.ColumnChange;
+import migrator.app.migration.model.SimpleColumnChange;
+import migrator.app.migration.model.SimpleColumnProperty;
+import migrator.app.domain.change.service.TableChangeFactory;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Table;
 

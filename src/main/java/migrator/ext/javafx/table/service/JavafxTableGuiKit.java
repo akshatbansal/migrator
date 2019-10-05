@@ -1,5 +1,6 @@
 package migrator.ext.javafx.table.service;
 
+import migrator.app.domain.change.service.ChangeService;
 import migrator.app.domain.database.service.DatabaseService;
 import migrator.app.domain.table.component.ColumnForm;
 import migrator.app.domain.table.component.ColumnList;
@@ -23,7 +24,6 @@ import migrator.ext.javafx.table.component.JavafxTableForm;
 import migrator.ext.javafx.table.component.JavafxTableList;
 import migrator.ext.javafx.table.component.JavafxTableView;
 import migrator.javafx.helpers.View;
-import migrator.migration.ChangeService;
 import migrator.router.Router;
 
 public class JavafxTableGuiKit implements TableGuiKit {

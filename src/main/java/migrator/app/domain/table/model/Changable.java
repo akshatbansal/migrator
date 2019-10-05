@@ -1,6 +1,6 @@
 package migrator.app.domain.table.model;
 
-import migrator.migration.ChangeCommand;
+import migrator.app.migration.model.ChangeCommand;
 
 public interface Changable {
     public ChangeCommand getChangeCommand();

@@ -2,9 +2,9 @@ package migrator.app.domain.table.model;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.StringProperty;
-import migrator.migration.ChangeCommand;
-import migrator.migration.ColumnChange;
-import migrator.migration.ColumnProperty;
+import migrator.app.migration.model.ChangeCommand;
+import migrator.app.migration.model.ColumnChange;
+import migrator.app.migration.model.ColumnProperty;
 
 public class Column implements Changable {
     protected ColumnProperty originalColumn;

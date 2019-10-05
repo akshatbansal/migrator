@@ -1,14 +1,10 @@
 package migrator.app.domain.connection.model;
 
-import java.io.Serializable;
-
-import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import migrator.common.Extractable;
 
-public class Connection implements Serializable, Extractable {
+public class Connection {
     protected transient StringProperty name;
     protected transient StringProperty user;
     protected transient StringProperty password;
@@ -119,9 +115,4 @@ public class Connection implements Serializable, Extractable {
     //     this.name.set(s.readUTF());
     //     this.url.set(s.readUTF());
     // }
-
-    @Override
-    public Observable[] extract() {
-        return new Observable[]{this.name, this.url};
-    }
 }

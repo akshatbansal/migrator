@@ -4,16 +4,16 @@ import java.util.Arrays;
 import java.util.List;
 
 import migrator.lib.storage.Storage;
-import migrator.migration.MigrationGenerator;
-import migrator.migration.TableChange;
-import migrator.lib.php.PhpCommandFactory;
-import migrator.lib.php.command.PhpCommand;
+import migrator.app.code.CodeCommand;
+import migrator.app.code.CodeCommandFactory;
+import migrator.app.migration.MigrationGenerator;
+import migrator.app.migration.model.TableChange;
 
 public class PhinxMigrationGenerator implements MigrationGenerator {
     protected Storage storage;
-    protected PhpCommandFactory commandFactory;
+    protected CodeCommandFactory commandFactory;
 
-    public PhinxMigrationGenerator(Storage storage, PhpCommandFactory commandFactory) {
+    public PhinxMigrationGenerator(Storage storage, CodeCommandFactory commandFactory) {
         this.storage = storage;
         this.commandFactory = commandFactory;
     }
@@ -39,8 +39,8 @@ public class PhinxMigrationGenerator implements MigrationGenerator {
     }
 
     private String toPhinxFormat(TableChange tableChange) {
-        PhpCommand phpCommand = this.commandFactory.table(tableChange);
-        return phpCommand.toPhp();
+        CodeCommand codeCommand = this.commandFactory.table(tableChange);
+        return codeCommand.toCode();
     }
 
     private String wrapToPhinxClass(String changeContent) {

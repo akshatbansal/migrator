@@ -1,7 +1,7 @@
 package migrator.app.domain.connection.component;
 
-import migrator.emitter.Subscriber;
-import migrator.emitter.Subscription;
+import migrator.lib.emitter.Subscriber;
+import migrator.lib.emitter.Subscription;
 import migrator.app.gui.GuiNode;
 
 public interface ConnectionCard extends GuiNode {

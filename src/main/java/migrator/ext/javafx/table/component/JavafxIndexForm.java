@@ -16,8 +16,8 @@ import migrator.app.domain.table.model.Index;
 import migrator.app.domain.table.service.ColumnService;
 import migrator.app.domain.table.service.IndexService;
 import migrator.app.domain.table.service.TableService;
+import migrator.app.migration.model.ChangeCommand;
 import migrator.javafx.helpers.ControllerHelper;
-import migrator.migration.ChangeCommand;
 import migrator.router.Router;
 
 public class JavafxIndexForm implements IndexForm {

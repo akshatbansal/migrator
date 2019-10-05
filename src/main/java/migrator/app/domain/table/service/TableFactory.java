@@ -1,11 +1,11 @@
 package migrator.app.domain.table.service;
 
+import migrator.app.domain.change.service.TableChangeFactory;
 import migrator.app.domain.database.model.DatabaseConnection;
 import migrator.app.domain.table.model.Table;
-import migrator.migration.SimpleTableProperty;
-import migrator.migration.TableChange;
-import migrator.migration.TableChangeFactory;
-import migrator.migration.TableProperty;
+import migrator.app.migration.model.SimpleTableProperty;
+import migrator.app.migration.model.TableChange;
+import migrator.app.migration.model.TableProperty;
 
 public class TableFactory {
     protected TableChangeFactory tableChangeFactory;

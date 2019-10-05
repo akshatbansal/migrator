@@ -17,19 +17,19 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import migrator.migration.ChangeCommand;
-import migrator.migration.ColumnChange;
-import migrator.migration.IndexChange;
-import migrator.migration.SimpleColumnChange;
-import migrator.migration.SimpleColumnProperty;
-import migrator.migration.SimpleIndexChange;
-import migrator.migration.SimpleIndexProperty;
-import migrator.migration.SimpleTableChange;
-import migrator.migration.SimpleTableProperty;
-import migrator.migration.TableChange;
+import migrator.app.migration.model.ChangeCommand;
+import migrator.app.migration.model.ColumnChange;
+import migrator.app.migration.model.IndexChange;
+import migrator.app.migration.model.SimpleColumnChange;
+import migrator.app.migration.model.SimpleColumnProperty;
+import migrator.app.migration.model.SimpleIndexChange;
+import migrator.app.migration.model.SimpleIndexProperty;
+import migrator.app.migration.model.SimpleTableChange;
+import migrator.app.migration.model.SimpleTableProperty;
+import migrator.app.migration.model.TableChange;
 import migrator.ext.phinx.PhinxMigrationGenerator;
 import migrator.ext.phinx.mock.FileStorage;
-import migrator.lib.php.PhpCommandFactory;
+import migrator.ext.php.PhpCommandFactory;
 
 public class PhinxMigrationGeneratorTest {
     protected PhinxMigrationGenerator migrator;

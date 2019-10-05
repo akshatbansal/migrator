@@ -7,11 +7,11 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ListChangeListener.Change;
+import migrator.app.domain.change.service.ChangeService;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Table;
-import migrator.migration.ChangeCommand;
-import migrator.migration.ChangeService;
-import migrator.migration.TableChange;
+import migrator.app.migration.model.ChangeCommand;
+import migrator.app.migration.model.TableChange;
 
 public class ColumnService {
     protected ChangeService changeService;

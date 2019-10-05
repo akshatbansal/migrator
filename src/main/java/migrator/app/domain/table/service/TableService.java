@@ -7,8 +7,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ListChangeListener.Change;
+import migrator.app.domain.change.service.ChangeService;
 import migrator.app.domain.table.model.Table;
-import migrator.migration.ChangeService;
 
 public class TableService {
     protected TableFactory tableFactory;

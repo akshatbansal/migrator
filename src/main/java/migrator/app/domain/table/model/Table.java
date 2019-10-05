@@ -2,8 +2,8 @@ package migrator.app.domain.table.model;
 
 import javafx.beans.property.StringProperty;
 import migrator.app.domain.database.model.DatabaseConnection;
-import migrator.migration.TableChange;
-import migrator.migration.TableProperty;
+import migrator.app.migration.model.TableChange;
+import migrator.app.migration.model.TableProperty;
 
 public class Table {
     protected TableProperty originalTable;

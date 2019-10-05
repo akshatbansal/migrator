@@ -3,10 +3,12 @@ package migrator.ext.javafx;
 import migrator.app.BusinessLogic;
 import migrator.app.Gui;
 import migrator.app.database.driver.DatabaseDriverManager;
+import migrator.app.domain.change.service.ChangeGuiKit;
 import migrator.app.domain.connection.service.ConnectionGuiKit;
 import migrator.app.domain.database.service.GuiKit;
 import migrator.app.domain.table.service.TableGuiKit;
 import migrator.app.migration.Migration;
+import migrator.ext.javafx.change.service.JavafxChangeGuiKit;
 import migrator.ext.javafx.component.ViewLoader;
 import migrator.ext.javafx.connection.service.JavafxConnectionGuiKit;
 import migrator.ext.javafx.database.service.JavafxGuiKit;
@@ -19,7 +21,7 @@ public class JavafxGui implements Gui {
     protected GuiKit databaseGuiKit;
     protected TableGuiKit tableGuiKit;
     protected migrator.breadcrumps.GuiKit breadcrumpsGuiKit;
-    protected migrator.change.service.GuiKit changeGuiKit;
+    protected ChangeGuiKit changeGuiKit;
 
     public JavafxGui(
         View view,
@@ -39,7 +41,7 @@ public class JavafxGui implements Gui {
             businessLogic.getDatabase(),
             businessLogic.getTable()
         );
-        this.changeGuiKit = new migrator.change.javafx.JavafxGuiKit(
+        this.changeGuiKit = new JavafxChangeGuiKit(
             viewLoader,
             router,
             businessLogic.getChange(),
@@ -68,7 +70,7 @@ public class JavafxGui implements Gui {
     }
 
     @Override
-    public migrator.change.service.GuiKit getChangeKit() {
+    public ChangeGuiKit getChangeKit() {
         return this.changeGuiKit;
     }
 }

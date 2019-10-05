@@ -17,7 +17,7 @@ import migrator.app.domain.connection.component.ConnectionList;
 import migrator.app.domain.connection.model.Connection;
 import migrator.app.domain.connection.service.ConnectionGuiKit;
 import migrator.app.domain.connection.service.ConnectionService;
-import migrator.emitter.Subscription;
+import migrator.lib.emitter.Subscription;
 import migrator.javafx.helpers.ControllerHelper;
 import migrator.router.Router;
 

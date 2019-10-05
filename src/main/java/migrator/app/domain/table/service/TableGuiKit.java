@@ -1,5 +1,6 @@
 package migrator.app.domain.table.service;
 
+import migrator.app.domain.change.service.ChangeService;
 import migrator.app.domain.table.component.ColumnForm;
 import migrator.app.domain.table.component.ColumnList;
 import migrator.app.domain.table.component.IndexForm;
@@ -9,7 +10,6 @@ import migrator.app.domain.table.component.TableForm;
 import migrator.app.domain.table.component.TableList;
 import migrator.app.domain.table.component.TableView;
 import migrator.app.domain.table.model.Table;
-import migrator.migration.ChangeService;
 
 public interface TableGuiKit {
     public TableList createList(TableService tableService);

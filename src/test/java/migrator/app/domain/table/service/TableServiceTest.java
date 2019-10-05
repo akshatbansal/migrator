@@ -4,8 +4,8 @@ import org.junit.jupiter.api.Test;
 
 import migrator.app.domain.connection.model.Connection;
 import migrator.app.domain.database.model.DatabaseConnection;
-import migrator.migration.ChangeService;
-import migrator.migration.TableChangeFactory;
+import migrator.app.domain.change.service.ChangeService;
+import migrator.app.domain.change.service.TableChangeFactory;
 import migrator.app.domain.table.model.Table;
 
 import org.junit.jupiter.api.BeforeEach;

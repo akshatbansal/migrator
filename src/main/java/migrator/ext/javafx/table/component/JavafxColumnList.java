@@ -7,11 +7,11 @@ import javafx.collections.ListChangeListener.Change;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.TableView;
+import migrator.app.domain.change.service.ChangeService;
 import migrator.app.domain.table.component.ColumnList;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.service.ColumnService;
 import migrator.javafx.helpers.ControllerHelper;
-import migrator.migration.ChangeService;
 import migrator.router.Router;
 
 public class JavafxColumnList implements ColumnList {

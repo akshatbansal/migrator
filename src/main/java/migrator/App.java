@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.stage.Stage;
 import migrator.app.BusinessLogic;
 import migrator.app.Gui;
+import migrator.app.code.CodeManager;
 import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.domain.connection.model.Connection;
 import migrator.app.domain.connection.service.ConnectionService;
@@ -18,6 +19,7 @@ import migrator.app.migration.Migration;
 import migrator.ext.javafx.JavafxGui;
 import migrator.ext.mysql.MysqlExtension;
 import migrator.ext.phinx.PhinxExtension;
+import migrator.ext.php.PhpExtension;
 import migrator.app.Container;
 import migrator.javafx.helpers.ControllerHelper;
 import migrator.javafx.helpers.ResourceView;
@@ -29,16 +31,18 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         ConfigContainer configContainer = new ConfigContainer();
+        Migration migration = new Migration(configContainer.getMigrationConfig());
+        DatabaseDriverManager databaseDriverManager = new DatabaseDriverManager(configContainer.getDatabaseDriverConfig());
+        CodeManager codeManager = new CodeManager(configContainer.getCodeConfig());
 
         List<Extension> extensions = new ArrayList<>();
-        extensions.add(new PhinxExtension());
+        extensions.add(new PhinxExtension(codeManager));
         extensions.add(new MysqlExtension());
+        extensions.add(new PhpExtension());
         for (Extension extension : extensions) {
             extension.load(configContainer);
         }
-
-        Migration migration = new Migration(configContainer.getMigrationConfig());
-        DatabaseDriverManager databaseDriverManager = new DatabaseDriverManager(configContainer.getDatabaseDriverConfig());
+        
         BusinessLogic businessLogic = new BusinessLogic(
             databaseDriverManager,
             new ConnectionService(

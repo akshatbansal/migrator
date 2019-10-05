@@ -6,10 +6,10 @@ import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import migrator.app.domain.table.model.Index;
-import migrator.migration.ChangeCommand;
-import migrator.migration.IndexProperty;
-import migrator.migration.SimpleIndexChange;
-import migrator.migration.SimpleIndexProperty;
+import migrator.app.migration.model.ChangeCommand;
+import migrator.app.migration.model.IndexProperty;
+import migrator.app.migration.model.SimpleIndexChange;
+import migrator.app.migration.model.SimpleIndexProperty;
 
 public class IndexFactory {
     protected IndexProperty simpleIndexProperty(String name, List<StringProperty> columns) {

@@ -6,7 +6,7 @@ import migrator.app.domain.connection.model.Connection;
 import migrator.app.domain.database.model.DatabaseConnection;
 import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableFactory;
-import migrator.migration.TableChangeFactory;
+import migrator.app.domain.change.service.TableChangeFactory;
 
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;

@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import migrator.app.domain.change.service.ChangeService;
 import migrator.app.domain.table.component.TableView;
 import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.ColumnService;
@@ -13,7 +14,6 @@ import migrator.app.domain.table.service.TableService;
 import migrator.breadcrumps.BreadcrumpsComponent;
 import migrator.breadcrumps.GuiKit;
 import migrator.javafx.helpers.ControllerHelper;
-import migrator.migration.ChangeService;
 
 public class JavafxTableView implements TableView {
     protected BreadcrumpsComponent breadcrumpsComponent;

@@ -6,10 +6,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import migrator.app.domain.table.component.TableCard;
 import migrator.app.domain.table.model.Table;
-import migrator.emitter.Emitter;
-import migrator.emitter.EventEmitter;
-import migrator.emitter.Subscriber;
-import migrator.emitter.Subscription;
+import migrator.lib.emitter.Emitter;
+import migrator.lib.emitter.EventEmitter;
+import migrator.lib.emitter.Subscriber;
+import migrator.lib.emitter.Subscription;
 import migrator.javafx.helpers.ControllerHelper;
 
 public class JavafxTableCard implements TableCard {

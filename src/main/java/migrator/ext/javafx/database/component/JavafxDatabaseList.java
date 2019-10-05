@@ -15,7 +15,7 @@ import migrator.app.domain.database.model.DatabaseConnection;
 import migrator.app.domain.database.service.DatabaseService;
 import migrator.app.domain.database.service.GuiKit;
 import migrator.breadcrumps.BreadcrumpsComponent;
-import migrator.emitter.Subscription;
+import migrator.lib.emitter.Subscription;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
 import migrator.javafx.helpers.ControllerHelper;

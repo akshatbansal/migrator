@@ -1,10 +1,10 @@
 package migrator.app.domain.table.service;
 
 import migrator.app.domain.table.model.Column;
-import migrator.migration.ChangeCommand;
-import migrator.migration.ColumnProperty;
-import migrator.migration.SimpleColumnChange;
-import migrator.migration.SimpleColumnProperty;
+import migrator.app.migration.model.ChangeCommand;
+import migrator.app.migration.model.ColumnProperty;
+import migrator.app.migration.model.SimpleColumnChange;
+import migrator.app.migration.model.SimpleColumnProperty;
 
 public class ColumnFactory {
     protected ColumnProperty simpleColumnProperty(String name, String format, String defaultValue, Boolean enableNull) {

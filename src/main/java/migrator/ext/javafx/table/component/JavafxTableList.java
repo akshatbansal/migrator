@@ -16,7 +16,7 @@ import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableGuiKit;
 import migrator.app.domain.table.service.TableService;
 import migrator.breadcrumps.BreadcrumpsComponent;
-import migrator.emitter.Subscription;
+import migrator.lib.emitter.Subscription;
 import migrator.javafx.helpers.ControllerHelper;
 import migrator.router.Router;
 

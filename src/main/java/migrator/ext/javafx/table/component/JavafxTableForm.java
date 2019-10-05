@@ -9,8 +9,8 @@ import javafx.scene.layout.HBox;
 import migrator.app.domain.table.component.TableForm;
 import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableService;
+import migrator.app.migration.model.ChangeCommand;
 import migrator.javafx.helpers.ControllerHelper;
-import migrator.migration.ChangeCommand;
 import migrator.router.Router;
 
 public class JavafxTableForm implements TableForm {
