@@ -1,13 +1,26 @@
 package migrator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
-import migrator.connection.model.Connection;
-import migrator.connection.service.ConnectionService;
-import migrator.database.service.DatabaseServerConnectionFactory;
-import migrator.javafx.Container;
+import migrator.app.BusinessLogic;
+import migrator.app.Gui;
+import migrator.app.code.CodeManager;
+import migrator.app.database.driver.DatabaseDriverManager;
+import migrator.app.domain.connection.model.Connection;
+import migrator.app.domain.connection.service.ConnectionService;
+import migrator.app.extension.ConfigContainer;
+import migrator.app.extension.Extension;
+import migrator.app.migration.Migration;
+import migrator.ext.javafx.JavafxGui;
+import migrator.ext.mysql.MysqlExtension;
+import migrator.ext.phinx.PhinxExtension;
+import migrator.ext.php.PhpExtension;
+import migrator.app.Container;
 import migrator.javafx.helpers.ControllerHelper;
 import migrator.javafx.helpers.ResourceView;
 import migrator.router.BasicRouter;
@@ -17,31 +30,40 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        // ListPersistance<Object> listPersistance = new ListPersistance<>();
+        ConfigContainer configContainer = new ConfigContainer();
+        Migration migration = new Migration(configContainer.getMigrationConfig());
+        DatabaseDriverManager databaseDriverManager = new DatabaseDriverManager(configContainer.getDatabaseDriverConfig());
+        CodeManager codeManager = new CodeManager(configContainer.getCodeConfig());
 
-        // ObservableList<ObservableObjectValue<Connection>> connections = FXCollections.observableArrayList((List<ObservableObjectValue<Connection>>) listPersistance.load("Migrator.model.connections", new ArrayList<>()));
-        // ObservableList<Connection> connections = FXCollections.observableArrayList(new Callback<Connection,Observable[]>() {
-        //     @Override
-        //     public Observable[] call(Connection param) {
-        //         return param.extract();
-        //     }
-        // });
-        // ModelRegistry.register("connections.list", connections);
-        // ModelRegistry.register("connections.edit", new SimpleObjectProperty<Connection>());
-
-        // connections.addListener((Change<? extends Object> change) -> {
-        //     listPersistance.store("Migrator.model.connections", Arrays.asList(connections.toArray()));
-        // });
-
+        List<Extension> extensions = new ArrayList<>();
+        extensions.add(new PhinxExtension(codeManager));
+        extensions.add(new MysqlExtension());
+        extensions.add(new PhpExtension());
+        for (Extension extension : extensions) {
+            extension.load(configContainer);
+        }
+        
         BusinessLogic businessLogic = new BusinessLogic(
-            new DatabaseServerConnectionFactory(),
+            databaseDriverManager,
             new ConnectionService(
                 new Connection("localhost")
             )
         );
         Router router = new BasicRouter();
-        Gui gui = new Gui(new ResourceView(), router, businessLogic);
-        Container container = new Container(businessLogic, gui, router);
+        Gui gui = new JavafxGui(
+            new ResourceView(),
+            router,
+            businessLogic,
+            migration,
+            databaseDriverManager
+        );
+        Container container = new Container(
+            businessLogic,
+            gui,
+            router,
+            migration,
+            databaseDriverManager
+        );
         MainController mainController = new MainController(container);
         
         Parent root = (Parent) ControllerHelper.createViewNode(mainController, "/layout/main.fxml");        

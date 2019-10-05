@@ -1,17 +1,17 @@
 package migrator.javafx.router;
 
 import javafx.scene.Node;
-import migrator.BusinessLogic;
+import migrator.app.BusinessLogic;
 import migrator.breadcrumps.RouterBreadcrump;
-import migrator.javafx.Container;
+import migrator.app.Container;
+import migrator.app.domain.table.model.Table;
+import migrator.app.domain.table.service.TableGuiKit;
 import migrator.router.Route;
 import migrator.router.Router;
-import migrator.table.model.Table;
-import migrator.table.service.GuiKit;
 
 public class TableViewRoute implements Route {
     protected MainRenderer renderer;
-    protected GuiKit guiKit;
+    protected TableGuiKit guiKit;
     protected BusinessLogic businessLogic;
     protected Router router;
 

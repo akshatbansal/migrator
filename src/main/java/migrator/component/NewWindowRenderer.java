@@ -1,6 +1,5 @@
 package migrator.component;
 
-import javafx.beans.value.ChangeListener;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
