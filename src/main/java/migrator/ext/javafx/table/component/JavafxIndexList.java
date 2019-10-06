@@ -11,7 +11,6 @@ import migrator.app.domain.table.service.IndexService;
 import migrator.app.router.ActiveRoute;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
-import migrator.router.Router;
 
 public class JavafxIndexList extends ViewComponent implements IndexList {
     protected IndexService indexService;

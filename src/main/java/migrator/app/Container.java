@@ -15,7 +15,6 @@ import migrator.app.ConfigContainer;
 import migrator.app.code.CodeManager;
 import migrator.app.migration.Migration;
 import migrator.app.router.ActiveRoute;
-import migrator.javafx.breadcrumps.BreadcrumpsService;
 
 public class Container {
     protected ConfigContainer config;
@@ -66,10 +65,6 @@ public class Container {
 
     public TableService getTableService() {
         return this.config.tableServiceConfig().get();
-    }
-
-    public BreadcrumpsService getBreadcrumpsService() {
-        return this.config.breadcrumpsServiceConfig().get();
     }
 
     public ColumnService getColumnService() {

@@ -5,17 +5,17 @@ import migrator.app.Gui;
 import migrator.app.domain.database.component.DatabaseCard;
 import migrator.app.domain.database.component.DatabaseList;
 import migrator.app.domain.database.model.DatabaseConnection;
-import migrator.app.domain.database.service.GuiKit;
+import migrator.app.domain.database.service.DatabaseGuiKit;
 import migrator.ext.javafx.component.ViewLoader;
 import migrator.ext.javafx.database.component.JavafxDatabaseCard;
 import migrator.ext.javafx.database.component.JavafxDatabaseList;
 
-public class JavafxGuiKit implements GuiKit {
+public class JavafxDatabaseGuiKit implements DatabaseGuiKit {
     protected Container container;
     protected ViewLoader viewLoader;
     protected Gui gui;
 
-    public JavafxGuiKit(ViewLoader viewLoader, Container container, Gui gui) {
+    public JavafxDatabaseGuiKit(ViewLoader viewLoader, Container container, Gui gui) {
         this.viewLoader = viewLoader;
         this.container = container;
         this.gui = gui;

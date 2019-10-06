@@ -17,7 +17,6 @@ import migrator.app.domain.table.service.TableService;
 import migrator.app.migration.Migration;
 import migrator.app.migration.MigrationConfig;
 import migrator.app.router.ActiveRoute;
-import migrator.javafx.breadcrumps.BreadcrumpsService;
 import migrator.lib.config.ValueConfig;
 
 public class ConfigContainer {
@@ -38,7 +37,6 @@ public class ConfigContainer {
     protected ValueConfig<ConnectionService> connectionService;
     protected ValueConfig<DatabaseService> databaseService;
     protected ValueConfig<TableService> tableService;
-    protected ValueConfig<BreadcrumpsService> breadcrumpsService;
     protected ValueConfig<ColumnService> columnService;
     protected ValueConfig<IndexService> indexService;
     protected ValueConfig<ChangeService> changeService;
@@ -63,7 +61,6 @@ public class ConfigContainer {
         this.tableService = new ValueConfig<>();
         this.columnService = new ValueConfig<>();
         this.indexService = new ValueConfig<>();
-        this.breadcrumpsService = new ValueConfig<>();
         this.changeService = new ValueConfig<>();
     }
 
@@ -133,9 +130,5 @@ public class ConfigContainer {
 
     public ValueConfig<ChangeService> changeServiceConfig() {
         return this.changeService;
-    }
-
-    public ValueConfig<BreadcrumpsService> breadcrumpsServiceConfig() {
-        return this.breadcrumpsService;
     }
 }

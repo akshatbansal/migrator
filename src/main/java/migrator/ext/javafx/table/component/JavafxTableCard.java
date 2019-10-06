@@ -1,33 +1,30 @@
 package migrator.ext.javafx.table.component;
 
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import migrator.app.domain.table.component.TableCard;
 import migrator.app.domain.table.model.Table;
+import migrator.ext.javafx.component.ViewComponent;
+import migrator.ext.javafx.component.ViewLoader;
 import migrator.lib.emitter.Emitter;
 import migrator.lib.emitter.EventEmitter;
 import migrator.lib.emitter.Subscriber;
 import migrator.lib.emitter.Subscription;
-import migrator.javafx.helpers.ControllerHelper;
 
-public class JavafxTableCard implements TableCard {
+public class JavafxTableCard extends ViewComponent implements TableCard {
     @FXML protected Text cardName;
     @FXML protected VBox pane;
+
     protected Table table;
-    protected Node node;
     protected Emitter emitter;
 
-    public JavafxTableCard(Table table) {
+    public JavafxTableCard(ViewLoader viewLoader, Table table) {
+        super(viewLoader);
         this.table = table;
         this.emitter = new EventEmitter();
-        this.node = ControllerHelper.createViewNode(this, "/layout/table/card.fxml");
-    }
 
-    @Override
-    public Object getContent() {
-        return this.node;
+        this.loadView("/layout/table/card.fxml");
     }
 
     @FXML public void initialize() {

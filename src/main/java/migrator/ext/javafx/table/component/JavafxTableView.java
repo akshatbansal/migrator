@@ -1,15 +1,17 @@
 package migrator.ext.javafx.table.component;
 
+import java.util.Arrays;
+
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import migrator.app.Container;
 import migrator.app.Gui;
+import migrator.app.breadcrumps.BreadcrumpsComponent;
 import migrator.app.domain.table.component.TableView;
 import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableGuiKit;
-import migrator.breadcrumps.BreadcrumpsComponent;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
 
@@ -24,7 +26,9 @@ public class JavafxTableView extends ViewComponent implements TableView {
 
     public JavafxTableView(Table table, ViewLoader viewLoader, Container container, Gui gui) {
         super(viewLoader);
-        this.breadcrumpsComponent = gui.getBreadcrumps().createBreadcrumps();
+        this.breadcrumpsComponent = gui.getBreadcrumps().createBreadcrumps(Arrays.asList(
+            
+        ));
         this.tableGuiKit = gui.getTableKit();
         this.table = table;
 

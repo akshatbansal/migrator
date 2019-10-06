@@ -18,7 +18,6 @@ import migrator.app.ConfigContainer;
 import migrator.app.extension.Extension;
 import migrator.app.migration.Migration;
 import migrator.app.router.ActiveRoute;
-import migrator.javafx.breadcrumps.BreadcrumpsService;
 
 public class Bootstrap {
     protected List<Extension> extensions;
@@ -94,9 +93,6 @@ public class Bootstrap {
             new IndexService(
                 config.indexFactoryConfig().get()
             )
-        );
-        config.breadcrumpsServiceConfig().set(
-            new BreadcrumpsService()
         );
     }
 

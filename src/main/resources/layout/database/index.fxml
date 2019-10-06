@@ -8,7 +8,7 @@
 
 <BorderPane xmlns:fx="http://javafx.com/fxml">
     <center>
-        <ScrollPane styleClass="background-light" fitToWidth="true">            
+        <ScrollPane styleClass="background-light" fitToWidth="true">
             <VBox>
                 <HBox styleClass="container">
                     <Text text="Databases" styleClass="title" />

@@ -1,15 +1,32 @@
 package migrator.app;
 
-import migrator.app.domain.connection.route.ConnectionRoute;
+import java.util.HashMap;
+import java.util.Map;
+
+import migrator.app.router.ActiveRoute;
+import migrator.app.router.RouteConnection;
 
 public class Router {
-    protected ConnectionRoute connectionRoute;
+    protected Map<String, RouteConnection> routes;
 
-    public Router(ConnectionRoute connectionRoute) {
-        this.connectionRoute = connectionRoute;
+    public Router(ActiveRoute activeRoute) {
+        this.routes = new HashMap<>();
+
+        activeRoute.routeProperty()
+            .addListener((obs, ol, ne) -> {
+                this.show(ne.getName(), ne.getValue());
+            });
     }
 
-    public ConnectionRoute connection() {
-        return this.connectionRoute;
+    public void connect(String name, RouteConnection<?> connection) {
+        this.routes.put(name, connection);
+    }
+
+    public void show(String routeName, Object routeData) {
+        if (!this.routes.containsKey(routeName)) {
+            System.out.println("Route does not exists '" + routeName + "'");
+            return;
+        }
+        this.routes.get(routeName).show(routeData);
     }
 }

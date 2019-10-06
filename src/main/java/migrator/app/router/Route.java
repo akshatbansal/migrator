@@ -9,6 +9,10 @@ public class Route {
         this.value = value;
     }
 
+    public Route(String name) {
+        this(name, null);
+    }
+
     public String getName() {
         return this.name;
     }

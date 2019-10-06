@@ -1,4 +1,4 @@
-package migrator.breadcrumps;
+package migrator.app.breadcrumps;
 
 import migrator.app.gui.GuiNode;
 

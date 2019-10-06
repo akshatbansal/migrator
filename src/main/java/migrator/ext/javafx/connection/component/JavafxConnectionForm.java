@@ -56,10 +56,12 @@ public class JavafxConnectionForm extends ViewComponent implements ConnectionFor
 
     @FXML public void delete() {
         this.connectionsService.remove(this.connectionsService.getSelected().get());
+        this.close();
     }
 
     @FXML public void close() {
         this.connectionsService.select(null);
+        this.activeRoute.changeTo("connection.index");
     }
 
     @FXML public void connect() {

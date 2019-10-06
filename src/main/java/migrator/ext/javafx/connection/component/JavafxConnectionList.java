@@ -42,6 +42,11 @@ public class JavafxConnectionList extends ViewComponent implements ConnectionLis
         this.cards = new HashMap<>();
         
         this.loadView("/layout/connection/index.fxml");
+
+        this.connectionService.getSelected()
+            .addListener((obs, oldValue, newValue) -> {
+                this.setSelectedCardByConnection(newValue);
+            });
     }
 
     protected void draw() {
@@ -60,13 +65,13 @@ public class JavafxConnectionList extends ViewComponent implements ConnectionLis
                 card.onSelect((Object o) -> {
                     Connection c = (Connection) o;
                     this.connectionService.select(c);
-                    this.setSelectedCardByConnection(c);
+                    this.activeRoute.changeTo("connection.view", c);
                 })
             );
             this.subscriptions.add(
                 card.onConnect((Object o) -> {
                     this.connectionService.connect((Connection) o);
-                    this.activeRoute.changeTo("connection.view", o);
+                    this.activeRoute.changeTo("database.index", null);
                 })
             );
             this.connectionsView.getChildren().add((Node) card.getContent());
@@ -101,15 +106,18 @@ public class JavafxConnectionList extends ViewComponent implements ConnectionLis
         this.setSelectedCardByConnection(this.connectionService.getSelected().get());
     }
 
-    @FXML public void openCreateConnection() {
+    @Override
+    @FXML public void addConnection() {
         Connection newConnection = new Connection("New Connection");
         newConnection.setPort("3306");
         newConnection.setDriver("mysql");
         this.connectionService.add(newConnection);
         this.connectionService.select(newConnection);
+        this.activeRoute.changeTo("connection.view", newConnection);
     }
 
-    @FXML public void openCommit() {
+    @Override
+    @FXML public void commit() {
         this.activeRoute.changeTo("commit");
     }
 }

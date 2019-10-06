@@ -23,24 +23,16 @@ public class JavafxConnectionGuiKit implements ConnectionGuiKit {
 
     @Override
     public ConnectionCard createCard(Connection connection) {
-        return new JavafxConnectionCard(connection);
+        return new JavafxConnectionCard(connection, this.viewLoader);
     }
 
     @Override
     public ConnectionForm createForm(Connection connection) {
-        return new JavafxConnectionForm(
-            this.viewLoader,
-            connection,
-            this.container
-        );
+        return new JavafxConnectionForm(this.viewLoader, connection, this.container);
     }
 
     @Override
     public ConnectionList createList(ObservableList<Connection> connections) {
-        return new JavafxConnectionList(
-            this.viewLoader,
-            this,
-            this.container
-        );
+        return new JavafxConnectionList(this.viewLoader, this, this.container);
     }
 }

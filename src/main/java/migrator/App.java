@@ -7,16 +7,23 @@ import javafx.scene.Scene;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
 import migrator.app.Bootstrap;
+import migrator.app.BusinessLogic;
 import migrator.app.Gui;
+import migrator.app.Router;
 import migrator.app.domain.connection.model.Connection;
 import migrator.ext.javafx.JavafxGui;
+import migrator.ext.javafx.component.JavafxLayout;
+import migrator.ext.javafx.component.ViewLoader;
+import migrator.ext.javafx.connection.route.ConnectionIndexRoute;
+import migrator.ext.javafx.connection.route.ConnectionViewRoute;
+import migrator.ext.javafx.database.route.DatabaseIndexRoute;
+import migrator.ext.javafx.renderer.PaneRenderer;
+import migrator.ext.javafx.table.route.TableIndexRoute;
+import migrator.ext.javafx.table.route.TableViewRoute;
 import migrator.ext.mysql.MysqlExtension;
 import migrator.ext.phinx.PhinxExtension;
 import migrator.ext.php.PhpExtension;
 import migrator.app.Container;
-import migrator.javafx.helpers.ControllerHelper;
-import migrator.router.BasicRouter;
-import migrator.router.Router;
 
 public class App extends Application {
 
@@ -29,33 +36,47 @@ public class App extends Application {
                 new PhpExtension()
             )
         );
-
         Container container = bootstrap.getContainer();
+        new BusinessLogic(container);
 
         // Seed data
         container.getConnectionService()
             .add(new Connection("localhost"));
 
         Gui gui = new JavafxGui(container);
-        
-        Router router = new BasicRouter();
-        
 
+        ViewLoader viewLoader = new ViewLoader();
+        MainController mainController = new MainController(container, gui);
+        Parent root = (Parent) viewLoader.load(mainController, "/layout/main.fxml");
 
+        PaneRenderer bodyRenderer = new PaneRenderer(mainController.getBodyPane());
+        PaneRenderer sideRenderer = new PaneRenderer(mainController.getSidePane());
+        JavafxLayout layout = new JavafxLayout(mainController.getBodyPane(), mainController.getSidePane());
 
-        container.getActiveRoute().routeProperty()
-            .addListener((obs, ol, ne) -> {
-                router.show(ne.getName(), ne.getValue());
-            });
+        Router router = new Router(container.getActiveRoute());
+        router.connect(
+            "connection.index",
+            new ConnectionIndexRoute(gui.getConnectionKit(), layout)
+        );
+        router.connect(
+            "connection.view",
+            new ConnectionViewRoute(gui.getConnectionKit(), layout)
+        );
+        router.connect(
+            "database.index",
+            new DatabaseIndexRoute(gui.getDatabaseKit(), layout)
+        );
+        router.connect(
+            "table.index",
+            new TableIndexRoute(gui.getTableKit(), layout)
+        );
+        router.connect(
+            "table.view",
+            new TableViewRoute(gui.getTableKit(), bodyRenderer, sideRenderer)
+        );
 
-        // migrator.app.Router appRouter = new migrator.app.Router(
-        //     new ConnectionRoute(
-        //         new ConnectionIndexRoute(gui.getConnectionKit(), )
-        //     )
-        // )
-        MainController mainController = new MainController(container, gui, router);
-        
-        Parent root = (Parent) ControllerHelper.createViewNode(mainController, "/layout/main.fxml");        
+        container.getActiveRoute().changeTo("connection.index");
+
         Scene scene = new Scene(root, 1280, 720);
         scene.getStylesheets().addAll(
             getClass().getResource("/styles/layout.css").toExternalForm(),
