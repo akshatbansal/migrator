@@ -1,5 +1,7 @@
 package migrator.ext.javafx.table.service;
 
+import migrator.app.Container;
+import migrator.app.Gui;
 import migrator.app.domain.change.service.ChangeService;
 import migrator.app.domain.database.service.DatabaseService;
 import migrator.app.domain.table.component.ColumnForm;
@@ -10,11 +12,15 @@ import migrator.app.domain.table.component.TableCard;
 import migrator.app.domain.table.component.TableForm;
 import migrator.app.domain.table.component.TableList;
 import migrator.app.domain.table.component.TableView;
+import migrator.app.domain.table.model.Column;
+import migrator.app.domain.table.model.Index;
 import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.ColumnService;
 import migrator.app.domain.table.service.IndexService;
 import migrator.app.domain.table.service.TableGuiKit;
 import migrator.app.domain.table.service.TableService;
+import migrator.app.router.ActiveRoute;
+import migrator.ext.javafx.component.ViewLoader;
 import migrator.ext.javafx.table.component.JavafxColumnForm;
 import migrator.ext.javafx.table.component.JavafxColumnList;
 import migrator.ext.javafx.table.component.JavafxIndexForm;
@@ -23,22 +29,17 @@ import migrator.ext.javafx.table.component.JavafxTableCard;
 import migrator.ext.javafx.table.component.JavafxTableForm;
 import migrator.ext.javafx.table.component.JavafxTableList;
 import migrator.ext.javafx.table.component.JavafxTableView;
-import migrator.javafx.helpers.View;
 import migrator.router.Router;
 
 public class JavafxTableGuiKit implements TableGuiKit {
-    protected migrator.breadcrumps.GuiKit breadcrumpsGuiKit;
-    protected Router router;
-    protected View view;
-    protected DatabaseService databaseService;
-    protected TableService tableService;
+    protected ViewLoader viewLoader;
+    protected Container container;
+    protected Gui gui;
 
-    public JavafxTableGuiKit(migrator.breadcrumps.GuiKit breadcrumpsGuiKit, Router router, View view, DatabaseService databaseService, TableService tableService) {
-        this.breadcrumpsGuiKit = breadcrumpsGuiKit;
-        this.databaseService = databaseService;
-        this.tableService = tableService;
-        this.router = router;
-        this.view  = view;
+    public JavafxTableGuiKit(ViewLoader viewLoader, Container container, Gui gui) {
+        this.gui = gui;
+        this.viewLoader  = viewLoader;
+        this.container = container;
     }
 
     @Override
@@ -47,37 +48,37 @@ public class JavafxTableGuiKit implements TableGuiKit {
     }
 
     @Override
-    public TableList createList(TableService tableService) {
-        return new JavafxTableList(tableService, this.databaseService, this, this.breadcrumpsGuiKit, this.router);
+    public TableList createList() {
+        return new JavafxTableList(this.viewLoader, this.container, this.gui);
     }
 
     @Override
-    public TableForm createForm(TableService tableService) {
-        return new JavafxTableForm(tableService, this.router);
+    public TableForm createForm(Table table) {
+        return new JavafxTableForm(table, this.viewLoader, this.container);
     }
 
     @Override
-    public TableView createView(TableService tableService, ColumnService columnService, IndexService indexService, ChangeService changeService) {
-        return new JavafxTableView(this.breadcrumpsGuiKit, this, tableService, columnService, indexService, changeService);
+    public TableView createView(Table table) {
+        return new JavafxTableView(table, this.viewLoader, this.container, this.gui);
     }
 
     @Override
-    public ColumnList createColumnList(ColumnService columnService, ChangeService changeService) {
-        return new JavafxColumnList(columnService, changeService, this.router);
+    public ColumnList createColumnList() {
+        return new JavafxColumnList(this.viewLoader, this.container);
     }
 
     @Override
-    public IndexList createIndexList(IndexService indexService) {
-        return new JavafxIndexList(this.view, indexService, this.router);
+    public IndexList createIndexList() {
+        return new JavafxIndexList(this.viewLoader, this.container);
     }
 
     @Override
-    public ColumnForm createColumnForm(ColumnService columnService) {
-        return new JavafxColumnForm(columnService, this.tableService, this.router);
+    public ColumnForm createColumnForm(Column column) {
+        return new JavafxColumnForm(column, this.viewLoader, this.container);
     }
 
     @Override
-    public IndexForm createIndexForm(IndexService indexService, ColumnService columnService) {
-        return new JavafxIndexForm(indexService, columnService, this.tableService, this.router);
+    public IndexForm createIndexForm(Index index) {
+        return new JavafxIndexForm(index, this.viewLoader, this.container);
     }
 }

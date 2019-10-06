@@ -16,7 +16,7 @@ public class JavafxDatabaseCard extends ViewComponent implements DatabaseCard {
     protected DatabaseConnection connection;
     protected Emitter emitter;
 
-    public JavafxDatabaseCard(ViewLoader viewLoader, DatabaseConnection connection) {
+    public JavafxDatabaseCard(DatabaseConnection connection, ViewLoader viewLoader) {
         super(viewLoader);
         this.connection = connection;
         this.emitter = new EventEmitter();

@@ -4,51 +4,42 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import migrator.app.domain.change.service.ChangeService;
+import migrator.app.Container;
+import migrator.app.Gui;
 import migrator.app.domain.table.component.TableView;
 import migrator.app.domain.table.model.Table;
-import migrator.app.domain.table.service.ColumnService;
-import migrator.app.domain.table.service.IndexService;
 import migrator.app.domain.table.service.TableGuiKit;
-import migrator.app.domain.table.service.TableService;
 import migrator.breadcrumps.BreadcrumpsComponent;
-import migrator.breadcrumps.GuiKit;
-import migrator.javafx.helpers.ControllerHelper;
+import migrator.ext.javafx.component.ViewComponent;
+import migrator.ext.javafx.component.ViewLoader;
 
-public class JavafxTableView implements TableView {
+public class JavafxTableView extends ViewComponent implements TableView {
     protected BreadcrumpsComponent breadcrumpsComponent;
     protected TableGuiKit tableGuiKit;
-    protected TableService tableService;
-    protected ColumnService columnService;
-    protected IndexService indexService;
-    protected ChangeService changeService;
     protected Table table;
-    protected Node node;
+
     @FXML protected VBox breadcrumpsContainer;
     @FXML protected VBox body;
     @FXML protected Text title;
 
-    public JavafxTableView(GuiKit breadcrumpsGuiKit, TableGuiKit tableGuiKit, TableService tableService, ColumnService columnService, IndexService indexService, ChangeService changeService) {
-        this.breadcrumpsComponent = breadcrumpsGuiKit.createBreadcrumps();
-        this.tableGuiKit = tableGuiKit;
-        this.tableService = tableService;
-        this.columnService = columnService;
-        this.indexService = indexService;
-        this.changeService = changeService;
-        this.table = this.tableService.getSelected().get();
-        this.node = ControllerHelper.createViewNode(this, "/layout/table/view.fxml");
-    }
+    public JavafxTableView(Table table, ViewLoader viewLoader, Container container, Gui gui) {
+        super(viewLoader);
+        this.breadcrumpsComponent = gui.getBreadcrumps().createBreadcrumps();
+        this.tableGuiKit = gui.getTableKit();
+        this.table = table;
 
-    @Override
-    public Object getContent() {
-        return this.node;
+        this.loadView("/layout/table/view.fxml");
     }
 
     @FXML
     public void initialize() {
         this.title.textProperty().bind(this.table.nameProperty());
-        ControllerHelper.replaceNode(this.breadcrumpsContainer, this.breadcrumpsComponent);
-        ControllerHelper.addNode(this.body, this.tableGuiKit.createColumnList(this.columnService, this.changeService));
-        ControllerHelper.addNode(this.body, this.tableGuiKit.createIndexList(this.indexService));
+
+        this.breadcrumpsContainer.getChildren().setAll((Node) this.breadcrumpsComponent.getContent());
+
+        this.body.getChildren().setAll(
+            (Node) this.tableGuiKit.createColumnList().getContent(),
+            (Node) this.tableGuiKit.createIndexList().getContent()
+        );
     }
 }

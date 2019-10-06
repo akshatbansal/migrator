@@ -5,11 +5,11 @@ import java.util.List;
 
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import migrator.app.Container;
 import migrator.app.domain.table.component.IndexForm;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Index;
@@ -17,15 +17,15 @@ import migrator.app.domain.table.service.ColumnService;
 import migrator.app.domain.table.service.IndexService;
 import migrator.app.domain.table.service.TableService;
 import migrator.app.migration.model.ChangeCommand;
-import migrator.javafx.helpers.ControllerHelper;
-import migrator.router.Router;
+import migrator.app.router.ActiveRoute;
+import migrator.ext.javafx.component.ViewComponent;
+import migrator.ext.javafx.component.ViewLoader;
 
-public class JavafxIndexForm implements IndexForm {
-    protected Node node;
+public class JavafxIndexForm extends ViewComponent implements IndexForm {
     protected IndexService indexService;
     protected ColumnService columnService;
     protected TableService tableService;
-    protected Router router;
+    protected ActiveRoute activeRoute;
     protected Index index;
 
     @FXML protected TextField name;
@@ -36,11 +36,12 @@ public class JavafxIndexForm implements IndexForm {
     protected Button removeButton;
     protected Button restoreButton;
 
-    public JavafxIndexForm(IndexService indexService, ColumnService columnService, TableService tableService, Router router) {
-        this.indexService = indexService;
-        this.columnService = columnService;
-        this.tableService = tableService;
-        this.router = router;
+    public JavafxIndexForm(Index index, ViewLoader viewLoader, Container container) {
+        super(viewLoader);
+        this.indexService = container.getIndexService();
+        this.columnService = container.getColumnService();
+        this.tableService = container.getTableService();
+        this.activeRoute = container.getActiveRoute();
 
         this.removeButton = new Button("Remove");
         this.removeButton.getStyleClass().addAll("btn-danger");
@@ -54,7 +55,8 @@ public class JavafxIndexForm implements IndexForm {
             this.restore();
         });
 
-        this.node = ControllerHelper.createViewNode(this, "/layout/table/index/form.fxml");
+        this.loadView("/layout/table/index/form.fxml");
+        this.setIndex(index);
     }
 
     public void setIndex(Index index) {
@@ -101,11 +103,6 @@ public class JavafxIndexForm implements IndexForm {
         this.column3.getItems().setAll(columnNames);
     }
 
-    @Override
-    public Object getContent() {
-        return this.node;
-    }
-
     @FXML public void delete() {
         if (this.index.getChangeCommand().isType(ChangeCommand.CREATE)) {
             this.indexService.remove(this.index);
@@ -115,7 +112,7 @@ public class JavafxIndexForm implements IndexForm {
     }
 
     @FXML public void close() {
-        this.router.show("tables.view", this.tableService.getSelected().get());
+        this.activeRoute.changeTo("table.view", this.tableService.getSelected().get());
     }
 
     @FXML public void restore() {

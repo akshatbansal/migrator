@@ -9,45 +9,46 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
+import migrator.app.Container;
+import migrator.app.Gui;
 import migrator.app.domain.database.service.DatabaseService;
 import migrator.app.domain.table.component.TableCard;
 import migrator.app.domain.table.component.TableList;
 import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableGuiKit;
 import migrator.app.domain.table.service.TableService;
+import migrator.app.router.ActiveRoute;
 import migrator.breadcrumps.BreadcrumpsComponent;
+import migrator.ext.javafx.component.ViewComponent;
+import migrator.ext.javafx.component.ViewLoader;
 import migrator.lib.emitter.Subscription;
 import migrator.javafx.helpers.ControllerHelper;
-import migrator.router.Router;
 
-public class JavafxTableList implements TableList {
-    protected Node node;
+public class JavafxTableList extends ViewComponent implements TableList {
     protected List<Subscription> subscriptions;
     protected TableService tableService;
     protected DatabaseService databaseService;
     protected TableGuiKit guiKit;
     protected BreadcrumpsComponent breadcrumpsComponent;
-    protected Router router;
+    protected ActiveRoute activeRoute;
+
     @FXML protected FlowPane tables;
     @FXML protected VBox breadcrumpsContainer;
 
-    public JavafxTableList(TableService tableService, DatabaseService databaseService,  TableGuiKit guiKit, migrator.breadcrumps.GuiKit breadcrumpsGuiKit, Router router) {
-        this.tableService = tableService;
-        this.databaseService = databaseService;
-        this.guiKit = guiKit;
-        this.breadcrumpsComponent = breadcrumpsGuiKit.createBreadcrumps();
-        this.router = router;
+    public JavafxTableList(ViewLoader viewLoader, Container container, Gui gui) {
+        super(viewLoader);
+        this.activeRoute = container.getActiveRoute();
+        this.tableService = container.getTableService();
+        this.databaseService = container.getDatabaseService();
+        this.guiKit = gui.getTableKit();
+        this.breadcrumpsComponent = gui.getBreadcrumps().createBreadcrumps();
         this.subscriptions = new LinkedList<>();
-        this.node = ControllerHelper.createViewNode(this, "/layout/table/index.fxml");
+
+        this.loadView("/layout/table/index.fxml");
 
         this.tableService.getList().addListener((Change<? extends Table> change) -> {
             this.draw();
         });
-    }
-
-    @Override
-    public Object getContent() {
-        return this.node;
     }
 
     protected void draw() {
@@ -62,7 +63,7 @@ public class JavafxTableList implements TableList {
             TableCard card = this.guiKit.createCard(table);
             this.subscriptions.add(
                 card.onSelect((Object o) -> {
-                    this.router.show("tables.view", o);
+                    this.activeRoute.changeTo("tables.view", o);
                 })
             );
             this.tables.getChildren().add((Node) card.getContent());
@@ -79,6 +80,6 @@ public class JavafxTableList implements TableList {
         Table newTable = this.tableService.getFactory()
             .createWithCreateChange(this.databaseService.getConnected().get(), "new_table");
         this.tableService.register(newTable);
-        this.router.show("tables.view", newTable);
+        this.activeRoute.changeTo("table.view", newTable);
     }
 }

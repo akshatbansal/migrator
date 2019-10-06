@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import migrator.router.BasicRouter;
 import migrator.app.domain.table.service.IndexFactory;
 import migrator.app.domain.table.service.IndexService;
-import migrator.mock.FakeView;
 
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,7 +19,6 @@ public class JavafxIndexListTest {
             new IndexFactory()
         );
         JavafxIndexList javafxIndexList = new JavafxIndexList(
-            new FakeView(),
             indexService,
             new BasicRouter()
         );
@@ -34,7 +32,6 @@ public class JavafxIndexListTest {
             new IndexFactory()
         );
         JavafxIndexList javafxIndexList = new JavafxIndexList(
-            new FakeView(),
             indexService,
             new BasicRouter()
         );
