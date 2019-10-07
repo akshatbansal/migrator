@@ -6,6 +6,7 @@ import migrator.app.breadcrumps.BreadcrumpsGuiKit;
 import migrator.app.domain.change.service.ChangeGuiKit;
 import migrator.app.domain.connection.service.ConnectionGuiKit;
 import migrator.app.domain.database.service.DatabaseGuiKit;
+import migrator.app.domain.project.service.ProjectGuiKit;
 import migrator.app.domain.table.service.TableGuiKit;
 import migrator.app.router.ActiveRoute;
 import migrator.ext.javafx.breadcrumps.JavafxBreadcrumpsGuiKit;
@@ -13,6 +14,7 @@ import migrator.ext.javafx.change.service.JavafxChangeGuiKit;
 import migrator.ext.javafx.component.ViewLoader;
 import migrator.ext.javafx.connection.service.JavafxConnectionGuiKit;
 import migrator.ext.javafx.database.service.JavafxDatabaseGuiKit;
+import migrator.ext.javafx.project.service.JavafxProjectGuiKit;
 import migrator.ext.javafx.table.service.JavafxTableGuiKit;
 
 public class JavafxGui implements Gui {
@@ -21,6 +23,7 @@ public class JavafxGui implements Gui {
     protected TableGuiKit tableGuiKit;
     protected BreadcrumpsGuiKit breadcrumpsGuiKit;
     protected ChangeGuiKit changeGuiKit;
+    protected ProjectGuiKit projectGuiKit;
     protected ActiveRoute activeRoute;
 
     public JavafxGui(Container container, ViewLoader viewLoader) {
@@ -32,6 +35,7 @@ public class JavafxGui implements Gui {
         this.databaseGuiKit = new JavafxDatabaseGuiKit(viewLoader, container, this);
         this.tableGuiKit = new JavafxTableGuiKit(viewLoader, container, this);
         this.changeGuiKit = new JavafxChangeGuiKit(viewLoader, container);
+        this.projectGuiKit = new JavafxProjectGuiKit(viewLoader, container);
     }
 
     @Override
@@ -57,5 +61,10 @@ public class JavafxGui implements Gui {
     @Override
     public ChangeGuiKit getChangeKit() {
         return this.changeGuiKit;
+    }
+
+    @Override
+    public ProjectGuiKit getProject() {
+        return this.projectGuiKit;
     }
 }

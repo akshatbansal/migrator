@@ -9,6 +9,7 @@ import migrator.app.migration.model.TableChange;
 import migrator.ext.php.command.AddColumn;
 import migrator.ext.php.command.AddIndex;
 import migrator.ext.php.command.ChangeColumn;
+import migrator.ext.php.command.CreateTable;
 import migrator.ext.php.command.DropTable;
 import migrator.ext.php.command.RemoveColumn;
 import migrator.ext.php.command.RemoveIndexByName;
@@ -34,6 +35,8 @@ public class PhpCommandFactory implements CodeCommandFactory {
             return this.dropTable(tableChange);
         } else if (tableChange.getCommand().isType(ChangeCommand.UPDATE)) {
             return this.updateTable(tableChange);
+        } else if (tableChange.getCommand().isType(ChangeCommand.CREATE)) {
+            return this.createTable(tableChange);
         }
         return this.saveTable(tableChange);
     }
@@ -51,6 +54,10 @@ public class PhpCommandFactory implements CodeCommandFactory {
 
     public UpdateTable updateTable(TableChange tableChange) {
         return new UpdateTable(tableChange, this);
+    }
+
+    public CreateTable createTable(TableChange tableChange) {
+        return new CreateTable(tableChange, this);
     }
 
     public AddColumn addColumn(ColumnChange columnChange) {

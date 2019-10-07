@@ -74,8 +74,7 @@ public class JavafxTableList extends ViewComponent implements TableList {
         }
     }
 
-    @FXML
-    public void initialize() {
+    @FXML public void initialize() {
         this.draw();
 
         this.breadcrumpsContainer.getChildren()
@@ -84,6 +83,7 @@ public class JavafxTableList extends ViewComponent implements TableList {
             );
     }
 
+    @Override
     @FXML public void addTable() {
         Table newTable = this.tableService.getFactory()
             .createWithCreateChange(this.databaseService.getConnected().get(), "new_table");
