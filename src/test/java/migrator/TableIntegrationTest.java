@@ -16,6 +16,7 @@ import migrator.app.Container;
 import migrator.app.domain.connection.model.Connection;
 import migrator.app.domain.connection.service.ConnectionService;
 import migrator.app.domain.database.model.DatabaseConnection;
+import migrator.app.domain.project.model.Project;
 import migrator.mock.FakeDatabaseDriver;
 import migrator.mock.FakeDatabaseDriverManager;
 import migrator.mock.DataExtension;
@@ -55,9 +56,14 @@ public class TableIntegrationTest {
             .select(
                 this.container.getTableFactory()
                     .createNotChanged(
-                        new DatabaseConnection(
-                            new Connection("localhost"),
-                            "test_db"
+                        new Project(
+                            new DatabaseConnection(
+                                new Connection("localhost"),
+                                "test_db"
+                            ),
+                            "project_name",
+                            "phinx",
+                            ""
                         ),
                         "test_table"
                     )
@@ -75,9 +81,14 @@ public class TableIntegrationTest {
             .select(
                 this.container.getTableFactory()
                     .createNotChanged(
-                        new DatabaseConnection(
-                            new Connection("localhost"),
-                            "test_db"
+                        new Project(
+                            new DatabaseConnection(
+                                new Connection("localhost"),
+                                "test_db"
+                            ),
+                            "project_name",
+                            "phinx",
+                            ""
                         ),
                         "test_table"
                     )

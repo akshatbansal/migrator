@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import migrator.app.domain.connection.model.Connection;
 import migrator.app.domain.database.model.DatabaseConnection;
+import migrator.app.domain.project.model.Project;
 import migrator.app.domain.change.service.ChangeService;
 import migrator.app.domain.change.service.TableChangeFactory;
 import migrator.app.domain.table.model.Table;
@@ -29,9 +30,14 @@ public class TableServiceTest {
         this.tableService.select(
             this.tableService.getFactory()
                 .createNotChanged(
-                    new DatabaseConnection(
-                        new Connection("localhost"),
-                        "test_db"
+                    new Project(
+                        new DatabaseConnection(
+                            new Connection("localhost"),
+                            "test_db"
+                        ),
+                        "project_name",
+                        "phinx",
+                        ""
                     ),
                     "test_table"
                 )
@@ -44,9 +50,14 @@ public class TableServiceTest {
         this.tableService.add(
             this.tableService.getFactory()
                 .createNotChanged(
-                    new DatabaseConnection(
-                        new Connection("localhost"),
-                        "test_db"
+                    new Project(
+                        new DatabaseConnection(
+                            new Connection("localhost"),
+                            "test_db"
+                        ),
+                        "project_name",
+                        "phinx",
+                        ""
                     ),
                     "test_table"
                 )
@@ -59,9 +70,14 @@ public class TableServiceTest {
     @Test public void testRemoveRemovesTableFromList() {
         Table table = this.tableService.getFactory()
         .createNotChanged(
-            new DatabaseConnection(
-                new Connection("localhost"),
-                "test_db"
+            new Project(
+                new DatabaseConnection(
+                    new Connection("localhost"),
+                    "test_db"
+                ),
+                "project_name",
+                "phinx",
+                ""
             ),
             "test_table"
         );
@@ -74,9 +90,14 @@ public class TableServiceTest {
     @Test public void testSetAllSetsListValues() {
         Table table = this.tableService.getFactory()
         .createNotChanged(
-            new DatabaseConnection(
-                new Connection("localhost"),
-                "test_db"
+            new Project(
+                new DatabaseConnection(
+                    new Connection("localhost"),
+                    "test_db"
+                ),
+                "project_name",
+                "phinx",
+                ""
             ),
             "test_table"
         );
@@ -89,9 +110,14 @@ public class TableServiceTest {
     @Test public void testRemoveRemovesSelectedIfNotInTheList() {
         Table table = this.tableService.getFactory()
         .createNotChanged(
-            new DatabaseConnection(
-                new Connection("localhost"),
-                "test_db"
+            new Project(
+                new DatabaseConnection(
+                    new Connection("localhost"),
+                    "test_db"
+                ),
+                "project_name",
+                "phinx",
+                ""
             ),
             "test_table"
         );

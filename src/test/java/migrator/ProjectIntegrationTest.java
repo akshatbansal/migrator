@@ -13,12 +13,13 @@ import migrator.app.Container;
 import migrator.app.domain.connection.model.Connection;
 import migrator.app.domain.database.model.DatabaseConnection;
 import migrator.app.domain.database.service.DatabaseService;
+import migrator.app.domain.project.model.Project;
 import migrator.app.domain.table.service.TableService;
 import migrator.mock.FakeDatabaseDriver;
 import migrator.mock.FakeDatabaseDriverManager;
 import migrator.mock.DataExtension;
 
-public class ConnectionIntegrationTest {
+public class ProjectIntegrationTest {
     protected Container container;
 
     @BeforeEach
@@ -46,23 +47,18 @@ public class ConnectionIntegrationTest {
         this.container = bootstrap.getContainer();
     }
 
-    @Test public void testSetDatabaseListOnConnectionConnect() {
+    @Test public void testSetTableListOnProjectOpen() {
         new BusinessLogic(this.container);
-        this.container.getConnectionService()
-            .connect(new Connection("localhost"));
-        
-        DatabaseService databaseService = this.container.getDatabaseService();
-        assertEquals(1, databaseService.getList().size());
-        assertEquals("test_db", databaseService.getList().get(0).getDatabase());
-    }
-
-    @Test public void testSetTableListOnDatabaseConnect() {
-        new BusinessLogic(this.container);
-        this.container.getDatabaseService()
-            .connect(
-                new DatabaseConnection(
-                    new Connection("localhost"),
-                    "test_db"
+        this.container.getProjectService()
+            .open(
+                new Project(
+                    new DatabaseConnection(
+                        new Connection("localhost"),
+                        "test_db"
+                    ),
+                    "project_name",
+                    "phinx",
+                    ""
                 )
             );
 
