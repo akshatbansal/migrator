@@ -8,7 +8,7 @@
 }
 
 .card.card--active {
-    -fx-border-color: #20AAD6;
+    -fx-effect: dropshadow(three-pass-box, #20AAD6, 10, 0, 0, 0);
 }
 
 .card.card--create {

@@ -11,6 +11,7 @@ import migrator.app.breadcrumps.BreadcrumpsGuiKit;
 import migrator.app.breadcrumps.VoidBreadcrump;
 import migrator.app.domain.connection.model.Connection;
 import migrator.app.domain.database.model.DatabaseConnection;
+import migrator.app.domain.project.model.Project;
 import migrator.app.domain.table.model.Table;
 import migrator.app.router.ActiveRoute;
 import migrator.app.router.Route;
@@ -77,6 +78,20 @@ public class JavafxBreadcrumpsGuiKit implements BreadcrumpsGuiKit {
                     activeRoute
                 ),
                 new VoidBreadcrump(table.nameProperty())
+            )
+        );
+    }
+
+    @Override
+    public BreadcrumpsComponent createBreadcrumps(Project project) {
+        return this.createBreadcrumps(
+            Arrays.asList(
+                new ActiveRouteBreadcrump(
+                    "Projects", 
+                    new Route("project.index"), 
+                    this.container.getActiveRoute()
+                ),
+                new VoidBreadcrump(project.nameProperty())
             )
         );
     }

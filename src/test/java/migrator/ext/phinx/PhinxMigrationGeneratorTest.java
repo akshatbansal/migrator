@@ -65,7 +65,7 @@ public class PhinxMigrationGeneratorTest {
                 "\t{\n" +
                     "\t\t$this->table('table_name')\n" +
                         "\t\t\t->addColumn('column_name', 'string', ['null' => false])\n" +
-                        "\t\t\t->save();\n" +
+                        "\t\t\t->create();\n" +
                 "\t}\n" +
             "}\n",
             this.storage.load()
@@ -245,7 +245,7 @@ public class PhinxMigrationGeneratorTest {
                         "\t\t\t->addColumn('id', 'integer', ['null' => false])\n" +
                         "\t\t\t->addColumn('name', 'string', ['null' => false])\n" +
                         "\t\t\t->addIndex(['id', 'name'], ['name' => 'id_name'])\n" +
-                        "\t\t\t->save();\n" +
+                        "\t\t\t->create();\n" +
                 "\t}\n" +
             "}\n",
             this.storage.load()
@@ -256,7 +256,7 @@ public class PhinxMigrationGeneratorTest {
         TableChange change = new SimpleTableChange(
             "table_name",
             new SimpleTableProperty(null),
-            new ChangeCommand("create"),
+            new ChangeCommand("update"),
             new ArrayList(),
             Arrays.asList(
                 new SimpleIndexChange(
@@ -275,7 +275,7 @@ public class PhinxMigrationGeneratorTest {
                 "\t{\n" +
                     "\t\t$this->table('table_name')\n" +
                         "\t\t\t->removeIndexByName('id_name')\n" +
-                        "\t\t\t->save();\n" +
+                        "\t\t\t->update();\n" +
                 "\t}\n" +
             "}\n",
             this.storage.load()

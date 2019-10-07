@@ -19,6 +19,8 @@ import migrator.ext.javafx.component.ViewLoader;
 import migrator.ext.javafx.connection.route.ConnectionIndexRoute;
 import migrator.ext.javafx.connection.route.ConnectionViewRoute;
 import migrator.ext.javafx.database.route.DatabaseIndexRoute;
+import migrator.ext.javafx.project.route.ProjectIndexRoute;
+import migrator.ext.javafx.project.route.ProjectViewRoute;
 import migrator.ext.javafx.table.route.ColumnViewRoute;
 import migrator.ext.javafx.table.route.IndexViewRoute;
 import migrator.ext.javafx.table.route.TableIndexRoute;
@@ -84,8 +86,16 @@ public class JavafxApplication extends Application {
             "commit.view",
             new CommitViewRoute(gui.getChangeKit(), layout)
         );
+        router.connect(
+            "project.index",
+            new ProjectIndexRoute(layout, gui.getProject())
+        );
+        router.connect(
+            "project.view",
+            new ProjectViewRoute(layout, gui.getProject())
+        );
 
-        container.getActiveRoute().changeTo("connection.index");
+        container.getActiveRoute().changeTo("project.index");
 
         Scene scene = new Scene((Pane) mainController.getContent(), 1280, 720);
         scene.getStylesheets().addAll(

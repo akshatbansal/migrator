@@ -14,6 +14,7 @@ import migrator.app.database.driver.DatabaseDriver;
 import migrator.app.domain.change.service.ChangeService;
 import migrator.app.domain.connection.model.Connection;
 import migrator.app.domain.database.model.DatabaseConnection;
+import migrator.app.domain.project.model.Project;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Index;
 import migrator.app.domain.table.model.Table;
@@ -42,6 +43,12 @@ public class BusinessLogic {
             .getSelected()
             .addListener((ObservableValue<? extends Table> observable, Table oldValue, Table newValue) -> {
                 this.onTableSelect(newValue);
+            });
+
+        this.container.getProjectService()
+            .getOpened()
+            .addListener((ObservableValue<? extends Project> obs, Project oldValue, Project newValue) -> {
+                this.onProjectOpen(newValue);
             });
     }
 
@@ -120,6 +127,11 @@ public class BusinessLogic {
                     databaseDriver.getColumns(table.getOriginalName())
                 )
             );
+    }
+
+    public void onProjectOpen(Project project) {
+        this.container.getDatabaseService()
+            .connect(project.getDatabase());
     }
 
     private Collection<Index> getTransformedIndexes(ObservableList<List<String>> rawIndexes) {

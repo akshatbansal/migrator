@@ -6,8 +6,12 @@ import migrator.app.database.driver.DatabaseDriverConfig;
 import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.domain.change.service.ChangeService;
 import migrator.app.domain.change.service.TableChangeFactory;
+import migrator.app.domain.connection.service.ConnectionFactory;
 import migrator.app.domain.connection.service.ConnectionService;
+import migrator.app.domain.database.service.DatabaseFactory;
 import migrator.app.domain.database.service.DatabaseService;
+import migrator.app.domain.project.service.ProjectFactory;
+import migrator.app.domain.project.service.ProjectService;
 import migrator.app.domain.table.service.ColumnFactory;
 import migrator.app.domain.table.service.ColumnService;
 import migrator.app.domain.table.service.IndexFactory;
@@ -29,10 +33,13 @@ public class ConfigContainer {
     protected ValueConfig<DatabaseDriverManager> databaseDriverManager;
     protected ValueConfig<CodeManager> codeManager;
 
+    protected ValueConfig<ConnectionFactory> connectionFactory;
+    protected ValueConfig<DatabaseFactory> databaseFactory;
     protected ValueConfig<ColumnFactory> columnFactory;
     protected ValueConfig<IndexFactory> indexFactory;
     protected ValueConfig<TableFactory> tableFactory;
     protected ValueConfig<TableChangeFactory> tableChangeFactory;
+    protected ValueConfig<ProjectFactory> projectFactory;
 
     protected ValueConfig<ConnectionService> connectionService;
     protected ValueConfig<DatabaseService> databaseService;
@@ -40,6 +47,7 @@ public class ConfigContainer {
     protected ValueConfig<ColumnService> columnService;
     protected ValueConfig<IndexService> indexService;
     protected ValueConfig<ChangeService> changeService;
+    protected ValueConfig<ProjectService> projectService;
 
     public ConfigContainer() {
         this.migrationConfig = new MigrationConfig();
@@ -51,10 +59,13 @@ public class ConfigContainer {
         this.databaseDriverManager = new ValueConfig<>();
         this.codeManager = new ValueConfig<>();
 
+        this.connectionFactory = new ValueConfig<>();
+        this.databaseFactory = new ValueConfig<>();
         this.tableChangeFactory = new ValueConfig<>();
         this.tableFactory = new ValueConfig<>();
         this.columnFactory = new ValueConfig<>();
         this.indexFactory = new ValueConfig<>();
+        this.projectFactory = new ValueConfig<>();
 
         this.connectionService = new ValueConfig<>();
         this.databaseService = new ValueConfig<>();
@@ -62,6 +73,7 @@ public class ConfigContainer {
         this.columnService = new ValueConfig<>();
         this.indexService = new ValueConfig<>();
         this.changeService = new ValueConfig<>();
+        this.projectService = new ValueConfig<>();
     }
 
     public MigrationConfig getMigrationConfig() {
@@ -92,6 +104,14 @@ public class ConfigContainer {
         return this.codeManager;
     }
 
+    public ValueConfig<ConnectionFactory> connectionFactoryConfig() {
+        return this.connectionFactory;
+    }
+
+    public ValueConfig<DatabaseFactory> databaseFactoryConfig() {
+        return this.databaseFactory;
+    }
+
     public ValueConfig<TableChangeFactory> tableChangeFactoryConfig() {
         return this.tableChangeFactory;
     }
@@ -106,6 +126,10 @@ public class ConfigContainer {
 
     public ValueConfig<IndexFactory> indexFactoryConfig() {
         return this.indexFactory;
+    }
+
+    public ValueConfig<ProjectFactory> projectFactoryConfig() {
+        return this.projectFactory;
     }
 
     public ValueConfig<ConnectionService> connectionServiceConfig() {
@@ -130,5 +154,9 @@ public class ConfigContainer {
 
     public ValueConfig<ChangeService> changeServiceConfig() {
         return this.changeService;
+    }
+
+    public ValueConfig<ProjectService> projectServiceConfig() {
+        return this.projectService;
     }
 }
