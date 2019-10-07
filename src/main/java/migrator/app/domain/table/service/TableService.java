@@ -45,16 +45,16 @@ public class TableService {
         return this.selected;
     }
 
-    public void select(Table connection) {
-        this.selected.set(connection);
+    public void select(Table table) {
+        this.selected.set(table);
     }
 
-    public void remove(Table connection) {
-        this.list.remove(connection);
+    public void remove(Table table) {
+        this.list.remove(table);
     }
 
-    public void add(Table connection) {
-        this.list.add(connection);
+    public void add(Table table) {
+        this.list.add(table);
     }
 
     public void register(Table table) {

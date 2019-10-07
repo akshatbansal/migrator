@@ -24,6 +24,7 @@ public class TableFactory {
     }
 
     public Table createWithCreateChange(DatabaseConnection connection, String tableName) {
+
         return new Table(
             connection,
             new SimpleTableProperty(tableName), // original

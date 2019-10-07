@@ -1,52 +1,37 @@
 package migrator.ext.javafx;
 
-import migrator.app.BusinessLogic;
+import migrator.app.Container;
 import migrator.app.Gui;
-import migrator.app.database.driver.DatabaseDriverManager;
+import migrator.app.breadcrumps.BreadcrumpsGuiKit;
 import migrator.app.domain.change.service.ChangeGuiKit;
 import migrator.app.domain.connection.service.ConnectionGuiKit;
-import migrator.app.domain.database.service.GuiKit;
+import migrator.app.domain.database.service.DatabaseGuiKit;
 import migrator.app.domain.table.service.TableGuiKit;
-import migrator.app.migration.Migration;
+import migrator.app.router.ActiveRoute;
+import migrator.ext.javafx.breadcrumps.JavafxBreadcrumpsGuiKit;
 import migrator.ext.javafx.change.service.JavafxChangeGuiKit;
 import migrator.ext.javafx.component.ViewLoader;
 import migrator.ext.javafx.connection.service.JavafxConnectionGuiKit;
-import migrator.ext.javafx.database.service.JavafxGuiKit;
+import migrator.ext.javafx.database.service.JavafxDatabaseGuiKit;
 import migrator.ext.javafx.table.service.JavafxTableGuiKit;
-import migrator.javafx.helpers.View;
-import migrator.router.Router;
 
 public class JavafxGui implements Gui {
     protected ConnectionGuiKit connectionGuiKit;
-    protected GuiKit databaseGuiKit;
+    protected DatabaseGuiKit databaseGuiKit;
     protected TableGuiKit tableGuiKit;
-    protected migrator.breadcrumps.GuiKit breadcrumpsGuiKit;
+    protected BreadcrumpsGuiKit breadcrumpsGuiKit;
     protected ChangeGuiKit changeGuiKit;
+    protected ActiveRoute activeRoute;
 
-    public JavafxGui(
-        View view,
-        Router router,
-        BusinessLogic businessLogic,
-        Migration migration, 
-        DatabaseDriverManager databaseDriverManager
-    ) {
-        ViewLoader viewLoader = new ViewLoader();
-        this.breadcrumpsGuiKit = new migrator.javafx.breadcrumps.JavafxGuiKit(businessLogic.getBreadcrumps());
-        this.connectionGuiKit = new JavafxConnectionGuiKit(businessLogic.getConnection(), router, databaseDriverManager);
-        this.databaseGuiKit = new JavafxGuiKit(viewLoader, businessLogic.getDatabase(), router, this.breadcrumpsGuiKit);
-        this.tableGuiKit = new JavafxTableGuiKit(
-            this.breadcrumpsGuiKit,
-            router,
-            view,
-            businessLogic.getDatabase(),
-            businessLogic.getTable()
+    public JavafxGui(Container container, ViewLoader viewLoader) {
+        this.breadcrumpsGuiKit = new JavafxBreadcrumpsGuiKit(viewLoader, container);
+        this.connectionGuiKit = new JavafxConnectionGuiKit(
+            container,
+            viewLoader
         );
-        this.changeGuiKit = new JavafxChangeGuiKit(
-            viewLoader,
-            router,
-            businessLogic.getChange(),
-            migration
-        );
+        this.databaseGuiKit = new JavafxDatabaseGuiKit(viewLoader, container, this);
+        this.tableGuiKit = new JavafxTableGuiKit(viewLoader, container, this);
+        this.changeGuiKit = new JavafxChangeGuiKit(viewLoader, container);
     }
 
     @Override
@@ -55,7 +40,7 @@ public class JavafxGui implements Gui {
     }
 
     @Override
-    public GuiKit getDatabaseKit() {
+    public DatabaseGuiKit getDatabaseKit() {
         return this.databaseGuiKit;
     }
 
@@ -65,7 +50,7 @@ public class JavafxGui implements Gui {
     }
 
     @Override
-    public migrator.breadcrumps.GuiKit getBreadcrumps() {
+    public BreadcrumpsGuiKit getBreadcrumps() {
         return this.breadcrumpsGuiKit;
     }
 

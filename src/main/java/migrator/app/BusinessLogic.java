@@ -11,72 +11,38 @@ import java.util.Map.Entry;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import migrator.app.database.driver.DatabaseDriver;
-import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.domain.change.service.ChangeService;
-import migrator.app.domain.change.service.TableChangeFactory;
 import migrator.app.domain.connection.model.Connection;
-import migrator.app.domain.connection.service.ConnectionService;
 import migrator.app.domain.database.model.DatabaseConnection;
-import migrator.app.domain.database.service.DatabaseService;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Index;
 import migrator.app.domain.table.model.Table;
-import migrator.app.domain.table.service.ColumnFactory;
-import migrator.app.domain.table.service.ColumnService;
-import migrator.app.domain.table.service.IndexFactory;
-import migrator.app.domain.table.service.IndexService;
 import migrator.app.domain.table.service.TableFactory;
-import migrator.app.domain.table.service.TableService;
 import migrator.app.migration.model.TableChange;
-import migrator.javafx.breadcrumps.BreadcrumpsService;
 
 public class BusinessLogic {
-    protected ConnectionService connectionService;
-    protected DatabaseDriverManager databaseDriverManager;
-    protected DatabaseService databaseService;
-    protected TableService tableService;
-    protected BreadcrumpsService breadcrumpsService;
-    protected ColumnService columnService;
-    protected IndexService indexService;
-    protected ChangeService changeService;
-    protected ColumnFactory columnFactory;
-    protected IndexFactory indexFactory;
-    protected TableFactory tableFactory;
-    protected TableChangeFactory tableChangeFactory;
- 
-    public BusinessLogic(DatabaseDriverManager databaseDriverManager, ConnectionService connectionService) {
-        this.databaseDriverManager = databaseDriverManager;
-        this.connectionService = connectionService;
-        this.tableChangeFactory = new TableChangeFactory();
-        this.changeService = new ChangeService(this.tableChangeFactory);
-        this.columnFactory = new ColumnFactory();
-        this.indexFactory = new IndexFactory();
-        this.tableFactory = new TableFactory(this.tableChangeFactory);
-        this.databaseService = new DatabaseService();
-        this.tableService = new TableService(this.changeService, this.tableFactory);
-        this.columnService = new ColumnService(this.columnFactory, this.changeService, this.tableService.getSelected());
-        this.indexService = new IndexService(this.indexFactory);
-        this.breadcrumpsService = new BreadcrumpsService();
-        
+    protected Container container;
 
-        this.connectionService.getConnected()
+    public BusinessLogic(Container container) {
+        this.container = container;
+
+        this.container.getConnectionService()
+            .getConnected()
             .addListener((ObservableValue<? extends Connection> observable, Connection oldValue, Connection newValue) -> {
                 this.onConnectConnection(newValue);
             });
 
-        this.databaseService.getConnected()
+        this.container.getDatabaseService()
+            .getConnected()
             .addListener((ObservableValue<? extends DatabaseConnection> observable, DatabaseConnection oldValue, DatabaseConnection newValue) -> {
                 this.onDatabaseConnect(newValue);
             });
 
-        this.tableService.getSelected()
+        this.container.getTableService()
+            .getSelected()
             .addListener((ObservableValue<? extends Table> observable, Table oldValue, Table newValue) -> {
                 this.onTableSelect(newValue);
             });
-    }
-
-    public BusinessLogic(DatabaseDriverManager databaseDriverManager) {
-        this(databaseDriverManager, new ConnectionService());
     }
 
     protected void onConnectConnection(Connection connection) {
@@ -85,7 +51,8 @@ public class BusinessLogic {
             return;
         }
 
-        DatabaseDriver databaseDriver  = this.databaseDriverManager.createDriver(connection);
+        DatabaseDriver databaseDriver  = this.container.getDatabaseDriverManager()
+            .createDriver(connection);
         databaseDriver.connect();
 
         List<DatabaseConnection> databases = new ArrayList<>();
@@ -93,7 +60,7 @@ public class BusinessLogic {
             databases.add(new DatabaseConnection(connection, databaseName));
         }
 
-        this.databaseService.setAll(databases);
+        this.container.getDatabaseService().setAll(databases);
     }
 
     protected void onDatabaseConnect(DatabaseConnection connection) {
@@ -102,48 +69,57 @@ public class BusinessLogic {
             return;
         }
 
-        DatabaseDriver databaseDriver = this.databaseDriverManager.createDriver(connection);
+        DatabaseDriver databaseDriver  = this.container.getDatabaseDriverManager()
+            .createDriver(connection);
         databaseDriver.connect();
+
+        ChangeService changeService = this.container.getChangeService();
+        TableFactory tableFactory = this.container.getTableFactory();
 
         String databaseDotString = connection.getConnection().getName() + "." + connection.getDatabase();
         List<Table> tables = new ArrayList<>();
         for (String tableName : databaseDriver.getTables()) {
-            TableChange tableChange = this.changeService.getTableChange(databaseDotString, tableName);
+            TableChange tableChange = changeService.getTableChange(databaseDotString, tableName);
             if (tableChange == null) {
-                tableChange = this.changeService.getTableChangeFactory()
+                tableChange = changeService.getTableChangeFactory()
                     .createNotChanged(tableName);
-                this.changeService.addTableChange(databaseDotString, tableChange);
+                changeService.addTableChange(databaseDotString, tableChange);
             }
-            Table table = this.tableFactory.create(connection, tableName, tableChange);
+            Table table = tableFactory.create(connection, tableName, tableChange);
             tables.add(table);
         }
-        List<TableChange> createdTableChanges = this.changeService.getCreatedTableChanges(databaseDotString);
+        List<TableChange> createdTableChanges = changeService.getCreatedTableChanges(databaseDotString);
         for (TableChange tableChange : createdTableChanges) {
             tables.add(
-                this.tableFactory.create(connection, tableChange.getOriginalName(), tableChange)
+                tableFactory.create(connection, tableChange.getOriginalName(), tableChange)
             );
         }
-        this.tableService.setAll(tables);
+        this.container.getTableService()
+            .setAll(tables);
     }
 
     protected void onTableSelect(Table table) {
+        System.out.println("on table");
         if (table == null) {
             return;
         }
 
-        DatabaseDriver databaseDriver = this.databaseDriverManager.createDriver(table.getDatabase());
+        DatabaseDriver databaseDriver = this.container.getDatabaseDriverManager()
+            .createDriver(table.getDatabase());
 
-        this.indexService.setAll(
-            this.getTransformedIndexes(
-                databaseDriver.getIndexes(table.getOriginalName())
-            )
-        );
+        this.container.getIndexService()
+            .setAll(
+                this.getTransformedIndexes(
+                    databaseDriver.getIndexes(table.getOriginalName())
+                )
+            );
         
-        this.columnService.setAll(
-            this.getTransformedColumns(
-                databaseDriver.getColumns(table.getOriginalName())
-            )
-        );
+        this.container.getColumnService()
+            .setAll(
+                this.getTransformedColumns(
+                    databaseDriver.getColumns(table.getOriginalName())
+                )
+            );
     }
 
     private Collection<Index> getTransformedIndexes(ObservableList<List<String>> rawIndexes) {
@@ -161,7 +137,8 @@ public class BusinessLogic {
         while (entryIterator.hasNext()) {
             Entry<String, List<String>> entry = entryIterator.next();
             indexes.add(
-                this.indexFactory.createNotChanged(entry.getKey(), entry.getValue())
+                this.container.getIndexFactory()
+                    .createNotChanged(entry.getKey(), entry.getValue())
             );
         }
         return indexes;
@@ -175,42 +152,15 @@ public class BusinessLogic {
                 defaultValue = "";
             }
             columns.add(
-                this.columnFactory.createNotChanged(
-                    columnName.get(0),
-                    columnName.get(1),
-                    defaultValue,
-                    columnName.get(2) == "YES" ? true : false
-                )
+                this.container.getColumnFactory()
+                    .createNotChanged(
+                        columnName.get(0),
+                        columnName.get(1),
+                        defaultValue,
+                        columnName.get(2) == "YES" ? true : false
+                    )
             );
         }
         return columns;
-    }
-
-    public ConnectionService getConnection() {
-        return this.connectionService;
-    }
-
-    public DatabaseService getDatabase() {
-        return this.databaseService;
-    }
-
-    public TableService getTable() {
-        return this.tableService;
-    }
-
-    public ColumnService getColumn() {
-        return this.columnService;
-    }
-
-    public IndexService getIndex() {
-        return this.indexService;
-    }
-
-    public BreadcrumpsService getBreadcrumps() {
-        return this.breadcrumpsService;
-    }
-
-    public ChangeService getChange() {
-        return this.changeService;
     }
 }

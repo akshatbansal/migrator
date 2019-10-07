@@ -14,12 +14,12 @@ import migrator.ext.javafx.component.ViewLoader;
 public class JavafxDatabaseCard extends ViewComponent implements DatabaseCard {
     @FXML protected Text cardName;
     protected DatabaseConnection connection;
-    protected Emitter emitter;
+    protected Emitter<DatabaseConnection> emitter;
 
-    public JavafxDatabaseCard(ViewLoader viewLoader, DatabaseConnection connection) {
+    public JavafxDatabaseCard(DatabaseConnection connection, ViewLoader viewLoader) {
         super(viewLoader);
         this.connection = connection;
-        this.emitter = new EventEmitter();
+        this.emitter = new EventEmitter<>();
 
         this.loadView("/layout/database/card.fxml");
     }
@@ -33,7 +33,7 @@ public class JavafxDatabaseCard extends ViewComponent implements DatabaseCard {
     }
 
     @Override
-    public Subscription onConnect(Subscriber subscriber) {
+    public Subscription<DatabaseConnection> onConnect(Subscriber<DatabaseConnection> subscriber) {
         return this.emitter.on("connect", subscriber);
     }
 }

@@ -1,40 +1,38 @@
 package migrator.ext.javafx.connection.service;
 
-import migrator.app.database.driver.DatabaseDriverManager;
+import javafx.collections.ObservableList;
+import migrator.app.Container;
 import migrator.app.domain.connection.component.ConnectionCard;
 import migrator.app.domain.connection.component.ConnectionForm;
 import migrator.app.domain.connection.component.ConnectionList;
 import migrator.app.domain.connection.model.Connection;
 import migrator.app.domain.connection.service.ConnectionGuiKit;
-import migrator.app.domain.connection.service.ConnectionService;
+import migrator.ext.javafx.component.ViewLoader;
 import migrator.ext.javafx.connection.component.JavafxConnectionCard;
 import migrator.ext.javafx.connection.component.JavafxConnectionForm;
 import migrator.ext.javafx.connection.component.JavafxConnectionList;
-import migrator.router.Router;
 
 public class JavafxConnectionGuiKit implements ConnectionGuiKit {
-    protected ConnectionService connectionService;
-    protected Router router;
-    protected DatabaseDriverManager databaseDriverManager;
+    protected Container container;
+    protected ViewLoader viewLoader;
 
-    public JavafxConnectionGuiKit(ConnectionService connectionService, Router router, DatabaseDriverManager databaseDriverManager) {
-        this.connectionService = connectionService;
-        this.router = router;
-        this.databaseDriverManager = databaseDriverManager;
+    public JavafxConnectionGuiKit(Container container, ViewLoader viewLoader) {
+        this.container = container;
+        this.viewLoader = viewLoader;
     }
 
     @Override
     public ConnectionCard createCard(Connection connection) {
-        return new JavafxConnectionCard(connection);
+        return new JavafxConnectionCard(connection, this.viewLoader);
     }
 
     @Override
-    public ConnectionForm createForm() {
-        return new JavafxConnectionForm(this.connectionService, this.router, this.databaseDriverManager);
+    public ConnectionForm createForm(Connection connection) {
+        return new JavafxConnectionForm(this.viewLoader, connection, this.container);
     }
 
     @Override
-    public ConnectionList createList() {
-        return new JavafxConnectionList(this, this.connectionService, this.router);
+    public ConnectionList createList(ObservableList<Connection> connections) {
+        return new JavafxConnectionList(this.viewLoader, this, this.container);
     }
 }

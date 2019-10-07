@@ -1,5 +1,5 @@
 package migrator.lib.emitter;
 
-public interface Subscriber {
-    public void next(Object object);
+public interface Subscriber<T> {
+    public void next(T object);
 }

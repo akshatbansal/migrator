@@ -1,8 +1,8 @@
 package migrator.lib.emitter;
 
-public interface Emitter {
-    public Subscription on(String eventName, Subscriber subscriber);
-    public void off(String eventName, Subscriber subscriber);
-    public void emit(String eventName, Object object);
+public interface Emitter<T> {
+    public Subscription<T> on(String eventName, Subscriber<T> subscriber);
+    public void off(String eventName, Subscriber<T> subscriber);
+    public void emit(String eventName, T object);
     public void emit(String eventName);
 }

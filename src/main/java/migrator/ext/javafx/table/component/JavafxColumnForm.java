@@ -2,24 +2,24 @@ package migrator.ext.javafx.table.component;
 
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import migrator.app.Container;
 import migrator.app.domain.table.component.ColumnForm;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.service.ColumnService;
 import migrator.app.domain.table.service.TableService;
 import migrator.app.migration.model.ChangeCommand;
-import migrator.javafx.helpers.ControllerHelper;
-import migrator.router.Router;
+import migrator.app.router.ActiveRoute;
+import migrator.ext.javafx.component.ViewComponent;
+import migrator.ext.javafx.component.ViewLoader;
 
-public class JavafxColumnForm implements ColumnForm {
-    protected Node node;
+public class JavafxColumnForm extends ViewComponent implements ColumnForm {
     protected ColumnService columnService;
-    protected Router router;
+    protected ActiveRoute activeRoute;
     protected TableService tableService;
     protected Column column;
 
@@ -31,10 +31,11 @@ public class JavafxColumnForm implements ColumnForm {
     protected Button removeButton;
     protected Button restoreButton;
 
-    public JavafxColumnForm(ColumnService columnService, TableService tableService, Router router) {
-        this.columnService = columnService;
-        this.tableService = tableService;
-        this.router = router;
+    public JavafxColumnForm(Column column, ViewLoader viewLoader, Container container) {
+        super(viewLoader);
+        this.columnService = container.getColumnService();
+        this.tableService = container.getTableService();
+        this.activeRoute = container.getActiveRoute();
 
         this.removeButton = new Button("Remove");
         this.removeButton.getStyleClass().addAll("btn-danger");
@@ -48,7 +49,8 @@ public class JavafxColumnForm implements ColumnForm {
             this.restore();
         });
 
-        this.node = ControllerHelper.createViewNode(this, "/layout/table/column/form.fxml");
+        this.loadView("/layout/table/column/form.fxml");
+        this.setColumn(column);
     }
 
     public void setColumn(Column column) {
@@ -87,14 +89,10 @@ public class JavafxColumnForm implements ColumnForm {
         );
     }
 
-    @Override
-    public Object getContent() {
-        return this.node;
-    }
-
     public void delete() {
         if (this.column.getChangeCommand().isType(ChangeCommand.CREATE)) {
             this.columnService.unregister(this.column);
+            this.close();
             return;
         }
         this.column.delete();
@@ -105,6 +103,6 @@ public class JavafxColumnForm implements ColumnForm {
     }
 
     @FXML public void close() {
-        this.router.show("tables.view", this.tableService.getSelected().get());
+        this.activeRoute.changeTo("table.view", this.tableService.getSelected().get());
     }
 }

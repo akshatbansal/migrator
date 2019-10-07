@@ -40,7 +40,7 @@ tasks.test {
 
 application {
     // Define the main class for the application
-    mainClassName = "migrator.App"
+    mainClassName = "migrator.JavafxApplication"
 }
 
 javafx {
