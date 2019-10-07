@@ -12,8 +12,7 @@ import javafx.scene.layout.VBox;
 import migrator.app.Container;
 import migrator.app.Gui;
 import migrator.app.breadcrumps.BreadcrumpsComponent;
-import migrator.app.domain.database.model.DatabaseConnection;
-import migrator.app.domain.database.service.DatabaseService;
+import migrator.app.domain.project.service.ProjectService;
 import migrator.app.domain.table.component.TableCard;
 import migrator.app.domain.table.component.TableList;
 import migrator.app.domain.table.model.Table;
@@ -27,7 +26,7 @@ import migrator.lib.emitter.Subscription;
 public class JavafxTableList extends ViewComponent implements TableList {
     protected List<Subscription<Table>> subscriptions;
     protected TableService tableService;
-    protected DatabaseService databaseService;
+    protected ProjectService projectService;
     protected TableGuiKit guiKit;
     protected BreadcrumpsComponent breadcrumpsComponent;
     protected ActiveRoute activeRoute;
@@ -39,12 +38,12 @@ public class JavafxTableList extends ViewComponent implements TableList {
         super(viewLoader);
         this.activeRoute = container.getActiveRoute();
         this.tableService = container.getTableService();
-        this.databaseService = container.getDatabaseService();
+        this.projectService = container.getProjectService();
         this.guiKit = gui.getTableKit();
 
-        DatabaseConnection connectedDatabaseConnection = this.databaseService.getConnected().get();
-
-        this.breadcrumpsComponent = gui.getBreadcrumps().createBreadcrumps(connectedDatabaseConnection);
+        this.breadcrumpsComponent = gui.getBreadcrumps().createBreadcrumps(
+            this.projectService.getOpened().get()
+        );
         this.subscriptions = new LinkedList<>();
 
         this.loadView("/layout/table/index.fxml");
@@ -86,7 +85,7 @@ public class JavafxTableList extends ViewComponent implements TableList {
     @Override
     @FXML public void addTable() {
         Table newTable = this.tableService.getFactory()
-            .createWithCreateChange(this.databaseService.getConnected().get(), "new_table");
+            .createWithCreateChange(this.projectService.getOpened().get(), "new_table");
         this.tableService.register(newTable);
         this.tableService.select(newTable);
         this.activeRoute.changeTo("table.view", newTable);

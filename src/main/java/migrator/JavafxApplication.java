@@ -11,14 +11,13 @@ import migrator.app.BusinessLogic;
 import migrator.app.Gui;
 import migrator.app.Router;
 import migrator.app.domain.connection.model.Connection;
+import migrator.app.domain.database.model.DatabaseConnection;
+import migrator.app.domain.project.model.Project;
 import migrator.ext.javafx.JavafxGui;
 import migrator.ext.javafx.MainController;
 import migrator.ext.javafx.change.route.CommitViewRoute;
 import migrator.ext.javafx.component.JavafxLayout;
 import migrator.ext.javafx.component.ViewLoader;
-import migrator.ext.javafx.connection.route.ConnectionIndexRoute;
-import migrator.ext.javafx.connection.route.ConnectionViewRoute;
-import migrator.ext.javafx.database.route.DatabaseIndexRoute;
 import migrator.ext.javafx.project.route.ProjectIndexRoute;
 import migrator.ext.javafx.project.route.ProjectViewRoute;
 import migrator.ext.javafx.table.route.ColumnViewRoute;
@@ -44,8 +43,18 @@ public class JavafxApplication extends Application {
         new BusinessLogic(container);
 
         // Seed data
-        container.getConnectionService()
-            .add(new Connection("localhost"));
+        container.getProjectService()
+            .add(
+                new Project(
+                    new DatabaseConnection(
+                        new Connection("localhost"), 
+                        "ovaldo"
+                    ), 
+                    "project#1",
+                    "phinx",
+                    ""
+                )
+            );
 
         ViewLoader viewLoader = new ViewLoader();
         Gui gui = new JavafxGui(container, viewLoader);
@@ -54,18 +63,6 @@ public class JavafxApplication extends Application {
         JavafxLayout layout = new JavafxLayout(mainController.getBodyPane(), mainController.getSidePane());
 
         Router router = new Router(container.getActiveRoute());
-        router.connect(
-            "connection.index",
-            new ConnectionIndexRoute(gui.getConnectionKit(), layout)
-        );
-        router.connect(
-            "connection.view",
-            new ConnectionViewRoute(gui.getConnectionKit(), layout)
-        );
-        router.connect(
-            "database.index",
-            new DatabaseIndexRoute(gui.getDatabaseKit(), layout)
-        );
         router.connect(
             "table.index",
             new TableIndexRoute(gui.getTableKit(), layout)

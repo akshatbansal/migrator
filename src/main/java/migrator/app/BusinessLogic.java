@@ -12,8 +12,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import migrator.app.database.driver.DatabaseDriver;
 import migrator.app.domain.change.service.ChangeService;
-import migrator.app.domain.connection.model.Connection;
-import migrator.app.domain.database.model.DatabaseConnection;
 import migrator.app.domain.project.model.Project;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Index;
@@ -26,18 +24,6 @@ public class BusinessLogic {
 
     public BusinessLogic(Container container) {
         this.container = container;
-
-        this.container.getConnectionService()
-            .getConnected()
-            .addListener((ObservableValue<? extends Connection> observable, Connection oldValue, Connection newValue) -> {
-                this.onConnectConnection(newValue);
-            });
-
-        this.container.getDatabaseService()
-            .getConnected()
-            .addListener((ObservableValue<? extends DatabaseConnection> observable, DatabaseConnection oldValue, DatabaseConnection newValue) -> {
-                this.onDatabaseConnect(newValue);
-            });
 
         this.container.getTableService()
             .getSelected()
@@ -52,59 +38,6 @@ public class BusinessLogic {
             });
     }
 
-    protected void onConnectConnection(Connection connection) {
-        // TODO: disconect previous connection
-        if (connection == null) {
-            return;
-        }
-
-        DatabaseDriver databaseDriver  = this.container.getDatabaseDriverManager()
-            .createDriver(connection);
-        databaseDriver.connect();
-
-        List<DatabaseConnection> databases = new ArrayList<>();
-        for (String databaseName : databaseDriver.getDatabases()) {
-            databases.add(new DatabaseConnection(connection, databaseName));
-        }
-
-        this.container.getDatabaseService().setAll(databases);
-    }
-
-    protected void onDatabaseConnect(DatabaseConnection connection) {
-        // TODO: disconect previous connection
-        if (connection == null) {
-            return;
-        }
-
-        DatabaseDriver databaseDriver  = this.container.getDatabaseDriverManager()
-            .createDriver(connection);
-        databaseDriver.connect();
-
-        ChangeService changeService = this.container.getChangeService();
-        TableFactory tableFactory = this.container.getTableFactory();
-
-        String databaseDotString = connection.getConnection().getName() + "." + connection.getDatabase();
-        List<Table> tables = new ArrayList<>();
-        for (String tableName : databaseDriver.getTables()) {
-            TableChange tableChange = changeService.getTableChange(databaseDotString, tableName);
-            if (tableChange == null) {
-                tableChange = changeService.getTableChangeFactory()
-                    .createNotChanged(tableName);
-                changeService.addTableChange(databaseDotString, tableChange);
-            }
-            Table table = tableFactory.create(connection, tableName, tableChange);
-            tables.add(table);
-        }
-        List<TableChange> createdTableChanges = changeService.getCreatedTableChanges(databaseDotString);
-        for (TableChange tableChange : createdTableChanges) {
-            tables.add(
-                tableFactory.create(connection, tableChange.getOriginalName(), tableChange)
-            );
-        }
-        this.container.getTableService()
-            .setAll(tables);
-    }
-
     protected void onTableSelect(Table table) {
         System.out.println("on table");
         if (table == null) {
@@ -112,7 +45,7 @@ public class BusinessLogic {
         }
 
         DatabaseDriver databaseDriver = this.container.getDatabaseDriverManager()
-            .createDriver(table.getDatabase());
+            .createDriver(table.getProject().getDatabase());
 
         this.container.getIndexService()
             .setAll(
@@ -130,8 +63,37 @@ public class BusinessLogic {
     }
 
     public void onProjectOpen(Project project) {
-        this.container.getDatabaseService()
-            .connect(project.getDatabase());
+        // TODO: disconect previous connection
+        if (project == null) {
+            return;
+        }
+
+        DatabaseDriver databaseDriver  = this.container.getDatabaseDriverManager()
+            .createDriver(project.getDatabase());
+        databaseDriver.connect();
+
+        ChangeService changeService = this.container.getChangeService();
+        TableFactory tableFactory = this.container.getTableFactory();
+
+        List<Table> tables = new ArrayList<>();
+        for (String tableName : databaseDriver.getTables()) {
+            TableChange tableChange = changeService.getTableChange(project.getName(), tableName);
+            if (tableChange == null) {
+                tableChange = changeService.getTableChangeFactory()
+                    .createNotChanged(tableName);
+                changeService.addTableChange(project.getName(), tableChange);
+            }
+            Table table = tableFactory.create(project, tableName, tableChange);
+            tables.add(table);
+        }
+        List<TableChange> createdTableChanges = changeService.getCreatedTableChanges(project.getName());
+        for (TableChange tableChange : createdTableChanges) {
+            tables.add(
+                tableFactory.create(project, tableChange.getOriginalName(), tableChange)
+            );
+        }
+        this.container.getTableService()
+            .setAll(tables);
     }
 
     private Collection<Index> getTransformedIndexes(ObservableList<List<String>> rawIndexes) {

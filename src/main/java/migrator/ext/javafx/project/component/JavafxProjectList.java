@@ -66,4 +66,8 @@ public class JavafxProjectList extends ViewComponent implements ProjectList {
         this.projectService.select(newProject);
         this.activeRoute.changeTo("project.view", newProject);
     }
+
+    @FXML public void commit() {
+        this.activeRoute.changeTo("commit.view");
+    }
 }
