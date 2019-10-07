@@ -76,8 +76,10 @@ public class ColumnService {
 
     protected void register(Column column, Table table) {
         this.add(column);
-        String dbName = table.getDatabase().getConnection().getName() + "." + table.getDatabase().getDatabase();
-        TableChange tableChange = this.changeService.getTableChange(dbName, table.getOriginalName());
+        TableChange tableChange = this.changeService.getTableChange(
+            table.getProject().getName(),
+            table.getOriginalName()
+        );
         tableChange.getColumnsChanges().add(column.getChange());
     }
 
@@ -86,8 +88,10 @@ public class ColumnService {
     }
 
     protected void unregister(Column column, Table table) {
-        String dbName = table.getDatabase().getConnection().getName() + "." + table.getDatabase().getDatabase();
-        TableChange tableChange = this.changeService.getTableChange(dbName, table.getOriginalName());
+        TableChange tableChange = this.changeService.getTableChange(
+            table.getProject().getName(),
+            table.getOriginalName()
+        );
         tableChange.getColumnsChanges().remove(column.getChange());
         this.remove(column);
     }

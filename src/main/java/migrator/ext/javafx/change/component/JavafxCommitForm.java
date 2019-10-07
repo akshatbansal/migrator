@@ -52,6 +52,6 @@ public class JavafxCommitForm extends ViewComponent implements CommitForm {
     }
 
     @FXML public void close() {
-        this.activeRoute.changeTo("connection.index");
+        this.activeRoute.changeTo("project.index");
     }
 }

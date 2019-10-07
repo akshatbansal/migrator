@@ -1,20 +1,20 @@
 package migrator.app.domain.table.model;
 
 import javafx.beans.property.StringProperty;
-import migrator.app.domain.database.model.DatabaseConnection;
+import migrator.app.domain.project.model.Project;
 import migrator.app.migration.model.TableChange;
 import migrator.app.migration.model.TableProperty;
 
 public class Table {
     protected TableProperty originalTable;
     protected TableProperty changedTable;
-    protected DatabaseConnection database;
+    protected Project project;
     protected TableChange change;
 
-    public Table(DatabaseConnection database, TableProperty originalTable, TableProperty changedProperty, TableChange tableChange) {
+    public Table(Project project, TableProperty originalTable, TableProperty changedProperty, TableChange tableChange) {
         this.originalTable = originalTable;
         this.changedTable = changedProperty;
-        this.database = database;
+        this.project = project;
         this.change = tableChange;
 
         this.changedTable.nameProperty().addListener(
@@ -41,8 +41,8 @@ public class Table {
         return this.originalTable.getName();
     }
 
-    public DatabaseConnection getDatabase() {
-        return this.database;
+    public Project getProject() {
+        return this.project;
     }
 
     public String toString() {

@@ -59,8 +59,10 @@ public class TableService {
 
     public void register(Table table) {
         this.list.add(table);
-        String dbName = table.getDatabase().getConnection().getName() + "." + table.getDatabase().getDatabase();
-        this.changeService.addTableChange(dbName, table.getChange());
+        this.changeService.addTableChange(
+            table.getProject().getName(),
+            table.getChange()
+        );
     }
 
     public void setAll(List<Table> tables) {

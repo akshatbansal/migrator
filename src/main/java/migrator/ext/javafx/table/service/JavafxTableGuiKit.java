@@ -6,7 +6,6 @@ import migrator.app.domain.table.component.ColumnForm;
 import migrator.app.domain.table.component.ColumnList;
 import migrator.app.domain.table.component.IndexForm;
 import migrator.app.domain.table.component.IndexList;
-import migrator.app.domain.table.component.TableCard;
 import migrator.app.domain.table.component.TableForm;
 import migrator.app.domain.table.component.TableList;
 import migrator.app.domain.table.component.TableView;
@@ -19,7 +18,6 @@ import migrator.ext.javafx.table.component.JavafxColumnForm;
 import migrator.ext.javafx.table.component.JavafxColumnList;
 import migrator.ext.javafx.table.component.JavafxIndexForm;
 import migrator.ext.javafx.table.component.JavafxIndexList;
-import migrator.ext.javafx.table.component.JavafxTableCard;
 import migrator.ext.javafx.table.component.JavafxTableForm;
 import migrator.ext.javafx.table.component.JavafxTableList;
 import migrator.ext.javafx.table.component.JavafxTableView;
@@ -33,11 +31,6 @@ public class JavafxTableGuiKit implements TableGuiKit {
         this.gui = gui;
         this.viewLoader  = viewLoader;
         this.container = container;
-    }
-
-    @Override
-    public TableCard createCard(Table table) {
-        return new JavafxTableCard(this.viewLoader, table);
     }
 
     @Override
