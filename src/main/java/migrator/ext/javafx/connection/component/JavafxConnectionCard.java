@@ -15,12 +15,12 @@ public class JavafxConnectionCard extends ViewComponent implements ConnectionCar
     @FXML protected Text cardName;
 
     protected Connection connection;
-    protected Emitter emitter;
+    protected Emitter<Connection> emitter;
 
     public JavafxConnectionCard(Connection connection, ViewLoader viewLoader) {
         super(viewLoader);
         this.connection = connection;
-        this.emitter = new EventEmitter();
+        this.emitter = new EventEmitter<>();
 
         this.loadView("/layout/connection/card.fxml");
     }
@@ -38,12 +38,12 @@ public class JavafxConnectionCard extends ViewComponent implements ConnectionCar
     }
 
     @Override
-    public Subscription onConnect(Subscriber subscriber) {
+    public Subscription<Connection> onConnect(Subscriber<Connection> subscriber) {
         return this.emitter.on("connect", subscriber);
     }
 
     @Override
-    public Subscription onSelect(Subscriber subscriber) {
+    public Subscription<Connection> onSelect(Subscriber<Connection> subscriber) {
         return this.emitter.on("select", subscriber);
     }
 }

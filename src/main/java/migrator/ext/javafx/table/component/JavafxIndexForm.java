@@ -106,6 +106,7 @@ public class JavafxIndexForm extends ViewComponent implements IndexForm {
     @FXML public void delete() {
         if (this.index.getChangeCommand().isType(ChangeCommand.CREATE)) {
             this.indexService.remove(this.index);
+            this.close();
             return;
         }
         this.index.delete();

@@ -35,7 +35,8 @@ public class JavafxBreadcrumpsComponent extends ViewComponent implements Breadcr
         Iterator<Breadcrump> iterator = this.breadcrumpsList.iterator();
         while (iterator.hasNext()) {
             Breadcrump b = iterator.next();
-            Button button = new Button(b.getName());
+            Button button = new Button();
+            button.textProperty().bind(b.nameProperty());
             button.setMnemonicParsing(false);
             button.getStyleClass().add("btn-link");
             button.setOnAction((ActionEvent event) -> {

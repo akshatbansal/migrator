@@ -99,6 +99,7 @@ public class BusinessLogic {
     }
 
     protected void onTableSelect(Table table) {
+        System.out.println("on table");
         if (table == null) {
             return;
         }

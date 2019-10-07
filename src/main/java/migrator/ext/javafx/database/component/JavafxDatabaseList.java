@@ -1,6 +1,5 @@
 package migrator.ext.javafx.database.component;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,9 +11,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import migrator.app.Container;
 import migrator.app.Gui;
-import migrator.app.breadcrumps.ActiveRouteBreadcrump;
 import migrator.app.breadcrumps.BreadcrumpsComponent;
-import migrator.app.breadcrumps.VoidBreadcrump;
 import migrator.app.domain.connection.model.Connection;
 import migrator.app.domain.database.component.DatabaseCard;
 import migrator.app.domain.database.component.DatabaseList;
@@ -22,13 +19,12 @@ import migrator.app.domain.database.model.DatabaseConnection;
 import migrator.app.domain.database.service.DatabaseGuiKit;
 import migrator.app.domain.database.service.DatabaseService;
 import migrator.app.router.ActiveRoute;
-import migrator.app.router.Route;
 import migrator.lib.emitter.Subscription;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
 
 public class JavafxDatabaseList extends ViewComponent implements DatabaseList {
-    protected List<Subscription> subscriptions;
+    protected List<Subscription<DatabaseConnection>> subscriptions;
     protected DatabaseService databaseService;
     protected DatabaseGuiKit guiKit;
     protected ActiveRoute activeRoute;
@@ -45,14 +41,7 @@ public class JavafxDatabaseList extends ViewComponent implements DatabaseList {
         this.subscriptions = new LinkedList<>();
 
         Connection connectedConnection = container.getConnectionService().getConnected().get();
-        this.breadcrumpsController = gui.getBreadcrumps().createBreadcrumps(Arrays.asList(
-            new ActiveRouteBreadcrump(
-                "Home", 
-                new Route("connection.index"), 
-                this.activeRoute
-            ),
-            new VoidBreadcrump(connectedConnection.getName())
-        ));
+        this.breadcrumpsController = gui.getBreadcrumps().createBreadcrumps(connectedConnection);
 
         this.loadView("/layout/database/index.fxml");
 
@@ -62,7 +51,7 @@ public class JavafxDatabaseList extends ViewComponent implements DatabaseList {
     }
 
     protected void draw() {
-        for (Subscription s : this.subscriptions) {
+        for (Subscription<DatabaseConnection> s : this.subscriptions) {
             s.unsubscribe();
         }
         this.subscriptions.clear();
@@ -72,9 +61,9 @@ public class JavafxDatabaseList extends ViewComponent implements DatabaseList {
             DatabaseConnection connection = iterator.next();
             DatabaseCard card = this.guiKit.createCard(connection);
             this.subscriptions.add(
-                card.onConnect((Object o) -> {
-                    this.databaseService.connect((DatabaseConnection) o);
-                    this.activeRoute.changeTo("table.index", null);
+                card.onConnect((DatabaseConnection connectecDatabase) -> {
+                    this.databaseService.connect(connectecDatabase);
+                    this.activeRoute.changeTo("table.index");
                 })
             );
             this.databasesView.getChildren().add((Node) card.getContent());

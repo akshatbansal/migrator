@@ -1,11 +1,11 @@
 package migrator.lib.emitter;
 
-public class Subscription {
-    protected Emitter emitter;
+public class Subscription<T> {
+    protected Emitter<T> emitter;
     protected String eventName;
-    protected Subscriber subscriber;
+    protected Subscriber<T> subscriber;
 
-    public Subscription(Emitter emitter, String eventName, Subscriber subscriber) {
+    public Subscription(Emitter<T> emitter, String eventName, Subscriber<T> subscriber) {
         this.emitter = emitter;
         this.eventName = eventName;
         this.subscriber = subscriber;

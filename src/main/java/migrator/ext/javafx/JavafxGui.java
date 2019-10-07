@@ -23,8 +23,7 @@ public class JavafxGui implements Gui {
     protected ChangeGuiKit changeGuiKit;
     protected ActiveRoute activeRoute;
 
-    public JavafxGui(Container container) {
-        ViewLoader viewLoader = new ViewLoader();
+    public JavafxGui(Container container, ViewLoader viewLoader) {
         this.breadcrumpsGuiKit = new JavafxBreadcrumpsGuiKit(viewLoader, container);
         this.connectionGuiKit = new JavafxConnectionGuiKit(
             container,

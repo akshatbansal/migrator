@@ -24,7 +24,7 @@ import migrator.lib.emitter.Subscription;
 
 public class JavafxConnectionList extends ViewComponent implements ConnectionList {
     protected ConnectionGuiKit connectionGuiKit;
-    protected List<Subscription> subscriptions;
+    protected List<Subscription<Connection>> subscriptions;
     protected ConnectionService connectionService;
     protected ConnectionCard selectedCard;
     protected Map<Connection, ConnectionCard> cards;
@@ -50,7 +50,7 @@ public class JavafxConnectionList extends ViewComponent implements ConnectionLis
     }
 
     protected void draw() {
-        for (Subscription s : this.subscriptions) {
+        for (Subscription<Connection> s : this.subscriptions) {
             s.unsubscribe();
         }
         this.subscriptions.clear();
@@ -62,16 +62,15 @@ public class JavafxConnectionList extends ViewComponent implements ConnectionLis
             ConnectionCard card = this.connectionGuiKit.createCard(connection);
             this.cards.put(connection, card);
             this.subscriptions.add(
-                card.onSelect((Object o) -> {
-                    Connection c = (Connection) o;
-                    this.connectionService.select(c);
-                    this.activeRoute.changeTo("connection.view", c);
+                card.onSelect((Connection selectedConnection) -> {
+                    this.connectionService.select(selectedConnection);
+                    this.activeRoute.changeTo("connection.view", selectedConnection);
                 })
             );
             this.subscriptions.add(
-                card.onConnect((Object o) -> {
-                    this.connectionService.connect((Connection) o);
-                    this.activeRoute.changeTo("database.index", null);
+                card.onConnect((Connection connectedConnection) -> {
+                    this.connectionService.connect(connectedConnection);
+                    this.activeRoute.changeTo("database.index");
                 })
             );
             this.connectionsView.getChildren().add((Node) card.getContent());
@@ -118,6 +117,6 @@ public class JavafxConnectionList extends ViewComponent implements ConnectionLis
 
     @Override
     @FXML public void commit() {
-        this.activeRoute.changeTo("commit");
+        this.activeRoute.changeTo("commit.view");
     }
 }

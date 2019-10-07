@@ -49,7 +49,7 @@ public class JavafxColumnList extends ViewComponent implements ColumnList {
         this.columns.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         this.columns.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> obs, Number oldSelection, Number newSelection) -> {
             Column selectedColumn = this.columns.getSelectionModel().getSelectedItem();
-            this.activeRoute.changeTo("column.edit", selectedColumn);
+            this.activeRoute.changeTo("column.view", selectedColumn);
         });
         this.draw();
     }
@@ -61,6 +61,6 @@ public class JavafxColumnList extends ViewComponent implements ColumnList {
         this.columnService.register(newColumn);
         this.columnService.select(newColumn);
         this.columns.getSelectionModel().select(newColumn);
-        this.activeRoute.changeTo("column.edit", newColumn);
+        this.activeRoute.changeTo("column.view", newColumn);
     }
 }

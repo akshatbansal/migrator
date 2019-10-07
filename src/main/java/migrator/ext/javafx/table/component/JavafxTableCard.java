@@ -17,12 +17,12 @@ public class JavafxTableCard extends ViewComponent implements TableCard {
     @FXML protected VBox pane;
 
     protected Table table;
-    protected Emitter emitter;
+    protected Emitter<Table> emitter;
 
     public JavafxTableCard(ViewLoader viewLoader, Table table) {
         super(viewLoader);
         this.table = table;
-        this.emitter = new EventEmitter();
+        this.emitter = new EventEmitter<>();
 
         this.loadView("/layout/table/card.fxml");
     }
@@ -39,7 +39,7 @@ public class JavafxTableCard extends ViewComponent implements TableCard {
     }
 
     @Override
-    public Subscription onSelect(Subscriber subscriber) {
+    public Subscription<Table> onSelect(Subscriber<Table> subscriber) {
         return this.emitter.on("select", subscriber);
     }
 }

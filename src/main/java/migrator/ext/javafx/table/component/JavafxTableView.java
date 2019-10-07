@@ -1,7 +1,5 @@
 package migrator.ext.javafx.table.component;
 
-import java.util.Arrays;
-
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.VBox;
@@ -26,9 +24,7 @@ public class JavafxTableView extends ViewComponent implements TableView {
 
     public JavafxTableView(Table table, ViewLoader viewLoader, Container container, Gui gui) {
         super(viewLoader);
-        this.breadcrumpsComponent = gui.getBreadcrumps().createBreadcrumps(Arrays.asList(
-            
-        ));
+        this.breadcrumpsComponent = gui.getBreadcrumps().createBreadcrumps(table);
         this.tableGuiKit = gui.getTableKit();
         this.table = table;
 
@@ -41,9 +37,10 @@ public class JavafxTableView extends ViewComponent implements TableView {
 
         this.breadcrumpsContainer.getChildren().setAll((Node) this.breadcrumpsComponent.getContent());
 
-        this.body.getChildren().setAll(
-            (Node) this.tableGuiKit.createColumnList().getContent(),
-            (Node) this.tableGuiKit.createIndexList().getContent()
-        );
+        this.body.getChildren()
+            .setAll(
+                (Node) this.tableGuiKit.createColumnList().getContent(),
+                (Node) this.tableGuiKit.createIndexList().getContent()
+            );
     }
 }

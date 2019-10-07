@@ -39,10 +39,9 @@ public class JavafxCommitForm extends ViewComponent implements CommitForm {
 
     @Override
     @FXML public void commit() {
-        System.out.println("COMMIT");
         String outputName = this.output.getSelectionModel().getSelectedItem();
         if (outputName == null || outputName.isEmpty()) {
-            System.out.println("EMPTY OUTPUT");
+            System.out.println("OUTPUT TYPE IS NOT SELECTED");
             return;
         }
         MigrationGeneratorFactory generatorFactory = this.migration.getGenerator(outputName);
@@ -53,6 +52,6 @@ public class JavafxCommitForm extends ViewComponent implements CommitForm {
     }
 
     @FXML public void close() {
-        this.activeRoute.changeTo("connections");
+        this.activeRoute.changeTo("connection.index");
     }
 }

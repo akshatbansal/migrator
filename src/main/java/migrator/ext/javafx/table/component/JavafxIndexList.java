@@ -43,7 +43,7 @@ public class JavafxIndexList extends ViewComponent implements IndexList {
         this.indexes.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         this.indexes.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> obs, Number oldSelection, Number newSelection) -> {
             Index selectedIndex = this.indexes.getSelectionModel().getSelectedItem();
-            this.activeRoute.changeTo("index.edit", selectedIndex);
+            this.activeRoute.changeTo("index.view", selectedIndex);
         });
         this.draw();
     }
@@ -57,6 +57,6 @@ public class JavafxIndexList extends ViewComponent implements IndexList {
         if (this.indexes != null) {
             this.indexes.getSelectionModel().select(newIndex);
         }
-        this.activeRoute.changeTo("index.edit", newIndex);
+        this.activeRoute.changeTo("index.view", newIndex);
     }
 }

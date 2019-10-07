@@ -15,20 +15,32 @@ public class JavafxLayout {
 
     public void renderSide(Node node) {
         if (node == null) {
-            this.side.getChildren().clear();
+            this.clearSide();
             return;
         }
         this.side.getChildren()
             .setAll(node);
     }
 
+    public void renderSide(GuiNode node) {
+        this.renderSide((Node) node.getContent());
+    }
+
+    public void clearSide() {
+        this.side.getChildren().clear();
+    }
+
     public void renderBody(Node node) {
         if (node == null) {
-            this.side.getChildren().clear();
+            this.clearBody();
             return;
         }
         this.body.getChildren()
             .setAll(node);
+    }
+
+    public void clearBody() {
+        this.body.getChildren().clear();
     }
 
     public void renderBody(GuiNode node) {

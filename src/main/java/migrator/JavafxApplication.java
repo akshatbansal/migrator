@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.Parent;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import migrator.app.Bootstrap;
 import migrator.app.BusinessLogic;
@@ -12,12 +12,15 @@ import migrator.app.Gui;
 import migrator.app.Router;
 import migrator.app.domain.connection.model.Connection;
 import migrator.ext.javafx.JavafxGui;
+import migrator.ext.javafx.MainController;
+import migrator.ext.javafx.change.route.CommitViewRoute;
 import migrator.ext.javafx.component.JavafxLayout;
 import migrator.ext.javafx.component.ViewLoader;
 import migrator.ext.javafx.connection.route.ConnectionIndexRoute;
 import migrator.ext.javafx.connection.route.ConnectionViewRoute;
 import migrator.ext.javafx.database.route.DatabaseIndexRoute;
-import migrator.ext.javafx.renderer.PaneRenderer;
+import migrator.ext.javafx.table.route.ColumnViewRoute;
+import migrator.ext.javafx.table.route.IndexViewRoute;
 import migrator.ext.javafx.table.route.TableIndexRoute;
 import migrator.ext.javafx.table.route.TableViewRoute;
 import migrator.ext.mysql.MysqlExtension;
@@ -25,8 +28,7 @@ import migrator.ext.phinx.PhinxExtension;
 import migrator.ext.php.PhpExtension;
 import migrator.app.Container;
 
-public class App extends Application {
-
+public class JavafxApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Bootstrap bootstrap = new Bootstrap(
@@ -43,14 +45,10 @@ public class App extends Application {
         container.getConnectionService()
             .add(new Connection("localhost"));
 
-        Gui gui = new JavafxGui(container);
-
         ViewLoader viewLoader = new ViewLoader();
-        MainController mainController = new MainController(container, gui);
-        Parent root = (Parent) viewLoader.load(mainController, "/layout/main.fxml");
+        Gui gui = new JavafxGui(container, viewLoader);
+        MainController mainController = new MainController(viewLoader);
 
-        PaneRenderer bodyRenderer = new PaneRenderer(mainController.getBodyPane());
-        PaneRenderer sideRenderer = new PaneRenderer(mainController.getSidePane());
         JavafxLayout layout = new JavafxLayout(mainController.getBodyPane(), mainController.getSidePane());
 
         Router router = new Router(container.getActiveRoute());
@@ -72,12 +70,24 @@ public class App extends Application {
         );
         router.connect(
             "table.view",
-            new TableViewRoute(gui.getTableKit(), bodyRenderer, sideRenderer)
+            new TableViewRoute(gui.getTableKit(), layout)
+        );
+        router.connect(
+            "column.view",
+            new ColumnViewRoute(gui.getTableKit(), layout)
+        );
+        router.connect(
+            "index.view",
+            new IndexViewRoute(gui.getTableKit(), layout)
+        );
+        router.connect(
+            "commit.view",
+            new CommitViewRoute(gui.getChangeKit(), layout)
         );
 
         container.getActiveRoute().changeTo("connection.index");
 
-        Scene scene = new Scene(root, 1280, 720);
+        Scene scene = new Scene((Pane) mainController.getContent(), 1280, 720);
         scene.getStylesheets().addAll(
             getClass().getResource("/styles/layout.css").toExternalForm(),
             getClass().getResource("/styles/text.css").toExternalForm(),
