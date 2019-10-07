@@ -2,7 +2,6 @@ package migrator.ext.javafx.database.route;
 
 import java.util.List;
 
-import javafx.scene.Node;
 import migrator.app.domain.database.model.DatabaseConnection;
 import migrator.app.domain.database.service.DatabaseGuiKit;
 import migrator.app.router.RouteConnection;
@@ -19,9 +18,9 @@ public class DatabaseIndexRoute implements RouteConnection<List<DatabaseConnecti
 
     @Override
     public void show(List<DatabaseConnection> routeData) {
-        this.layout.render(
-            (Node) this.databaseGuiKit.createList().getContent(), 
-            null
+        this.layout.renderBody(
+            this.databaseGuiKit.createList()
         );
+        this.layout.clearSide();
     }
 }

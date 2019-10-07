@@ -1,6 +1,5 @@
 package migrator.ext.javafx.connection.route;
 
-import javafx.scene.Node;
 import migrator.app.domain.connection.model.Connection;
 import migrator.app.domain.connection.service.ConnectionGuiKit;
 import migrator.app.router.RouteConnection;
@@ -18,7 +17,7 @@ public class ConnectionViewRoute implements RouteConnection<Connection> {
     @Override
     public void show(Connection routeData) {
         this.layout.renderSide(
-            (Node) this.connectionGuiKit.createForm(routeData).getContent()
+            this.connectionGuiKit.createForm(routeData)
         );
     }
 }

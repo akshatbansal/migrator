@@ -16,8 +16,10 @@ public class TableViewRoute implements RouteConnection<Table> {
 
     @Override
     public void show(Table routeData) {
-        this.layout.render(
-            this.tableGuiKit.createView(routeData),
+        this.layout.renderBody(
+            this.tableGuiKit.createView(routeData)
+        );
+        this.layout.renderSide(
             this.tableGuiKit.createForm(routeData)
         );
     }

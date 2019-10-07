@@ -6,60 +6,68 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
 
+import migrator.app.Bootstrap;
 import migrator.app.BusinessLogic;
+import migrator.app.ConfigContainer;
+import migrator.app.Container;
 import migrator.app.domain.connection.model.Connection;
 import migrator.app.domain.database.model.DatabaseConnection;
+import migrator.app.domain.database.service.DatabaseService;
+import migrator.app.domain.table.service.TableService;
 import migrator.mock.FakeDatabaseDriver;
 import migrator.mock.FakeDatabaseDriverManager;
+import migrator.mock.DataExtension;
 
 public class ConnectionIntegrationTest {
-    @BeforeEach
-    public void setUp() {}
+    protected Container container;
 
-    @Test public void testSetDatabaseListOnConnectionConnect() {
-        BusinessLogic businessLogic = new BusinessLogic(
-            new FakeDatabaseDriverManager(
-                new FakeDatabaseDriver(
-                    Arrays.asList("test_db"),
-                    Arrays.asList("test_table"),
-                    Arrays.asList(
-                        Arrays.asList("column")
-                    ),
-                    Arrays.asList(
-                        Arrays.asList("index")
+    @BeforeEach
+    public void setUp() {
+        ConfigContainer dataExtensionConfig = new ConfigContainer();
+        dataExtensionConfig.databaseDriverManagerConfig()
+            .set(
+                new FakeDatabaseDriverManager(
+                    new FakeDatabaseDriver(
+                        Arrays.asList("test_db"),
+                        Arrays.asList("test_table"),
+                        Arrays.asList(
+                            Arrays.asList("column")
+                        ),
+                        Arrays.asList(
+                            Arrays.asList("index")
+                        )
                     )
                 )
-            )
-        );
+            );
 
-        businessLogic.getConnection().connect(new Connection("localhost"));
-        assertEquals(1, businessLogic.getDatabase().getList().size());
-        assertEquals("test_db", businessLogic.getDatabase().getList().get(0).getDatabase());
+        Bootstrap bootstrap = new Bootstrap(
+            new DataExtension(dataExtensionConfig)
+        );
+        this.container = bootstrap.getContainer();
+    }
+
+    @Test public void testSetDatabaseListOnConnectionConnect() {
+        new BusinessLogic(this.container);
+        this.container.getConnectionService()
+            .connect(new Connection("localhost"));
+        
+        DatabaseService databaseService = this.container.getDatabaseService();
+        assertEquals(1, databaseService.getList().size());
+        assertEquals("test_db", databaseService.getList().get(0).getDatabase());
     }
 
     @Test public void testSetTableListOnDatabaseConnect() {
-        BusinessLogic businessLogic = new BusinessLogic(
-            new FakeDatabaseDriverManager(
-                new FakeDatabaseDriver(
-                    Arrays.asList("test_db"),
-                    Arrays.asList("test_table"),
-                    Arrays.asList(
-                        Arrays.asList("column")
-                    ),
-                    Arrays.asList(
-                        Arrays.asList("index")
-                    )
+        new BusinessLogic(this.container);
+        this.container.getDatabaseService()
+            .connect(
+                new DatabaseConnection(
+                    new Connection("localhost"),
+                    "test_db"
                 )
-            )
-        );
+            );
 
-        businessLogic.getDatabase().connect(
-            new DatabaseConnection(
-                new Connection("localhost"),
-                "test_db"
-            )
-        );
-        assertEquals(1, businessLogic.getTable().getList().size());
-        assertEquals("test_table", businessLogic.getTable().getList().get(0).getName());
+        TableService tableService = this.container.getTableService();
+        assertEquals(1, tableService.getList().size());
+        assertEquals("test_table", tableService.getList().get(0).getName());
     }
 }

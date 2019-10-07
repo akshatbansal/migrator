@@ -1,5 +1,7 @@
 package migrator.app;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import migrator.app.code.CodeManager;
@@ -23,9 +25,7 @@ public class Bootstrap {
     protected List<Extension> extensions;
     protected Container container;
 
-    public Bootstrap(
-        List<Extension> extensions
-    ) {
+    public Bootstrap(List<Extension> extensions) {
         ConfigContainer configContainer = new ConfigContainer();
         this.initialize(configContainer);
         
@@ -34,6 +34,14 @@ public class Bootstrap {
         }
 
         this.container = new Container(configContainer);
+    }
+
+    public Bootstrap(Extension ... extensions) {
+        this(Arrays.asList(extensions));
+    }
+
+    public Bootstrap() {
+        this(new ArrayList<>());
     }
 
     protected void initialize(ConfigContainer config) {

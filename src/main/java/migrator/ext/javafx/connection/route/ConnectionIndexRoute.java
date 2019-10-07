@@ -1,7 +1,6 @@
 package migrator.ext.javafx.connection.route;
 
 import javafx.collections.ObservableList;
-import javafx.scene.Node;
 import migrator.app.domain.connection.model.Connection;
 import migrator.app.domain.connection.service.ConnectionGuiKit;
 import migrator.app.router.RouteConnection;
@@ -18,9 +17,9 @@ public class ConnectionIndexRoute implements RouteConnection<ObservableList<Conn
 
     @Override
     public void show(ObservableList<Connection> routeData) {
-        this.layout.render(
-            (Node) this.connectionGuiKit.createList(routeData).getContent(),
-            null
+        this.layout.renderBody(
+            this.connectionGuiKit.createList(routeData)
         );
+        this.layout.clearSide();
     }
 }

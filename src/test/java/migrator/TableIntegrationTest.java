@@ -7,74 +7,84 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.Arrays;
 
 import migrator.app.domain.table.model.Table;
+import migrator.app.domain.table.service.ColumnService;
+import migrator.app.domain.table.service.IndexService;
+import migrator.app.Bootstrap;
 import migrator.app.BusinessLogic;
+import migrator.app.ConfigContainer;
+import migrator.app.Container;
 import migrator.app.domain.connection.model.Connection;
 import migrator.app.domain.connection.service.ConnectionService;
 import migrator.app.domain.database.model.DatabaseConnection;
 import migrator.mock.FakeDatabaseDriver;
 import migrator.mock.FakeDatabaseDriverManager;
+import migrator.mock.DataExtension;
 
 public class TableIntegrationTest {
-    @BeforeEach
-    public void setUp() {}
+    protected Container container;
 
-    @Test public void testSetColumnsOnTableSelect() {
-        BusinessLogic businessLogic = new BusinessLogic(
-            new FakeDatabaseDriverManager(
-                new FakeDatabaseDriver(
-                    Arrays.asList("test_db"),
-                    Arrays.asList("test_table"),
-                    Arrays.asList(
-                        Arrays.asList("column", "string", "NO", "")
-                    ),
-                    Arrays.asList(
-                        Arrays.asList("index", "id")
+    @BeforeEach
+    public void setUp() {
+        ConfigContainer dataExtensionConfig = new ConfigContainer();
+        dataExtensionConfig.databaseDriverManagerConfig()
+            .set(
+                new FakeDatabaseDriverManager(
+                    new FakeDatabaseDriver(
+                        Arrays.asList("test_db"),
+                        Arrays.asList("test_table"),
+                        Arrays.asList(
+                            Arrays.asList("column_name", "string", "NO", "")
+                        ),
+                        Arrays.asList(
+                            Arrays.asList("index_name", "id")
+                        )
                     )
                 )
-            )
-        );
+            );
 
-        businessLogic.getTable().select(
-            businessLogic.getTable().getFactory()
-                .createNotChanged(
-                    new DatabaseConnection(
-                        new Connection("localhost"),
-                        "test_db"
-                    ),
-                    "test_table"
-                )
+        Bootstrap bootstrap = new Bootstrap(
+            new DataExtension(dataExtensionConfig)
         );
-        assertEquals(1, businessLogic.getColumn().getList().size());
-        assertEquals("column", businessLogic.getColumn().getList().get(0).getName());
+        this.container = bootstrap.getContainer();
+    }
+
+    @Test public void testSetColumnsOnTableSelect() {
+        new BusinessLogic(this.container);
+
+        this.container.getTableService()
+            .select(
+                this.container.getTableFactory()
+                    .createNotChanged(
+                        new DatabaseConnection(
+                            new Connection("localhost"),
+                            "test_db"
+                        ),
+                        "test_table"
+                    )
+            );
+            
+        ColumnService columnService = this.container.getColumnService();
+        assertEquals(1, columnService.getList().size());
+        assertEquals("column_name", columnService.getList().get(0).getName());
     }
 
     @Test public void testSetIndexesOnTableSelect() {
-        BusinessLogic businessLogic = new BusinessLogic(
-            new FakeDatabaseDriverManager(
-                new FakeDatabaseDriver(
-                    Arrays.asList("test_db"),
-                    Arrays.asList("test_table"),
-                    Arrays.asList(
-                        Arrays.asList("column", "string", "NO", "")
-                    ),
-                    Arrays.asList(
-                        Arrays.asList("index_name", "id")
-                    )
-                )
-            )
-        );
+        new BusinessLogic(this.container);
 
-        businessLogic.getTable().select(
-            businessLogic.getTable().getFactory()
-                .createNotChanged(
-                    new DatabaseConnection(
-                        new Connection("localhost"),
-                        "test_db"
-                    ),
-                    "test_table"
-                )
-        );
-        assertEquals(1, businessLogic.getIndex().getList().size());
-        assertEquals("index_name", businessLogic.getIndex().getList().get(0).getName());
+        this.container.getTableService()
+            .select(
+                this.container.getTableFactory()
+                    .createNotChanged(
+                        new DatabaseConnection(
+                            new Connection("localhost"),
+                            "test_db"
+                        ),
+                        "test_table"
+                    )
+            );
+
+        IndexService indexService = this.container.getIndexService();
+        assertEquals(1, indexService.getList().size());
+        assertEquals("index_name", indexService.getList().get(0).getName());
     }
 }
