@@ -11,7 +11,8 @@ public class TableCardFactory implements CardFactory<Table> {
             value,
             value.nameProperty(),
             "edit",
-            null
+            null,
+            value.getChange().getCommand().typeProperty()
         );
     }
 }

@@ -11,7 +11,8 @@ public class ProjectCardFactory implements CardFactory<Project> {
             value,
             value.nameProperty(),
             "open",
-            "edit"
+            "edit",
+            null
         );
     }
 }

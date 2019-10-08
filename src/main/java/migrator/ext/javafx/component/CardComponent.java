@@ -54,6 +54,14 @@ public class CardComponent<T> extends ViewComponent {
             });
             this.buttonBox.getChildren().add(primaryButton);
         }
+
+        if (this.card.changeTypeProperty() != null) {
+            this.card.changeTypeProperty()
+                .addListener((obs, oldValue, newValue) -> {
+                    this.changeTo(newValue);
+                });
+            this.changeTo(this.card.changeTypeProperty().get());
+        }
     }
 
     public Subscription<Card<T>> onPrimary(Subscriber<Card<T>> subscriber) {
@@ -70,5 +78,14 @@ public class CardComponent<T> extends ViewComponent {
 
     public void blur() {
         this.pane.getStyleClass().remove("card--active");
+    }
+
+    public void changeTo(String changeType) {
+        this.pane.getStyleClass().remove("card--create");
+        this.pane.getStyleClass().remove("card--update");
+        this.pane.getStyleClass().remove("card--delete");
+        if (changeType != null) {
+            this.pane.getStyleClass().add("card--" + changeType);
+        }
     }
 }
