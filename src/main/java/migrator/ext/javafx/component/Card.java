@@ -7,17 +7,19 @@ public class Card<T> {
     protected StringProperty name;
     protected StringProperty primary;
     protected StringProperty secondary;
+    protected StringProperty changeType;
     protected T value;
 
-    public Card(T value, StringProperty name, StringProperty primary, StringProperty secondary) {
+    public Card(T value, StringProperty name, StringProperty primary, StringProperty secondary, StringProperty changeType) {
         this.value = value;
         this.name = name;
         this.primary = primary;
         this.secondary = secondary;
+        this.changeType = changeType;
     }
 
-    public Card(T value, StringProperty name, String primary, String secondary) {
-        this(value, name, new SimpleStringProperty(primary), new SimpleStringProperty(secondary));
+    public Card(T value, StringProperty name, String primary, String secondary, StringProperty changeType) {
+        this(value, name, new SimpleStringProperty(primary), new SimpleStringProperty(secondary), changeType);
     }
 
     public StringProperty nameProperty() {
@@ -30,6 +32,10 @@ public class Card<T> {
 
     public StringProperty secondaProperty() {
         return this.secondary;
+    }
+
+    public StringProperty changeTypeProperty() {
+        return this.changeType;
     }
 
     public T getValue() {

@@ -85,7 +85,12 @@ public class JavafxApplication extends Application {
         );
         router.connect(
             "project.index",
-            new ProjectIndexRoute(layout, gui.getProject())
+            new ProjectIndexRoute(
+                layout,
+                gui.getProject(),
+                container.getProjectService(),
+                container.getActiveRoute()
+            )
         );
         router.connect(
             "project.view",

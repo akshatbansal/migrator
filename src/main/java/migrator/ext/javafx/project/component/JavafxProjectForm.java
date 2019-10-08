@@ -93,7 +93,7 @@ public class JavafxProjectForm extends ViewComponent implements ProjectForm {
 
     @Override
     @FXML public void delete() {
-        // TODO Auto-generated method stub
-        
+        this.projectService.remove(this.project);
+        this.close();
     }
 }
