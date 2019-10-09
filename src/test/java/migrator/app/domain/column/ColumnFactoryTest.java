@@ -1,4 +1,4 @@
-package migrator.app.domain.table.service;
+package migrator.app.domain.column.service;
 
 import org.junit.jupiter.api.Test;
 
@@ -15,13 +15,13 @@ public class ColumnFactoryTest {
         this.columnFactory = new ColumnFactory();
     }
 
-    @Test public void testCreateNotChangedHasNullValuesInChangeCommand() {
+    @Test public void testCreateNotChangedHasChangedValuesEqualToOriginal() {
         Column column = this.columnFactory.createNotChanged("column_name", "format", "default", true);
     
-        assertNull(column.getChange().getName());
-        assertNull(column.getChange().getFormat());
-        assertNull(column.getChange().getDefaultValue());
-        assertNull(column.getChange().isNullEnabled());
+        assertEquals("column_name", column.getChange().getName());
+        assertEquals("format", column.getChange().getFormat());
+        assertEquals("default", column.getChange().getDefaultValue());
+        assertEquals(true, column.getChange().isNullEnabled());
     }
 
     @Test public void testCreateNotChangedIsNoneType() {

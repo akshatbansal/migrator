@@ -1,4 +1,4 @@
-package migrator.app.domain.table.service;
+package migrator.app.domain.index.service;
 
 import org.junit.jupiter.api.Test;
 

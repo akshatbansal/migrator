@@ -121,26 +121,32 @@ public class Bootstrap {
                 config.projectServiceConfig().get()
             )
         );
+        config.columnActiveStateConfig().set(
+            new ColumnActiveState(
+                columnRepository, 
+                tableActiveState
+            )
+        );
         config.columnServiceConfig().set(
             new SimpleColumnService(
                 columnRepository,
-                new ColumnActiveState(
-                    columnRepository, 
-                    tableActiveState
-                ),
+                config.columnActiveStateConfig().get(),   
                 config.columnFactoryConfig().get(),
                 config.tableServiceConfig().get(),
                 config.databaseDriverManagerConfig().get()
+            )
+        );
+        config.indexActiveStateConfig().set(
+            new IndexActiveState(
+                indexRepository,
+                tableActiveState
             )
         );
         config.indexServiceConfig().set(
             new SimpleIndexService(
                 config.indexFactoryConfig().get(),
                 indexRepository,
-                new IndexActiveState(
-                    indexRepository,
-                    tableActiveState
-                ),
+                config.indexActiveStateConfig().get(),
                 config.tableServiceConfig().get(),
                 config.databaseDriverManagerConfig().get()
             )

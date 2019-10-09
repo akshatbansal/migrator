@@ -82,4 +82,10 @@ public class SimpleActiveState<T> implements ActiveState<T> {
     public void remove(T item) {
         this.list.remove(item);
     }
+
+    @Override
+    public void addAndActivate(T item) {
+        this.add(item);
+        this.activate(item);
+    }
 }

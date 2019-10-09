@@ -1,12 +1,14 @@
 package migrator.app;
 
 import migrator.app.database.driver.DatabaseDriverManager;
+import migrator.app.domain.column.service.ColumnActiveState;
 import migrator.app.domain.column.service.ColumnFactory;
 import migrator.app.domain.column.service.ColumnService;
 import migrator.app.domain.connection.service.ConnectionFactory;
 import migrator.app.domain.connection.service.ConnectionService;
 import migrator.app.domain.database.service.DatabaseFactory;
 import migrator.app.domain.database.service.DatabaseService;
+import migrator.app.domain.index.service.IndexActiveState;
 import migrator.app.domain.index.service.IndexFactory;
 import migrator.app.domain.index.service.IndexService;
 import migrator.app.domain.project.service.ProjectFactory;
@@ -87,5 +89,13 @@ public class Container {
 
     public ProjectService getProjectService() {
         return this.config.projectServiceConfig().get();
+    }
+
+    public ColumnActiveState getColumnActiveState() {
+        return this.config.columnActiveStateConfig().get();
+    }
+
+    public IndexActiveState getIndexActiveState() {
+        return this.config.indexActiveStateConfig().get();
     }
 }

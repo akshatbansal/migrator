@@ -102,21 +102,6 @@ public class SimpleIndexService implements IndexService {
     }
 
     @Override
-    public IndexFactory getFactory() {
-        return this.indexFactory;
-    }
-
-    @Override
-    public ActiveState<Index> getActiveState() {
-        return this.activeState;
-    }
-
-    @Override
-    public IndexRepository getRepository() {
-        return this.indexRepository;
-    }
-
-    @Override
     public void add(Index index) {
         this.activeState.add(index);
     }

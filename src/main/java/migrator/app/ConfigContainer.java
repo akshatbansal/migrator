@@ -4,12 +4,14 @@ import migrator.app.code.CodeConfig;
 import migrator.app.code.CodeManager;
 import migrator.app.database.driver.DatabaseDriverConfig;
 import migrator.app.database.driver.DatabaseDriverManager;
+import migrator.app.domain.column.service.ColumnActiveState;
 import migrator.app.domain.column.service.ColumnFactory;
 import migrator.app.domain.column.service.ColumnService;
 import migrator.app.domain.connection.service.ConnectionFactory;
 import migrator.app.domain.connection.service.ConnectionService;
 import migrator.app.domain.database.service.DatabaseFactory;
 import migrator.app.domain.database.service.DatabaseService;
+import migrator.app.domain.index.service.IndexActiveState;
 import migrator.app.domain.index.service.IndexFactory;
 import migrator.app.domain.index.service.IndexService;
 import migrator.app.domain.project.service.ProjectFactory;
@@ -22,28 +24,31 @@ import migrator.app.router.ActiveRoute;
 import migrator.lib.config.ValueConfig;
 
 public class ConfigContainer {
-    protected MigrationConfig migrationConfig;
-    protected DatabaseDriverConfig databaseDriverConfig;
-    protected CodeConfig codeConfig;
+    private MigrationConfig migrationConfig;
+    private DatabaseDriverConfig databaseDriverConfig;
+    private CodeConfig codeConfig;
 
-    protected ValueConfig<ActiveRoute> activeRoute;
-    protected ValueConfig<Migration> migration;
-    protected ValueConfig<DatabaseDriverManager> databaseDriverManager;
-    protected ValueConfig<CodeManager> codeManager;
+    private ValueConfig<ActiveRoute> activeRoute;
+    private ValueConfig<Migration> migration;
+    private ValueConfig<DatabaseDriverManager> databaseDriverManager;
+    private ValueConfig<CodeManager> codeManager;
 
-    protected ValueConfig<ConnectionFactory> connectionFactory;
-    protected ValueConfig<DatabaseFactory> databaseFactory;
-    protected ValueConfig<ColumnFactory> columnFactory;
-    protected ValueConfig<IndexFactory> indexFactory;
-    protected ValueConfig<TableFactory> tableFactory;
-    protected ValueConfig<ProjectFactory> projectFactory;
+    private ValueConfig<ConnectionFactory> connectionFactory;
+    private ValueConfig<DatabaseFactory> databaseFactory;
+    private ValueConfig<ColumnFactory> columnFactory;
+    private ValueConfig<IndexFactory> indexFactory;
+    private ValueConfig<TableFactory> tableFactory;
+    private ValueConfig<ProjectFactory> projectFactory;
 
-    protected ValueConfig<ConnectionService> connectionService;
-    protected ValueConfig<DatabaseService> databaseService;
-    protected ValueConfig<TableService> tableService;
-    protected ValueConfig<ColumnService> columnService;
-    protected ValueConfig<IndexService> indexService;
-    protected ValueConfig<ProjectService> projectService;
+    private ValueConfig<ConnectionService> connectionService;
+    private ValueConfig<DatabaseService> databaseService;
+    private ValueConfig<TableService> tableService;
+    private ValueConfig<ColumnService> columnService;
+    private ValueConfig<IndexService> indexService;
+    private ValueConfig<ProjectService> projectService;
+
+    private ValueConfig<ColumnActiveState> columnActiveState;
+    private ValueConfig<IndexActiveState> indexActiveState;
 
     public ConfigContainer() {
         this.migrationConfig = new MigrationConfig();
@@ -68,6 +73,9 @@ public class ConfigContainer {
         this.columnService = new ValueConfig<>();
         this.indexService = new ValueConfig<>();
         this.projectService = new ValueConfig<>();
+
+        this.columnActiveState = new ValueConfig<>();
+        this.indexActiveState = new ValueConfig<>();
     }
 
     public MigrationConfig getMigrationConfig() {
@@ -144,5 +152,13 @@ public class ConfigContainer {
 
     public ValueConfig<ProjectService> projectServiceConfig() {
         return this.projectService;
+    }
+
+    public ValueConfig<ColumnActiveState> columnActiveStateConfig() {
+        return this.columnActiveState;
+    }
+
+    public ValueConfig<IndexActiveState> indexActiveStateConfig() {
+        return this.indexActiveState;
     }
 }

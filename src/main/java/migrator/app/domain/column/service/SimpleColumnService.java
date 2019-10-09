@@ -93,21 +93,6 @@ public class SimpleColumnService implements ColumnService {
     }
 
     @Override
-    public ActiveState<Column> getActiveState() {
-        return this.columnActiveState;
-    }
-
-    @Override
-    public ColumnFactory getFactory() {
-        return this.columnFactory;
-    }
-
-    @Override
-    public Repository<Column> getRepository() {
-        return this.columnRepository;
-    }
-
-    @Override
     public void activate(Column column) {
         this.columnActiveState.activate(column);
     }
