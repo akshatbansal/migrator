@@ -6,15 +6,15 @@ import migrator.app.migration.model.ChangeCommand;
 import migrator.app.migration.model.IndexChange;
 import migrator.app.migration.model.IndexProperty;
 
-public class Index implements Changable {
+public class Index implements Changable, IndexChange {
     protected IndexProperty originalIndex;
     protected IndexProperty changedIndex;
-    protected IndexChange change;
+    protected ChangeCommand changeCommand;
 
-    public Index(IndexProperty originalIndex, IndexProperty changedIndex, IndexChange indexChange) {
+    public Index(IndexProperty originalIndex, IndexProperty changedIndex, ChangeCommand changeCommand) {
         this.originalIndex = originalIndex;
         this.changedIndex = changedIndex;
-        this.change = indexChange;
+        this.changeCommand = changeCommand;
     }
 
     public StringProperty nameProperty() {
@@ -60,11 +60,11 @@ public class Index implements Changable {
 
     @Override
     public ChangeCommand getChangeCommand() {
-        return this.change.getCommand();
+        return this.changeCommand;
     }
 
     public IndexChange getChange() {
-        return this.change;
+        return this;
     }
 
     protected void fillColumnsTo(int index) {
@@ -80,10 +80,25 @@ public class Index implements Changable {
     public void restore() {
         this.changedIndex.nameProperty().set(this.originalIndex.getName());
         this.changedIndex.columnsProperty().setAll(this.originalColumnsProperty());
-        this.change.clear();
+        this.changeCommand.setType(ChangeCommand.NONE);
     }
 
     public StringProperty changeTypeProperty() {
         return this.getChangeCommand().typeProperty();
+    }
+
+    @Override
+    public ChangeCommand getCommand() {
+        return this.changeCommand;
+    }
+
+    @Override
+    public void addColumn(String columnName) {
+        this.changedIndex.addColumn(columnName);
+    }
+
+    @Override
+    public IndexProperty getOriginal() {
+        return this.originalIndex;
     }
 }

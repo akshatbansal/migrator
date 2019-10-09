@@ -15,7 +15,6 @@
                         <Text text="Projects" styleClass="title" />
                     </HBox>
                     <Button text="+" onAction="#newProject" styleClass="btn-primary" />
-                    <Button text="+" onAction="#commit" styleClass="btn-secondary" />
                 </HBox>
                 <VBox fx:id="projectCards"></VBox>
             </VBox>

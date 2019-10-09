@@ -67,7 +67,7 @@ public class JavafxTableForm extends ViewComponent implements TableForm {
     @FXML public void delete() {
         if (this.table.getChange().getCommand().isType(ChangeCommand.CREATE)) {
             this.tableService.remove(this.table);
-            this.activeRoute.changeTo("table.index", this.table.getProject());
+            this.activeRoute.changeTo("table.index");
             return;
         }
         this.table.getChange().getCommand().setType(ChangeCommand.DELETE);

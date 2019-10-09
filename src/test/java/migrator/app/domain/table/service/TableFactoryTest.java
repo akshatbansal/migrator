@@ -2,12 +2,13 @@ package migrator.app.domain.table.service;
 
 import org.junit.jupiter.api.Test;
 
+import migrator.app.domain.column.service.ColumnRepository;
 import migrator.app.domain.connection.model.Connection;
 import migrator.app.domain.database.model.DatabaseConnection;
+import migrator.app.domain.index.service.IndexRepository;
 import migrator.app.domain.project.model.Project;
 import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableFactory;
-import migrator.app.domain.change.service.TableChangeFactory;
 
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,7 +19,8 @@ public class TableFactoryTest {
     @BeforeEach
     public void setUp() {
         this.tableFactory = new TableFactory(
-            new TableChangeFactory()
+            new ColumnRepository(),
+            new IndexRepository()
         );
     }
 
@@ -73,7 +75,7 @@ public class TableFactoryTest {
         assertEquals("table_name", table.getOriginalName());
     }
 
-    @Test public void testCreateNotChangedHasChangesSetToNull() {
+    @Test public void testCreateNotChangedHasChangesEqualToOriginal() {
         Table table = this.tableFactory.createNotChanged(
             new Project(
                 new DatabaseConnection(
@@ -87,7 +89,7 @@ public class TableFactoryTest {
             "test_table"
         );
     
-        assertNull(table.getChange().getName());
+        assertEquals("test_table", table.getChange().getName());
     }
 
     @Test public void testCreateWithCreateChangeByNameHasNameSet() {

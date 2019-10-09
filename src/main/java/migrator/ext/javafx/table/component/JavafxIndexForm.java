@@ -10,11 +10,11 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import migrator.app.Container;
+import migrator.app.domain.column.service.ColumnActiveState;
+import migrator.app.domain.index.service.IndexService;
 import migrator.app.domain.table.component.IndexForm;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Index;
-import migrator.app.domain.table.service.ColumnService;
-import migrator.app.domain.table.service.IndexService;
 import migrator.app.domain.table.service.TableService;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.app.router.ActiveRoute;
@@ -23,7 +23,7 @@ import migrator.ext.javafx.component.ViewLoader;
 
 public class JavafxIndexForm extends ViewComponent implements IndexForm {
     protected IndexService indexService;
-    protected ColumnService columnService;
+    protected ColumnActiveState columnActiveState;
     protected TableService tableService;
     protected ActiveRoute activeRoute;
     protected Index index;
@@ -39,7 +39,7 @@ public class JavafxIndexForm extends ViewComponent implements IndexForm {
     public JavafxIndexForm(Index index, ViewLoader viewLoader, Container container) {
         super(viewLoader);
         this.indexService = container.getIndexService();
-        this.columnService = container.getColumnService();
+        this.columnActiveState = container.getColumnActiveState();
         this.tableService = container.getTableService();
         this.activeRoute = container.getActiveRoute();
 
@@ -95,7 +95,7 @@ public class JavafxIndexForm extends ViewComponent implements IndexForm {
     @FXML public void initialize() {
         List<String> columnNames = new ArrayList<>();
         columnNames.add("");
-        for (Column column : this.columnService.getList()) {
+        for (Column column : this.columnActiveState.getList()) {
             columnNames.add(column.getName());
         }
         this.column1.getItems().setAll(columnNames);
@@ -113,7 +113,7 @@ public class JavafxIndexForm extends ViewComponent implements IndexForm {
     }
 
     @FXML public void close() {
-        this.activeRoute.changeTo("table.view", this.tableService.getSelected().get());
+        this.activeRoute.changeTo("table.view", this.tableService.getActiveState().getActive().get());
     }
 
     @FXML public void restore() {

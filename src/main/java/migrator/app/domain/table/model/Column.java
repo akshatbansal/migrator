@@ -2,52 +2,26 @@ package migrator.app.domain.table.model;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.app.migration.model.ColumnChange;
 import migrator.app.migration.model.ColumnProperty;
 
-public class Column implements Changable {
+public class Column implements Changable, ColumnChange, ChangeListener<Object> {
     protected ColumnProperty originalColumn;
     protected ColumnProperty changedColumn;
-    protected ColumnChange change;
+    protected ChangeCommand changeCommand;
 
-    public Column(ColumnProperty originalColumn, ColumnProperty changedColumn, ColumnChange columnChange) {
+    public Column(ColumnProperty originalColumn, ColumnProperty changedColumn, ChangeCommand changeCommand) {
         this.originalColumn = originalColumn;
         this.changedColumn = changedColumn;
-        this.change = columnChange;
+        this.changeCommand = changeCommand;
 
-        this.changedColumn.nameProperty().addListener(
-            new ChangeStringPropertyListener(
-                this.originalColumn.nameProperty(),
-                this.change.nameProperty()
-            )
-        );
-
-         this.changedColumn.formatProperty().addListener(
-             new ChangeStringPropertyListener(
-                 this.originalColumn.formatProperty(),
-                 this.change.formatProperty()
-             )
-         );
-
-         this.changedColumn.defaultValueProperty().addListener(
-             new ChangeStringPropertyListener(
-                 this.originalColumn.defaultValueProperty(),
-                 this.change.defaultValueProperty()
-             )
-         );
-
-         this.changedColumn.nullProperty().addListener((obs, ol, ne) -> {
-             if (this.originalColumn.isNullEnabled() == null) {
-                this.change.nullProperty().setValue(this.changedColumn.isNullEnabled());
-                return;
-             }
-            if (this.originalColumn.isNullEnabled().equals(this.changedColumn.isNullEnabled())) {
-                this.change.nullProperty().setValue(null);
-            } else {
-                this.change.nullProperty().setValue(this.changedColumn.isNullEnabled());
-            }
-         });
+        this.changedColumn.nameProperty().addListener(this);
+        this.changedColumn.formatProperty().addListener(this);
+        this.changedColumn.defaultValueProperty().addListener(this);
+        this.changedColumn.nullProperty().addListener(this);
     }
 
     public StringProperty nameProperty() {
@@ -99,27 +73,79 @@ public class Column implements Changable {
     }
 
     public ColumnChange getChange() {
-        return this.change;
+        return this;
     }
 
     public StringProperty changeTypeProperty() {
-        return this.change.getCommand().typeProperty();
+        return this.changeCommand.typeProperty();
     }
 
     @Override
     public ChangeCommand getChangeCommand() {
-        return this.change.getCommand();
+        return this.changeCommand;
     }
 
     public void delete() {
         this.getChangeCommand().setType(ChangeCommand.DELETE);
     }
 
+    @Override
     public void restore() {
         this.changedColumn.nameProperty().set(this.originalColumn.getName());
         this.changedColumn.formatProperty().set(this.originalColumn.getFormat());
         this.changedColumn.defaultValueProperty().set(this.originalColumn.getDefaultValue());
         this.changedColumn.nullProperty().setValue(this.originalColumn.isNullEnabled());
-        this.change.clear();
+        this.changeCommand.setType(ChangeCommand.NONE);
+    }
+
+    @Override
+    public ChangeCommand getCommand() {
+        return this.getChangeCommand();
+    }
+
+    @Override
+    public ColumnProperty getOriginal() {
+        return this.originalColumn;
+    }
+
+    @Override
+    public Boolean hasDefaultValueChanged() {
+        return !this.getDefaultValue().equals(this.getOriginal().getDefaultValue());
+    }
+
+    @Override
+    public Boolean hasFormatChanged() {
+        return !this.getFormat().equals(this.getOriginal().getFormat());
+    }
+
+    @Override
+    public Boolean hasNameChanged() {
+        return !this.getName().equals(this.getOriginal().getName());
+    }
+
+    @Override
+    public Boolean hasNullEnabledChanged() {
+        return this.isNullEnabled() != this.getOriginal().isNullEnabled();
+    }
+
+    @Override
+    public Property<Boolean> nullProperty() {
+        return this.enableNullProperty();
+    }
+
+    @Override
+    public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
+        if (this.changeCommand.isType(ChangeCommand.DELETE)) {
+            return;
+        }
+        if (this.changeCommand.isType(ChangeCommand.CREATE)) {
+            return;
+        }
+        
+        if (this.hasNameChanged() || this.hasFormatChanged() || this.hasDefaultValueChanged() || this.hasNullEnabledChanged()) {
+            this.changeCommand.typeProperty().set(ChangeCommand.UPDATE);
+            return;
+        }
+        this.changeCommand.typeProperty().set(ChangeCommand.NONE);
     }
 }

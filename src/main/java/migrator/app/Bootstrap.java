@@ -6,20 +6,24 @@ import java.util.List;
 
 import migrator.app.code.CodeManager;
 import migrator.app.database.driver.DatabaseDriverManager;
-import migrator.app.domain.change.service.ChangeService;
-import migrator.app.domain.change.service.TableChangeFactory;
+import migrator.app.domain.column.service.ColumnActiveState;
+import migrator.app.domain.column.service.ColumnFactory;
+import migrator.app.domain.column.service.ColumnRepository;
+import migrator.app.domain.column.service.SimpleColumnService;
 import migrator.app.domain.connection.service.ConnectionFactory;
 import migrator.app.domain.connection.service.ConnectionService;
 import migrator.app.domain.database.service.DatabaseFactory;
 import migrator.app.domain.database.service.DatabaseService;
+import migrator.app.domain.index.service.IndexActiveState;
+import migrator.app.domain.index.service.IndexFactory;
+import migrator.app.domain.index.service.IndexRepository;
+import migrator.app.domain.index.service.SimpleIndexService;
 import migrator.app.domain.project.service.ProjectFactory;
 import migrator.app.domain.project.service.ProjectService;
-import migrator.app.domain.table.service.ColumnFactory;
-import migrator.app.domain.table.service.ColumnService;
-import migrator.app.domain.table.service.IndexFactory;
-import migrator.app.domain.table.service.IndexService;
+import migrator.app.domain.table.service.SimpleTableService;
+import migrator.app.domain.table.service.TableActiveState;
 import migrator.app.domain.table.service.TableFactory;
-import migrator.app.domain.table.service.TableService;
+import migrator.app.domain.table.service.TableRepository;
 import migrator.app.ConfigContainer;
 import migrator.app.extension.Extension;
 import migrator.app.migration.Migration;
@@ -49,6 +53,10 @@ public class Bootstrap {
     }
 
     protected void initialize(ConfigContainer config) {
+        ColumnRepository columnRepository = new ColumnRepository();
+        IndexRepository indexRepository = new IndexRepository();
+        TableRepository tableRepository = new TableRepository();
+
         config.activeRouteConfig().set(
             new ActiveRoute()
         );
@@ -70,12 +78,10 @@ public class Bootstrap {
                 config.connectionFactoryConfig().get()
             )
         );
-        config.tableChangeFactoryConfig().set(
-            new TableChangeFactory()
-        );
         config.tableFactoryConfig().set(
             new TableFactory(
-                config.tableChangeFactoryConfig().get()
+                columnRepository,
+                indexRepository
             )
         );
         config.columnFactoryConfig().set(
@@ -85,11 +91,6 @@ public class Bootstrap {
             new IndexFactory()
         );
 
-        config.changeServiceConfig().set(
-            new ChangeService(
-                config.tableChangeFactoryConfig().get()
-            )
-        );
         config.projectFactoryConfig().set(
             new ProjectFactory(
                 config.databaseFactoryConfig().get()
@@ -102,27 +103,52 @@ public class Bootstrap {
         config.databaseServiceConfig().set(
             new DatabaseService()
         );
-        config.tableServiceConfig().set(
-            new TableService(
-                config.changeServiceConfig().get(),
-                config.tableFactoryConfig().get()
-            )
-        );
-        config.columnServiceConfig().set(
-            new ColumnService(
-                config.columnFactoryConfig().get(),
-                config.changeServiceConfig().get(), 
-                config.tableServiceConfig().get().getSelected()
-            )
-        );
-        config.indexServiceConfig().set(
-            new IndexService(
-                config.indexFactoryConfig().get()
-            )
-        );
         config.projectServiceConfig().set(
             new ProjectService(
                 config.projectFactoryConfig().get()
+            )
+        );
+        TableActiveState tableActiveState = new TableActiveState(
+            tableRepository,
+            config.projectServiceConfig().get()
+        );
+        config.tableServiceConfig().set(
+            new SimpleTableService(
+                config.tableFactoryConfig().get(),
+                tableRepository,
+                tableActiveState,
+                config.databaseDriverManagerConfig().get(),
+                config.projectServiceConfig().get()
+            )
+        );
+        config.columnActiveStateConfig().set(
+            new ColumnActiveState(
+                columnRepository, 
+                tableActiveState
+            )
+        );
+        config.columnServiceConfig().set(
+            new SimpleColumnService(
+                columnRepository,
+                config.columnActiveStateConfig().get(),   
+                config.columnFactoryConfig().get(),
+                config.tableServiceConfig().get(),
+                config.databaseDriverManagerConfig().get()
+            )
+        );
+        config.indexActiveStateConfig().set(
+            new IndexActiveState(
+                indexRepository,
+                tableActiveState
+            )
+        );
+        config.indexServiceConfig().set(
+            new SimpleIndexService(
+                config.indexFactoryConfig().get(),
+                indexRepository,
+                config.indexActiveStateConfig().get(),
+                config.tableServiceConfig().get(),
+                config.databaseDriverManagerConfig().get()
             )
         );
     }

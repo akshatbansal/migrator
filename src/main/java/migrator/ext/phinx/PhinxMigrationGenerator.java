@@ -18,7 +18,7 @@ public class PhinxMigrationGenerator implements MigrationGenerator {
         this.commandFactory = commandFactory;
     }
 
-    public Boolean generateMigration(List<TableChange> changes) {
+    public Boolean generateMigration(String name, List<? extends TableChange> changes) {
         String phinxContent = "";
         for (TableChange tableChange : changes) {
             phinxContent += this.toPhinxFormat(tableChange);
@@ -28,14 +28,14 @@ public class PhinxMigrationGenerator implements MigrationGenerator {
         }
 
         this.storage.store(
-            this.wrapToPhinxClass(phinxContent)
+            this.wrapToPhinxClass(name, phinxContent)
         );
 
         return true;
     }
 
-    public Boolean generateMigration(TableChange ... changes) {
-        return this.generateMigration(Arrays.asList(changes));
+    public Boolean generateMigration(String name, TableChange ... changes) {
+        return this.generateMigration(name, Arrays.asList(changes));
     }
 
     private String toPhinxFormat(TableChange tableChange) {
@@ -43,14 +43,14 @@ public class PhinxMigrationGenerator implements MigrationGenerator {
         return codeCommand.toCode();
     }
 
-    private String wrapToPhinxClass(String changeContent) {
+    private String wrapToPhinxClass(String className, String changeContent) {
         String tabedContent = "";
         for (String line : changeContent.split("\n")) {
             tabedContent += "\t\t" + line + "\n";
         }
         return "<?php\n\n" +
             "use Phinx\\Migration\\AbstractMigration;\n\n" +
-            "class MigrationByMigrator extends AbstractMigration\n" +
+            "class " + className + " extends AbstractMigration\n" +
             "{\n" +
                 "\tpublic function change()\n" +
                 "\t{\n" +

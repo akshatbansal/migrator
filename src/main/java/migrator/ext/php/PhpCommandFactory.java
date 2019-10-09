@@ -15,6 +15,7 @@ import migrator.ext.php.command.RemoveColumn;
 import migrator.ext.php.command.RemoveIndexByName;
 import migrator.ext.php.command.SaveTable;
 import migrator.ext.php.command.UpdateTable;
+import migrator.ext.php.command.VoidCommand;
 
 public class PhpCommandFactory implements CodeCommandFactory {
     public DropTable dropTable(TableChange tableChange) {
@@ -26,8 +27,10 @@ public class PhpCommandFactory implements CodeCommandFactory {
             return this.removeColumn(columnChange);
         } else if (columnChange.getCommand().isType(ChangeCommand.UPDATE)) {
             return this.changeColumn(columnChange);
+        } else if (columnChange.getCommand().isType(ChangeCommand.CREATE)) {
+            return this.addColumn(columnChange);
         }
-        return this.addColumn(columnChange);
+        return new VoidCommand();
     }
 
     public CodeCommand table(TableChange tableChange) {

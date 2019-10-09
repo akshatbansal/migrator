@@ -1,48 +1,42 @@
 package migrator.app.domain.table.service;
 
-import migrator.app.domain.change.service.TableChangeFactory;
+import migrator.app.domain.column.service.ColumnRepository;
+import migrator.app.domain.index.service.IndexRepository;
 import migrator.app.domain.project.model.Project;
 import migrator.app.domain.table.model.Table;
+import migrator.app.migration.model.ChangeCommand;
 import migrator.app.migration.model.SimpleTableProperty;
-import migrator.app.migration.model.TableChange;
-import migrator.app.migration.model.TableProperty;
 
 public class TableFactory {
-    protected TableChangeFactory tableChangeFactory;
+    protected ColumnRepository columnRepository;
+    protected IndexRepository indexRepository;
 
-    public TableFactory(TableChangeFactory tableChangeFactory) {
-        this.tableChangeFactory = tableChangeFactory;
+    public TableFactory(ColumnRepository columnRepository, IndexRepository indexRepository) {
+        this.columnRepository = columnRepository;
+        this.indexRepository = indexRepository;
     }
 
     public Table createNotChanged(Project project, String tableName) {
+        String repositoryKey = project.getName() + "." + tableName;
         return new Table(
             project,
             new SimpleTableProperty(tableName), // original
             new SimpleTableProperty(tableName), // changed
-            this.tableChangeFactory.createNotChanged(tableName)
+            new ChangeCommand(ChangeCommand.NONE),
+            this.columnRepository.getList(repositoryKey),
+            this.indexRepository.getList(repositoryKey)
         );
     }
 
     public Table createWithCreateChange(Project project, String tableName) {
-
+        String repositoryKey = project.getName() + "." + tableName;
         return new Table(
             project,
             new SimpleTableProperty(tableName), // original
             new SimpleTableProperty(tableName), // changed
-            this.tableChangeFactory.createWithCreateChange(tableName)
-        );
-    }
-
-    public Table create(Project project, String tableName, TableChange change) {
-        TableProperty tableProperty = new SimpleTableProperty(tableName);
-        if (change.getName() != null) {
-            tableProperty.nameProperty().set(change.getName());
-        }
-        return new Table(
-            project,
-            new SimpleTableProperty(tableName),
-            tableProperty,
-            change
+            new ChangeCommand(ChangeCommand.CREATE),
+            this.columnRepository.getList(repositoryKey),
+            this.indexRepository.getList(repositoryKey)
         );
     }
 }

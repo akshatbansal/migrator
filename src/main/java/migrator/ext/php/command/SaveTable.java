@@ -1,7 +1,6 @@
 package migrator.ext.php.command;
 
 import migrator.app.code.CodeCommand;
-import migrator.app.migration.model.ChangeCommand;
 import migrator.app.migration.model.ColumnChange;
 import migrator.app.migration.model.IndexChange;
 import migrator.app.migration.model.TableChange;
@@ -18,19 +17,23 @@ public class SaveTable implements CodeCommand {
 
     @Override
     public String toCode() {
-        if (this.tableChange.getCommand().isType(ChangeCommand.NONE) && this.tableChange.getColumnsChanges().size() == 0 && this.tableChange.getIndexesChanges().size() == 0) {
-            return "";
-        }
-        String php = "$this->table('" + this.tableChange.getOriginalName() + "')\n";
+        String tablePhp = "$this->table('" + this.tableChange.getOriginalName() + "')\n";
+        String columnPhp = "";
+        String indexPhp = "";
         for (ColumnChange columnChange : this.tableChange.getColumnsChanges()) {
             CodeCommand columnPhpCommand = this.commandFactory.column(columnChange);
-            php += columnPhpCommand.toCode();
+            columnPhp += columnPhpCommand.toCode();
         }
         for (IndexChange indexChange : this.tableChange.getIndexesChanges()) {
             CodeCommand columnPhpCommand = this.commandFactory.index(indexChange);
-            php += columnPhpCommand.toCode();
+            indexPhp += columnPhpCommand.toCode();
         }
-        return  php + 
+
+        if (indexPhp.isEmpty() && columnPhp.isEmpty()) {
+            return "";
+        }
+
+        return  tablePhp + columnPhp + indexPhp +
             "\t->save();\n";
     }
 }

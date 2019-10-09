@@ -8,9 +8,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import migrator.app.Container;
+import migrator.app.domain.column.service.ColumnService;
 import migrator.app.domain.table.component.ColumnForm;
 import migrator.app.domain.table.model.Column;
-import migrator.app.domain.table.service.ColumnService;
 import migrator.app.domain.table.service.TableService;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.app.router.ActiveRoute;
@@ -91,7 +91,7 @@ public class JavafxColumnForm extends ViewComponent implements ColumnForm {
 
     public void delete() {
         if (this.column.getChangeCommand().isType(ChangeCommand.CREATE)) {
-            this.columnService.unregister(this.column);
+            this.columnService.remove(this.column);
             this.close();
             return;
         }
@@ -103,6 +103,6 @@ public class JavafxColumnForm extends ViewComponent implements ColumnForm {
     }
 
     @FXML public void close() {
-        this.activeRoute.changeTo("table.view", this.tableService.getSelected().get());
+        this.activeRoute.changeTo("table.view", this.tableService.getActiveState().getActive().get());
     }
 }
