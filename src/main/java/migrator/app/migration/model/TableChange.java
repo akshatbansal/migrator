@@ -4,9 +4,10 @@ import javafx.collections.ObservableList;
 
 public interface TableChange extends TableProperty {
     public String getOriginalName();
-    public ObservableList<ColumnChange> getColumnsChanges();
-    public ObservableList<IndexChange> getIndexesChanges();
+    public TableProperty getOriginal();
+    public ObservableList<? extends ColumnChange> getColumnsChanges();
+    public ObservableList<? extends IndexChange> getIndexesChanges();
     public ChangeCommand getCommand();
-    public Boolean isNameChanged();
-    public void clear();
+    public Boolean hasNameChanged();
+    public void restore();
 }

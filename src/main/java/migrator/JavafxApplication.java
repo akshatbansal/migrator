@@ -7,7 +7,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import migrator.app.Bootstrap;
-import migrator.app.BusinessLogic;
 import migrator.app.Gui;
 import migrator.app.Router;
 import migrator.app.domain.connection.model.Connection;
@@ -40,7 +39,9 @@ public class JavafxApplication extends Application {
             )
         );
         Container container = bootstrap.getContainer();
-        new BusinessLogic(container);
+        container.getTableService().start();
+        container.getColumnService().start();
+        container.getIndexService().start();
 
         // Seed data
         container.getProjectService()

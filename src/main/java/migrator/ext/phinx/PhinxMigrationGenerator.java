@@ -18,7 +18,7 @@ public class PhinxMigrationGenerator implements MigrationGenerator {
         this.commandFactory = commandFactory;
     }
 
-    public Boolean generateMigration(String name, List<TableChange> changes) {
+    public Boolean generateMigration(String name, List<? extends TableChange> changes) {
         String phinxContent = "";
         for (TableChange tableChange : changes) {
             phinxContent += this.toPhinxFormat(tableChange);

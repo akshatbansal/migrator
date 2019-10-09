@@ -1,20 +1,16 @@
 package migrator.app;
 
 import migrator.app.database.driver.DatabaseDriverManager;
-import migrator.app.domain.change.service.ChangeService;
-import migrator.app.domain.change.service.ColumnChangeFactory;
-import migrator.app.domain.change.service.ColumnChangeService;
-import migrator.app.domain.change.service.TableChangeFactory;
+import migrator.app.domain.column.service.ColumnFactory;
+import migrator.app.domain.column.service.ColumnService;
 import migrator.app.domain.connection.service.ConnectionFactory;
 import migrator.app.domain.connection.service.ConnectionService;
 import migrator.app.domain.database.service.DatabaseFactory;
 import migrator.app.domain.database.service.DatabaseService;
+import migrator.app.domain.index.service.IndexFactory;
+import migrator.app.domain.index.service.IndexService;
 import migrator.app.domain.project.service.ProjectFactory;
 import migrator.app.domain.project.service.ProjectService;
-import migrator.app.domain.table.service.ColumnFactory;
-import migrator.app.domain.table.service.ColumnService;
-import migrator.app.domain.table.service.IndexFactory;
-import migrator.app.domain.table.service.IndexService;
 import migrator.app.domain.table.service.TableFactory;
 import migrator.app.domain.table.service.TableService;
 import migrator.app.ConfigContainer;
@@ -65,14 +61,6 @@ public class Container {
         return this.config.tableFactoryConfig().get();
     }
 
-    public TableChangeFactory getTableChangeFactory() {
-        return this.config.tableChangeFactoryConfig().get();
-    }
-
-    public ColumnChangeFactory getColumnChangeFactory() {
-        return this.config.columnChangeFactoryConfig().get();
-    }
-
     public ProjectFactory getProjectFactory() {
         return this.config.projectFactoryConfig().get();
     }
@@ -95,14 +83,6 @@ public class Container {
 
     public IndexService getIndexService() {
         return this.config.indexServiceConfig().get();
-    }
-
-    public ChangeService getChangeService() {
-        return this.config.changeServiceConfig().get();
-    }
-
-    public ColumnChangeService getColumnChangeService() {
-        return this.config.columnChangeServiceConfig().get();
     }
 
     public ProjectService getProjectService() {

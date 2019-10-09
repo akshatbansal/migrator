@@ -1,4 +1,4 @@
-package migrator.app.domain.table.service;
+package migrator.app.domain.index.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,6 @@ import javafx.beans.property.StringProperty;
 import migrator.app.domain.table.model.Index;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.app.migration.model.IndexProperty;
-import migrator.app.migration.model.SimpleIndexChange;
 import migrator.app.migration.model.SimpleIndexProperty;
 
 public class IndexFactory {
@@ -24,7 +23,7 @@ public class IndexFactory {
         return new Index(
             this.simpleIndexProperty(indexName, columnsProperty),
             this.simpleIndexProperty(indexName, columnsProperty),
-            new SimpleIndexChange(this.simpleIndexProperty(null, new ArrayList<>()), new ChangeCommand(ChangeCommand.NONE))
+            new ChangeCommand(ChangeCommand.NONE)
         );
     }
 
@@ -32,7 +31,7 @@ public class IndexFactory {
         return new Index(
             this.simpleIndexProperty(indexName, new ArrayList<>()),
             this.simpleIndexProperty(indexName, new ArrayList<>()),
-            new SimpleIndexChange(this.simpleIndexProperty(null, new ArrayList<>()), new ChangeCommand(ChangeCommand.CREATE))
+            new ChangeCommand(ChangeCommand.CREATE)
         );
     }
 }

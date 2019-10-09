@@ -4,20 +4,16 @@ import migrator.app.code.CodeConfig;
 import migrator.app.code.CodeManager;
 import migrator.app.database.driver.DatabaseDriverConfig;
 import migrator.app.database.driver.DatabaseDriverManager;
-import migrator.app.domain.change.service.ChangeService;
-import migrator.app.domain.change.service.ColumnChangeFactory;
-import migrator.app.domain.change.service.ColumnChangeService;
-import migrator.app.domain.change.service.TableChangeFactory;
+import migrator.app.domain.column.service.ColumnFactory;
+import migrator.app.domain.column.service.ColumnService;
 import migrator.app.domain.connection.service.ConnectionFactory;
 import migrator.app.domain.connection.service.ConnectionService;
 import migrator.app.domain.database.service.DatabaseFactory;
 import migrator.app.domain.database.service.DatabaseService;
+import migrator.app.domain.index.service.IndexFactory;
+import migrator.app.domain.index.service.IndexService;
 import migrator.app.domain.project.service.ProjectFactory;
 import migrator.app.domain.project.service.ProjectService;
-import migrator.app.domain.table.service.ColumnFactory;
-import migrator.app.domain.table.service.ColumnService;
-import migrator.app.domain.table.service.IndexFactory;
-import migrator.app.domain.table.service.IndexService;
 import migrator.app.domain.table.service.TableFactory;
 import migrator.app.domain.table.service.TableService;
 import migrator.app.migration.Migration;
@@ -40,8 +36,6 @@ public class ConfigContainer {
     protected ValueConfig<ColumnFactory> columnFactory;
     protected ValueConfig<IndexFactory> indexFactory;
     protected ValueConfig<TableFactory> tableFactory;
-    protected ValueConfig<TableChangeFactory> tableChangeFactory;
-    protected ValueConfig<ColumnChangeFactory> columnChangeFactory;
     protected ValueConfig<ProjectFactory> projectFactory;
 
     protected ValueConfig<ConnectionService> connectionService;
@@ -49,8 +43,6 @@ public class ConfigContainer {
     protected ValueConfig<TableService> tableService;
     protected ValueConfig<ColumnService> columnService;
     protected ValueConfig<IndexService> indexService;
-    protected ValueConfig<ChangeService> changeService;
-    protected ValueConfig<ColumnChangeService> columnChangeService;
     protected ValueConfig<ProjectService> projectService;
 
     public ConfigContainer() {
@@ -65,8 +57,6 @@ public class ConfigContainer {
 
         this.connectionFactory = new ValueConfig<>();
         this.databaseFactory = new ValueConfig<>();
-        this.tableChangeFactory = new ValueConfig<>();
-        this.columnChangeFactory = new ValueConfig<>();
         this.tableFactory = new ValueConfig<>();
         this.columnFactory = new ValueConfig<>();
         this.indexFactory = new ValueConfig<>();
@@ -77,8 +67,6 @@ public class ConfigContainer {
         this.tableService = new ValueConfig<>();
         this.columnService = new ValueConfig<>();
         this.indexService = new ValueConfig<>();
-        this.changeService = new ValueConfig<>();
-        this.columnChangeService = new ValueConfig<>();
         this.projectService = new ValueConfig<>();
     }
 
@@ -118,14 +106,6 @@ public class ConfigContainer {
         return this.databaseFactory;
     }
 
-    public ValueConfig<TableChangeFactory> tableChangeFactoryConfig() {
-        return this.tableChangeFactory;
-    }
-
-    public ValueConfig<ColumnChangeFactory> columnChangeFactoryConfig() {
-        return this.columnChangeFactory;
-    }
-
     public ValueConfig<TableFactory> tableFactoryConfig() {
         return this.tableFactory;
     }
@@ -160,14 +140,6 @@ public class ConfigContainer {
 
     public ValueConfig<IndexService> indexServiceConfig() {
         return this.indexService;
-    }
-
-    public ValueConfig<ChangeService> changeServiceConfig() {
-        return this.changeService;
-    }
-
-    public ValueConfig<ColumnChangeService> columnChangeServiceConfig() {
-        return this.columnChangeService;
     }
 
     public ValueConfig<ProjectService> projectServiceConfig() {

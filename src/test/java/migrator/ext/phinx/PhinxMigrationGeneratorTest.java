@@ -294,34 +294,34 @@ public class PhinxMigrationGeneratorTest {
         );
     }
 
-    // public void testPhpMigrationGenerateChangedColumnFormat() {
-    //     TableChange change = new SimpleTableChange(
-    //         "table_name",
-    //         new SimpleTableProperty(null),
-    //         new ChangeCommand(null),
-    //         Arrays.asList(
-    //             new SimpleColumnChange(
-    //                 "id",
-    //                 new SimpleColumnProperty(null, "integer", null, null),
-    //                 new ChangeCommand("update")
-    //             )
-    //         ),
-    //         new ArrayList<>()
-    //     );
-    //     this.migrator.generateMigration("MigrationByMigrator", change);
-    //     assertEquals(
-    //         "<?php\n\n" +
-    //         "use Phinx\\Migration\\AbstractMigration;\n\n" +
-    //         "class MigrationByMigrator extends AbstractMigration\n" +
-    //         "{\n" +
-    //             "\tpublic function change()\n" +
-    //             "\t{\n" +
-    //                 "\t\t$this->table('table_name')\n" +
-    //                     "\t\t\t->changeColumn('id_name')\n" +
-    //                     "\t\t\t->update();\n" +
-    //             "\t}\n" +
-    //         "}\n",,
-    //         this.storage.load()
-    //     );
-    // }
+    public void testPhpMigrationGenerateChangedColumnFormat() {
+        TableChange change = new SimpleTableChange(
+            "table_name",
+            new SimpleTableProperty(null),
+            new ChangeCommand(null),
+            Arrays.asList(
+                new SimpleColumnChange(
+                    new SimpleColumnProperty("name", "integer", null, false),
+                    new SimpleColumnProperty(null, "string", null, null),
+                    new ChangeCommand("update")
+                )
+            ),
+            new ArrayList<>()
+        );
+        this.migrator.generateMigration("MigrationByMigrator", change);
+        assertEquals(
+            "<?php\n\n" +
+            "use Phinx\\Migration\\AbstractMigration;\n\n" +
+            "class MigrationByMigrator extends AbstractMigration\n" +
+            "{\n" +
+                "\tpublic function change()\n" +
+                "\t{\n" +
+                    "\t\t$this->table('table_name')\n" +
+                        "\t\t\t->changeColumn('id_name')\n" +
+                        "\t\t\t->update();\n" +
+                "\t}\n" +
+            "}\n",,
+            this.storage.load()
+        );
+    }
 }

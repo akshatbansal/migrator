@@ -47,13 +47,13 @@ public class JavafxTableList extends ViewComponent implements TableList {
         this.subscriptions = new LinkedList<>();
 
         this.cardListComponent = new CardListComponent<>(
-            this.tableService.getList(),
+            this.tableService.getActiveState().getList(),
             new TableCardFactory(), 
             viewLoader
         );
 
         this.cardListComponent.onPrimary((Table eventTable) -> {
-            this.tableService.select(eventTable);
+            this.tableService.getActiveState().activate(eventTable);
             this.activeRoute.changeTo("table.view", eventTable);
         });
 
@@ -76,8 +76,8 @@ public class JavafxTableList extends ViewComponent implements TableList {
     @FXML public void addTable() {
         Table newTable = this.tableService.getFactory()
             .createWithCreateChange(this.projectService.getOpened().get(), "new_table");
-        this.tableService.register(newTable);
-        this.tableService.select(newTable);
+        // this.tableService.register(newTable);
+        // this.tableService.select(newTable);
         this.activeRoute.changeTo("table.view", newTable);
     }
 

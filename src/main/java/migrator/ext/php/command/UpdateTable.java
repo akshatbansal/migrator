@@ -18,7 +18,7 @@ public class UpdateTable implements CodeCommand {
     @Override
     public String toCode() {
         String php = "$this->table('" + this.tableChange.getOriginalName() + "')\n";
-        if (this.tableChange.isNameChanged()) {
+        if (this.tableChange.hasNameChanged()) {
             php += "\t->renameTable('" + this.tableChange.getName() + "')\n";
         }
         for (ColumnChange columnChange : this.tableChange.getColumnsChanges()) {

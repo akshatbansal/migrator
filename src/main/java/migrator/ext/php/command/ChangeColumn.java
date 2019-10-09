@@ -14,7 +14,7 @@ public class ChangeColumn implements CodeCommand {
     public String toCode() {
         String php = "";
         if (this.columnChange.hasNameChanged()) {
-            php += "\t->renameColumn('" + this.columnChange.getOriginalName() + "', '" + this.columnChange.getName() + "')\n";
+            php += "\t->renameColumn('" + this.columnChange.getOriginal().getName() + "', '" + this.columnChange.getName() + "')\n";
         }
 
         return php;
