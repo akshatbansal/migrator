@@ -22,6 +22,7 @@ import migrator.app.domain.connection.model.Connection;
 import migrator.app.domain.database.model.DatabaseConnection;
 import migrator.app.domain.project.model.Project;
 import migrator.app.domain.table.model.Column;
+import migrator.app.domain.table.model.Index;
 import migrator.app.domain.table.model.Table;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.app.migration.model.ColumnChange;
@@ -46,15 +47,7 @@ public class PhinxMigrationGeneratorTest {
 
     @Test public void testPhpMigrationCreateTableWithColumn() {
         TableChange change = new Table(
-            new Project(
-                new DatabaseConnection(
-                    new Connection("localhost"),
-                    "test_db"
-                ),
-                "test_project",
-                "phinx",
-                ""
-            ),
+            null,
             new SimpleTableProperty("table_name"),
             new SimpleTableProperty("table_name"),
             new ChangeCommand("create"),
@@ -86,256 +79,319 @@ public class PhinxMigrationGeneratorTest {
         );
     }
 
-    // @Test public void testPhpMigrationUpdateTableRenameTable() {
-    //     TableChange change = new SimpleTableChange(
-    //         "table_name",
-    //         new SimpleTableProperty("new_table_name"),
-    //         new ChangeCommand("update")
-    //     );
-    //     this.migrator.generateMigration("MigrationByMigrator", change);
-    //     assertEquals(
-    //         "<?php\n\n" +
-    //         "use Phinx\\Migration\\AbstractMigration;\n\n" +
-    //         "class MigrationByMigrator extends AbstractMigration\n" +
-    //         "{\n" +
-    //             "\tpublic function change()\n" +
-    //             "\t{\n" +
-    //                 "\t\t$this->table('table_name')\n" +
-    //                     "\t\t\t->renameTable('new_table_name')\n" +
-    //                     "\t\t\t->update();\n" +
-    //             "\t}\n" +
-    //         "}\n",
-    //         this.storage.load()
-    //     );
-    // }
+    @Test public void testPhpMigrationRenameTable() {
+        TableChange change = new Table(
+            null,
+            new SimpleTableProperty("table_name"),
+            new SimpleTableProperty("new_table_name"),
+            new ChangeCommand("update"),
+            FXCollections.observableArrayList(),
+            FXCollections.observableArrayList()
+        );
+        this.migrator.generateMigration("MigrationByMigrator", change);
+        assertEquals(
+            "<?php\n\n" +
+            "use Phinx\\Migration\\AbstractMigration;\n\n" +
+            "class MigrationByMigrator extends AbstractMigration\n" +
+            "{\n" +
+                "\tpublic function change()\n" +
+                "\t{\n" +
+                    "\t\t$this->table('table_name')\n" +
+                        "\t\t\t->renameTable('new_table_name')\n" +
+                        "\t\t\t->update();\n" +
+                "\t}\n" +
+            "}\n",
+            this.storage.load()
+        );
+    }
 
-    // @Test public void testPhpMigrationUpdateTableAddColumn() {
-    //     TableChange change = new SimpleTableChange(
-    //         "table_name", 
-    //         new SimpleTableProperty(null),
-    //         new ChangeCommand("update"),
-    //         Arrays.asList(
-    //             new SimpleColumnChange(
-    //                 "column_name",
-    //                 new SimpleColumnProperty("column_name", "column_format", null, false),
-    //                 new ChangeCommand("create")
-    //             )
-    //         ),
-    //         new ArrayList<>()
-    //     );
-    //     this.migrator.generateMigration("MigrationByMigrator", change);
-    //     assertEquals(
-    //         "<?php\n\n" +
-    //         "use Phinx\\Migration\\AbstractMigration;\n\n" +
-    //         "class MigrationByMigrator extends AbstractMigration\n" +
-    //         "{\n" +
-    //             "\tpublic function change()\n" +
-    //             "\t{\n" +
-    //                 "\t\t$this->table('table_name')\n" +
-    //                     "\t\t\t->addColumn('column_name', 'column_format', ['null' => false])\n" +
-    //                     "\t\t\t->update();\n" +
-    //             "\t}\n" +
-    //         "}\n",
-    //         this.storage.load()
-    //     );
-    // }
+    @Test public void testPhpMigrationUpdateTableAddColumn() {
+        TableChange change = new Table(
+            null,
+            new SimpleTableProperty("table_name"),
+            new SimpleTableProperty("table_name"),
+            new ChangeCommand(null),
+            FXCollections.observableArrayList(
+                Arrays.asList(
+                    new Column(
+                        new SimpleColumnProperty("column_name", "column_format", null, false),
+                        new SimpleColumnProperty("column_name", "column_format", null, false),
+                        new ChangeCommand("create")
+                    )
+                )
+            ),
+            FXCollections.observableArrayList()
+        );
+        this.migrator.generateMigration("MigrationByMigrator", change);
+        assertEquals(
+            "<?php\n\n" +
+            "use Phinx\\Migration\\AbstractMigration;\n\n" +
+            "class MigrationByMigrator extends AbstractMigration\n" +
+            "{\n" +
+                "\tpublic function change()\n" +
+                "\t{\n" +
+                    "\t\t$this->table('table_name')\n" +
+                        "\t\t\t->addColumn('column_name', 'column_format', ['null' => false])\n" +
+                        "\t\t\t->save();\n" +
+                "\t}\n" +
+            "}\n",
+            this.storage.load()
+        );
+    }
 
-    // @Test public void testPhpMigrationUpdateTableRemoveColumn() {
-    //     TableChange change = new SimpleTableChange(
-    //         "table_name",
-    //         new SimpleTableProperty(null),
-    //         new ChangeCommand("update"),
-    //         Arrays.asList(
-    //             new SimpleColumnChange(
-    //                 "column_name",
-    //                 new SimpleColumnProperty("column_name", null, null, false),
-    //                 new ChangeCommand("delete")
-    //             )
-    //         ),
-    //         new ArrayList<>()
-    //     );
-    //     this.migrator.generateMigration("MigrationByMigrator", change);
-    //     assertEquals(
-    //         "<?php\n\n" +
-    //         "use Phinx\\Migration\\AbstractMigration;\n\n" +
-    //         "class MigrationByMigrator extends AbstractMigration\n" +
-    //         "{\n" +
-    //             "\tpublic function change()\n" +
-    //             "\t{\n" +
-    //                 "\t\t$this->table('table_name')\n" + 
-    //                     "\t\t\t->removeColumn('column_name')\n" +
-    //                     "\t\t\t->update();\n" +
-    //             "\t}\n" +
-    //         "}\n",
-    //         this.storage.load()
-    //     );
-    // }
+    @Test public void testPhpMigrationUpdateTableRemoveColumn() {
+        TableChange change = new Table(
+            null,
+            new SimpleTableProperty("table_name"),
+            new SimpleTableProperty("table_name"),
+            new ChangeCommand(null),
+            FXCollections.observableArrayList(
+                Arrays.asList(
+                    new Column(
+                        new SimpleColumnProperty("column_name", "column_format", null, false),
+                        new SimpleColumnProperty("column_name", "column_format", null, false),
+                        new ChangeCommand("delete")
+                    )
+                )
+            ),
+            FXCollections.observableArrayList()
+        );
+        this.migrator.generateMigration("MigrationByMigrator", change);
+        assertEquals(
+            "<?php\n\n" +
+            "use Phinx\\Migration\\AbstractMigration;\n\n" +
+            "class MigrationByMigrator extends AbstractMigration\n" +
+            "{\n" +
+                "\tpublic function change()\n" +
+                "\t{\n" +
+                    "\t\t$this->table('table_name')\n" + 
+                        "\t\t\t->removeColumn('column_name')\n" +
+                        "\t\t\t->save();\n" +
+                "\t}\n" +
+            "}\n",
+            this.storage.load()
+        );
+    }
 
-    // @Test public void testPhpMigrationUpdateTableRenameColumn() {
-    //     TableChange change = new SimpleTableChange(
-    //         "table_name", 
-    //         new SimpleTableProperty(null),
-    //         new ChangeCommand("update"),
-    //         Arrays.asList(
-    //             new SimpleColumnChange(
-    //                 "column_name",
-    //                 new SimpleColumnProperty("new_column_name", null, null, false),
-    //                 new ChangeCommand("update")
-    //             )
-    //         ),
-    //         new ArrayList<>()
-    //     );
-    //     this.migrator.generateMigration("MigrationByMigrator", change);
-    //     assertEquals(
-    //         "<?php\n\n" +
-    //         "use Phinx\\Migration\\AbstractMigration;\n\n" +
-    //         "class MigrationByMigrator extends AbstractMigration\n" +
-    //         "{\n" +
-    //             "\tpublic function change()\n" +
-    //             "\t{\n" +
-    //                 "\t\t$this->table('table_name')\n" +
-    //                     "\t\t\t->renameColumn('column_name', 'new_column_name')\n" +
-    //                     "\t\t\t->update();\n" +
-    //             "\t}\n" +
-    //         "}\n",
-    //         this.storage.load()
-    //     );
-    // }
+    @Test public void testPhpMigrationUpdateTableRenameColumn() {
+        TableChange change = new Table(
+            null,
+            new SimpleTableProperty("table_name"),
+            new SimpleTableProperty("table_name"),
+            new ChangeCommand(null),
+            FXCollections.observableArrayList(
+                Arrays.asList(
+                    new Column(
+                        new SimpleColumnProperty("column_name", "column_format", "", false),
+                        new SimpleColumnProperty("new_column_name", "column_format", "", false),
+                        new ChangeCommand("update")
+                    )
+                )
+            ),
+            FXCollections.observableArrayList()
+        );
+        this.migrator.generateMigration("MigrationByMigrator", change);
+        assertEquals(
+            "<?php\n\n" +
+            "use Phinx\\Migration\\AbstractMigration;\n\n" +
+            "class MigrationByMigrator extends AbstractMigration\n" +
+            "{\n" +
+                "\tpublic function change()\n" +
+                "\t{\n" +
+                    "\t\t$this->table('table_name')\n" +
+                        "\t\t\t->renameColumn('column_name', 'new_column_name')\n" +
+                        "\t\t\t->save();\n" +
+                "\t}\n" +
+            "}\n",
+            this.storage.load()
+        );
+    }
 
-    // @Test public void testPhpMigrationDeleteTable() {
-    //     TableChange change = new SimpleTableChange(
-    //         "table_name",
-    //         new SimpleTableProperty(null),
-    //         new ChangeCommand("delete")
-    //     );
-    //     this.migrator.generateMigration("MigrationByMigrator", change);
-    //     assertEquals(
-    //         "<?php\n\n" +
-    //         "use Phinx\\Migration\\AbstractMigration;\n\n" +
-    //         "class MigrationByMigrator extends AbstractMigration\n" +
-    //         "{\n" +
-    //             "\tpublic function change()\n" +
-    //             "\t{\n" +
-    //                 "\t\t$this->dropTable('table_name');\n" +
-    //             "\t}\n" +
-    //         "}\n",
-    //         this.storage.load()
-    //     );
-    // }
+    @Test public void testPhpMigrationDeleteTable() {
+        TableChange change = new Table(
+            null,
+            new SimpleTableProperty("table_name"),
+            new SimpleTableProperty("table_name"),
+            new ChangeCommand("delete"),
+            FXCollections.observableArrayList(),
+            FXCollections.observableArrayList()
+        );
+        this.migrator.generateMigration("MigrationByMigrator", change);
+        assertEquals(
+            "<?php\n\n" +
+            "use Phinx\\Migration\\AbstractMigration;\n\n" +
+            "class MigrationByMigrator extends AbstractMigration\n" +
+            "{\n" +
+                "\tpublic function change()\n" +
+                "\t{\n" +
+                    "\t\t$this->dropTable('table_name');\n" +
+                "\t}\n" +
+            "}\n",
+            this.storage.load()
+        );
+    }
 
-    // @Test public void testPhpMigrationCreateTableWithColumnAndIndex() {
-    //     TableChange change = new SimpleTableChange(
-    //         "table_name",
-    //         new SimpleTableProperty(null),
-    //         new ChangeCommand("create"),
-    //         Arrays.asList(
-    //             new SimpleColumnChange(
-    //                 "id",
-    //                 new SimpleColumnProperty("id", "integer", null, false),
-    //                 new ChangeCommand("create")
-    //             ),
-    //             new SimpleColumnChange(
-    //                 "name",
-    //                 new SimpleColumnProperty("name", "string", null, false),
-    //                 new ChangeCommand("create")
-    //             )
-    //         ),
-    //         Arrays.asList(
-    //             new SimpleIndexChange(
-    //                 new SimpleIndexProperty("id_name", Arrays.asList(new SimpleStringProperty("id"), new SimpleStringProperty("name"))),
-    //                 new ChangeCommand("create")
-    //             )
-    //         )
-    //     );
-    //     this.migrator.generateMigration("MigrationByMigrator", change);
-    //     assertEquals(
-    //         "<?php\n\n" +
-    //         "use Phinx\\Migration\\AbstractMigration;\n\n" +
-    //         "class MigrationByMigrator extends AbstractMigration\n" +
-    //         "{\n" +
-    //             "\tpublic function change()\n" +
-    //             "\t{\n" +
-    //                 "\t\t$this->table('table_name')\n" +
-    //                     "\t\t\t->addColumn('id', 'integer', ['null' => false])\n" +
-    //                     "\t\t\t->addColumn('name', 'string', ['null' => false])\n" +
-    //                     "\t\t\t->addIndex(['id', 'name'], ['name' => 'id_name'])\n" +
-    //                     "\t\t\t->create();\n" +
-    //             "\t}\n" +
-    //         "}\n",
-    //         this.storage.load()
-    //     );
-    // }
+    @Test public void testPhpMigrationCreateTableWithColumnAndIndex() {
+        TableChange change = new Table(
+            null,
+            new SimpleTableProperty("table_name"),
+            new SimpleTableProperty("table_name"),
+            new ChangeCommand("create"),
+            FXCollections.observableArrayList(
+                Arrays.asList(
+                    new Column(
+                        new SimpleColumnProperty("id", "integer", null, false),
+                        new SimpleColumnProperty("id", "integer", null, false),
+                        new ChangeCommand("create")
+                    ),
+                    new Column(
+                        new SimpleColumnProperty("name", "string", null, false),
+                        new SimpleColumnProperty("name", "string", null, false),
+                        new ChangeCommand("create")
+                    )
+                )
+            ),
+            FXCollections.observableArrayList(
+                Arrays.asList(
+                    new Index(
+                        new SimpleIndexProperty("id_name", Arrays.asList()),
+                        new SimpleIndexProperty("id_name", Arrays.asList(new SimpleStringProperty("id"), new SimpleStringProperty("name"))),
+                        new ChangeCommand("create")
+                    )
+                )
+            )
+        );
+        this.migrator.generateMigration("MigrationByMigrator", change);
+        assertEquals(
+            "<?php\n\n" +
+            "use Phinx\\Migration\\AbstractMigration;\n\n" +
+            "class MigrationByMigrator extends AbstractMigration\n" +
+            "{\n" +
+                "\tpublic function change()\n" +
+                "\t{\n" +
+                    "\t\t$this->table('table_name')\n" +
+                        "\t\t\t->addColumn('id', 'integer', ['null' => false])\n" +
+                        "\t\t\t->addColumn('name', 'string', ['null' => false])\n" +
+                        "\t\t\t->addIndex(['id', 'name'], ['name' => 'id_name'])\n" +
+                        "\t\t\t->create();\n" +
+                "\t}\n" +
+            "}\n",
+            this.storage.load()
+        );
+    }
 
-    // @Test public void testPhpMigrationCreateTableWithColumnRemoveIndex() {
-    //     TableChange change = new SimpleTableChange(
-    //         "table_name",
-    //         new SimpleTableProperty(null),
-    //         new ChangeCommand("update"),
-    //         new ArrayList(),
-    //         Arrays.asList(
-    //             new SimpleIndexChange(
-    //                 new SimpleIndexProperty("id_name", new ArrayList<>()),
-    //                 new ChangeCommand("delete")
-    //             )
-    //         )
-    //     );
-    //     this.migrator.generateMigration("MigrationByMigrator", change);
-    //     assertEquals(
-    //         "<?php\n\n" +
-    //         "use Phinx\\Migration\\AbstractMigration;\n\n" +
-    //         "class MigrationByMigrator extends AbstractMigration\n" +
-    //         "{\n" +
-    //             "\tpublic function change()\n" +
-    //             "\t{\n" +
-    //                 "\t\t$this->table('table_name')\n" +
-    //                     "\t\t\t->removeIndexByName('id_name')\n" +
-    //                     "\t\t\t->update();\n" +
-    //             "\t}\n" +
-    //         "}\n",
-    //         this.storage.load()
-    //     );
-    // }
+    @Test public void testPhpMigrationRemoveIndex() {
+        TableChange change = new Table(
+            null,
+            new SimpleTableProperty("table_name"),
+            new SimpleTableProperty("table_name"),
+            new ChangeCommand(null),
+            FXCollections.observableArrayList(),
+            FXCollections.observableArrayList(
+                Arrays.asList(
+                    new Index(
+                        new SimpleIndexProperty("id_name", Arrays.asList()),
+                        new SimpleIndexProperty("id_name", Arrays.asList()),
+                        new ChangeCommand("delete")
+                    )
+                )
+            )
+        );
+        this.migrator.generateMigration("MigrationByMigrator", change);
+        assertEquals(
+            "<?php\n\n" +
+            "use Phinx\\Migration\\AbstractMigration;\n\n" +
+            "class MigrationByMigrator extends AbstractMigration\n" +
+            "{\n" +
+                "\tpublic function change()\n" +
+                "\t{\n" +
+                    "\t\t$this->table('table_name')\n" +
+                        "\t\t\t->removeIndexByName('id_name')\n" +
+                        "\t\t\t->save();\n" +
+                "\t}\n" +
+            "}\n",
+            this.storage.load()
+        );
+    }
 
-    // public void testPhpMigrationCreateTablaWithoutChangeRetunrnsEmptyCommand() {
-    //     TableChange change = new SimpleTableChange(
-    //         "table_name",
-    //         new SimpleTableProperty(null),
-    //         new ChangeCommand(null)
-    //     );
-    //     this.migrator.generateMigration("MigrationByMigrator", change);
-    //     assertEquals("",
-    //         this.storage.load()
-    //     );
-    // }
+    @Test public void testPhpMigrationNoChangeRetunrnsEmptyCommand() {
+        TableChange change = new Table(
+            null,
+            new SimpleTableProperty("table_name"),
+            new SimpleTableProperty("table_name"),
+            new ChangeCommand(null),
+            FXCollections.observableArrayList(),
+            FXCollections.observableArrayList()
+        );
+        this.migrator.generateMigration("MigrationByMigrator", change);
+        assertNull(this.storage.load());
+    }
 
-    // public void testPhpMigrationGenerateChangedColumnFormat() {
-    //     TableChange change = new SimpleTableChange(
-    //         "table_name",
-    //         new SimpleTableProperty(null),
-    //         new ChangeCommand(null),
-    //         Arrays.asList(
-    //             new SimpleColumnChange(
-    //                 new SimpleColumnProperty("name", "integer", null, false),
-    //                 new SimpleColumnProperty(null, "string", null, null),
-    //                 new ChangeCommand("update")
-    //             )
-    //         ),
-    //         new ArrayList<>()
-    //     );
-    //     this.migrator.generateMigration("MigrationByMigrator", change);
-    //     assertEquals(
-    //         "<?php\n\n" +
-    //         "use Phinx\\Migration\\AbstractMigration;\n\n" +
-    //         "class MigrationByMigrator extends AbstractMigration\n" +
-    //         "{\n" +
-    //             "\tpublic function change()\n" +
-    //             "\t{\n" +
-    //                 "\t\t$this->table('table_name')\n" +
-    //                     "\t\t\t->changeColumn('id_name')\n" +
-    //                     "\t\t\t->update();\n" +
-    //             "\t}\n" +
-    //         "}\n",
-    //         this.storage.load()
-    //     );
-    // }
+    @Test public void testPhpMigrationGenerateChangedColumnFormat() {
+        TableChange change = new Table(
+            null,
+            new SimpleTableProperty("table_name"),
+            new SimpleTableProperty("table_name"),
+            new ChangeCommand(null),
+            FXCollections.observableArrayList(
+                Arrays.asList(
+                    new Column(
+                        new SimpleColumnProperty("column_name", "column_format", null, false),
+                        new SimpleColumnProperty("column_name", "string", null, false),
+                        new ChangeCommand("update")
+                    )
+                )
+            ),
+            FXCollections.observableArrayList()
+        );
+        this.migrator.generateMigration("MigrationByMigrator", change);
+        assertEquals(
+            "<?php\n\n" +
+            "use Phinx\\Migration\\AbstractMigration;\n\n" +
+            "class MigrationByMigrator extends AbstractMigration\n" +
+            "{\n" +
+                "\tpublic function change()\n" +
+                "\t{\n" +
+                    "\t\t$this->table('table_name')\n" +
+                        "\t\t\t->changeColumn('column_name', 'string', ['null' => false])\n" +
+                        "\t\t\t->save();\n" +
+                "\t}\n" +
+            "}\n",
+            this.storage.load()
+        );
+    }
+
+    @Test public void testPhpMigrationGenerateChangedColumnDefaultValue() {
+        TableChange change = new Table(
+            null,
+            new SimpleTableProperty("table_name"),
+            new SimpleTableProperty("table_name"),
+            new ChangeCommand(null),
+            FXCollections.observableArrayList(
+                Arrays.asList(
+                    new Column(
+                        new SimpleColumnProperty("column_name", "string", "", false),
+                        new SimpleColumnProperty("column_name", "string", "default_value", false),
+                        new ChangeCommand("update")
+                    )
+                )
+            ),
+            FXCollections.observableArrayList()
+        );
+        this.migrator.generateMigration("MigrationByMigrator", change);
+        assertEquals(
+            "<?php\n\n" +
+            "use Phinx\\Migration\\AbstractMigration;\n\n" +
+            "class MigrationByMigrator extends AbstractMigration\n" +
+            "{\n" +
+                "\tpublic function change()\n" +
+                "\t{\n" +
+                    "\t\t$this->table('table_name')\n" +
+                        "\t\t\t->changeColumn('column_name', 'string', ['null' => false, 'default' => 'default_value'])\n" +
+                        "\t\t\t->save();\n" +
+                "\t}\n" +
+            "}\n",
+            this.storage.load()
+        );
+    }
 }

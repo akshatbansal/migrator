@@ -14,7 +14,8 @@ import migrator.app.domain.project.service.ProjectService;
 import migrator.app.domain.table.component.TableList;
 import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableGuiKit;
-import migrator.app.domain.table.service.TableService;
+import migrator.app.domain.table.service.TableActiveState;
+import migrator.app.domain.table.service.TableFactory;
 import migrator.app.router.ActiveRoute;
 import migrator.ext.javafx.component.CardListComponent;
 import migrator.ext.javafx.component.ViewComponent;
@@ -23,7 +24,8 @@ import migrator.lib.emitter.Subscription;
 
 public class JavafxTableList extends ViewComponent implements TableList {
     protected List<Subscription<Table>> subscriptions;
-    protected TableService tableService;
+    protected TableFactory tableFactory;
+    protected TableActiveState tableActiveState;
     protected ProjectService projectService;
     protected TableGuiKit guiKit;
     protected BreadcrumpsComponent breadcrumpsComponent;
@@ -37,7 +39,8 @@ public class JavafxTableList extends ViewComponent implements TableList {
     public JavafxTableList(ViewLoader viewLoader, Container container, Gui gui) {
         super(viewLoader);
         this.activeRoute = container.getActiveRoute();
-        this.tableService = container.getTableService();
+        this.tableFactory = container.getTableFactory();
+        this.tableActiveState = container.getTableActiveState();
         this.projectService = container.getProjectService();
         this.guiKit = gui.getTableKit();
 
@@ -47,13 +50,13 @@ public class JavafxTableList extends ViewComponent implements TableList {
         this.subscriptions = new LinkedList<>();
 
         this.cardListComponent = new CardListComponent<>(
-            this.tableService.getAll(),
+            this.tableActiveState.getList(),
             new TableCardFactory(), 
             viewLoader
         );
 
         this.cardListComponent.onPrimary((Table eventTable) -> {
-            this.tableService.activate(eventTable);
+            this.tableActiveState.activate(eventTable);
             this.activeRoute.changeTo("table.view", eventTable);
         });
 
@@ -74,9 +77,8 @@ public class JavafxTableList extends ViewComponent implements TableList {
 
     @Override
     @FXML public void addTable() {
-        Table newTable = this.tableService.getFactory()
-            .createWithCreateChange(this.projectService.getOpened().get(), "new_table");
-        this.tableService.addAndActivate(newTable);
+        Table newTable = this.tableFactory.createWithCreateChange(this.projectService.getOpened().get(), "new_table");
+        this.tableActiveState.addAndActivate(newTable);
         this.activeRoute.changeTo("table.view", newTable);
     }
 

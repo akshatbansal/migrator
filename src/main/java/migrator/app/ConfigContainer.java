@@ -18,6 +18,7 @@ import migrator.app.domain.project.service.ProjectFactory;
 import migrator.app.domain.project.service.ProjectService;
 import migrator.app.domain.table.service.TableFactory;
 import migrator.app.domain.table.service.TableService;
+import migrator.app.domain.table.service.TableActiveState;
 import migrator.app.migration.Migration;
 import migrator.app.migration.MigrationConfig;
 import migrator.app.router.ActiveRoute;
@@ -47,6 +48,7 @@ public class ConfigContainer {
     private ValueConfig<IndexService> indexService;
     private ValueConfig<ProjectService> projectService;
 
+    private ValueConfig<TableActiveState> tableActiveState;
     private ValueConfig<ColumnActiveState> columnActiveState;
     private ValueConfig<IndexActiveState> indexActiveState;
 
@@ -76,6 +78,7 @@ public class ConfigContainer {
 
         this.columnActiveState = new ValueConfig<>();
         this.indexActiveState = new ValueConfig<>();
+        this.tableActiveState = new ValueConfig<>();
     }
 
     public MigrationConfig getMigrationConfig() {
@@ -160,5 +163,9 @@ public class ConfigContainer {
 
     public ValueConfig<IndexActiveState> indexActiveStateConfig() {
         return this.indexActiveState;
+    }
+
+    public ValueConfig<TableActiveState> tableActiveStateConfig() {
+        return this.tableActiveState;
     }
 }

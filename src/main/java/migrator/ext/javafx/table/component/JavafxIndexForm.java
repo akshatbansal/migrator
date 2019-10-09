@@ -15,7 +15,7 @@ import migrator.app.domain.index.service.IndexService;
 import migrator.app.domain.table.component.IndexForm;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Index;
-import migrator.app.domain.table.service.TableService;
+import migrator.app.domain.table.service.TableActiveState;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.app.router.ActiveRoute;
 import migrator.ext.javafx.component.ViewComponent;
@@ -24,7 +24,7 @@ import migrator.ext.javafx.component.ViewLoader;
 public class JavafxIndexForm extends ViewComponent implements IndexForm {
     protected IndexService indexService;
     protected ColumnActiveState columnActiveState;
-    protected TableService tableService;
+    protected TableActiveState tableActiveState;
     protected ActiveRoute activeRoute;
     protected Index index;
 
@@ -40,7 +40,7 @@ public class JavafxIndexForm extends ViewComponent implements IndexForm {
         super(viewLoader);
         this.indexService = container.getIndexService();
         this.columnActiveState = container.getColumnActiveState();
-        this.tableService = container.getTableService();
+        this.tableActiveState = container.getTableActiveState();
         this.activeRoute = container.getActiveRoute();
 
         this.removeButton = new Button("Remove");
@@ -113,7 +113,7 @@ public class JavafxIndexForm extends ViewComponent implements IndexForm {
     }
 
     @FXML public void close() {
-        this.activeRoute.changeTo("table.view", this.tableService.getActiveState().getActive().get());
+        this.activeRoute.changeTo("table.view", this.tableActiveState.getActive().get());
     }
 
     @FXML public void restore() {

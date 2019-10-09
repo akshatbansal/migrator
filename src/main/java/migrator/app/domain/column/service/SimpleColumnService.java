@@ -10,13 +10,13 @@ import migrator.app.database.driver.DatabaseDriver;
 import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Table;
-import migrator.app.domain.table.service.TableService;
+import migrator.app.domain.table.service.TableActiveState;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.lib.modelstorage.ActiveState;
 import migrator.lib.modelstorage.Repository;
 
 public class SimpleColumnService implements ColumnService {
-    protected TableService tableService;
+    protected TableActiveState tableActiveState;
     protected Repository<Column> columnRepository;
     protected ActiveState<Column> columnActiveState;
     protected ColumnFactory columnFactory;
@@ -27,10 +27,10 @@ public class SimpleColumnService implements ColumnService {
         Repository<Column> columnRepository,
         ActiveState<Column> columnActiveState,
         ColumnFactory columnFactory,
-        TableService tableService,
+        TableActiveState tableActiveState,
         DatabaseDriverManager databaseDriverManager
     ) {
-        this.tableService = tableService;
+        this.tableActiveState = tableActiveState;
         this.columnRepository = columnRepository;
         this.columnActiveState = columnActiveState;
         this.columnFactory = columnFactory;
@@ -43,15 +43,13 @@ public class SimpleColumnService implements ColumnService {
 
     @Override
     public void start() {
-        this.tableService.getActiveState()
-            .getActive().addListener(this.onTableChangeListener);
+        this.tableActiveState.getActive().addListener(this.onTableChangeListener);
         
     }
 
     @Override
     public void stop() {
-        this.tableService.getActiveState()
-            .getActive().removeListener(this.onTableChangeListener);
+        this.tableActiveState.getActive().removeListener(this.onTableChangeListener);
     }
 
     protected void onTableSelect(Table activeTable) {

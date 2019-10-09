@@ -86,21 +86,6 @@ public class SimpleTableService implements TableService {
     }
 
     @Override
-    public ActiveState<Table> getActiveState() {
-        return this.activeState;
-    }
-
-    @Override
-    public TableFactory getFactory() {
-        return this.tableFactory;
-    }
-
-    @Override
-    public TableRepository getRepository() {
-        return this.tableRepository;
-    }
-
-    @Override
     public void add(Table table) {
         this.activeState.add(table);
     }

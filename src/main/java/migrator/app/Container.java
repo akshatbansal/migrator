@@ -15,6 +15,7 @@ import migrator.app.domain.project.service.ProjectFactory;
 import migrator.app.domain.project.service.ProjectService;
 import migrator.app.domain.table.service.TableFactory;
 import migrator.app.domain.table.service.TableService;
+import migrator.app.domain.table.service.TableActiveState;
 import migrator.app.ConfigContainer;
 import migrator.app.code.CodeManager;
 import migrator.app.migration.Migration;
@@ -97,5 +98,9 @@ public class Container {
 
     public IndexActiveState getIndexActiveState() {
         return this.config.indexActiveStateConfig().get();
+    }
+
+    public TableActiveState getTableActiveState() {
+        return this.config.tableActiveStateConfig().get();
     }
 }
