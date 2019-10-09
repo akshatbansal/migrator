@@ -42,7 +42,14 @@ public class SimpleColumnChange implements ColumnChange {
 
     @Override
     public Boolean hasNameChanged() {
-        return !this.getOriginalName().equals(this.getName());
+        return this.getName() != null && !this.getOriginalName().equals(this.getName());
+    }
+
+    @Override
+    public Boolean hasAttributeChanged() {
+        return this.getDefaultValue() != null ||
+            this.getFormat() != null ||
+            this.isNullEnabled() != null;
     }
 
     @Override

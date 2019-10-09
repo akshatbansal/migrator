@@ -7,6 +7,8 @@ import java.util.List;
 import migrator.app.code.CodeManager;
 import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.domain.change.service.ChangeService;
+import migrator.app.domain.change.service.ColumnChangeFactory;
+import migrator.app.domain.change.service.ColumnChangeService;
 import migrator.app.domain.change.service.TableChangeFactory;
 import migrator.app.domain.connection.service.ConnectionFactory;
 import migrator.app.domain.connection.service.ConnectionService;
@@ -73,6 +75,9 @@ public class Bootstrap {
         config.tableChangeFactoryConfig().set(
             new TableChangeFactory()
         );
+        config.columnChangeFactoryConfig().set(
+            new ColumnChangeFactory()
+        );
         config.tableFactoryConfig().set(
             new TableFactory(
                 config.tableChangeFactoryConfig().get()
@@ -90,6 +95,12 @@ public class Bootstrap {
                 config.tableChangeFactoryConfig().get()
             )
         );
+        config.columnChangeServiceConfig().set(
+            new ColumnChangeService(
+                config.changeServiceConfig().get(),
+                config.columnChangeFactoryConfig().get()
+            )
+        );
         config.projectFactoryConfig().set(
             new ProjectFactory(
                 config.databaseFactoryConfig().get()
@@ -105,14 +116,17 @@ public class Bootstrap {
         config.tableServiceConfig().set(
             new TableService(
                 config.changeServiceConfig().get(),
-                config.tableFactoryConfig().get()
+                config.tableFactoryConfig().get(),
+                config.databaseDriverManagerConfig().get()
             )
         );
         config.columnServiceConfig().set(
             new ColumnService(
                 config.columnFactoryConfig().get(),
                 config.changeServiceConfig().get(), 
-                config.tableServiceConfig().get().getSelected()
+                config.tableServiceConfig().get().getSelected(),
+                config.databaseDriverManagerConfig().get(),
+                config.columnChangeServiceConfig().get()
             )
         );
         config.indexServiceConfig().set(

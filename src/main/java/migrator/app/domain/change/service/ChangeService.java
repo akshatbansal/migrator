@@ -41,6 +41,16 @@ public class ChangeService {
         return null;
     }
 
+    public TableChange getOrCreateTableChange(String databaseName, String tableName) {
+        TableChange tableChange = this.getTableChange(databaseName, tableName);
+        if (tableChange == null) {
+            tableChange = this.getTableChangeFactory()
+                .createNotChanged(tableName);
+            this.addTableChange(databaseName, tableChange);
+        }
+        return tableChange;
+    }
+
     public TableChangeFactory getTableChangeFactory() {
         return this.tableChangeFactory;
     }

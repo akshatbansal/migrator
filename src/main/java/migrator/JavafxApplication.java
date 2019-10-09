@@ -15,9 +15,9 @@ import migrator.app.domain.database.model.DatabaseConnection;
 import migrator.app.domain.project.model.Project;
 import migrator.ext.javafx.JavafxGui;
 import migrator.ext.javafx.MainController;
-import migrator.ext.javafx.change.route.CommitViewRoute;
 import migrator.ext.javafx.component.JavafxLayout;
 import migrator.ext.javafx.component.ViewLoader;
+import migrator.ext.javafx.project.route.CommitViewRoute;
 import migrator.ext.javafx.project.route.ProjectIndexRoute;
 import migrator.ext.javafx.project.route.ProjectViewRoute;
 import migrator.ext.javafx.table.route.ColumnViewRoute;
@@ -81,7 +81,7 @@ public class JavafxApplication extends Application {
         );
         router.connect(
             "commit.view",
-            new CommitViewRoute(gui.getChangeKit(), layout)
+            new CommitViewRoute(gui.getProject(), layout)
         );
         router.connect(
             "project.index",

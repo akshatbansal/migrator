@@ -2,6 +2,8 @@ package migrator.app;
 
 import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.domain.change.service.ChangeService;
+import migrator.app.domain.change.service.ColumnChangeFactory;
+import migrator.app.domain.change.service.ColumnChangeService;
 import migrator.app.domain.change.service.TableChangeFactory;
 import migrator.app.domain.connection.service.ConnectionFactory;
 import migrator.app.domain.connection.service.ConnectionService;
@@ -67,6 +69,10 @@ public class Container {
         return this.config.tableChangeFactoryConfig().get();
     }
 
+    public ColumnChangeFactory getColumnChangeFactory() {
+        return this.config.columnChangeFactoryConfig().get();
+    }
+
     public ProjectFactory getProjectFactory() {
         return this.config.projectFactoryConfig().get();
     }
@@ -93,6 +99,10 @@ public class Container {
 
     public ChangeService getChangeService() {
         return this.config.changeServiceConfig().get();
+    }
+
+    public ColumnChangeService getColumnChangeService() {
+        return this.config.columnChangeServiceConfig().get();
     }
 
     public ProjectService getProjectService() {

@@ -80,4 +80,9 @@ public class JavafxTableList extends ViewComponent implements TableList {
         this.tableService.select(newTable);
         this.activeRoute.changeTo("table.view", newTable);
     }
+
+    @Override
+    @FXML public void commit() {
+        this.activeRoute.changeTo("commit.view", this.projectService.getOpened().get());
+    }
 }

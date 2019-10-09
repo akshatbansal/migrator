@@ -15,6 +15,7 @@
                         <Text text="Tables" styleClass="title" />
                     </HBox>
                     <Button text="+" onAction="#addTable" styleClass="btn-primary" />
+                    <Button text=">" onAction="#commit" styleClass="btn-primary" />
                 </HBox>
                 <VBox fx:id="breadcrumpsContainer"></VBox>
                 <VBox fx:id="tableCards"></VBox>

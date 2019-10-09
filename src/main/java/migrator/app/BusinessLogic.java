@@ -12,18 +12,20 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import migrator.app.database.driver.DatabaseDriver;
 import migrator.app.domain.change.service.ChangeService;
+import migrator.app.domain.change.service.ColumnChangeService;
 import migrator.app.domain.project.model.Project;
-import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Index;
 import migrator.app.domain.table.model.Table;
-import migrator.app.domain.table.service.TableFactory;
-import migrator.app.migration.model.TableChange;
 
 public class BusinessLogic {
     protected Container container;
+    protected ChangeService changeService;
+    protected ColumnChangeService columnChangeService;
 
     public BusinessLogic(Container container) {
         this.container = container;
+        this.changeService = container.getChangeService();
+        this.columnChangeService = container.getColumnChangeService();
 
         this.container.getTableService()
             .getSelected()
@@ -49,16 +51,21 @@ public class BusinessLogic {
         this.container.getIndexService()
             .setAll(
                 this.getTransformedIndexes(
+                    table,
                     databaseDriver.getIndexes(table.getOriginalName())
                 )
             );
         
         this.container.getColumnService()
-            .setAll(
-                this.getTransformedColumns(
-                    databaseDriver.getColumns(table.getOriginalName())
-                )
-            );
+            .loadAll(table);
+
+        // this.container.getColumnService()
+        //     .setAll(
+        //         this.getTransformedColumns(
+        //             table,
+        //             databaseDriver.getColumns(table.getOriginalName())
+        //         )
+        //     );
     }
 
     public void onProjectOpen(Project project) {
@@ -67,35 +74,11 @@ public class BusinessLogic {
             return;
         }
 
-        DatabaseDriver databaseDriver  = this.container.getDatabaseDriverManager()
-            .createDriver(project.getDatabase());
-        databaseDriver.connect();
-
-        ChangeService changeService = this.container.getChangeService();
-        TableFactory tableFactory = this.container.getTableFactory();
-
-        List<Table> tables = new ArrayList<>();
-        for (String tableName : databaseDriver.getTables()) {
-            TableChange tableChange = changeService.getTableChange(project.getName(), tableName);
-            if (tableChange == null) {
-                tableChange = changeService.getTableChangeFactory()
-                    .createNotChanged(tableName);
-                changeService.addTableChange(project.getName(), tableChange);
-            }
-            Table table = tableFactory.create(project, tableName, tableChange);
-            tables.add(table);
-        }
-        List<TableChange> createdTableChanges = changeService.getCreatedTableChanges(project.getName());
-        for (TableChange tableChange : createdTableChanges) {
-            tables.add(
-                tableFactory.create(project, tableChange.getOriginalName(), tableChange)
-            );
-        }
         this.container.getTableService()
-            .setAll(tables);
+            .loadAll(project);
     }
 
-    private Collection<Index> getTransformedIndexes(ObservableList<List<String>> rawIndexes) {
+    private Collection<Index> getTransformedIndexes(Table table, ObservableList<List<String>> rawIndexes) {
         Map<String, List<String>> indexColumnsMap = new LinkedHashMap<>();
         for (List<String> indexValues : rawIndexes) {
             String indexName = indexValues.get(0);
@@ -117,23 +100,29 @@ public class BusinessLogic {
         return indexes;
     }
 
-    private Collection<Column> getTransformedColumns(ObservableList<List<String>> rawColumns) {
-        List<Column> columns = new ArrayList<>();
-        for (List<String> columnName : rawColumns) {
-            String defaultValue = columnName.get(3);
-            if (defaultValue == null) {
-                defaultValue = "";
-            }
-            columns.add(
-                this.container.getColumnFactory()
-                    .createNotChanged(
-                        columnName.get(0),
-                        columnName.get(1),
-                        defaultValue,
-                        columnName.get(2) == "YES" ? true : false
-                    )
-            );
-        }
-        return columns;
-    }
+    // private Collection<Column> getTransformedColumns(Table table, ObservableList<List<String>> rawColumns) {
+    //     List<Column> columns = new ArrayList<>();
+    //     for (List<String> columnName : rawColumns) {
+    //         String defaultValue = columnName.get(3);
+    //         if (defaultValue == null) {
+    //             defaultValue = "";
+    //         }
+    //         ColumnChange columnChange = this.columnChangeService.getOrCreate(project.getName(), tableName);
+    //         if (tableChange == null) {
+    //             tableChange = changeService.getTableChangeFactory()
+    //                 .createNotChanged(tableName);
+    //             changeService.addTableChange(project.getName(), tableChange);
+    //         }
+    //         columns.add(
+    //             this.container.getColumnFactory()
+    //                 .createNotChanged(
+    //                     columnName.get(0),
+    //                     columnName.get(1),
+    //                     defaultValue,
+    //                     columnName.get(2) == "YES" ? true : false
+    //                 )
+    //         );
+    //     }
+    //     return columns;
+    // }
 }

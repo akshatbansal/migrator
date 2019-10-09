@@ -1,4 +1,4 @@
-package migrator.app.domain.change.component;
+package migrator.app.domain.project.component;
 
 import migrator.app.gui.GuiNode;
 

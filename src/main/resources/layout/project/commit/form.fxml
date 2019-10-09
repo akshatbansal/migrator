@@ -12,16 +12,9 @@
         <VBox >
             <HBox styleClass="form__row">
                 <HBox styleClass="form__row-label" alignment="center_left">
-                    <Text text="output" />
+                    <Text text="name" />
                 </HBox>
-                <ComboBox fx:id="output" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
-            </HBox>
-
-            <HBox styleClass="form__row">
-                <HBox styleClass="form__row-label" alignment="center_left">
-                    <Text text="project" />
-                </HBox>
-                <TextField fx:id="project" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
+                <TextField fx:id="name" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
             </HBox>
         </VBox>
     </center>
