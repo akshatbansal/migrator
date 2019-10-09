@@ -91,8 +91,7 @@ public class JavafxColumnForm extends ViewComponent implements ColumnForm {
 
     public void delete() {
         if (this.column.getChangeCommand().isType(ChangeCommand.CREATE)) {
-            this.columnService.getActiveState()
-                .remove(this.column);
+            this.columnService.remove(this.column);
             this.close();
             return;
         }

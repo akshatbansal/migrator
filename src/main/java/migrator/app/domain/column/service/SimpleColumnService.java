@@ -5,6 +5,7 @@ import java.util.List;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import migrator.app.database.driver.DatabaseDriver;
 import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.domain.table.model.Column;
@@ -104,6 +105,32 @@ public class SimpleColumnService implements ColumnService {
     @Override
     public Repository<Column> getRepository() {
         return this.columnRepository;
+    }
+
+    @Override
+    public void activate(Column column) {
+        this.columnActiveState.activate(column);
+    }
+
+    @Override
+    public void add(Column column) {
+        this.columnActiveState.add(column);
+    }
+
+    @Override
+    public void addAndActivate(Column column) {
+        this.add(column);
+        this.activate(column);
+    }
+
+    @Override
+    public ObservableList<Column> getAll() {
+        return this.columnActiveState.getList();
+    }
+
+    @Override
+    public void remove(Column column) {
+        this.columnActiveState.remove(column);
     }
 
     protected Column mergeColumn(Column dbValue, Column repositoryValue) {

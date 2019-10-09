@@ -24,7 +24,7 @@ public class ColumnServiceTest {
 
     @BeforeEach
     public void setUp() {
-        this.columnService = new ColumnService(
+        this.columnService = new SimpleColumnService(
             new ColumnFactory(),
             new ChangeService(
                 new TableChangeFactory()

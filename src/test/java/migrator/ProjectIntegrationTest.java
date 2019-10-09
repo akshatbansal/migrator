@@ -48,7 +48,8 @@ public class ProjectIntegrationTest {
     }
 
     @Test public void testSetTableListOnProjectOpen() {
-        new BusinessLogic(this.container);
+        this.container.getTableService().start();
+
         this.container.getProjectService()
             .open(
                 new Project(

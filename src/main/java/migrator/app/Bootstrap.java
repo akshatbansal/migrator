@@ -28,7 +28,6 @@ import migrator.app.ConfigContainer;
 import migrator.app.extension.Extension;
 import migrator.app.migration.Migration;
 import migrator.app.router.ActiveRoute;
-import migrator.lib.modelstorage.SimpleActiveState;
 
 public class Bootstrap {
     protected List<Extension> extensions;

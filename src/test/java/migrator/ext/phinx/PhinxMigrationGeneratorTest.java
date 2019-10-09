@@ -320,7 +320,7 @@ public class PhinxMigrationGeneratorTest {
                         "\t\t\t->changeColumn('id_name')\n" +
                         "\t\t\t->update();\n" +
                 "\t}\n" +
-            "}\n",,
+            "}\n",
             this.storage.load()
         );
     }

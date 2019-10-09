@@ -50,7 +50,7 @@ public class TableIntegrationTest {
     }
 
     @Test public void testSetColumnsOnTableSelect() {
-        new BusinessLogic(this.container);
+        this.container.getColumnService().start();
 
         this.container.getTableService()
             .select(
@@ -75,7 +75,7 @@ public class TableIntegrationTest {
     }
 
     @Test public void testSetIndexesOnTableSelect() {
-        new BusinessLogic(this.container);
+        this.container.getIndexService().start();
 
         this.container.getTableService()
             .select(

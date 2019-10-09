@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import migrator.app.database.driver.DatabaseDriver;
 import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.domain.table.model.Index;
@@ -113,6 +114,32 @@ public class SimpleIndexService implements IndexService {
     @Override
     public IndexRepository getRepository() {
         return this.indexRepository;
+    }
+
+    @Override
+    public void add(Index index) {
+        this.activeState.add(index);
+    }
+
+    @Override
+    public ObservableList<Index> getAll() {
+        return this.activeState.getList();
+    }
+
+    @Override
+    public void remove(Index index) {
+        this.activeState.remove(index);
+    }
+
+    @Override
+    public void activate(Index index) {
+        this.activeState.activate(index);
+    }
+
+    @Override
+    public void addAndActivate(Index index) {
+        this.add(index);
+        this.activate(index);
     }
 
     protected Index mergeColumn(Index dbValue, Index repositoryValue) {

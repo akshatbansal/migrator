@@ -5,6 +5,7 @@ import java.util.List;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import migrator.app.database.driver.DatabaseDriver;
 import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.domain.project.model.Project;
@@ -97,6 +98,32 @@ public class SimpleTableService implements TableService {
     @Override
     public TableRepository getRepository() {
         return this.tableRepository;
+    }
+
+    @Override
+    public void add(Table table) {
+        this.activeState.add(table);
+    }
+
+    @Override
+    public void activate(Table table) {
+        this.activeState.activate(table);
+    }
+
+    @Override
+    public void addAndActivate(Table table) {
+        this.add(table);
+        this.activate(table);
+    }
+
+    @Override
+    public void remove(Table table) {
+        this.activeState.remove(table);
+    }
+
+    @Override
+    public ObservableList<Table> getAll() {
+        return this.activeState.getList();
     }
 
     protected Table mergeTable(Table dbValue, Table repositoryValue) {

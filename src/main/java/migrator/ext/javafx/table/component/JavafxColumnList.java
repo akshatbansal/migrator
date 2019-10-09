@@ -37,7 +37,7 @@ public class JavafxColumnList extends ViewComponent implements ColumnList {
         if (this.columns == null) {
             return;
         }
-        List<Column> columns = this.columnService.getActiveState().getList();
+        List<Column> columns = this.columnService.getAll();
         this.columns.setPrefHeight((40) * (columns.size() + 1));
         this.columns.getItems().setAll(columns);
     }
@@ -56,7 +56,7 @@ public class JavafxColumnList extends ViewComponent implements ColumnList {
     public void addColumn() {
         Column newColumn = this.columnService.getFactory()
             .createWithCreateChange("new_column");
-        this.columnService.getActiveState().addAndActivate(newColumn);
+        this.columnService.addAndActivate(newColumn);
         this.activeRoute.changeTo("column.view", newColumn);
     }
 }

@@ -36,7 +36,7 @@ public class JavafxIndexList extends ViewComponent implements IndexList {
             return;
         }
         this.indexes.getItems().setAll(
-            this.indexService.getActiveState().getList()
+            this.indexService.getAll()
         );
         this.indexes.setPrefHeight(40 * (this.indexes.getItems().size() + 1));
     }
@@ -55,8 +55,7 @@ public class JavafxIndexList extends ViewComponent implements IndexList {
     public void addIndex() {
         Index newIndex = this.indexService.getFactory()
             .createWithCreateChange("new_index");
-        this.indexService.getActiveState()
-            .addAndActivate(newIndex);
+        this.indexService.addAndActivate(newIndex);
         if (this.indexes != null) {
             this.indexes.getSelectionModel().select(newIndex);
         }
