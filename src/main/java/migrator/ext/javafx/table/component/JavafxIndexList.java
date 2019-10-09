@@ -55,8 +55,8 @@ public class JavafxIndexList extends ViewComponent implements IndexList {
     public void addIndex() {
         Index newIndex = this.indexService.getFactory()
             .createWithCreateChange("new_index");
-        // this.indexService.add(newIndex);
-        // this.indexService.select(newIndex);
+        this.indexService.getActiveState()
+            .addAndActivate(newIndex);
         if (this.indexes != null) {
             this.indexes.getSelectionModel().select(newIndex);
         }

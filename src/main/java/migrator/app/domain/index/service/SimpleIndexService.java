@@ -65,7 +65,7 @@ public class SimpleIndexService implements IndexService {
         databaseDriver.connect();
 
         Map<String, List<String>> indexColumnsMap = new LinkedHashMap<>();
-        for (List<String> indexValues : databaseDriver.getColumns(activeTable.getOriginalName())) {
+        for (List<String> indexValues : databaseDriver.getIndexes(activeTable.getOriginalName())) {
             String indexName = indexValues.get(0);
             if (!indexColumnsMap.containsKey(indexName)) {
                 indexColumnsMap.put(indexName, new ArrayList<>());

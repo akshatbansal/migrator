@@ -124,16 +124,4 @@ public class SimpleColumnService implements ColumnService {
         repositoryValue.getOriginal().nullProperty().setValue(dbValue.getOriginal().isNullEnabled());
         return repositoryValue;
     }
-
-    @Override
-    public void add(Column column) {
-        Table activeTable = this.tableService.getActiveState()
-            .getActive().get();
-        String repositoryKey = activeTable.getProject().getName() + "." + activeTable.getName();
-
-        this.columnRepository.add(repositoryKey, column);
-        this.columnActiveState.setListAll(
-            this.columnRepository.getList(repositoryKey)
-        );
-    }
 }

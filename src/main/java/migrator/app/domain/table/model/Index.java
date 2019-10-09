@@ -80,6 +80,7 @@ public class Index implements Changable, IndexChange {
     public void restore() {
         this.changedIndex.nameProperty().set(this.originalIndex.getName());
         this.changedIndex.columnsProperty().setAll(this.originalColumnsProperty());
+        this.changeCommand.setType(ChangeCommand.NONE);
     }
 
     public StringProperty changeTypeProperty() {

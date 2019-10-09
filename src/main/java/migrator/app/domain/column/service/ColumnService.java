@@ -10,5 +10,4 @@ public interface ColumnService {
     public Repository<Column> getRepository();
     public ActiveState<Column> getActiveState();
     public ColumnFactory getFactory();
-    public void add(Column column);
 }

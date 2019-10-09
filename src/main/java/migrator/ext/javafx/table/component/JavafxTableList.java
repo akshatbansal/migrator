@@ -76,8 +76,8 @@ public class JavafxTableList extends ViewComponent implements TableList {
     @FXML public void addTable() {
         Table newTable = this.tableService.getFactory()
             .createWithCreateChange(this.projectService.getOpened().get(), "new_table");
-        // this.tableService.register(newTable);
-        // this.tableService.select(newTable);
+        this.tableService.getActiveState()
+            .addAndActivate(newTable);
         this.activeRoute.changeTo("table.view", newTable);
     }
 

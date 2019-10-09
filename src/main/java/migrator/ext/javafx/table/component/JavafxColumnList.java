@@ -56,8 +56,7 @@ public class JavafxColumnList extends ViewComponent implements ColumnList {
     public void addColumn() {
         Column newColumn = this.columnService.getFactory()
             .createWithCreateChange("new_column");
-        this.columnService.add(newColumn);
-        this.columns.getSelectionModel().select(newColumn);
+        this.columnService.getActiveState().addAndActivate(newColumn);
         this.activeRoute.changeTo("column.view", newColumn);
     }
 }

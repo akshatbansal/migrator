@@ -16,4 +16,7 @@ public interface ActiveState<T> {
 
     public ObservableList<T> getList();
     public void setListAll(List<T> list);
+    public void add(T item);
+    public void remove(T item);
+    public void addAndActivate(T item);
 }

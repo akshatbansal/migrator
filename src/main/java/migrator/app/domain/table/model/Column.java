@@ -95,7 +95,7 @@ public class Column implements Changable, ColumnChange, ChangeListener<Object> {
         this.changedColumn.formatProperty().set(this.originalColumn.getFormat());
         this.changedColumn.defaultValueProperty().set(this.originalColumn.getDefaultValue());
         this.changedColumn.nullProperty().setValue(this.originalColumn.isNullEnabled());
-        // this.change.clear();
+        this.changeCommand.setType(ChangeCommand.NONE);
     }
 
     @Override

@@ -72,4 +72,20 @@ public class SimpleActiveState<T> implements ActiveState<T> {
     public void setListAll(List<T> list) {
         this.list.setAll(list);
     }
+
+    @Override
+    public void add(T item) {
+        this.list.add(item);
+    }
+
+    @Override
+    public void remove(T item) {
+        this.list.remove(item);
+    }
+
+    @Override
+    public void addAndActivate(T item) {
+        this.add(item);
+        this.activate(item);
+    }
 }
