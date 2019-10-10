@@ -35,6 +35,7 @@ import migrator.ext.phinx.PhinxMigrationGenerator;
 import migrator.ext.phinx.mock.FileStorage;
 import migrator.ext.phinx.mock.FakeTimestampFileStorageFactory;
 import migrator.ext.php.PhpCommandFactory;
+import migrator.lib.stringformatter.PascalCaseFormatter;
 
 public class PhinxMigrationGeneratorTest {
     protected PhinxMigrationGenerator migrator;
@@ -45,7 +46,8 @@ public class PhinxMigrationGeneratorTest {
         this.storage = new FileStorage();
         this.migrator = new PhinxMigrationGenerator(
             new FakeTimestampFileStorageFactory(this.storage),
-            new PhpCommandFactory()
+            new PhpCommandFactory(),
+            new PascalCaseFormatter()
         );
     }
 

@@ -4,11 +4,13 @@ import java.io.File;
 
 import migrator.ext.phinx.TimestampFileStorageFactory;
 import migrator.lib.storage.Storage;
+import migrator.lib.stringformatter.UnderscoreFormatter;
 
 public class FakeTimestampFileStorageFactory extends TimestampFileStorageFactory {
     protected Storage storage;
 
     public FakeTimestampFileStorageFactory(Storage storage) {
+        super(new UnderscoreFormatter());
         this.storage = storage;
     }
 
