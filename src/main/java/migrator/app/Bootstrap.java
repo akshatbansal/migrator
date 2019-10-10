@@ -55,7 +55,10 @@ public class Bootstrap {
     protected void initialize(ConfigContainer config) {
         ColumnRepository columnRepository = new ColumnRepository();
         IndexRepository indexRepository = new IndexRepository();
-        TableRepository tableRepository = new TableRepository();
+        
+        config.tableRepositoryConfig().set(
+            new TableRepository()
+        );
 
         config.activeRouteConfig().set(
             new ActiveRoute()
@@ -110,14 +113,14 @@ public class Bootstrap {
         );
         config.tableActiveStateConfig().set(
             new TableActiveState(
-                tableRepository,
+                config.tableRepositoryConfig().get(),
                 config.projectServiceConfig().get()
             )
         );
         config.tableServiceConfig().set(
             new SimpleTableService(
                 config.tableFactoryConfig().get(),
-                tableRepository,
+                config.tableRepositoryConfig().get(),
                 config.tableActiveStateConfig().get(),
                 config.databaseDriverManagerConfig().get(),
                 config.projectServiceConfig().get()

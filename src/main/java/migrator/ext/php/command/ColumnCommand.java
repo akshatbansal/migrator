@@ -15,7 +15,6 @@ public class ColumnCommand {
     protected String getOptions() {
         // limit
         // after
-        // null
         // comment
         List<String> options = new ArrayList<>();
         if (this.columnChange.isNullEnabled() != null) {

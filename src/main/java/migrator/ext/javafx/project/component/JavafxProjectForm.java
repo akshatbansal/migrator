@@ -1,5 +1,9 @@
 package migrator.ext.javafx.project.component;
 
+import java.io.File;
+
+import javafx.stage.DirectoryChooser;
+import javafx.stage.Window;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
@@ -20,6 +24,7 @@ public class JavafxProjectForm extends ViewComponent implements ProjectForm {
     protected ActiveRoute activeRoute;
     protected Project project;
     protected ProjectService projectService;
+    protected Window window;
 
     @FXML protected TextField name;
     @FXML protected ComboBox<String> outputType;
@@ -31,13 +36,14 @@ public class JavafxProjectForm extends ViewComponent implements ProjectForm {
     @FXML protected TextField user;
     @FXML protected PasswordField password;
 
-    public JavafxProjectForm(Project project, ViewLoader viewLoader, Container container) {
+    public JavafxProjectForm(Project project, ViewLoader viewLoader,Container container, Window window) {
         super(viewLoader);
         this.databaseDriverManager = container.getDatabaseDriverManager();
         this.migration = container.getMigration();
         this.activeRoute = container.getActiveRoute();
         this.projectService = container.getProjectService();
         this.project = project;
+        this.window = window;
 
         this.loadView("/layout/project/form.fxml");
     }
@@ -95,5 +101,18 @@ public class JavafxProjectForm extends ViewComponent implements ProjectForm {
     @FXML public void delete() {
         this.projectService.remove(this.project);
         this.close();
+    }
+
+    @FXML public void chooseDirectory() {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        File selectedDirectory = directoryChooser.showDialog(this.window);
+
+        if(selectedDirectory == null){
+            return;
+        }
+        
+        this.folder.textProperty().set(
+            selectedDirectory.getAbsolutePath()
+        );
     }
 }

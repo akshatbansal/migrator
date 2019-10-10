@@ -1,24 +1,32 @@
 package migrator.ext.phinx;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
 import migrator.lib.storage.Storage;
+import migrator.lib.stringformatter.StringFormatter;
 import migrator.app.code.CodeCommand;
 import migrator.app.code.CodeCommandFactory;
 import migrator.app.migration.MigrationGenerator;
 import migrator.app.migration.model.TableChange;
 
 public class PhinxMigrationGenerator implements MigrationGenerator {
-    protected Storage storage;
+    protected TimestampFileStorageFactory timestampFileStorageFactory;
     protected CodeCommandFactory commandFactory;
+    protected StringFormatter classNameFormatter;
 
-    public PhinxMigrationGenerator(Storage storage, CodeCommandFactory commandFactory) {
-        this.storage = storage;
+    public PhinxMigrationGenerator(
+        TimestampFileStorageFactory timestampFileStorageFactory,
+        CodeCommandFactory commandFactory,
+        StringFormatter classNameFormatter
+    ) {
+        this.timestampFileStorageFactory = timestampFileStorageFactory;
         this.commandFactory = commandFactory;
+        this.classNameFormatter = classNameFormatter;
     }
 
-    public Boolean generateMigration(String name, List<? extends TableChange> changes) {
+    public Boolean generateMigration(String projectFolder, String name, List<? extends TableChange> changes) {
         String phinxContent = "";
         for (TableChange tableChange : changes) {
             phinxContent += this.toPhinxFormat(tableChange);
@@ -27,15 +35,19 @@ public class PhinxMigrationGenerator implements MigrationGenerator {
             return true;
         }
 
-        this.storage.store(
-            this.wrapToPhinxClass(name, phinxContent)
+        Storage storage = this.timestampFileStorageFactory.create(
+            new File(projectFolder + System.getProperty("file.separator") + name)
+        );
+        String className = this.classNameFormatter.format(name);
+        storage.store(
+            this.wrapToPhinxClass(className, phinxContent)
         );
 
         return true;
     }
 
-    public Boolean generateMigration(String name, TableChange ... changes) {
-        return this.generateMigration(name, Arrays.asList(changes));
+    public Boolean generateMigration(String projectFolder, String name, TableChange ... changes) {
+        return this.generateMigration(projectFolder, name, Arrays.asList(changes));
     }
 
     private String toPhinxFormat(TableChange tableChange) {

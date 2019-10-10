@@ -45,6 +45,9 @@ public class PhpCommandFactory implements CodeCommandFactory {
     }
 
     public CodeCommand index(IndexChange indexChange) {
+        if (indexChange.getCommand().isType(ChangeCommand.NONE)) {
+            return new VoidCommand();
+        }
         if (indexChange.getCommand().isType(ChangeCommand.DELETE)) {
             return this.removeIndexByname(indexChange);
         }

@@ -33,6 +33,7 @@ import migrator.app.migration.model.SimpleTableProperty;
 import migrator.app.migration.model.TableChange;
 import migrator.ext.phinx.PhinxMigrationGenerator;
 import migrator.ext.phinx.mock.FileStorage;
+import migrator.ext.phinx.mock.FakeTimestampFileStorageFactory;
 import migrator.ext.php.PhpCommandFactory;
 
 public class PhinxMigrationGeneratorTest {
@@ -42,7 +43,10 @@ public class PhinxMigrationGeneratorTest {
     @BeforeEach
     public void setUp() {
         this.storage = new FileStorage();
-        this.migrator = new PhinxMigrationGenerator(this.storage, new PhpCommandFactory());
+        this.migrator = new PhinxMigrationGenerator(
+            new FakeTimestampFileStorageFactory(this.storage),
+            new PhpCommandFactory()
+        );
     }
 
     @Test public void testPhpMigrationCreateTableWithColumn() {
@@ -62,7 +66,7 @@ public class PhinxMigrationGeneratorTest {
             ),
             FXCollections.observableArrayList()
         );
-        this.migrator.generateMigration("MigrationByMigrator", change);
+        this.migrator.generateMigration("", "MigrationByMigrator", change);
         assertEquals(
             "<?php\n\n" +
             "use Phinx\\Migration\\AbstractMigration;\n\n" +
@@ -88,7 +92,7 @@ public class PhinxMigrationGeneratorTest {
             FXCollections.observableArrayList(),
             FXCollections.observableArrayList()
         );
-        this.migrator.generateMigration("MigrationByMigrator", change);
+        this.migrator.generateMigration("", "MigrationByMigrator", change);
         assertEquals(
             "<?php\n\n" +
             "use Phinx\\Migration\\AbstractMigration;\n\n" +
@@ -122,7 +126,7 @@ public class PhinxMigrationGeneratorTest {
             ),
             FXCollections.observableArrayList()
         );
-        this.migrator.generateMigration("MigrationByMigrator", change);
+        this.migrator.generateMigration("", "MigrationByMigrator", change);
         assertEquals(
             "<?php\n\n" +
             "use Phinx\\Migration\\AbstractMigration;\n\n" +
@@ -156,7 +160,7 @@ public class PhinxMigrationGeneratorTest {
             ),
             FXCollections.observableArrayList()
         );
-        this.migrator.generateMigration("MigrationByMigrator", change);
+        this.migrator.generateMigration("", "MigrationByMigrator", change);
         assertEquals(
             "<?php\n\n" +
             "use Phinx\\Migration\\AbstractMigration;\n\n" +
@@ -190,7 +194,7 @@ public class PhinxMigrationGeneratorTest {
             ),
             FXCollections.observableArrayList()
         );
-        this.migrator.generateMigration("MigrationByMigrator", change);
+        this.migrator.generateMigration("", "MigrationByMigrator", change);
         assertEquals(
             "<?php\n\n" +
             "use Phinx\\Migration\\AbstractMigration;\n\n" +
@@ -216,7 +220,7 @@ public class PhinxMigrationGeneratorTest {
             FXCollections.observableArrayList(),
             FXCollections.observableArrayList()
         );
-        this.migrator.generateMigration("MigrationByMigrator", change);
+        this.migrator.generateMigration("", "MigrationByMigrator", change);
         assertEquals(
             "<?php\n\n" +
             "use Phinx\\Migration\\AbstractMigration;\n\n" +
@@ -261,7 +265,7 @@ public class PhinxMigrationGeneratorTest {
                 )
             )
         );
-        this.migrator.generateMigration("MigrationByMigrator", change);
+        this.migrator.generateMigration("", "MigrationByMigrator", change);
         assertEquals(
             "<?php\n\n" +
             "use Phinx\\Migration\\AbstractMigration;\n\n" +
@@ -297,7 +301,7 @@ public class PhinxMigrationGeneratorTest {
                 )
             )
         );
-        this.migrator.generateMigration("MigrationByMigrator", change);
+        this.migrator.generateMigration("", "MigrationByMigrator", change);
         assertEquals(
             "<?php\n\n" +
             "use Phinx\\Migration\\AbstractMigration;\n\n" +
@@ -323,7 +327,7 @@ public class PhinxMigrationGeneratorTest {
             FXCollections.observableArrayList(),
             FXCollections.observableArrayList()
         );
-        this.migrator.generateMigration("MigrationByMigrator", change);
+        this.migrator.generateMigration("", "MigrationByMigrator", change);
         assertNull(this.storage.load());
     }
 
@@ -344,7 +348,7 @@ public class PhinxMigrationGeneratorTest {
             ),
             FXCollections.observableArrayList()
         );
-        this.migrator.generateMigration("MigrationByMigrator", change);
+        this.migrator.generateMigration("", "MigrationByMigrator", change);
         assertEquals(
             "<?php\n\n" +
             "use Phinx\\Migration\\AbstractMigration;\n\n" +
@@ -378,7 +382,7 @@ public class PhinxMigrationGeneratorTest {
             ),
             FXCollections.observableArrayList()
         );
-        this.migrator.generateMigration("MigrationByMigrator", change);
+        this.migrator.generateMigration("", "MigrationByMigrator", change);
         assertEquals(
             "<?php\n\n" +
             "use Phinx\\Migration\\AbstractMigration;\n\n" +
