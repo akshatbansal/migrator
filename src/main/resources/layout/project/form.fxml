@@ -28,7 +28,10 @@
                 <HBox styleClass="form__row-label" alignment="center_left">
                     <Text text="folder" />
                 </HBox>
-                <TextField fx:id="folder" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
+                <HBox maxWidth="Infinity">
+                    <TextField fx:id="folder" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
+                    <Button text="..." onAction="#chooseDirectory" styleClass="btn-secondary" />
+                </HBox>
             </HBox>
 
             <HBox alignment="center">

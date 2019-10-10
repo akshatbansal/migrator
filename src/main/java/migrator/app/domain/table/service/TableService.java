@@ -8,10 +8,6 @@ public interface TableService {
     public void start();
     public void stop();
 
-    public TableFactory getFactory();
-    public ActiveState<Table> getActiveState();
-    public TableRepository getRepository();
-
     public void add(Table table);
     public void activate(Table table);
     public void remove(Table table);

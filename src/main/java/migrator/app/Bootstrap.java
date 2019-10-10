@@ -55,7 +55,10 @@ public class Bootstrap {
     protected void initialize(ConfigContainer config) {
         ColumnRepository columnRepository = new ColumnRepository();
         IndexRepository indexRepository = new IndexRepository();
-        TableRepository tableRepository = new TableRepository();
+        
+        config.tableRepositoryConfig().set(
+            new TableRepository()
+        );
 
         config.activeRouteConfig().set(
             new ActiveRoute()
@@ -108,15 +111,17 @@ public class Bootstrap {
                 config.projectFactoryConfig().get()
             )
         );
-        TableActiveState tableActiveState = new TableActiveState(
-            tableRepository,
-            config.projectServiceConfig().get()
+        config.tableActiveStateConfig().set(
+            new TableActiveState(
+                config.tableRepositoryConfig().get(),
+                config.projectServiceConfig().get()
+            )
         );
         config.tableServiceConfig().set(
             new SimpleTableService(
                 config.tableFactoryConfig().get(),
-                tableRepository,
-                tableActiveState,
+                config.tableRepositoryConfig().get(),
+                config.tableActiveStateConfig().get(),
                 config.databaseDriverManagerConfig().get(),
                 config.projectServiceConfig().get()
             )
@@ -124,7 +129,7 @@ public class Bootstrap {
         config.columnActiveStateConfig().set(
             new ColumnActiveState(
                 columnRepository, 
-                tableActiveState
+                config.tableActiveStateConfig().get()
             )
         );
         config.columnServiceConfig().set(
@@ -132,14 +137,14 @@ public class Bootstrap {
                 columnRepository,
                 config.columnActiveStateConfig().get(),   
                 config.columnFactoryConfig().get(),
-                config.tableServiceConfig().get(),
+                config.tableActiveStateConfig().get(),
                 config.databaseDriverManagerConfig().get()
             )
         );
         config.indexActiveStateConfig().set(
             new IndexActiveState(
                 indexRepository,
-                tableActiveState
+                config.tableActiveStateConfig().get()
             )
         );
         config.indexServiceConfig().set(
@@ -147,7 +152,7 @@ public class Bootstrap {
                 config.indexFactoryConfig().get(),
                 indexRepository,
                 config.indexActiveStateConfig().get(),
-                config.tableServiceConfig().get(),
+                config.tableActiveStateConfig().get(),
                 config.databaseDriverManagerConfig().get()
             )
         );

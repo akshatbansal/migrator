@@ -11,7 +11,7 @@ import migrator.app.Container;
 import migrator.app.domain.column.service.ColumnService;
 import migrator.app.domain.table.component.ColumnForm;
 import migrator.app.domain.table.model.Column;
-import migrator.app.domain.table.service.TableService;
+import migrator.app.domain.table.service.TableActiveState;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.app.router.ActiveRoute;
 import migrator.ext.javafx.component.ViewComponent;
@@ -20,7 +20,7 @@ import migrator.ext.javafx.component.ViewLoader;
 public class JavafxColumnForm extends ViewComponent implements ColumnForm {
     protected ColumnService columnService;
     protected ActiveRoute activeRoute;
-    protected TableService tableService;
+    protected TableActiveState tableActiveState;
     protected Column column;
 
     @FXML protected TextField name;
@@ -34,7 +34,7 @@ public class JavafxColumnForm extends ViewComponent implements ColumnForm {
     public JavafxColumnForm(Column column, ViewLoader viewLoader, Container container) {
         super(viewLoader);
         this.columnService = container.getColumnService();
-        this.tableService = container.getTableService();
+        this.tableActiveState = container.getTableActiveState();
         this.activeRoute = container.getActiveRoute();
 
         this.removeButton = new Button("Remove");
@@ -103,6 +103,6 @@ public class JavafxColumnForm extends ViewComponent implements ColumnForm {
     }
 
     @FXML public void close() {
-        this.activeRoute.changeTo("table.view", this.tableService.getActiveState().getActive().get());
+        this.activeRoute.changeTo("table.view", this.tableActiveState.getActive().get());
     }
 }

@@ -14,7 +14,7 @@ import migrator.app.database.driver.DatabaseDriver;
 import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.domain.table.model.Index;
 import migrator.app.domain.table.model.Table;
-import migrator.app.domain.table.service.TableService;
+import migrator.app.domain.table.service.TableActiveState;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.lib.modelstorage.ActiveState;
 
@@ -23,7 +23,7 @@ public class SimpleIndexService implements IndexService {
     protected IndexRepository indexRepository;
     protected ActiveState<Index> activeState;
     protected DatabaseDriverManager databaseDriverManager;
-    protected TableService tableService;
+    protected TableActiveState tableActiveState;
 
     protected ChangeListener<Table> changeTableListener;
 
@@ -31,14 +31,14 @@ public class SimpleIndexService implements IndexService {
         IndexFactory indexFactory,
         IndexRepository indexRepository,
         ActiveState<Index> activeState,
-        TableService tableService,
+        TableActiveState tableActiveState,
         DatabaseDriverManager databaseDriverManager
     ) {
         this.activeState = activeState;
         this.databaseDriverManager = databaseDriverManager;
         this.indexFactory = indexFactory;
         this.indexRepository = indexRepository;
-        this.tableService = tableService;
+        this.tableActiveState = tableActiveState;
 
         this.changeTableListener = (ObservableValue<? extends Table> observable, Table oldValue, Table newValue) -> {
             this.onTableChange(newValue);
@@ -47,14 +47,14 @@ public class SimpleIndexService implements IndexService {
 
     @Override
     public void start() {
-        this.tableService.getActiveState().getActive()
+        this.tableActiveState.getActive()
             .addListener(this.changeTableListener);
         
     }
 
     @Override
     public void stop() {
-        this.tableService.getActiveState().getActive()
+        this.tableActiveState.getActive()
             .removeListener(this.changeTableListener);
     }
 

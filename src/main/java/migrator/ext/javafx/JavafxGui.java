@@ -1,5 +1,6 @@
 package migrator.ext.javafx;
 
+import javafx.stage.Window;
 import migrator.app.Container;
 import migrator.app.Gui;
 import migrator.app.breadcrumps.BreadcrumpsGuiKit;
@@ -17,10 +18,10 @@ public class JavafxGui implements Gui {
     protected ProjectGuiKit projectGuiKit;
     protected ActiveRoute activeRoute;
 
-    public JavafxGui(Container container, ViewLoader viewLoader) {
+    public JavafxGui(Container container, ViewLoader viewLoader, Window window) {
         this.breadcrumpsGuiKit = new JavafxBreadcrumpsGuiKit(viewLoader, container);
         this.tableGuiKit = new JavafxTableGuiKit(viewLoader, container, this);
-        this.projectGuiKit = new JavafxProjectGuiKit(viewLoader, container);
+        this.projectGuiKit = new JavafxProjectGuiKit(viewLoader, container, window);
     }
 
     @Override

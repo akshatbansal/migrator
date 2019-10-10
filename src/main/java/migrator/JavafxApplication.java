@@ -53,12 +53,12 @@ public class JavafxApplication extends Application {
                     ), 
                     "project#1",
                     "phinx",
-                    ""
+                    "/home/arksys/Documents/peto/projekty/migrator-test"
                 )
             );
 
         ViewLoader viewLoader = new ViewLoader();
-        Gui gui = new JavafxGui(container, viewLoader);
+        Gui gui = new JavafxGui(container, viewLoader, primaryStage);
         MainController mainController = new MainController(viewLoader);
 
         JavafxLayout layout = new JavafxLayout(mainController.getBodyPane(), mainController.getSidePane());

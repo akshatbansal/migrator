@@ -1,5 +1,6 @@
 package migrator.ext.javafx.project.service;
 
+import javafx.stage.Window;
 import migrator.app.Container;
 import migrator.app.domain.project.component.CommitForm;
 import migrator.app.domain.project.component.ProjectForm;
@@ -14,15 +15,17 @@ import migrator.ext.javafx.project.component.JavafxProjectList;
 public class JavafxProjectGuiKit implements ProjectGuiKit {
     protected ViewLoader viewLoader;
     protected Container container;
+    protected Window window;
 
-    public JavafxProjectGuiKit(ViewLoader viewLoader, Container container) {
+    public JavafxProjectGuiKit(ViewLoader viewLoader, Container container, Window window) {
         this.container = container;
         this.viewLoader = viewLoader;
+        this.window = window;
     }
 
     @Override
     public ProjectForm createForm(Project project) {
-        return new JavafxProjectForm(project, this.viewLoader, this.container);
+        return new JavafxProjectForm(project, this.viewLoader, this.container, this.window);
     }
 
     @Override

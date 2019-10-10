@@ -3,11 +3,9 @@ package migrator.ext.php.command;
 import migrator.app.code.CodeCommand;
 import migrator.app.migration.model.ColumnChange;
 
-public class AddColumn implements CodeCommand {
-    protected ColumnChange columnChange;
-
+public class AddColumn extends ColumnCommand implements CodeCommand {
     public AddColumn(ColumnChange columnChange) {
-        this.columnChange = columnChange;
+        super(columnChange);
     }
 
     @Override
@@ -26,18 +24,5 @@ public class AddColumn implements CodeCommand {
 
     private String getFormat() {
         return this.columnChange.getFormat();
-    }
-
-    private String getOptions() {
-        // limit
-        // after
-        // null
-        // default
-        // comment
-        String options = "";
-        if (this.columnChange.isNullEnabled() != null) {
-            options = "'null' => " + this.columnChange.isNullEnabled();
-        }
-        return "[" + options + "]";
     }
 }

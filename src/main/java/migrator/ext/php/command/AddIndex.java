@@ -23,6 +23,9 @@ public class AddIndex implements CodeCommand {
         List<StringProperty> columnsProperty = this.indexChange.columnsProperty();
         List<String> columns = new ArrayList<>();
         for (StringProperty columnProperty : columnsProperty) {
+            if (columnProperty.get().isEmpty()) {
+                continue;
+            }
             columns.add(columnProperty.get());
         }
         String columnsString = String.join("', '", columns);
