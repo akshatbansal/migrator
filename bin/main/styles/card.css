@@ -1,0 +1,61 @@
+.card {
+    -fx-background-color: #434343;
+    background-color: #434343;
+    -fx-effect: dropshadow(three-pass-box, #252525, 10, 0, 0, 0);
+    -fx-pref-width: 280pt;
+    -fx-border-radius: 0;
+    border-radius: 0;
+    -fx-background-raius: 0;
+    -fx-border-color: transparent;
+    border-color: transparent;
+}
+
+.card.card--active {
+    -fx-effect: dropshadow(three-pass-box, #20AAD6, 10, 0, 0, 0);
+}
+
+.card.card--create {
+    border-width: 0px 0px 0px 2px;
+    -fx-border-width: 0px 0px 0px 2px;
+    border-color: #6FDA80;
+    -fx-border-color: #6FDA80;
+}
+
+.card.card--delete {
+    border-width: 0px 0px 0px 2px;
+    -fx-border-width: 0px 0px 0px 2px;
+    border-color: #DA6F6F;
+    -fx-border-color: #DA6F6F;
+}
+
+.card.card--update {
+    border-width: 0px 0px 0px 2px;
+    -fx-border-width: 0px 0px 0px 2px;
+    border-color: #DAC26F;
+    -fx-border-color: #DAC26F;
+}
+
+.card__header {
+    padding: 10 10 10 10;
+    -fx-padding: 10 10 10 10;
+}
+
+.card__header-title {
+    font-size: 14pt;
+    -fx-font-size: 14pt;
+    fill: #f4f4f4;
+    -fx-fill: #f4f4f4;
+    -fx-text-fill: #f4f4f4;
+}
+
+.card__footer {
+    padding: 10 10 10 10;
+    -fx-padding: 10 10 10 10;
+}
+
+.card {
+    background-color: #434343;
+    -fx-background-color: #434343;
+    -fx-effect: dropshadow(three-pass-box, #252525, 10, 0, 0, 0);
+    -fx-pref-width: 300;
+}

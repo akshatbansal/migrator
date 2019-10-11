@@ -1,0 +1,66 @@
+.table-view {
+    background-color: #434343;
+    -fx-background-color: #434343;
+}
+.table-view .column-header, .table-view .filler {
+    background-color: transparent;
+    -fx-background-color: transparent;
+}
+.table-view .column-header-background {
+    background-color: #434343;
+    -fx-background-color: #434343;
+    border-style: solid;
+    -fx-border-style: solid;
+    border-color: #606060;
+    -fx-border-color: #606060;
+    border-width: 0px 0px 1px 0px;
+    -fx-border-width: 0px 0px 1px 0px;
+}
+.table-view .column-header .label {
+    font-weight: normal;
+    -fx-font-weight: normal;
+}
+.table-view .column-header .label, .table-view .cell {
+    -fx-alignment: CENTER_LEFT;
+    background-color: transparent;
+    -fx-background-color: transparent;
+    -fx-text-fill: #f4f4f4;
+    border-style: solid;
+    -fx-border-style: solid;
+    border-color: transparent;
+    -fx-border-color: transparent;
+    border-width: 1px;
+    -fx-border-width: 1px;
+}
+.table-view .column-header.column--align-right .label, .table-view .cell.column--align-right {
+    -fx-alignment: CENTER_RIGHT;
+}
+.table-view .cell:selected {
+    border-color: #20AAD6;
+    -fx-border-color: #20AAD6;
+}
+
+.table-view .cell.cell--create {
+    border-width: 2px;
+    -fx-border-width: 2px;
+    border-color: transparent transparent transparent #6FDA80;
+    -fx-border-color: transparent transparent transparent #6FDA80;
+}
+
+.table-view .cell.cell--update {
+    border-width: 2px;
+    -fx-border-width: 2px;
+    border-color: transparent transparent transparent #DAC26F;
+    -fx-border-color: transparent transparent transparent #DAC26F;
+}
+
+.table-view .cell.cell--delete {
+    border-width: 2px;
+    -fx-border-width: 2px;
+    border-color: transparent transparent transparent #DA6F6F;
+    -fx-border-color: transparent transparent transparent #DA6F6F;
+}
+
+.table-row-cell {
+    -fx-cell-size: 40px;
+}

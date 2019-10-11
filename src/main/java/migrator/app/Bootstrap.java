@@ -114,7 +114,8 @@ public class Bootstrap {
             new ProjectService(
                 config.projectFactoryConfig().get(),
                 config.databaseDriverManagerConfig().get(),
-                config.toastServiceConfig().get()
+                config.toastServiceConfig().get(),
+                config.activeRouteConfig().get()
             )
         );
         config.tableActiveStateConfig().set(

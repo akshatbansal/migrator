@@ -1,8 +1,9 @@
-package migrator.app.domain.column.service;
+package migrator.app.domain.column;
 
 import org.junit.jupiter.api.Test;
 
 import javafx.beans.property.SimpleObjectProperty;
+import migrator.app.domain.column.service.ColumnService;
 import migrator.app.domain.connection.model.Connection;
 import migrator.app.domain.database.model.DatabaseConnection;
 import migrator.app.migration.model.ChangeCommand;

@@ -1,0 +1,53 @@
+.button {
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-cursor: hand;
+    -fx-padding: 6 15 6 15;
+}
+
+.button:pressed {
+    -fx-scale-x: 0.93;
+    -fx-scale-y: 0.93;
+}
+
+.button.btn-primary {
+    -fx-background-color: #178fb8;
+    -fx-text-fill: #f4f4f4;
+}
+.button.btn-secondary {
+    -fx-background-color: transparent;
+    -fx-text-fill: #178fb8;
+}
+.button.btn-danger {
+    -fx-background-color: transparent;
+    -fx-text-fill: #e63e3e;
+}
+.button.btn-link {
+    -fx-background-color: transparent;
+    -fx-text-fill: #434343;
+}
+.button.btn-link.btn-link--active {
+    -fx-background-color: transparent;
+    -fx-text-fill: #2F2F2F;
+}
+
+.button.btn-primary:hover {
+    -fx-background-color: #20AAD6;
+}
+.button.btn-secondary:hover, .button.btn-link:hover, .button.btn-link.btn-link--active:hover {
+    -fx-text-fill: #20AAD6;
+    -fx-background-color: #606060;
+}
+.button.btn-danger:hover {
+    -fx-text-fill: #ee4e4e;
+    -fx-background-color: #606060;
+}
+
+.button.btn-icon {
+    -fx-background-color: transparent;
+    -fx-text-fill: #f4f4f4;
+}
+
+.button.btn-icon:hover {
+    -fx-text-fill: #20AAD6;
+}

@@ -1,9 +1,10 @@
-package migrator.app.domain.index.service;
+package migrator.app.domain.index;
 
 import org.junit.jupiter.api.Test;
 
 import migrator.app.domain.connection.model.Connection;
 import migrator.app.domain.database.model.DatabaseConnection;
+import migrator.app.domain.index.service.IndexService;
 import migrator.app.domain.table.model.Index;
 import migrator.app.domain.table.model.Table;
 

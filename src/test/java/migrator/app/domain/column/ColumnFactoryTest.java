@@ -1,7 +1,8 @@
-package migrator.app.domain.column.service;
+package migrator.app.domain.column;
 
 import org.junit.jupiter.api.Test;
 
+import migrator.app.domain.column.service.ColumnFactory;
 import migrator.app.domain.table.model.Column;
 
 import org.junit.jupiter.api.BeforeEach;

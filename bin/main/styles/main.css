@@ -1,0 +1,30 @@
+.background-medium Text, .foreground-light {
+    -fx-fill: #f4f4f4;
+    -fx-text-fill: #f4f4f4;
+}
+
+.foreground-dark {
+    -fx-fill: #606060;
+    -fx-text-fill: #606060;
+}
+
+.background-light {
+    -fx-background-color: #606060;
+}
+
+.background-medium {
+    -fx-background-color: #434343;   
+}
+
+.background-dark {
+    -fx-background-color: #2F2F2F;   
+}
+
+.breadcrumps {
+    -fx-padding: 10 20 0 20;
+    -fx-background-color: transparent;
+}
+
+.debug {
+    -fx-background-color: #aa6655;
+}

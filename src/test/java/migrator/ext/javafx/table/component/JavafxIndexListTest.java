@@ -2,7 +2,7 @@ package migrator.ext.javafx.table.component;
 
 import org.junit.jupiter.api.Test;
 
-import migrator.mock.FakeViewLoader;
+import migrator.ext.javafx.component.FakeViewLoader;
 import migrator.app.ConfigContainer;
 import migrator.app.Container;
 import migrator.app.domain.column.service.ColumnRepository;

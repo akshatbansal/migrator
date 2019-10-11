@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml">
+    <center>
+        <ScrollPane styleClass="background-light" fitToWidth="true">
+            <VBox>
+                <HBox styleClass="container">
+                    <Text fx:id="title" text="" styleClass="title" />
+                </HBox>
+                <VBox fx:id="breadcrumpsContainer"></VBox>
+                <VBox fx:id="body" styleClass="container" spacing="20"></VBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>

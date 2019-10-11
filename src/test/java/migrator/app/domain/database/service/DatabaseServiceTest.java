@@ -1,4 +1,4 @@
-package migrator.app.domain.connection.service;
+package migrator.app.domain.database.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;

@@ -9,7 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import migrator.app.Container;
-import migrator.ext.javafx.component.ToastListComponent;
+import migrator.ext.javafx.toast.ToastListComponent;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
 
