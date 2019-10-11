@@ -138,7 +138,8 @@ public class Bootstrap {
         config.columnActiveStateConfig().set(
             new ColumnActiveState(
                 columnRepository, 
-                config.tableActiveStateConfig().get()
+                config.tableActiveStateConfig().get(),
+                config.activeRouteConfig().get()
             )
         );
         config.columnServiceConfig().set(
@@ -153,7 +154,8 @@ public class Bootstrap {
         config.indexActiveStateConfig().set(
             new IndexActiveState(
                 indexRepository,
-                config.tableActiveStateConfig().get()
+                config.tableActiveStateConfig().get(),
+                config.activeRouteConfig().get()
             )
         );
         config.indexServiceConfig().set(

@@ -11,7 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import migrator.app.Container;
 import migrator.app.domain.column.service.ColumnActiveState;
-import migrator.app.domain.index.service.IndexService;
+import migrator.app.domain.index.service.IndexActiveState;
 import migrator.app.domain.table.component.IndexForm;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Index;
@@ -22,10 +22,9 @@ import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
 
 public class JavafxIndexForm extends ViewComponent implements IndexForm {
-    protected IndexService indexService;
     protected ColumnActiveState columnActiveState;
     protected TableActiveState tableActiveState;
-    protected ActiveRoute activeRoute;
+    protected IndexActiveState indexActiveState;
     protected Index index;
 
     @FXML protected TextField name;
@@ -38,10 +37,9 @@ public class JavafxIndexForm extends ViewComponent implements IndexForm {
 
     public JavafxIndexForm(Index index, ViewLoader viewLoader, Container container) {
         super(viewLoader);
-        this.indexService = container.getIndexService();
         this.columnActiveState = container.getColumnActiveState();
         this.tableActiveState = container.getTableActiveState();
-        this.activeRoute = container.getActiveRoute();
+        this.indexActiveState = container.getIndexActiveState();
 
         this.removeButton = new Button("Remove");
         this.removeButton.getStyleClass().addAll("btn-danger");
@@ -105,15 +103,14 @@ public class JavafxIndexForm extends ViewComponent implements IndexForm {
 
     @FXML public void delete() {
         if (this.index.getChangeCommand().isType(ChangeCommand.CREATE)) {
-            this.indexService.remove(this.index);
-            this.close();
+            this.indexActiveState.remove(this.index);
             return;
         }
         this.index.delete();
     }
 
     @FXML public void close() {
-        this.activeRoute.changeTo("table.view", this.tableActiveState.getActive().get());
+        this.indexActiveState.deactivate();
     }
 
     @FXML public void restore() {

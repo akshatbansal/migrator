@@ -24,13 +24,27 @@ public class SimpleActiveState<T> implements ActiveState<T> {
     }
 
     protected void onListChange() {
+        Boolean shouldBlur = true;
         if (this.focused.get() == null) {
-            return;
+            shouldBlur = false;
         }
         if (this.list.contains(this.focused.get())) {
-            return;
+            shouldBlur = false;
         }
-        this.blur();
+        if (shouldBlur) {
+            this.blur();
+        }
+
+        Boolean shouldDeactivate = true;
+        if (this.activated.get() == null) {
+            shouldDeactivate = false;
+        }
+        if (this.list.contains(this.activated.get())) {
+            shouldDeactivate = false;
+        }
+        if (shouldDeactivate) {
+            this.deactivate();
+        }
     }
 
     @Override
@@ -81,9 +95,6 @@ public class SimpleActiveState<T> implements ActiveState<T> {
     @Override
     public void remove(T item) {
         this.list.remove(item);
-        if (item == this.getActive().get()) {
-            this.deactivate();
-        }
     }
 
     @Override
