@@ -1,16 +1,16 @@
 package migrator.app.domain.table.service;
 
-import org.junit.jupiter.api.Test;
+// import org.junit.jupiter.api.Test;
 
-import migrator.app.domain.connection.model.Connection;
-import migrator.app.domain.database.model.DatabaseConnection;
-import migrator.app.domain.project.model.Project;
-import migrator.app.domain.table.model.Table;
+// import migrator.app.domain.connection.model.Connection;
+// import migrator.app.domain.database.model.DatabaseConnection;
+// import migrator.app.domain.project.model.Project;
+// import migrator.app.domain.table.model.Table;
 
-import org.junit.jupiter.api.BeforeEach;
-import static org.junit.jupiter.api.Assertions.*;
+// import org.junit.jupiter.api.BeforeEach;
+// import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Arrays;
+// import java.util.Arrays;
 
 public class TableServiceTest {
     protected TableService tableService;

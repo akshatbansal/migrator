@@ -12,7 +12,6 @@ import migrator.app.domain.project.breadcrumps.ProjectsBreadcrump;
 import migrator.app.domain.project.breadcrumps.SingleProjectBreadcrump;
 import migrator.app.domain.project.model.Project;
 import migrator.app.domain.table.model.Table;
-import migrator.app.router.Route;
 import migrator.ext.javafx.component.ViewLoader;
 
 public class JavafxBreadcrumpsGuiKit implements BreadcrumpsGuiKit {

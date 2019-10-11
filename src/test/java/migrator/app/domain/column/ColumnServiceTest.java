@@ -1,21 +1,21 @@
 package migrator.app.domain.column;
 
-import org.junit.jupiter.api.Test;
+// import org.junit.jupiter.api.Test;
 
-import javafx.beans.property.SimpleObjectProperty;
+// import javafx.beans.property.SimpleObjectProperty;
 import migrator.app.domain.column.service.ColumnService;
-import migrator.app.domain.connection.model.Connection;
-import migrator.app.domain.database.model.DatabaseConnection;
-import migrator.app.migration.model.ChangeCommand;
-import migrator.app.migration.model.ColumnChange;
-import migrator.app.migration.model.SimpleColumnProperty;
-import migrator.app.domain.table.model.Column;
-import migrator.app.domain.table.model.Table;
+// import migrator.app.domain.connection.model.Connection;
+// import migrator.app.domain.database.model.DatabaseConnection;
+// import migrator.app.migration.model.ChangeCommand;
+// import migrator.app.migration.model.ColumnChange;
+// import migrator.app.migration.model.SimpleColumnProperty;
+// import migrator.app.domain.table.model.Column;
+// import migrator.app.domain.table.model.Table;
 
-import org.junit.jupiter.api.BeforeEach;
-import static org.junit.jupiter.api.Assertions.*;
+// import org.junit.jupiter.api.BeforeEach;
+// import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Arrays;
+// import java.util.Arrays;
 
 public class ColumnServiceTest {
     protected ColumnService columnService;

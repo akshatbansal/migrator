@@ -1,22 +1,22 @@
 package migrator;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
-import static org.junit.jupiter.api.Assertions.*;
+// import org.junit.jupiter.api.Test;
+// import org.junit.jupiter.api.BeforeEach;
+// import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Arrays;
+// import java.util.Arrays;
 
-import migrator.app.Bootstrap;
-import migrator.app.ConfigContainer;
+// import migrator.app.Bootstrap;
+// import migrator.app.ConfigContainer;
 import migrator.app.Container;
-import migrator.app.domain.connection.model.Connection;
-import migrator.app.domain.database.model.DatabaseConnection;
-import migrator.app.domain.database.service.DatabaseService;
-import migrator.app.domain.project.model.Project;
-import migrator.app.domain.table.service.TableService;
-import migrator.lib.database.driver.FakeDatabaseDriver;
-import migrator.lib.database.driver.FakeDatabaseDriverManager;
-import migrator.app.DataExtension;
+// import migrator.app.domain.connection.model.Connection;
+// import migrator.app.domain.database.model.DatabaseConnection;
+// import migrator.app.domain.database.service.DatabaseService;
+// import migrator.app.domain.project.model.Project;
+// import migrator.app.domain.table.service.TableService;
+// import migrator.lib.database.driver.FakeDatabaseDriver;
+// import migrator.lib.database.driver.FakeDatabaseDriverManager;
+// import migrator.app.DataExtension;
 
 public class ProjectIntegrationTest {
     protected Container container;
