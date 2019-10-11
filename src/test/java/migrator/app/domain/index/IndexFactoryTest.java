@@ -1,7 +1,8 @@
-package migrator.app.domain.index.service;
+package migrator.app.domain.index;
 
 import org.junit.jupiter.api.Test;
 
+import migrator.app.domain.index.service.IndexFactory;
 import migrator.app.domain.table.model.Index;
 
 import org.junit.jupiter.api.BeforeEach;

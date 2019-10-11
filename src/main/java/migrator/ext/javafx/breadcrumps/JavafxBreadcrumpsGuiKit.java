@@ -4,15 +4,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import migrator.app.Container;
-import migrator.app.breadcrumps.ActiveRouteBreadcrump;
 import migrator.app.breadcrumps.Breadcrump;
 import migrator.app.breadcrumps.BreadcrumpsComponent;
 import migrator.app.breadcrumps.BreadcrumpsGuiKit;
 import migrator.app.breadcrumps.VoidBreadcrump;
+import migrator.app.domain.project.breadcrumps.ProjectsBreadcrump;
+import migrator.app.domain.project.breadcrumps.SingleProjectBreadcrump;
 import migrator.app.domain.project.model.Project;
 import migrator.app.domain.table.model.Table;
-import migrator.app.router.ActiveRoute;
-import migrator.app.router.Route;
 import migrator.ext.javafx.component.ViewLoader;
 
 public class JavafxBreadcrumpsGuiKit implements BreadcrumpsGuiKit {
@@ -31,14 +30,12 @@ public class JavafxBreadcrumpsGuiKit implements BreadcrumpsGuiKit {
 
     @Override
     public BreadcrumpsComponent createBreadcrumps(Table table) {
-        ActiveRoute activeRoute = this.container.getActiveRoute();
         return this.createBreadcrumps(
             Arrays.asList(
-                new ActiveRouteBreadcrump("Projects", new Route("project.index"), activeRoute),
-                new ActiveRouteBreadcrump(
-                    table.getProject().getName(),
-                    new Route("table.index"),
-                    activeRoute
+                new ProjectsBreadcrump(this.container.getProjectService()),
+                new SingleProjectBreadcrump(
+                    this.container.getProjectService(),
+                    table.getProject()
                 ),
                 new VoidBreadcrump(table.nameProperty())
             )
@@ -49,11 +46,7 @@ public class JavafxBreadcrumpsGuiKit implements BreadcrumpsGuiKit {
     public BreadcrumpsComponent createBreadcrumps(Project project) {
         return this.createBreadcrumps(
             Arrays.asList(
-                new ActiveRouteBreadcrump(
-                    "Projects", 
-                    new Route("project.index"), 
-                    this.container.getActiveRoute()
-                ),
+                new ProjectsBreadcrump(this.container.getProjectService()),
                 new VoidBreadcrump(project.nameProperty())
             )
         );

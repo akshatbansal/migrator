@@ -1,24 +1,24 @@
 package migrator;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
-import static org.junit.jupiter.api.Assertions.*;
+// import org.junit.jupiter.api.Test;
+// import org.junit.jupiter.api.BeforeEach;
+// import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Arrays;
+// import java.util.Arrays;
 
-import migrator.app.domain.table.model.Table;
-import migrator.app.domain.column.service.ColumnService;
-import migrator.app.domain.index.service.IndexService;
-import migrator.app.Bootstrap;
-import migrator.app.ConfigContainer;
+// import migrator.app.domain.table.model.Table;
+// import migrator.app.domain.column.service.ColumnService;
+// import migrator.app.domain.index.service.IndexService;
+// import migrator.app.Bootstrap;
+// import migrator.app.ConfigContainer;
 import migrator.app.Container;
-import migrator.app.domain.connection.model.Connection;
-import migrator.app.domain.connection.service.ConnectionService;
-import migrator.app.domain.database.model.DatabaseConnection;
-import migrator.app.domain.project.model.Project;
-import migrator.mock.FakeDatabaseDriver;
-import migrator.mock.FakeDatabaseDriverManager;
-import migrator.mock.DataExtension;
+// import migrator.app.domain.connection.model.Connection;
+// import migrator.app.domain.connection.service.ConnectionService;
+// import migrator.app.domain.database.model.DatabaseConnection;
+// import migrator.app.domain.project.model.Project;
+// import migrator.lib.database.driver.FakeDatabaseDriver;
+// import migrator.lib.database.driver.FakeDatabaseDriverManager;
+// import migrator.app.DataExtension;
 
 public class TableIntegrationTest {
     protected Container container;

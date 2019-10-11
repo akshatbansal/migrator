@@ -1,4 +1,4 @@
-package migrator.mock;
+package migrator.ext.javafx.component;
 
 import javafx.scene.Node;
 import migrator.ext.javafx.component.ViewLoader;

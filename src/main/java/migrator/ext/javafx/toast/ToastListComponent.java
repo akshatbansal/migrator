@@ -1,18 +1,17 @@
-package migrator.ext.javafx.component;
+package migrator.ext.javafx.toast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javafx.collections.ObservableList;
 import javafx.collections.ListChangeListener.Change;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.FlowPane;
 import migrator.app.toast.ToastService;
+import migrator.ext.javafx.component.ViewComponent;
+import migrator.ext.javafx.component.ViewLoader;
 import migrator.app.toast.Toast;
 
 public class ToastListComponent extends ViewComponent {

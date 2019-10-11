@@ -14,14 +14,12 @@ import migrator.app.domain.project.component.ProjectForm;
 import migrator.app.domain.project.model.Project;
 import migrator.app.domain.project.service.ProjectService;
 import migrator.app.migration.Migration;
-import migrator.app.router.ActiveRoute;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
 
 public class JavafxProjectForm extends ViewComponent implements ProjectForm {
     protected DatabaseDriverManager databaseDriverManager;
     protected Migration migration;
-    protected ActiveRoute activeRoute;
     protected Project project;
     protected ProjectService projectService;
     protected Window window;
@@ -40,7 +38,6 @@ public class JavafxProjectForm extends ViewComponent implements ProjectForm {
         super(viewLoader);
         this.databaseDriverManager = container.getDatabaseDriverManager();
         this.migration = container.getMigration();
-        this.activeRoute = container.getActiveRoute();
         this.projectService = container.getProjectService();
         this.project = project;
         this.window = window;
@@ -88,7 +85,6 @@ public class JavafxProjectForm extends ViewComponent implements ProjectForm {
     @Override
     @FXML public void close() {
         this.projectService.deselect();
-        this.activeRoute.changeTo("project.index");
     }
 
     @Override

@@ -11,14 +11,12 @@ import migrator.app.domain.column.service.ColumnActiveState;
 import migrator.app.domain.column.service.ColumnFactory;
 import migrator.app.domain.table.component.ColumnList;
 import migrator.app.domain.table.model.Column;
-import migrator.app.router.ActiveRoute;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
 
 public class JavafxColumnList extends ViewComponent implements ColumnList {
     protected ColumnActiveState columnActiveState;
     protected ColumnFactory columnFactory;
-    protected ActiveRoute activeRoute;
 
     @FXML protected TableView<Column> columns;
 
@@ -26,7 +24,6 @@ public class JavafxColumnList extends ViewComponent implements ColumnList {
         super(viewLoader);
         this.columnActiveState = container.getColumnActiveState();
         this.columnFactory = container.getColumnFactory();
-        this.activeRoute = container.getActiveRoute();
         
         this.loadView("/layout/table/column/index.fxml");
 
@@ -50,7 +47,7 @@ public class JavafxColumnList extends ViewComponent implements ColumnList {
         this.columns.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         this.columns.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> obs, Number oldSelection, Number newSelection) -> {
             Column selectedColumn = this.columns.getSelectionModel().getSelectedItem();
-            this.activeRoute.changeTo("column.view", selectedColumn);
+            this.columnActiveState.activate(selectedColumn);
         });
         this.draw();
     }
@@ -58,7 +55,7 @@ public class JavafxColumnList extends ViewComponent implements ColumnList {
     @FXML
     public void addColumn() {
         Column newColumn = this.columnFactory.createWithCreateChange("new_column");
-        this.columnActiveState.addAndActivate(newColumn);
-        this.activeRoute.changeTo("column.view", newColumn);
+        this.columnActiveState.add(newColumn);
+        this.columns.getSelectionModel().select(newColumn);
     }
 }

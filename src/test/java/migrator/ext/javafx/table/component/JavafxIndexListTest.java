@@ -1,29 +1,29 @@
 package migrator.ext.javafx.table.component;
 
-import org.junit.jupiter.api.Test;
+// import org.junit.jupiter.api.Test;
 
-import migrator.mock.FakeViewLoader;
-import migrator.app.ConfigContainer;
+// import migrator.ext.javafx.component.FakeViewLoader;
+// import migrator.app.ConfigContainer;
 import migrator.app.Container;
-import migrator.app.domain.column.service.ColumnRepository;
-import migrator.app.domain.connection.service.ConnectionFactory;
-import migrator.app.domain.database.service.DatabaseFactory;
-import migrator.app.domain.index.service.IndexActiveState;
-import migrator.app.domain.index.service.IndexFactory;
-import migrator.app.domain.index.service.IndexRepository;
-import migrator.app.domain.index.service.SimpleIndexService;
-import migrator.app.domain.project.service.ProjectFactory;
-import migrator.app.domain.project.service.ProjectService;
-import migrator.app.domain.table.service.SimpleTableService;
-import migrator.app.domain.table.service.TableActiveState;
-import migrator.app.domain.table.service.TableFactory;
-import migrator.app.domain.table.service.TableRepository;
-import migrator.app.router.ActiveRoute;
-import migrator.ext.javafx.component.JavafxLayout;
-import migrator.lib.modelstorage.SimpleActiveState;
+// import migrator.app.domain.column.service.ColumnRepository;
+// import migrator.app.domain.connection.service.ConnectionFactory;
+// import migrator.app.domain.database.service.DatabaseFactory;
+// import migrator.app.domain.index.service.IndexActiveState;
+// import migrator.app.domain.index.service.IndexFactory;
+// import migrator.app.domain.index.service.IndexRepository;
+// import migrator.app.domain.index.service.SimpleIndexService;
+// import migrator.app.domain.project.service.ProjectFactory;
+// import migrator.app.domain.project.service.ProjectService;
+// import migrator.app.domain.table.service.SimpleTableService;
+// import migrator.app.domain.table.service.TableActiveState;
+// import migrator.app.domain.table.service.TableFactory;
+// import migrator.app.domain.table.service.TableRepository;
+// import migrator.app.router.ActiveRoute;
+// import migrator.ext.javafx.component.JavafxLayout;
+// import migrator.lib.modelstorage.SimpleActiveState;
 
-import org.junit.jupiter.api.BeforeEach;
-import static org.junit.jupiter.api.Assertions.*;
+// import org.junit.jupiter.api.BeforeEach;
+// import static org.junit.jupiter.api.Assertions.*;
 
 public class JavafxIndexListTest {
     protected JavafxIndexList javafxIndexList;

@@ -1,4 +1,4 @@
-package migrator.mock;
+package migrator.lib.database.driver;
 
 import migrator.app.database.driver.DatabaseDriver;
 import migrator.app.database.driver.DatabaseDriverConfig;

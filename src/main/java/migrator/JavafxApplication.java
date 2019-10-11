@@ -12,7 +12,6 @@ import migrator.app.Router;
 import migrator.app.domain.connection.model.Connection;
 import migrator.app.domain.database.model.DatabaseConnection;
 import migrator.app.domain.project.model.Project;
-import migrator.app.toast.Toast;
 import migrator.ext.javafx.JavafxGui;
 import migrator.ext.javafx.MainController;
 import migrator.ext.javafx.component.JavafxLayout;

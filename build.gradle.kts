@@ -13,7 +13,7 @@ plugins {
     // Apply the application plugin to add support for building an application
     application
 
-    id("org.openjfx.javafxplugin") version "0.0.7"
+    id("org.openjfx.javafxplugin") version "0.0.8"
 }
 
 repositories {

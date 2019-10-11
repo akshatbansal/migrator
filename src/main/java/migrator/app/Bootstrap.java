@@ -114,13 +114,15 @@ public class Bootstrap {
             new ProjectService(
                 config.projectFactoryConfig().get(),
                 config.databaseDriverManagerConfig().get(),
-                config.toastServiceConfig().get()
+                config.toastServiceConfig().get(),
+                config.activeRouteConfig().get()
             )
         );
         config.tableActiveStateConfig().set(
             new TableActiveState(
                 config.tableRepositoryConfig().get(),
-                config.projectServiceConfig().get()
+                config.projectServiceConfig().get(),
+                config.activeRouteConfig().get()
             )
         );
         config.tableServiceConfig().set(
@@ -136,7 +138,8 @@ public class Bootstrap {
         config.columnActiveStateConfig().set(
             new ColumnActiveState(
                 columnRepository, 
-                config.tableActiveStateConfig().get()
+                config.tableActiveStateConfig().get(),
+                config.activeRouteConfig().get()
             )
         );
         config.columnServiceConfig().set(
@@ -151,7 +154,8 @@ public class Bootstrap {
         config.indexActiveStateConfig().set(
             new IndexActiveState(
                 indexRepository,
-                config.tableActiveStateConfig().get()
+                config.tableActiveStateConfig().get(),
+                config.activeRouteConfig().get()
             )
         );
         config.indexServiceConfig().set(

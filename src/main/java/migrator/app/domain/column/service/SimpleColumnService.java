@@ -53,6 +53,9 @@ public class SimpleColumnService implements ColumnService {
     }
 
     protected void onTableSelect(Table activeTable) {
+        if (activeTable == null) {
+            return;
+        }
         String repositryKey = activeTable.getProject().getName() + "." + activeTable.getOriginalName();
 
         DatabaseDriver databaseDriver  = this.databaseDriverManager

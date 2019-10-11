@@ -7,20 +7,23 @@ import javafx.collections.ObservableList;
 import migrator.app.database.driver.DatabaseDriver;
 import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.domain.project.model.Project;
+import migrator.app.router.ActiveRoute;
 import migrator.app.toast.ToastService;
 
 public class ProjectService {
     protected DatabaseDriverManager databaseDriverManager;
     protected ProjectFactory factory;
     protected ToastService toastService;
+    protected ActiveRoute activeRoute;
     protected ObjectProperty<Project> selected;
     protected ObjectProperty<Project> opened;
     protected ObservableList<Project> list;
 
-    public ProjectService(ProjectFactory factory, DatabaseDriverManager databaseDriverManager, ToastService toastService) {
+    public ProjectService(ProjectFactory factory, DatabaseDriverManager databaseDriverManager, ToastService toastService, ActiveRoute activeRoute) {
         this.factory = factory;
         this.databaseDriverManager = databaseDriverManager;
         this.toastService = toastService;
+        this.activeRoute = activeRoute;
         this.list = FXCollections.observableArrayList();
         this.selected = new SimpleObjectProperty<>();
         this.opened = new SimpleObjectProperty<>();
@@ -32,10 +35,14 @@ public class ProjectService {
 
     public void select(Project project) {
         this.selected.set(project);
+        if (project != null) {
+            this.activeRoute.changeTo("project.view", project);
+        }
     }
 
     public void deselect() {
         this.select(null);
+        this.activeRoute.changeTo("project.index");
     }
 
     public ObjectProperty<Project> getSelected() {
@@ -44,8 +51,6 @@ public class ProjectService {
 
     public void open(Project project) {
         if (project != null) {
-            String repositryKey = project.getName();
-
             DatabaseDriver databaseDriver  = this.databaseDriverManager
                 .createDriver(project.getDatabase());
             databaseDriver.connect();
@@ -55,10 +60,14 @@ public class ProjectService {
             }
         }
         this.opened.set(project);
+        if (project != null) {
+            this.activeRoute.changeTo("table.index");
+        }
     }
 
     public void close() {
         this.open(null);
+        this.activeRoute.changeTo("project.index");
     }
 
     public ObjectProperty<Project> getOpened() {

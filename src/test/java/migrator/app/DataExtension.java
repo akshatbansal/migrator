@@ -1,4 +1,4 @@
-package migrator.mock;
+package migrator.app;
 
 import migrator.app.ConfigContainer;
 import migrator.app.extension.Extension;

@@ -46,6 +46,9 @@ public class SimpleTableService implements TableService {
     }
 
     protected void onProjectActivate(Project project) {
+        if (project == null) {
+            return;
+        }
         String repositryKey = project.getName();
 
         DatabaseDriver databaseDriver  = this.databaseDriverManager
@@ -75,7 +78,6 @@ public class SimpleTableService implements TableService {
         this.activeState.setListAll(
             this.tableRepository.getList(repositryKey)
         );
-        this.activeRoute.changeTo("table.index");
     }
 
     @Override

@@ -2,31 +2,31 @@ package migrator.ext.phinx;
 
 import org.junit.jupiter.api.Test;
 
-import javafx.beans.Observable;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+// import javafx.beans.Observable;
+// import javafx.beans.property.ObjectProperty;
+// import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
+// import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Hashtable;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+// import java.util.Hashtable;
+// import java.util.LinkedList;
+// import java.util.List;
+// import java.util.Map;
 
-import migrator.app.domain.connection.model.Connection;
-import migrator.app.domain.database.model.DatabaseConnection;
-import migrator.app.domain.project.model.Project;
+// import migrator.app.domain.connection.model.Connection;
+// import migrator.app.domain.database.model.DatabaseConnection;
+// import migrator.app.domain.project.model.Project;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Index;
 import migrator.app.domain.table.model.Table;
 import migrator.app.migration.model.ChangeCommand;
-import migrator.app.migration.model.ColumnChange;
-import migrator.app.migration.model.IndexChange;
+// import migrator.app.migration.model.ColumnChange;
+// import migrator.app.migration.model.IndexChange;
 import migrator.app.migration.model.SimpleColumnProperty;
 import migrator.app.migration.model.SimpleIndexProperty;
 import migrator.app.migration.model.SimpleTableProperty;

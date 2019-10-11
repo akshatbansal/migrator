@@ -3,7 +3,6 @@ package migrator.ext.phinx;
 import migrator.app.code.CodeManager;
 import migrator.app.migration.MigrationGenerator;
 import migrator.app.migration.MigrationGeneratorFactory;
-import migrator.lib.storage.ConsoleStorage;
 import migrator.lib.stringformatter.PascalCaseFormatter;
 import migrator.lib.stringformatter.UnderscoreFormatter;;
 

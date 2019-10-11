@@ -57,7 +57,6 @@ public class JavafxTableList extends ViewComponent implements TableList {
 
         this.cardListComponent.onPrimary((Table eventTable) -> {
             this.tableActiveState.activate(eventTable);
-            this.activeRoute.changeTo("table.view", eventTable);
         });
 
         this.loadView("/layout/table/index.fxml");
@@ -79,7 +78,6 @@ public class JavafxTableList extends ViewComponent implements TableList {
     @FXML public void addTable() {
         Table newTable = this.tableFactory.createWithCreateChange(this.projectService.getOpened().get(), "new_table");
         this.tableActiveState.addAndActivate(newTable);
-        this.activeRoute.changeTo("table.view", newTable);
     }
 
     @Override

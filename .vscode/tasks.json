@@ -12,13 +12,13 @@
         {
             "label": "test",
             "type": "shell",
-            "command": "gradle test",
+            "command": "./gradle test",
             "problemMatcher": []
         },
         {
             "label": "build",
             "type": "shell",
-            "command": "gradle build",
+            "command": "./gradle build",
             "problemMatcher": []
         }
     ]

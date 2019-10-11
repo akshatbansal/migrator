@@ -1,10 +1,11 @@
-package migrator.ext.javafx.component;
+package migrator.ext.javafx.toast;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import migrator.app.toast.Toast;
 import migrator.app.toast.ToastService;
+import migrator.ext.javafx.component.ViewComponent;
+import migrator.ext.javafx.component.ViewLoader;
 
 public class ToastComponent extends ViewComponent {
     protected Toast toast;

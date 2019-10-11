@@ -59,6 +59,9 @@ public class SimpleIndexService implements IndexService {
     }
 
     protected void onTableChange(Table activeTable) {
+        if (activeTable == null) {
+            return;
+        }
         String repositryKey = activeTable.getProject().getName() + "." + activeTable.getOriginalName();
 
         DatabaseDriver databaseDriver  = this.databaseDriverManager

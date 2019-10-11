@@ -1,4 +1,4 @@
-package migrator.mock;
+package migrator.lib.database.driver;
 
 import java.util.List;
 
