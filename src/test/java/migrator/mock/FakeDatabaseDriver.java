@@ -44,4 +44,14 @@ public class FakeDatabaseDriver implements DatabaseDriver {
     public ObservableList<String> getTables() {
         return this.tables;
     }
+
+    @Override
+    public Boolean isConnected() {
+        return true;
+    }
+
+    @Override
+    public String getError() {
+        return null;
+    }
 }
