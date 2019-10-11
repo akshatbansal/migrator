@@ -94,7 +94,7 @@ public class JavafxProjectForm extends ViewComponent implements ProjectForm {
     @Override
     @FXML public void open() {
         this.projectService.open(this.project);
-        this.activeRoute.changeTo("table.index");
+        // this.activeRoute.changeTo("table.index");
     }
 
     @Override

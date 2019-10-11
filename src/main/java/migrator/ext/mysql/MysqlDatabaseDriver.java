@@ -22,6 +22,7 @@ public class MysqlDatabaseDriver implements DatabaseDriver {
     protected ObservableList<String> tables;
     protected ObservableList<List<String>> columns;
     protected ObservableList<List<String>> indexes;
+    protected String error;
 
     public MysqlDatabaseDriver(String url, String user, String password) {        
         this.url = url;
@@ -35,12 +36,18 @@ public class MysqlDatabaseDriver implements DatabaseDriver {
     }
 
     @Override
+    public Boolean isConnected() {
+        return this.mysql != null;
+    }
+
+    @Override
     public void connect() {
         try {
             this.mysql = DriverManager.getConnection("jdbc:" + this.url, this.user, this.password);
+            this.error = null;
         } catch (SQLException ex) {
-            ex.printStackTrace();
             this.mysql = null;
+            this.error = "Cannot connect to " + this.url + ". Reason: " + ex.getMessage();
         }
     }
 
@@ -50,6 +57,7 @@ public class MysqlDatabaseDriver implements DatabaseDriver {
         }
         try {
             this.mysql.close();
+            this.mysql = null;
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -186,5 +194,10 @@ public class MysqlDatabaseDriver implements DatabaseDriver {
         }
         
         return this.indexes;
+    }
+
+    @Override
+    public String getError() {
+        return this.error;
     }
 }

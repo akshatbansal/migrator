@@ -12,6 +12,7 @@ import migrator.app.domain.project.model.Project;
 import migrator.app.domain.project.service.ProjectService;
 import migrator.app.domain.table.model.Table;
 import migrator.app.migration.model.ChangeCommand;
+import migrator.app.router.ActiveRoute;
 import migrator.lib.modelstorage.ActiveState;
 
 public class SimpleTableService implements TableService {
@@ -20,6 +21,7 @@ public class SimpleTableService implements TableService {
     protected TableRepository tableRepository;
     protected DatabaseDriverManager databaseDriverManager;
     protected ProjectService projectService;
+    protected ActiveRoute activeRoute;
     
     protected ChangeListener<Project> changeProjectListener;
 
@@ -28,13 +30,15 @@ public class SimpleTableService implements TableService {
         TableRepository tableRepository,
         ActiveState<Table> activeState,
         DatabaseDriverManager databaseDriverManager,
-        ProjectService projectService
+        ProjectService projectService,
+        ActiveRoute activeRoute
     ) {
         this.tableFactory = tableFactory;
         this.activeState = activeState;
         this.tableRepository = tableRepository;
         this.databaseDriverManager = databaseDriverManager;
         this.projectService = projectService;
+        this.activeRoute = activeRoute;
 
         this.changeProjectListener = (ObservableValue<? extends Project> observable, Project oldValue, Project newValue) -> {
             this.onProjectActivate(newValue);
@@ -71,6 +75,7 @@ public class SimpleTableService implements TableService {
         this.activeState.setListAll(
             this.tableRepository.getList(repositryKey)
         );
+        this.activeRoute.changeTo("table.index");
     }
 
     @Override

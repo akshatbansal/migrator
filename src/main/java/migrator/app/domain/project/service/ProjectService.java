@@ -4,16 +4,23 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import migrator.app.database.driver.DatabaseDriver;
+import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.domain.project.model.Project;
+import migrator.app.toast.ToastService;
 
 public class ProjectService {
+    protected DatabaseDriverManager databaseDriverManager;
     protected ProjectFactory factory;
+    protected ToastService toastService;
     protected ObjectProperty<Project> selected;
     protected ObjectProperty<Project> opened;
     protected ObservableList<Project> list;
 
-    public ProjectService(ProjectFactory factory) {
+    public ProjectService(ProjectFactory factory, DatabaseDriverManager databaseDriverManager, ToastService toastService) {
         this.factory = factory;
+        this.databaseDriverManager = databaseDriverManager;
+        this.toastService = toastService;
         this.list = FXCollections.observableArrayList();
         this.selected = new SimpleObjectProperty<>();
         this.opened = new SimpleObjectProperty<>();
@@ -36,6 +43,17 @@ public class ProjectService {
     }
 
     public void open(Project project) {
+        if (project != null) {
+            String repositryKey = project.getName();
+
+            DatabaseDriver databaseDriver  = this.databaseDriverManager
+                .createDriver(project.getDatabase());
+            databaseDriver.connect();
+            if (!databaseDriver.isConnected()) {
+                this.toastService.show(databaseDriver.getError());
+                return;
+            }
+        }
         this.opened.set(project);
     }
 
