@@ -7,6 +7,8 @@
 <?import javafx.scene.text.*?>
 
 <HBox xmlns:fx="http://javafx.com/fxml" fx:id="pane" styleClass="toast" alignment="center_left" spacing="10">
-    <Text fx:id="message" HBox.hgrow="ALWAYS" styleClass="toast__message" />
+    <HBox HBox.hgrow="ALWAYS" styleClass="toast__message-box" maxWidth="Infinity" alignment="center_left">
+        <Text fx:id="message" styleClass="toast__message" />
+    </HBox>
     <Button styleClass="btn-secondary" onAction="#close" text="x" />
 </HBox>

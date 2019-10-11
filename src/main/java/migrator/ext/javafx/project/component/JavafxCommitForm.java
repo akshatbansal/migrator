@@ -15,6 +15,7 @@ import migrator.app.migration.MigrationGenerator;
 import migrator.app.migration.MigrationGeneratorFactory;
 import migrator.app.migration.model.TableChange;
 import migrator.app.router.ActiveRoute;
+import migrator.app.toast.ToastService;
 
 public class JavafxCommitForm extends ViewComponent implements CommitForm {
     @FXML protected TextField name;
@@ -23,12 +24,14 @@ public class JavafxCommitForm extends ViewComponent implements CommitForm {
     protected Migration migration;
     protected Project project;
     protected TableRepository tableRepository;
+    protected ToastService toastService;
 
     public JavafxCommitForm(Project project, ViewLoader viewLoader, Container container) {
         super(viewLoader);
         this.activeRoute = container.getActiveRoute();
         this.migration = container.getMigration();
         this.tableRepository = container.getTableRepository();
+        this.toastService = container.getToastService();
         this.project = project;
         
         this.loadView("/layout/project/commit/form.fxml");
@@ -38,7 +41,17 @@ public class JavafxCommitForm extends ViewComponent implements CommitForm {
     @FXML public void commit() {
         String outputType = this.project.getOutputType();
         if (outputType == null || outputType.isEmpty()) {
-            System.out.println("OUTPUT TYPE IS NOT SELECTED");
+            this.toastService.show("Project output type has to be set");
+            return;
+        }
+        String projectFolder = this.project.getFolder();
+        if (projectFolder == null || projectFolder.isEmpty()) {
+            this.toastService.show("Project folder has to be set");
+            return;
+        }
+        String commitName = this.name.textProperty().get();
+        if (commitName == null || commitName.isEmpty()) {
+            this.toastService.show("Commit name has to be set");
             return;
         }
         MigrationGeneratorFactory generatorFactory = this.migration.getGenerator(outputType);
@@ -46,6 +59,7 @@ public class JavafxCommitForm extends ViewComponent implements CommitForm {
 
         List<? extends TableChange> changes = this.tableRepository.getList(this.project.getName());
         generator.generateMigration(this.project.getFolder(), this.name.textProperty().get(), changes);
+        this.toastService.show("Migration file crated.");
     }
 
     @FXML public void close() {
