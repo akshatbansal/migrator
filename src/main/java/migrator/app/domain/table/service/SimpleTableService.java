@@ -78,7 +78,6 @@ public class SimpleTableService implements TableService {
         this.activeState.setListAll(
             this.tableRepository.getList(repositryKey)
         );
-        this.activeRoute.changeTo("table.index");
     }
 
     @Override

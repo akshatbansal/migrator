@@ -35,10 +35,14 @@ public class ProjectService {
 
     public void select(Project project) {
         this.selected.set(project);
+        if (project != null) {
+            this.activeRoute.changeTo("project.view", project);
+        }
     }
 
     public void deselect() {
         this.select(null);
+        this.activeRoute.changeTo("project.index");
     }
 
     public ObjectProperty<Project> getSelected() {

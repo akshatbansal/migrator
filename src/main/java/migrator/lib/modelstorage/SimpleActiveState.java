@@ -81,6 +81,9 @@ public class SimpleActiveState<T> implements ActiveState<T> {
     @Override
     public void remove(T item) {
         this.list.remove(item);
+        if (item == this.getActive().get()) {
+            this.deactivate();
+        }
     }
 
     @Override

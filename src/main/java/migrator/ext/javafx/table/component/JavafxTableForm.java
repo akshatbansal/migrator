@@ -10,13 +10,11 @@ import migrator.app.domain.table.component.TableForm;
 import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableService;
 import migrator.app.migration.model.ChangeCommand;
-import migrator.app.router.ActiveRoute;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
 
 public class JavafxTableForm extends ViewComponent implements TableForm {
     protected TableService tableService;
-    protected ActiveRoute activeRoute;
     protected Table table;
 
     @FXML protected TextField name;
@@ -27,7 +25,6 @@ public class JavafxTableForm extends ViewComponent implements TableForm {
     public JavafxTableForm(Table table, ViewLoader viewLoader, Container container) {
         super(viewLoader);
         this.tableService = container.getTableService();
-        this.activeRoute = container.getActiveRoute();
         this.table = table;
 
         this.removeButton = new Button("Remove");
@@ -67,7 +64,6 @@ public class JavafxTableForm extends ViewComponent implements TableForm {
     @FXML public void delete() {
         if (this.table.getChange().getCommand().isType(ChangeCommand.CREATE)) {
             this.tableService.remove(this.table);
-            this.activeRoute.changeTo("table.index");
             return;
         }
         this.table.getChange().getCommand().setType(ChangeCommand.DELETE);

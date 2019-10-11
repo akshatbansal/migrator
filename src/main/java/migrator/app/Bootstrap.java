@@ -121,7 +121,8 @@ public class Bootstrap {
         config.tableActiveStateConfig().set(
             new TableActiveState(
                 config.tableRepositoryConfig().get(),
-                config.projectServiceConfig().get()
+                config.projectServiceConfig().get(),
+                config.activeRouteConfig().get()
             )
         );
         config.tableServiceConfig().set(

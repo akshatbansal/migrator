@@ -8,13 +8,11 @@ import migrator.app.domain.project.component.ProjectList;
 import migrator.app.domain.project.model.Project;
 import migrator.app.domain.project.service.ProjectGuiKit;
 import migrator.app.domain.project.service.ProjectService;
-import migrator.app.router.ActiveRoute;
 import migrator.ext.javafx.component.CardListComponent;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
 
 public class JavafxProjectList extends ViewComponent implements ProjectList {
-    protected ActiveRoute activeRoute;
     protected ProjectService projectService;
     protected ProjectGuiKit projectGuiKit;
     protected CardListComponent<Project> cardList;
@@ -23,7 +21,6 @@ public class JavafxProjectList extends ViewComponent implements ProjectList {
 
     public JavafxProjectList(ViewLoader viewLoader, Container container, ProjectGuiKit projectGuiKit) {
         super(viewLoader);
-        this.activeRoute = container.getActiveRoute();
         this.projectService = container.getProjectService();
         this.projectGuiKit = projectGuiKit;
 
@@ -35,7 +32,6 @@ public class JavafxProjectList extends ViewComponent implements ProjectList {
 
         this.cardList.onSecondary((Project eventDataProject) -> {
             this.projectService.select(eventDataProject);
-            this.activeRoute.changeTo("project.view", eventDataProject);
         });
 
         this.cardList.onPrimary((Project eventDataProject) -> {
@@ -63,6 +59,5 @@ public class JavafxProjectList extends ViewComponent implements ProjectList {
             .create("new_project");
         this.projectService.add(newProject);
         this.projectService.select(newProject);
-        this.activeRoute.changeTo("project.view", newProject);
     }
 }
