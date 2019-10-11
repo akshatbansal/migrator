@@ -28,6 +28,7 @@ import migrator.app.ConfigContainer;
 import migrator.app.extension.Extension;
 import migrator.app.migration.Migration;
 import migrator.app.router.ActiveRoute;
+import migrator.app.toast.AutohideToastService;
 
 public class Bootstrap {
     protected List<Extension> extensions;
@@ -106,9 +107,14 @@ public class Bootstrap {
         config.databaseServiceConfig().set(
             new DatabaseService()
         );
+        config.toastServiceConfig().set(
+            new AutohideToastService(5000)
+        );
         config.projectServiceConfig().set(
             new ProjectService(
-                config.projectFactoryConfig().get()
+                config.projectFactoryConfig().get(),
+                config.databaseDriverManagerConfig().get(),
+                config.toastServiceConfig().get()
             )
         );
         config.tableActiveStateConfig().set(
@@ -123,7 +129,8 @@ public class Bootstrap {
                 config.tableRepositoryConfig().get(),
                 config.tableActiveStateConfig().get(),
                 config.databaseDriverManagerConfig().get(),
-                config.projectServiceConfig().get()
+                config.projectServiceConfig().get(),
+                config.activeRouteConfig().get()
             )
         );
         config.columnActiveStateConfig().set(

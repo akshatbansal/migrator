@@ -23,6 +23,7 @@ import migrator.app.domain.table.service.TableActiveState;
 import migrator.app.migration.Migration;
 import migrator.app.migration.MigrationConfig;
 import migrator.app.router.ActiveRoute;
+import migrator.app.toast.ToastService;
 import migrator.lib.config.ValueConfig;
 
 public class ConfigContainer {
@@ -48,6 +49,7 @@ public class ConfigContainer {
     private ValueConfig<ColumnService> columnService;
     private ValueConfig<IndexService> indexService;
     private ValueConfig<ProjectService> projectService;
+    private ValueConfig<ToastService> toastService;
 
     private ValueConfig<TableActiveState> tableActiveState;
     private ValueConfig<ColumnActiveState> columnActiveState;
@@ -78,6 +80,7 @@ public class ConfigContainer {
         this.columnService = new ValueConfig<>();
         this.indexService = new ValueConfig<>();
         this.projectService = new ValueConfig<>();
+        this.toastService = new ValueConfig<>();
 
         this.columnActiveState = new ValueConfig<>();
         this.indexActiveState = new ValueConfig<>();
@@ -160,6 +163,10 @@ public class ConfigContainer {
 
     public ValueConfig<ProjectService> projectServiceConfig() {
         return this.projectService;
+    }
+
+    public ValueConfig<ToastService> toastServiceConfig() {
+        return this.toastService;
     }
 
     public ValueConfig<ColumnActiveState> columnActiveStateConfig() {

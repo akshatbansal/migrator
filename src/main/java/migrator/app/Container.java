@@ -21,6 +21,7 @@ import migrator.app.ConfigContainer;
 import migrator.app.code.CodeManager;
 import migrator.app.migration.Migration;
 import migrator.app.router.ActiveRoute;
+import migrator.app.toast.ToastService;
 
 public class Container {
     protected ConfigContainer config;
@@ -91,6 +92,10 @@ public class Container {
 
     public ProjectService getProjectService() {
         return this.config.projectServiceConfig().get();
+    }
+
+    public ToastService getToastService() {
+        return this.config.toastServiceConfig().get();
     }
 
     public ColumnActiveState getColumnActiveState() {

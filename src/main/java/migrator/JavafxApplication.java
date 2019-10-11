@@ -12,6 +12,7 @@ import migrator.app.Router;
 import migrator.app.domain.connection.model.Connection;
 import migrator.app.domain.database.model.DatabaseConnection;
 import migrator.app.domain.project.model.Project;
+import migrator.app.toast.Toast;
 import migrator.ext.javafx.JavafxGui;
 import migrator.ext.javafx.MainController;
 import migrator.ext.javafx.component.JavafxLayout;
@@ -59,7 +60,7 @@ public class JavafxApplication extends Application {
 
         ViewLoader viewLoader = new ViewLoader();
         Gui gui = new JavafxGui(container, viewLoader, primaryStage);
-        MainController mainController = new MainController(viewLoader);
+        MainController mainController = new MainController(viewLoader, container);
 
         JavafxLayout layout = new JavafxLayout(mainController.getBodyPane(), mainController.getSidePane());
 
@@ -107,6 +108,7 @@ public class JavafxApplication extends Application {
             getClass().getResource("/styles/button.css").toExternalForm(),
             getClass().getResource("/styles/table.css").toExternalForm(),
             getClass().getResource("/styles/card.css").toExternalForm(),
+            getClass().getResource("/styles/toast.css").toExternalForm(),
             getClass().getResource("/styles/form.css").toExternalForm(),
             getClass().getResource("/styles/scroll.css").toExternalForm(),
             getClass().getResource("/styles/main.css").toExternalForm()

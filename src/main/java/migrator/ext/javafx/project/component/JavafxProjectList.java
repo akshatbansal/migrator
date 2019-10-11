@@ -40,7 +40,6 @@ public class JavafxProjectList extends ViewComponent implements ProjectList {
 
         this.cardList.onPrimary((Project eventDataProject) -> {
             this.projectService.open(eventDataProject);
-            this.activeRoute.changeTo("table.index");
         });
 
         this.loadView("/layout/project/list.fxml");

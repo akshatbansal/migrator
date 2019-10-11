@@ -11,4 +11,6 @@ public interface DatabaseDriver {
     public ObservableList<String> getTables();
     public ObservableList<List<String>> getColumns(String tableName);
     public ObservableList<List<String>> getIndexes(String tableName);
+    public Boolean isConnected();
+    public String getError();
 }

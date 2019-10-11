@@ -6,20 +6,24 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml">
-    <left>
-        <VBox styleClass="background-dark">
-            
-        </VBox>
-    </left>
-    <center>
-        <BorderPane>
-            <left>
-                <VBox styleClass="left-pane, background-medium" fx:id="leftPane"></VBox>
-            </left>
-            <center>
-                <VBox fx:id="centerPane"></VBox>
-            </center>
-        </BorderPane>
-    </center>
-</BorderPane>
+<AnchorPane xmlns:fx="http://javafx.com/fxml" >
+    <BorderPane AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <left>
+            <VBox styleClass="background-dark">
+                
+            </VBox>
+        </left>
+        <center>
+            <BorderPane>
+                <left>
+                    <VBox styleClass="left-pane, background-medium" fx:id="leftPane"></VBox>
+                </left>
+                <center>
+                    <VBox fx:id="centerPane"></VBox>
+                </center>
+            </BorderPane>
+        </center>
+    </BorderPane>
+    <VBox fx:id="toastPane" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
+    </VBox>
+</AnchorPane>
