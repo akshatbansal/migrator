@@ -7,6 +7,7 @@
 <?import javafx.scene.control.cell.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
 <?import migrator.ext.javafx.component.ChangeCellFactory?>
 
 <VBox styleClass="card" xmlns:fx="http://javafx.com/fxml">
@@ -38,6 +39,14 @@
           </columns>
      </TableView>
      <HBox styleClass="card__footer" spacing="10">
-          <Button text="+" onAction="#addColumn" styleClass="btn-primary" />
+          <Button onAction="#addColumn" styleClass="btn-primary">
+               <graphic>
+                    <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                         <image>
+                              <Image url="@/images/plus_white.png" />
+                         </image>
+                    </ImageView>
+               </graphic>
+          </Button>
      </HBox>
 </VBox>
