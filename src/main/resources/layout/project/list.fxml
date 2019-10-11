@@ -5,6 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml">
     <center>
@@ -14,7 +15,15 @@
                     <HBox HBox.hgrow="ALWAYS" maxWidth="Infinity">
                         <Text text="Projects" styleClass="title" />
                     </HBox>
-                    <Button text="+" onAction="#newProject" styleClass="btn-primary" />
+                    <Button onAction="#newProject" styleClass="btn-primary">
+                        <graphic>
+                            <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                                <image>
+                                    <Image url="@/images/plus_white.png" />
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </Button>
                 </HBox>
                 <VBox fx:id="projectCards"></VBox>
             </VBox>

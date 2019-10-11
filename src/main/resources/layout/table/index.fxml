@@ -3,6 +3,7 @@
 <?import java.net.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
@@ -10,12 +11,28 @@
     <center>
         <ScrollPane styleClass="background-light" fitToWidth="true">
             <VBox>
-                <HBox styleClass="container">
+                <HBox styleClass="container" spacing="10">
                     <HBox HBox.hgrow="ALWAYS" maxWidth="Infinity">
                         <Text text="Tables" styleClass="title" />
                     </HBox>
-                    <Button text="+" onAction="#addTable" styleClass="btn-primary" />
-                    <Button text=">" onAction="#commit" styleClass="btn-primary" />
+                    <Button onAction="#addTable" styleClass="btn-primary">
+                        <graphic>
+                            <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                                <image>
+                                    <Image url="@/images/plus_white.png" />
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    <Button onAction="#commit" styleClass="btn-primary">
+                        <graphic>
+                            <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                                <image>
+                                    <Image url="@/images/check_white.png" />
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </Button>
                 </HBox>
                 <VBox fx:id="breadcrumpsContainer"></VBox>
                 <VBox fx:id="tableCards"></VBox>
