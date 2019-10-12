@@ -12,28 +12,28 @@
         <VBox >
             <HBox styleClass="form__row">
                 <HBox styleClass="form__row-label" alignment="center_left">
-                    <Text text="name" />
+                    <Text styleClass="label" text="name" />
                 </HBox>
                 <TextField fx:id="name" HBox.hgrow="ALWAYS" maxWidth="Infinity" disable="true" />
             </HBox>
 
             <HBox styleClass="form__row">
                 <HBox styleClass="form__row-label" alignment="center_left">
-                    <Text text="column #1" />
+                    <Text styleClass="label" text="column #1" />
                 </HBox>
                 <ComboBox fx:id="column1" HBox.hgrow="ALWAYS" maxWidth="Infinity" disable="true" />
             </HBox>
 
             <HBox styleClass="form__row">
                 <HBox styleClass="form__row-label" alignment="center_left">
-                    <Text text="column #2" />
+                    <Text styleClass="label" text="column #2" />
                 </HBox>
                 <ComboBox fx:id="column2" HBox.hgrow="ALWAYS" maxWidth="Infinity" disable="true" />
             </HBox>
 
             <HBox styleClass="form__row">
                 <HBox styleClass="form__row-label" alignment="center_left">
-                    <Text text="column #3" />
+                    <Text styleClass="label" text="column #3" />
                 </HBox>
                 <ComboBox fx:id="column3" HBox.hgrow="ALWAYS" maxWidth="Infinity" disable="true" />
             </HBox>

@@ -1,4 +1,5 @@
-.background-medium Text, .foreground-light {
+.foreground-light {
+    fill: #f4f4f4;
     -fx-fill: #f4f4f4;
     -fx-text-fill: #f4f4f4;
 }

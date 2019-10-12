@@ -15,8 +15,8 @@ public class ColumnFactory {
     public Column createNotChanged(String columnName, String format, String defaultValue, Boolean enableNull, String length) {
         return new Column(
             this.columnFormatManager,
-            new SimpleColumnProperty(columnName, format, defaultValue, enableNull, length, null, ""), // original
-            new SimpleColumnProperty(columnName, format, defaultValue, enableNull, length, null, ""), // changed
+            new SimpleColumnProperty(columnName, format, defaultValue, enableNull, length, true, ""), // original
+            new SimpleColumnProperty(columnName, format, defaultValue, enableNull, length, true, ""), // changed
             new ChangeCommand(ChangeCommand.NONE)
         );
     }
@@ -24,8 +24,8 @@ public class ColumnFactory {
     public Column createWithCreateChange(String columnName) {
         return new Column(
             this.columnFormatManager,
-            new SimpleColumnProperty(columnName, "string", "", false, "255", false, ""), // original
-            new SimpleColumnProperty(columnName, "string", "", false, "255", false, ""), // changed
+            new SimpleColumnProperty(columnName, "string", "", false, "255", true, ""), // original
+            new SimpleColumnProperty(columnName, "string", "", false, "255", true, ""), // changed
             new ChangeCommand(ChangeCommand.CREATE)
         );
     }

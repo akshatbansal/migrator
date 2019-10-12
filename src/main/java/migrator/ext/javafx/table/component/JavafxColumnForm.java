@@ -23,6 +23,7 @@ import migrator.app.domain.table.service.TableActiveState;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
+import migrator.ext.javafx.component.form.JavafxCheckbox;
 import migrator.ext.javafx.component.form.JavafxTextInput;
 
 public class JavafxColumnForm extends ViewComponent implements ColumnForm {
@@ -100,6 +101,12 @@ public class JavafxColumnForm extends ViewComponent implements ColumnForm {
                 JavafxTextInput precision = new JavafxTextInput(this.viewLoader, this.column.precisionProperty(), "precision");
                 this.paramsBox.getChildren().add(
                     (Node) precision.getContent()
+                );
+            }
+            if (columnFormat.isSigned()) {
+                JavafxCheckbox signed = new JavafxCheckbox(this.viewLoader, this.column.signProperty(), "signed");
+                this.paramsBox.getChildren().add(
+                    (Node) signed.getContent()
                 );
             }
         }
