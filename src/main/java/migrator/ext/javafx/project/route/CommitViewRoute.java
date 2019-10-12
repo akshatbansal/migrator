@@ -17,7 +17,9 @@ public class CommitViewRoute implements RouteConnection
 
     @Override
     public void show(Project routeData) {
-        this.layout.clearBody();
+        this.layout.renderBody(
+            this.projectGuiKit.createCommitView(routeData)
+        );
         this.layout.renderSide(
             this.projectGuiKit.createCommitForm(routeData)
         );

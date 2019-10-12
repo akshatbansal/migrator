@@ -10,6 +10,10 @@
     border-color: transparent;
 }
 
+.card.card--full-width {
+    -fx-pref-width: 100%;
+}
+
 .card.card--active {
     -fx-effect: dropshadow(three-pass-box, #20AAD6, 10, 0, 0, 0);
 }

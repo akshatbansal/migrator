@@ -45,4 +45,27 @@ abstract public class ObservableListRepository<T> implements Repository<T> {
     public void setList(String key, List<T> list) {
         this.getOrCreateList(key).setAll(list);
     }
+
+    @Override
+    public T get(String key, String id) {
+        List<T> list = this.getOrCreateList(key);
+        for (T item : list) {
+            if (this.getId(item).equals(id)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public T getOrCreate(String key, T value) {
+        T exisitngValue = this.get(key, this.getId(value));
+        if (exisitngValue == null) {
+            this.add(key, value);
+            return value;
+        }
+        return exisitngValue;
+    }
+
+    protected abstract String getId(T value);
 }

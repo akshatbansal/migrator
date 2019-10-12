@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" styleClass="card,card--full-width">
+    <HBox>
+        <Text styleClass="title" fx:id="title" />
+    </HBox>
+    <VBox fx:id="changes">
+    </VBox>
+</VBox>
