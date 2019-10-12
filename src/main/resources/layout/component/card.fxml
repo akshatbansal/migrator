@@ -10,7 +10,7 @@
     <HBox styleClass="card__header">
         <Text fx:id="name" styleClass="card__header-title" />
     </HBox>
-    <HBox styleClass="card__footer" alignment="center_right" spacing="10" fx:id="buttonBox">
+    <HBox styleClass="card__footer" alignment="center_right" spacing="10" fx:id="buttonBox" HBox.hgrow="ALWAYS" maxWidth="Infinity" >
         
     </HBox>
 </VBox>

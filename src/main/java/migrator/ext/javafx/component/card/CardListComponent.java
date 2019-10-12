@@ -1,4 +1,4 @@
-package migrator.ext.javafx.component;
+package migrator.ext.javafx.component.card;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +11,8 @@ import javafx.collections.ListChangeListener.Change;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.FlowPane;
+import migrator.ext.javafx.component.ViewComponent;
+import migrator.ext.javafx.component.ViewLoader;
 import migrator.lib.emitter.Emitter;
 import migrator.lib.emitter.EventEmitter;
 import migrator.lib.emitter.Subscriber;
@@ -24,15 +26,17 @@ public class CardListComponent<T> extends ViewComponent {
     protected Map<T, CardComponent<T>> cards;
     protected ViewLoader viewLoader;
     protected CardComponent<T> focusedCard;
+    protected CardComponentFactory<T> cardComponentFactory;
 
     @FXML protected FlowPane pane;
 
-    public CardListComponent(ObservableList<T> list, CardFactory <T>cardFactory, ViewLoader viewLoader) {
+    public CardListComponent(ObservableList<T> list, CardFactory <T>cardFactory, CardComponentFactory<T> cardComponentFactory, ViewLoader viewLoader) {
         super(viewLoader);
         this.list = list;
         this.emitter = new EventEmitter<>();
         this.cards = new HashMap<>();
         this.cardFactory = cardFactory;
+        this.cardComponentFactory = cardComponentFactory;
         this.viewLoader = viewLoader;
         this.subscriptions = new ArrayList<>();
 
@@ -55,7 +59,7 @@ public class CardListComponent<T> extends ViewComponent {
         while (iterator.hasNext()) {
             T value = iterator.next();
             Card<T> card = this.cardFactory.create(value);
-            CardComponent<T> cardComponent = new CardComponent<>(card, this.viewLoader);
+            CardComponent<T> cardComponent = this.cardComponentFactory.create(card);
             this.cards.put(value, cardComponent);
             childrens.add((Node) cardComponent.getContent());
             this.subscriptions.add(

@@ -59,3 +59,23 @@
     -fx-effect: dropshadow(three-pass-box, #252525, 10, 0, 0, 0);
     -fx-pref-width: 300;
 }
+
+.marks__square {
+    -fx-pref-width: 6px;
+    -fx-pref-height: 6px;
+}
+
+.marks__square--create {
+    background-color: #6FDA80;
+    -fx-background-color: #6FDA80;
+}
+
+.marks__square--update {
+    background-color: #DAC26F;
+    -fx-background-color: #DAC26F;
+}
+
+.marks__square--delete {
+    background-color: #DA6F6F;
+    -fx-background-color: #DA6F6F;
+}

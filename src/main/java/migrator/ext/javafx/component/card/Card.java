@@ -1,4 +1,4 @@
-package migrator.ext.javafx.component;
+package migrator.ext.javafx.component.card;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
