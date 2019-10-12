@@ -3,12 +3,14 @@ package migrator.app.database.format;
 import migrator.lib.config.MapConfig;
 
 public class FakeColumnFormatManager extends ColumnFormatManager {
-    public FakeColumnFormatManager() {
+    protected ColumnFormat format;
+    public FakeColumnFormatManager(ColumnFormat format) {
         super(new MapConfig<>());
+        this.format = format;
     }
 
     @Override
     public ColumnFormat getFormat(String formatName) {
-        return new SimpleColumnFormat(formatName);
+        return this.format;
     }
 }

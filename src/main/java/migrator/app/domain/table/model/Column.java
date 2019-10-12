@@ -108,7 +108,7 @@ public class Column implements Changable, ColumnChange, ChangeListener<Object> {
 
     @Override
     public Boolean hasLengthChanged() {
-        return !this.getLength().equals(this.getOriginal().getLength());
+        return this.hasLengthAttribute() && !this.getLength().equals(this.getOriginal().getLength());
     }
 
     @Override
@@ -123,7 +123,7 @@ public class Column implements Changable, ColumnChange, ChangeListener<Object> {
 
     @Override
     public Boolean hasSignChanged() {
-        return this.isSigned() != this.getOriginal().isSigned();
+        return this.hasSignAttribute() && this.isSigned() != this.getOriginal().isSigned();
     }
 
     @Override
@@ -138,7 +138,7 @@ public class Column implements Changable, ColumnChange, ChangeListener<Object> {
 
     @Override
     public Boolean hasPrecisionChanged() {
-        return (!this.getPrecision().equals(this.getOriginal().getPrecision()));
+        return (this.hasPrecisionAttribute() && !this.getPrecision().equals(this.getOriginal().getPrecision()));
     }
 
     public ColumnChange getChange() {
@@ -200,6 +200,24 @@ public class Column implements Changable, ColumnChange, ChangeListener<Object> {
     @Override
     public Boolean hasNullEnabledChanged() {
         return this.isNullEnabled() != this.getOriginal().isNullEnabled();
+    }
+
+    @Override
+    public Boolean hasLengthAttribute() {
+        return this.columnFormatManager.getFormat(this.getFormat())
+            .hasLength();
+    }
+
+    @Override
+    public Boolean hasPrecisionAttribute() {
+        return this.columnFormatManager.getFormat(this.getFormat())
+            .hasPrecision();
+    }
+
+    @Override
+    public Boolean hasSignAttribute() {
+        return this.columnFormatManager.getFormat(this.getFormat())
+            .isSigned();
     }
 
     @Override

@@ -13,9 +13,8 @@ public class ColumnCommand {
     }
 
     protected String getOptions() {
-        // limit
-        // after
-        // comment
+        // TODO: after
+        // TODO: comment
         List<String> options = new ArrayList<>();
         if (this.columnChange.isNullEnabled() != null) {
             options.add(
@@ -26,6 +25,16 @@ public class ColumnCommand {
             options.add(
                 "'default' => '" + this.columnChange.getDefaultValue() + "'"
             );
+        }
+        if (this.columnChange.hasPrecisionAttribute()) {
+            options.add("'precision' => " + this.columnChange.getLength());
+            options.add("'scale' => " + this.columnChange.getPrecision());
+        } else if (this.columnChange.hasLengthAttribute()) {
+            options.add("'length' => " + this.columnChange.getLength());
+        }
+
+        if (this.columnChange.hasSignAttribute() && this.columnChange.isSigned() != null) {
+            options.add("'signed' => " + this.columnChange.isSigned());
         }
         if (options.size() == 0) {
             return "";

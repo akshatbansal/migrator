@@ -12,6 +12,9 @@ import java.util.Arrays;
 
 import migrator.app.database.format.ColumnFormatManager;
 import migrator.app.database.format.FakeColumnFormatManager;
+import migrator.app.database.format.LengthColumnFormatter;
+import migrator.app.database.format.PrecisionColumnFormatter;
+import migrator.app.database.format.SimpleColumnFormat;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Index;
 import migrator.app.domain.table.model.Table;
@@ -33,7 +36,9 @@ public class PhinxMigrationGeneratorTest {
 
     @BeforeEach
     public void setUp() {
-        this.columnFormatManager = new FakeColumnFormatManager();
+        this.columnFormatManager = new FakeColumnFormatManager(
+            new SimpleColumnFormat("test")
+        );
         this.storage = new FileStorage();
         this.migrator = new PhinxMigrationGenerator(
             new FakeTimestampFileStorageFactory(this.storage),
@@ -393,6 +398,120 @@ public class PhinxMigrationGeneratorTest {
                 "\t{\n" +
                     "\t\t$this->table('table_name')\n" +
                         "\t\t\t->changeColumn('column_name', 'string', ['null' => false, 'default' => 'default_value'])\n" +
+                        "\t\t\t->save();\n" +
+                "\t}\n" +
+            "}\n",
+            this.storage.load()
+        );
+    }
+
+    @Test public void testPhpMigrationGenerateChangedColumnFormatLength() {
+        ColumnFormatManager columnFormatManager = new FakeColumnFormatManager(
+            new SimpleColumnFormat("string", true, false, false, new LengthColumnFormatter("string"))
+        );
+        TableChange change = new Table(
+            null,
+            new SimpleTableProperty("table_name"),
+            new SimpleTableProperty("table_name"),
+            new ChangeCommand(null),
+            FXCollections.observableArrayList(
+                Arrays.asList(
+                    new Column(
+                        columnFormatManager,
+                        new SimpleColumnProperty("column_name", "string", "", false, "255", false, ""),
+                        new SimpleColumnProperty("column_name", "string", "", false, "250", false, ""),
+                        new ChangeCommand("update")
+                    )
+                )
+            ),
+            FXCollections.observableArrayList()
+        );
+        this.migrator.generateMigration("", "MigrationByMigrator", change);
+        assertEquals(
+            "<?php\n\n" +
+            "use Phinx\\Migration\\AbstractMigration;\n\n" +
+            "class MigrationByMigrator extends AbstractMigration\n" +
+            "{\n" +
+                "\tpublic function change()\n" +
+                "\t{\n" +
+                    "\t\t$this->table('table_name')\n" +
+                        "\t\t\t->changeColumn('column_name', 'string', ['null' => false, 'default' => '', 'length' => 250])\n" +
+                        "\t\t\t->save();\n" +
+                "\t}\n" +
+            "}\n",
+            this.storage.load()
+        );
+    }
+
+    @Test public void testPhpMigrationGenerateChangedColumnFormatPrecision() {
+        ColumnFormatManager columnFormatManager = new FakeColumnFormatManager(
+            new SimpleColumnFormat("string", true, false, true, new PrecisionColumnFormatter("string"))
+        );
+        TableChange change = new Table(
+            null,
+            new SimpleTableProperty("table_name"),
+            new SimpleTableProperty("table_name"),
+            new ChangeCommand(null),
+            FXCollections.observableArrayList(
+                Arrays.asList(
+                    new Column(
+                        columnFormatManager,
+                        new SimpleColumnProperty("column_name", "string", "", false, "10", false, "4"),
+                        new SimpleColumnProperty("column_name", "string", "", false, "10", false, "5"),
+                        new ChangeCommand("update")
+                    )
+                )
+            ),
+            FXCollections.observableArrayList()
+        );
+        this.migrator.generateMigration("", "MigrationByMigrator", change);
+        assertEquals(
+            "<?php\n\n" +
+            "use Phinx\\Migration\\AbstractMigration;\n\n" +
+            "class MigrationByMigrator extends AbstractMigration\n" +
+            "{\n" +
+                "\tpublic function change()\n" +
+                "\t{\n" +
+                    "\t\t$this->table('table_name')\n" +
+                        "\t\t\t->changeColumn('column_name', 'string', ['null' => false, 'default' => '', 'precision' => 10, 'scale' => 5])\n" +
+                        "\t\t\t->save();\n" +
+                "\t}\n" +
+            "}\n",
+            this.storage.load()
+        );
+    }
+
+    @Test public void testPhpMigrationGenerateChangedColumnSigned() {
+        ColumnFormatManager columnFormatManager = new FakeColumnFormatManager(
+            new SimpleColumnFormat("string", true, true, false, new LengthColumnFormatter("string"))
+        );
+        TableChange change = new Table(
+            null,
+            new SimpleTableProperty("table_name"),
+            new SimpleTableProperty("table_name"),
+            new ChangeCommand(null),
+            FXCollections.observableArrayList(
+                Arrays.asList(
+                    new Column(
+                        columnFormatManager,
+                        new SimpleColumnProperty("column_name", "string", "", false, "10", true, ""),
+                        new SimpleColumnProperty("column_name", "string", "", false, "10", false, ""),
+                        new ChangeCommand("update")
+                    )
+                )
+            ),
+            FXCollections.observableArrayList()
+        );
+        this.migrator.generateMigration("", "MigrationByMigrator", change);
+        assertEquals(
+            "<?php\n\n" +
+            "use Phinx\\Migration\\AbstractMigration;\n\n" +
+            "class MigrationByMigrator extends AbstractMigration\n" +
+            "{\n" +
+                "\tpublic function change()\n" +
+                "\t{\n" +
+                    "\t\t$this->table('table_name')\n" +
+                        "\t\t\t->changeColumn('column_name', 'string', ['null' => false, 'default' => '', 'length' => 10, 'signed' => false])\n" +
                         "\t\t\t->save();\n" +
                 "\t}\n" +
             "}\n",
