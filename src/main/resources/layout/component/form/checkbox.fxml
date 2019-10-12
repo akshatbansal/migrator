@@ -10,5 +10,7 @@
     <HBox styleClass="form__row-label" alignment="center_left">
         <Text styleClass="label" fx:id="label" />
     </HBox>
-    <CheckBox fx:id="field" />
+    <HBox HBox.hgrow="ALWAYS" maxWidth="Infinity" alignment="center_right">
+        <CheckBox fx:id="field" />
+    </HBox>
 </HBox>

@@ -38,7 +38,9 @@
                 <HBox styleClass="form__row-label" alignment="center_left">
                     <Text styleClass="label" text="null" />
                 </HBox>
-                <CheckBox fx:id="nullCheckbox" />
+                <HBox HBox.hgrow="ALWAYS" maxWidth="Infinity" alignment="center_right">
+                    <CheckBox fx:id="nullCheckbox" />
+                </HBox>
             </HBox>
 
             <HBox alignment="center">
