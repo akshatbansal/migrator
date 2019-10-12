@@ -41,17 +41,17 @@ public class JavafxCommitForm extends ViewComponent implements CommitForm {
     @FXML public void commit() {
         String outputType = this.project.getOutputType();
         if (outputType == null || outputType.isEmpty()) {
-            this.toastService.show("Project output type has to be set");
+            this.toastService.error("Project output type has to be set");
             return;
         }
         String projectFolder = this.project.getFolder();
         if (projectFolder == null || projectFolder.isEmpty()) {
-            this.toastService.show("Project folder has to be set");
+            this.toastService.error("Project folder has to be set");
             return;
         }
         String commitName = this.name.textProperty().get();
         if (commitName == null || commitName.isEmpty()) {
-            this.toastService.show("Commit name has to be set");
+            this.toastService.error("Commit name has to be set");
             return;
         }
         MigrationGeneratorFactory generatorFactory = this.migration.getGenerator(outputType);
@@ -59,7 +59,7 @@ public class JavafxCommitForm extends ViewComponent implements CommitForm {
 
         List<? extends TableChange> changes = this.tableRepository.getList(this.project.getName());
         generator.generateMigration(this.project.getFolder(), this.name.textProperty().get(), changes);
-        this.toastService.show("Migration file crated.");
+        this.toastService.success("Migration file crated.");
     }
 
     @FXML public void close() {

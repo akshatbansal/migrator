@@ -32,6 +32,9 @@
                                 </image>
                             </ImageView>
                         </graphic>
+                        <tooltip>
+                            <Tooltip text="Commit changes to new migration file"/>
+                        </tooltip>
                     </Button>
                 </HBox>
                 <VBox fx:id="breadcrumpsContainer"></VBox>

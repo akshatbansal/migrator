@@ -12,6 +12,26 @@
     -fx-padding: 5 10 5 10;
 }
 
+.toast.toast--info {
+    -fx-border-color: #6EC8FB;
+    border-color: #6EC8FB;
+}
+
+.toast.toast--success {
+    -fx-border-color: #8AFB6E;
+    border-color: #8AFB6E;
+}
+
+.toast.toast--warning {
+    -fx-border-color: #FBDC6E;
+    border-color: #FBDC6E;
+}
+
+.toast.toast--error {
+    -fx-border-color: #FB6E6E;
+    border-color: #FB6E6E;
+}
+
 .toast__message {
     font-size: 11pt;
     -fx-font-size: 11pt;

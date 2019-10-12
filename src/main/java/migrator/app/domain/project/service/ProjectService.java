@@ -55,7 +55,7 @@ public class ProjectService {
                 .createDriver(project.getDatabase());
             databaseDriver.connect();
             if (!databaseDriver.isConnected()) {
-                this.toastService.show(databaseDriver.getError());
+                this.toastService.error(databaseDriver.getError());
                 return;
             }
         }

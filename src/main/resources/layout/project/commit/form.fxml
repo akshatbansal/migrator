@@ -20,8 +20,8 @@
     </center>
     <bottom>
         <HBox styleClass="form__row" alignment="center_right" spacing="10">
-            <Button text="Commit" onAction="#commit" styleClass="btn-primary" />
             <Button text="Close" onAction="#close" styleClass="btn-secondary" />
+            <Button text="Commit" onAction="#commit" styleClass="btn-primary" />
         </HBox>
     </bottom>
 </BorderPane>

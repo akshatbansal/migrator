@@ -17,8 +17,8 @@ public class AutohideToastService implements ToastService {
     }
 
     @Override
-    public Toast show(String message) {
-        Toast toast = new Toast(message);
+    public Toast show(String message, String type) {
+        Toast toast = new Toast(message, type);
         this.show(toast);
         return toast;
     }
@@ -48,5 +48,25 @@ public class AutohideToastService implements ToastService {
 
     public ObservableList<Toast> getList() {
         return this.list;
+    }
+
+    @Override
+    public Toast error(String message) {
+        return this.show(message, "error");
+    }
+
+    @Override
+    public Toast info(String message) {
+        return this.show(message, "info");
+    }
+
+    @Override
+    public Toast success(String message) {
+        return this.show(message, "success");
+    }
+
+    @Override
+    public Toast warning(String message) {
+        return this.show(message, "warning");
     }
 }
