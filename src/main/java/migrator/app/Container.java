@@ -1,6 +1,7 @@
 package migrator.app;
 
 import migrator.app.database.driver.DatabaseDriverManager;
+import migrator.app.database.format.ColumnFormatManager;
 import migrator.app.domain.column.service.ColumnActiveState;
 import migrator.app.domain.column.service.ColumnFactory;
 import migrator.app.domain.column.service.ColumnService;
@@ -36,6 +37,10 @@ public class Container {
 
     public Migration getMigration() {
         return this.config.migrationConfig().get();
+    }
+
+    public ColumnFormatManager getColumnFormatManager() {
+        return this.config.columnFormatManagerConfig().get();
     }
 
     public DatabaseDriverManager getDatabaseDriverManager() {

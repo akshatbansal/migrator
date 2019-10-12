@@ -1,32 +1,42 @@
 package migrator.ext.javafx.table.component;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import migrator.app.Container;
+import migrator.app.database.format.ColumnFormat;
+import migrator.app.database.format.ColumnFormatManager;
 import migrator.app.domain.column.service.ColumnActiveState;
 import migrator.app.domain.table.component.ColumnForm;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.service.TableActiveState;
 import migrator.app.migration.model.ChangeCommand;
-import migrator.app.router.ActiveRoute;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
+import migrator.ext.javafx.component.form.JavafxCheckbox;
+import migrator.ext.javafx.component.form.JavafxTextInput;
 
 public class JavafxColumnForm extends ViewComponent implements ColumnForm {
     protected ColumnActiveState columnActiveState;
-    protected ActiveRoute activeRoute;
     protected TableActiveState tableActiveState;
+    protected ColumnFormatManager columnFormatManager;
     protected Column column;
 
     @FXML protected TextField name;
     @FXML protected ComboBox<String> format;
     @FXML protected TextField defaultText;
     @FXML protected CheckBox nullCheckbox;
+    @FXML protected VBox paramsBox;
     @FXML protected HBox manageBox;
     protected Button removeButton;
     protected Button restoreButton;
@@ -35,7 +45,7 @@ public class JavafxColumnForm extends ViewComponent implements ColumnForm {
         super(viewLoader);
         this.columnActiveState = container.getColumnActiveState();
         this.tableActiveState = container.getTableActiveState();
-        this.activeRoute = container.getActiveRoute();
+        this.columnFormatManager = container.getColumnFormatManager();
 
         this.removeButton = new Button("Remove");
         this.removeButton.getStyleClass().addAll("btn-danger");
@@ -62,10 +72,44 @@ public class JavafxColumnForm extends ViewComponent implements ColumnForm {
         this.format.valueProperty().bindBidirectional(column.formatProperty());
         this.defaultText.textProperty().bindBidirectional(column.defaultValueProperty());
         this.nullCheckbox.selectedProperty().bindBidirectional(column.enableNullProperty());
+
+        this.onFormatChange(
+            this.column.getFormat()
+        );
+        
+        this.column.formatProperty().addListener((obs, oldValue, newValue) -> {
+            this.onFormatChange(newValue);
+        });
+
         this.column.getChangeCommand().typeProperty().addListener((ObservableValue<? extends String> obs, String oldValue, String newValue) -> {
             this.onChangeTypeChange(newValue);
         });
         this.onChangeTypeChange(column.getChangeCommand().getType());
+    }
+
+    protected void onFormatChange(String format) {
+        ColumnFormat columnFormat = this.columnFormatManager.getFormat(format);
+        this.paramsBox.getChildren().clear();
+        if (columnFormat != null) {
+            if (columnFormat.hasLength()) {
+                JavafxTextInput length = new JavafxTextInput(this.viewLoader, this.column.lengthProperty(), "length");
+                this.paramsBox.getChildren().add(
+                    (Node) length.getContent()
+                );
+            }
+            if (columnFormat.hasPrecision()) {
+                JavafxTextInput precision = new JavafxTextInput(this.viewLoader, this.column.precisionProperty(), "precision");
+                this.paramsBox.getChildren().add(
+                    (Node) precision.getContent()
+                );
+            }
+            if (columnFormat.isSigned()) {
+                JavafxCheckbox signed = new JavafxCheckbox(this.viewLoader, this.column.signProperty(), "signed");
+                this.paramsBox.getChildren().add(
+                    (Node) signed.getContent()
+                );
+            }
+        }
     }
 
     protected void onChangeTypeChange(String changeType) {
@@ -79,13 +123,13 @@ public class JavafxColumnForm extends ViewComponent implements ColumnForm {
     }
 
     @FXML public void initialize() {
+        Collection<ColumnFormat> formats = this.columnFormatManager.getFormats();
+        List<String> formatNames = new ArrayList<>();
+        for (ColumnFormat columnFormat : formats) {
+            formatNames.add(columnFormat.getName());
+        }
         this.format.getItems().setAll(
-            "string",
-            "boolean",
-            "integer",
-            "smallint",
-            "longint",
-            "datetime"
+            formatNames
         );
     }
 

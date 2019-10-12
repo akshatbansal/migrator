@@ -1,6 +1,7 @@
 package migrator.ext.mysql;
 
 import migrator.app.database.driver.DatabaseDriverConfig;
+
 import migrator.app.ConfigContainer;
 import migrator.app.extension.Extension;
 
@@ -9,6 +10,10 @@ public class MysqlExtension implements Extension {
     public void load(ConfigContainer config) {
         DatabaseDriverConfig databaseDriverConfig = config.getDatabaseDriverConfig();
 
-        databaseDriverConfig.addDriver("mysql", new MysqlDatabaseDriverFactory());
+        databaseDriverConfig.addDriver("mysql", new MysqlDatabaseDriverFactory(
+            config.tableFactoryConfig().get(),
+            config.columnFactoryConfig().get(),
+            config.indexFactoryConfig().get()
+        ));
     }
 }

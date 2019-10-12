@@ -1,27 +1,42 @@
 package migrator.app.domain.table.model;
 
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import migrator.app.database.format.ColumnFormatManager;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.app.migration.model.ColumnChange;
 import migrator.app.migration.model.ColumnProperty;
 
 public class Column implements Changable, ColumnChange, ChangeListener<Object> {
+    protected ColumnFormatManager columnFormatManager;
     protected ColumnProperty originalColumn;
     protected ColumnProperty changedColumn;
     protected ChangeCommand changeCommand;
+    protected StringProperty fullFormatProperty;
 
-    public Column(ColumnProperty originalColumn, ColumnProperty changedColumn, ChangeCommand changeCommand) {
+    public Column(
+        ColumnFormatManager columnFormatManager,
+        ColumnProperty originalColumn,
+        ColumnProperty changedColumn,
+        ChangeCommand changeCommand
+    ) {
+        this.columnFormatManager = columnFormatManager;
         this.originalColumn = originalColumn;
         this.changedColumn = changedColumn;
         this.changeCommand = changeCommand;
+        this.fullFormatProperty = new SimpleStringProperty();
+        this.refreshFullFormat();
 
         this.changedColumn.nameProperty().addListener(this);
         this.changedColumn.formatProperty().addListener(this);
         this.changedColumn.defaultValueProperty().addListener(this);
         this.changedColumn.nullProperty().addListener(this);
+        this.changedColumn.lengthProperty().addListener(this);
+        this.changedColumn.precisionProperty().addListener(this);
+        this.changedColumn.signProperty().addListener(this);
     }
 
     public StringProperty nameProperty() {
@@ -72,6 +87,60 @@ public class Column implements Changable, ColumnChange, ChangeListener<Object> {
         return this.originalColumn.isNullEnabled();
     }
 
+    public StringProperty fullFormatProperty() {
+        return this.fullFormatProperty;
+    }
+
+    @Override
+    public Property<Boolean> nullProperty() {
+        return this.enableNullProperty();
+    }
+
+    @Override
+    public String getLength() {
+        return this.lengthProperty().getValue();
+    }
+
+    @Override
+    public StringProperty lengthProperty() {
+        return this.changedColumn.lengthProperty();
+    }
+
+    @Override
+    public Boolean hasLengthChanged() {
+        return this.hasLengthAttribute() && !this.getLength().equals(this.getOriginal().getLength());
+    }
+
+    @Override
+    public Boolean isSigned() {
+        return this.signProperty().getValue();
+    }
+
+    @Override
+    public Property<Boolean> signProperty() {
+        return this.changedColumn.signProperty();
+    }
+
+    @Override
+    public Boolean hasSignChanged() {
+        return this.hasSignAttribute() && this.isSigned() != this.getOriginal().isSigned();
+    }
+
+    @Override
+    public String getPrecision() {
+        return this.precisionProperty().getValue();
+    }
+
+    @Override
+    public StringProperty precisionProperty() {
+        return this.changedColumn.precisionProperty();
+    }
+
+    @Override
+    public Boolean hasPrecisionChanged() {
+        return (this.hasPrecisionAttribute() && !this.getPrecision().equals(this.getOriginal().getPrecision()));
+    }
+
     public ColumnChange getChange() {
         return this;
     }
@@ -95,7 +164,12 @@ public class Column implements Changable, ColumnChange, ChangeListener<Object> {
         this.changedColumn.formatProperty().set(this.originalColumn.getFormat());
         this.changedColumn.defaultValueProperty().set(this.originalColumn.getDefaultValue());
         this.changedColumn.nullProperty().setValue(this.originalColumn.isNullEnabled());
+        this.changedColumn.lengthProperty().set(this.originalColumn.getLength());
+        this.changedColumn.precisionProperty().set(this.originalColumn.getPrecision());
+        this.changedColumn.signProperty().setValue(this.originalColumn.isSigned());
+
         this.changeCommand.setType(ChangeCommand.NONE);
+        
     }
 
     @Override
@@ -129,12 +203,26 @@ public class Column implements Changable, ColumnChange, ChangeListener<Object> {
     }
 
     @Override
-    public Property<Boolean> nullProperty() {
-        return this.enableNullProperty();
+    public Boolean hasLengthAttribute() {
+        return this.columnFormatManager.getFormat(this.getFormat())
+            .hasLength();
+    }
+
+    @Override
+    public Boolean hasPrecisionAttribute() {
+        return this.columnFormatManager.getFormat(this.getFormat())
+            .hasPrecision();
+    }
+
+    @Override
+    public Boolean hasSignAttribute() {
+        return this.columnFormatManager.getFormat(this.getFormat())
+            .isSigned();
     }
 
     @Override
     public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
+        this.refreshFullFormat();
         if (this.changeCommand.isType(ChangeCommand.DELETE)) {
             return;
         }
@@ -142,10 +230,16 @@ public class Column implements Changable, ColumnChange, ChangeListener<Object> {
             return;
         }
         
-        if (this.hasNameChanged() || this.hasFormatChanged() || this.hasDefaultValueChanged() || this.hasNullEnabledChanged()) {
+        if (this.hasNameChanged() || this.hasFormatChanged() || this.hasDefaultValueChanged() || this.hasNullEnabledChanged() || this.hasLengthChanged() || this.hasPrecisionChanged() || this.hasSignChanged()) {
             this.changeCommand.typeProperty().set(ChangeCommand.UPDATE);
             return;
         }
         this.changeCommand.typeProperty().set(ChangeCommand.NONE);
+    }
+
+    protected void refreshFullFormat() {
+        this.fullFormatProperty.set(
+            this.columnFormatManager.getFormatter(this.getFormat()).format(this.getLength(), this.getPrecision())
+        );
     }
 }

@@ -12,23 +12,23 @@
         <VBox >
             <HBox styleClass="form__row">
                 <HBox styleClass="form__row-label" alignment="center_left">
-                    <Text text="name" />
+                    <Text styleClass="label" text="name" />
                 </HBox>
                 <TextField fx:id="name" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
             </HBox>
 
             <HBox styleClass="form__row">
                 <HBox styleClass="form__row-label" alignment="center_left">
-                    <Text text="output" />
+                    <Text styleClass="label" text="output" />
                 </HBox>
                 <ComboBox fx:id="outputType" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
             </HBox>
 
             <HBox styleClass="form__row">
                 <HBox styleClass="form__row-label" alignment="center_left">
-                    <Text text="folder" />
+                    <Text styleClass="label" text="folder" />
                 </HBox>
-                <HBox maxWidth="Infinity">
+                <HBox maxWidth="Infinity" spacing="10">
                     <TextField fx:id="folder" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
                     <Button text="..." onAction="#chooseDirectory" styleClass="btn-secondary" />
                 </HBox>
@@ -40,25 +40,25 @@
 
             <HBox styleClass="form__row">
                 <HBox styleClass="form__row-label" alignment="center_left">
-                    <Text text="driver" />
+                    <Text styleClass="label" text="driver" />
                 </HBox>
                 <ComboBox fx:id="driver" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
             </HBox>
             <HBox styleClass="form__row">
                 <HBox styleClass="form__row-label" alignment="center_left">
-                    <Text text="host" />
+                    <Text styleClass="label" text="host" />
                 </HBox>
                 <TextField fx:id="host" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
             </HBox>
             <HBox styleClass="form__row">
                 <HBox styleClass="form__row-label" alignment="center_left">
-                    <Text text="port" />
+                    <Text styleClass="label" text="port" />
                 </HBox>
                 <TextField fx:id="port" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
             </HBox>
             <HBox styleClass="form__row">
                 <HBox styleClass="form__row-label" alignment="center_left">
-                    <Text text="database" />
+                    <Text styleClass="label" text="database" />
                 </HBox>
                 <TextField fx:id="database" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
             </HBox>
@@ -69,13 +69,13 @@
 
             <HBox styleClass="form__row">
                 <HBox styleClass="form__row-label" alignment="center_left">
-                    <Text text="user" />
+                    <Text styleClass="label" text="user" />
                 </HBox>
                 <TextField fx:id="user" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
             </HBox>
             <HBox styleClass="form__row">
                 <HBox styleClass="form__row-label" alignment="center_left">
-                    <Text text="password" />
+                    <Text styleClass="label" text="password" />
                 </HBox>
                 <PasswordField fx:id="password" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
             </HBox>

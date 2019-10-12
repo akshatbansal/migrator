@@ -28,7 +28,7 @@
                     <cellValueFactory><PropertyValueFactory property="name" /></cellValueFactory>
                </TableColumn>
                <TableColumn styleClass="column--align-right" text="Format" prefWidth="${(columns.width-4)*0.15}">
-                    <cellValueFactory><PropertyValueFactory property="format" /></cellValueFactory>
+                    <cellValueFactory><PropertyValueFactory property="fullFormat" /></cellValueFactory>
                </TableColumn>
                <TableColumn styleClass="column--align-right" text="Default" prefWidth="${(columns.width-4)*0.15}">
                     <cellValueFactory><PropertyValueFactory property="defaultValue" /></cellValueFactory>

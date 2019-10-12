@@ -1,11 +1,7 @@
 package migrator.app.domain.index.service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -68,26 +64,10 @@ public class SimpleIndexService implements IndexService {
             .createDriver(activeTable.getProject().getDatabase());
         databaseDriver.connect();
 
-        Map<String, List<String>> indexColumnsMap = new LinkedHashMap<>();
-        for (List<String> indexValues : databaseDriver.getIndexes(activeTable.getOriginalName())) {
-            String indexName = indexValues.get(0);
-            if (!indexColumnsMap.containsKey(indexName)) {
-                indexColumnsMap.put(indexName, new ArrayList<>());
-            }
-            indexColumnsMap.get(indexName).add(indexValues.get(1));
-        }
-
         List<Index> indexes = new ArrayList<>();
-        Iterator<Entry<String, List<String>>> entryIterator = indexColumnsMap.entrySet().iterator();
-        while (entryIterator.hasNext()) {
-            Entry<String, List<String>> entry = entryIterator.next();
-            Index dbValue = this.indexFactory.createNotChanged(
-                entry.getKey(), 
-                entry.getValue()
-            );
-
+        for (Index dbIndex : databaseDriver.getIndexes(activeTable.getOriginalName())) {
             indexes.add(
-                this.mergeColumn(dbValue, this.indexRepository.get(repositryKey, dbValue.getOriginal().getName()))
+                this.mergeColumn(dbIndex, this.indexRepository.get(repositryKey, dbIndex.getOriginal().getName()))
             );
         }
 

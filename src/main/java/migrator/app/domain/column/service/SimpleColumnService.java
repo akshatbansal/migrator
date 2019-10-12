@@ -63,20 +63,9 @@ public class SimpleColumnService implements ColumnService {
         databaseDriver.connect();
 
         List<Column> columns = new ArrayList<>();
-        for (List<String> rawColumn : databaseDriver.getColumns(activeTable.getOriginalName())) {
-            String defaultValue = rawColumn.get(3);
-            if (defaultValue == null) {
-                defaultValue = "";
-            }
-            Column dbValue = this.columnFactory.createNotChanged(
-                rawColumn.get(0),
-                rawColumn.get(1),
-                defaultValue,
-                rawColumn.get(2) == "YES" ? true : false
-            );
-
+        for (Column dbColumn : databaseDriver.getColumns(activeTable.getOriginalName())) {
             columns.add(
-                this.mergeColumn(dbValue, this.columnRepository.get(repositryKey, dbValue.getOriginal().getName()))
+                this.mergeColumn(dbColumn, this.columnRepository.get(repositryKey, dbColumn.getOriginal().getName()))
             );
         }
 

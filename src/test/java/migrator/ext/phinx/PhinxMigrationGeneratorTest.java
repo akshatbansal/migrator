@@ -2,31 +2,23 @@ package migrator.ext.phinx;
 
 import org.junit.jupiter.api.Test;
 
-// import javafx.beans.Observable;
-// import javafx.beans.property.ObjectProperty;
-// import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
 
-// import java.util.ArrayList;
 import java.util.Arrays;
-// import java.util.Hashtable;
-// import java.util.LinkedList;
-// import java.util.List;
-// import java.util.Map;
 
-// import migrator.app.domain.connection.model.Connection;
-// import migrator.app.domain.database.model.DatabaseConnection;
-// import migrator.app.domain.project.model.Project;
+import migrator.app.database.format.ColumnFormatManager;
+import migrator.app.database.format.FakeColumnFormatManager;
+import migrator.app.database.format.LengthColumnFormatter;
+import migrator.app.database.format.PrecisionColumnFormatter;
+import migrator.app.database.format.SimpleColumnFormat;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Index;
 import migrator.app.domain.table.model.Table;
 import migrator.app.migration.model.ChangeCommand;
-// import migrator.app.migration.model.ColumnChange;
-// import migrator.app.migration.model.IndexChange;
 import migrator.app.migration.model.SimpleColumnProperty;
 import migrator.app.migration.model.SimpleIndexProperty;
 import migrator.app.migration.model.SimpleTableProperty;
@@ -40,9 +32,13 @@ import migrator.lib.stringformatter.PascalCaseFormatter;
 public class PhinxMigrationGeneratorTest {
     protected PhinxMigrationGenerator migrator;
     protected FileStorage storage;
+    protected ColumnFormatManager columnFormatManager;
 
     @BeforeEach
     public void setUp() {
+        this.columnFormatManager = new FakeColumnFormatManager(
+            new SimpleColumnFormat("test")
+        );
         this.storage = new FileStorage();
         this.migrator = new PhinxMigrationGenerator(
             new FakeTimestampFileStorageFactory(this.storage),
@@ -60,8 +56,9 @@ public class PhinxMigrationGeneratorTest {
             FXCollections.observableArrayList(
                 Arrays.asList(
                     new Column(
-                        new SimpleColumnProperty("column_name", "string", null, false),
-                        new SimpleColumnProperty("column_name", "string", null, false),
+                        this.columnFormatManager,
+                        new SimpleColumnProperty("column_name", "string", null, false, "255", false, ""),
+                        new SimpleColumnProperty("column_name", "string", null, false, "255", false, ""),
                         new ChangeCommand("create")
                     )
                 )
@@ -120,8 +117,9 @@ public class PhinxMigrationGeneratorTest {
             FXCollections.observableArrayList(
                 Arrays.asList(
                     new Column(
-                        new SimpleColumnProperty("column_name", "column_format", null, false),
-                        new SimpleColumnProperty("column_name", "column_format", null, false),
+                        this.columnFormatManager,
+                        new SimpleColumnProperty("column_name", "column_format", null, false, "255", false, ""),
+                        new SimpleColumnProperty("column_name", "column_format", null, false, "255", false, ""),
                         new ChangeCommand("create")
                     )
                 )
@@ -154,8 +152,9 @@ public class PhinxMigrationGeneratorTest {
             FXCollections.observableArrayList(
                 Arrays.asList(
                     new Column(
-                        new SimpleColumnProperty("column_name", "column_format", null, false),
-                        new SimpleColumnProperty("column_name", "column_format", null, false),
+                        this.columnFormatManager,
+                        new SimpleColumnProperty("column_name", "column_format", null, false, "255", false, ""),
+                        new SimpleColumnProperty("column_name", "column_format", null, false, "255", false, ""),
                         new ChangeCommand("delete")
                     )
                 )
@@ -188,8 +187,9 @@ public class PhinxMigrationGeneratorTest {
             FXCollections.observableArrayList(
                 Arrays.asList(
                     new Column(
-                        new SimpleColumnProperty("column_name", "column_format", "", false),
-                        new SimpleColumnProperty("new_column_name", "column_format", "", false),
+                        this.columnFormatManager,
+                        new SimpleColumnProperty("column_name", "column_format", "", false, "255", false, ""),
+                        new SimpleColumnProperty("new_column_name", "column_format", "", false, "255", false, ""),
                         new ChangeCommand("update")
                     )
                 )
@@ -246,13 +246,15 @@ public class PhinxMigrationGeneratorTest {
             FXCollections.observableArrayList(
                 Arrays.asList(
                     new Column(
-                        new SimpleColumnProperty("id", "integer", null, false),
-                        new SimpleColumnProperty("id", "integer", null, false),
+                        this.columnFormatManager,
+                        new SimpleColumnProperty("id", "integer", null, false, "11", true, ""),
+                        new SimpleColumnProperty("id", "integer", null, false, "11", true, ""),
                         new ChangeCommand("create")
                     ),
                     new Column(
-                        new SimpleColumnProperty("name", "string", null, false),
-                        new SimpleColumnProperty("name", "string", null, false),
+                        this.columnFormatManager,
+                        new SimpleColumnProperty("name", "string", null, false, "255", false, ""),
+                        new SimpleColumnProperty("name", "string", null, false, "255", false, ""),
                         new ChangeCommand("create")
                     )
                 )
@@ -342,8 +344,9 @@ public class PhinxMigrationGeneratorTest {
             FXCollections.observableArrayList(
                 Arrays.asList(
                     new Column(
-                        new SimpleColumnProperty("column_name", "column_format", null, false),
-                        new SimpleColumnProperty("column_name", "string", null, false),
+                        this.columnFormatManager,
+                        new SimpleColumnProperty("column_name", "column_format", null, false, "255", false, ""),
+                        new SimpleColumnProperty("column_name", "string", null, false, "255", false, ""),
                         new ChangeCommand("update")
                     )
                 )
@@ -376,8 +379,9 @@ public class PhinxMigrationGeneratorTest {
             FXCollections.observableArrayList(
                 Arrays.asList(
                     new Column(
-                        new SimpleColumnProperty("column_name", "string", "", false),
-                        new SimpleColumnProperty("column_name", "string", "default_value", false),
+                        this.columnFormatManager,
+                        new SimpleColumnProperty("column_name", "string", "", false, "255", false, ""),
+                        new SimpleColumnProperty("column_name", "string", "default_value", false, "255", false, ""),
                         new ChangeCommand("update")
                     )
                 )
@@ -394,6 +398,120 @@ public class PhinxMigrationGeneratorTest {
                 "\t{\n" +
                     "\t\t$this->table('table_name')\n" +
                         "\t\t\t->changeColumn('column_name', 'string', ['null' => false, 'default' => 'default_value'])\n" +
+                        "\t\t\t->save();\n" +
+                "\t}\n" +
+            "}\n",
+            this.storage.load()
+        );
+    }
+
+    @Test public void testPhpMigrationGenerateChangedColumnFormatLength() {
+        ColumnFormatManager columnFormatManager = new FakeColumnFormatManager(
+            new SimpleColumnFormat("string", true, false, false, new LengthColumnFormatter("string"))
+        );
+        TableChange change = new Table(
+            null,
+            new SimpleTableProperty("table_name"),
+            new SimpleTableProperty("table_name"),
+            new ChangeCommand(null),
+            FXCollections.observableArrayList(
+                Arrays.asList(
+                    new Column(
+                        columnFormatManager,
+                        new SimpleColumnProperty("column_name", "string", "", false, "255", false, ""),
+                        new SimpleColumnProperty("column_name", "string", "", false, "250", false, ""),
+                        new ChangeCommand("update")
+                    )
+                )
+            ),
+            FXCollections.observableArrayList()
+        );
+        this.migrator.generateMigration("", "MigrationByMigrator", change);
+        assertEquals(
+            "<?php\n\n" +
+            "use Phinx\\Migration\\AbstractMigration;\n\n" +
+            "class MigrationByMigrator extends AbstractMigration\n" +
+            "{\n" +
+                "\tpublic function change()\n" +
+                "\t{\n" +
+                    "\t\t$this->table('table_name')\n" +
+                        "\t\t\t->changeColumn('column_name', 'string', ['null' => false, 'default' => '', 'length' => 250])\n" +
+                        "\t\t\t->save();\n" +
+                "\t}\n" +
+            "}\n",
+            this.storage.load()
+        );
+    }
+
+    @Test public void testPhpMigrationGenerateChangedColumnFormatPrecision() {
+        ColumnFormatManager columnFormatManager = new FakeColumnFormatManager(
+            new SimpleColumnFormat("string", true, false, true, new PrecisionColumnFormatter("string"))
+        );
+        TableChange change = new Table(
+            null,
+            new SimpleTableProperty("table_name"),
+            new SimpleTableProperty("table_name"),
+            new ChangeCommand(null),
+            FXCollections.observableArrayList(
+                Arrays.asList(
+                    new Column(
+                        columnFormatManager,
+                        new SimpleColumnProperty("column_name", "string", "", false, "10", false, "4"),
+                        new SimpleColumnProperty("column_name", "string", "", false, "10", false, "5"),
+                        new ChangeCommand("update")
+                    )
+                )
+            ),
+            FXCollections.observableArrayList()
+        );
+        this.migrator.generateMigration("", "MigrationByMigrator", change);
+        assertEquals(
+            "<?php\n\n" +
+            "use Phinx\\Migration\\AbstractMigration;\n\n" +
+            "class MigrationByMigrator extends AbstractMigration\n" +
+            "{\n" +
+                "\tpublic function change()\n" +
+                "\t{\n" +
+                    "\t\t$this->table('table_name')\n" +
+                        "\t\t\t->changeColumn('column_name', 'string', ['null' => false, 'default' => '', 'precision' => 10, 'scale' => 5])\n" +
+                        "\t\t\t->save();\n" +
+                "\t}\n" +
+            "}\n",
+            this.storage.load()
+        );
+    }
+
+    @Test public void testPhpMigrationGenerateChangedColumnSigned() {
+        ColumnFormatManager columnFormatManager = new FakeColumnFormatManager(
+            new SimpleColumnFormat("string", true, true, false, new LengthColumnFormatter("string"))
+        );
+        TableChange change = new Table(
+            null,
+            new SimpleTableProperty("table_name"),
+            new SimpleTableProperty("table_name"),
+            new ChangeCommand(null),
+            FXCollections.observableArrayList(
+                Arrays.asList(
+                    new Column(
+                        columnFormatManager,
+                        new SimpleColumnProperty("column_name", "string", "", false, "10", true, ""),
+                        new SimpleColumnProperty("column_name", "string", "", false, "10", false, ""),
+                        new ChangeCommand("update")
+                    )
+                )
+            ),
+            FXCollections.observableArrayList()
+        );
+        this.migrator.generateMigration("", "MigrationByMigrator", change);
+        assertEquals(
+            "<?php\n\n" +
+            "use Phinx\\Migration\\AbstractMigration;\n\n" +
+            "class MigrationByMigrator extends AbstractMigration\n" +
+            "{\n" +
+                "\tpublic function change()\n" +
+                "\t{\n" +
+                    "\t\t$this->table('table_name')\n" +
+                        "\t\t\t->changeColumn('column_name', 'string', ['null' => false, 'default' => '', 'length' => 10, 'signed' => false])\n" +
                         "\t\t\t->save();\n" +
                 "\t}\n" +
             "}\n",

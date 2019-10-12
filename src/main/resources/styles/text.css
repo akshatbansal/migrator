@@ -1,5 +1,19 @@
 .title {
+    font-size: 24px;
     -fx-font-size: 24px;
+    fill: #f4f4f4;
+    -fx-fill: #f4f4f4;
+    -fx-text-fill: #f4f4f4;
+}
+
+.label--update {
+    fill: #DAC26F;
+    -fx-fill: #DAC26F;
+    -fx-text-fill: #DAC26F;
+}
+
+.label {
+    fill: #f4f4f4;
     -fx-fill: #f4f4f4;
     -fx-text-fill: #f4f4f4;
 }
