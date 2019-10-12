@@ -56,14 +56,9 @@ public class SimpleTableService implements TableService {
         databaseDriver.connect();
 
         List<Table> tables = new ArrayList<>();
-        for (String tableName : databaseDriver.getTables()) {
-            Table dbValue = this.tableFactory.createNotChanged(
-                project,
-                tableName
-            );
-
+        for (Table dbTable : databaseDriver.getTables(project)) {
             tables.add(
-                this.mergeTable(dbValue, this.tableRepository.get(repositryKey, dbValue.getOriginal().getName()))
+                this.mergeTable(dbTable, this.tableRepository.get(repositryKey, dbTable.getOriginal().getName()))
             );
         }
 

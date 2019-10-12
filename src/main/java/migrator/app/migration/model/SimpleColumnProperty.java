@@ -10,12 +10,18 @@ public class SimpleColumnProperty implements ColumnProperty {
     protected StringProperty format;
     protected StringProperty defaultValue;
     protected Property<Boolean> enableNull;
+    protected StringProperty length;
+    protected StringProperty precision;
+    protected Property<Boolean> sign;
 
-    public SimpleColumnProperty(String name, String format, String defaultValue, Boolean enableNull) {
+    public SimpleColumnProperty(String name, String format, String defaultValue, Boolean enableNull, String length, Boolean sign, String precision) {
         this.name = new SimpleStringProperty(name);
         this.format = new SimpleStringProperty(format);
         this.defaultValue = new SimpleStringProperty(defaultValue);
         this.enableNull = new SimpleObjectProperty<>(enableNull);
+        this.length = new SimpleStringProperty(length);
+        this.precision = new SimpleStringProperty(precision);
+        this.sign = new SimpleObjectProperty<>(sign);
     }
 
     @Override
@@ -56,5 +62,35 @@ public class SimpleColumnProperty implements ColumnProperty {
     @Override
     public Boolean isNullEnabled() {
         return this.nullProperty().getValue();
+    }
+
+    @Override
+    public String getLength() {
+        return this.lengthProperty().getValue();
+    }
+
+    @Override
+    public StringProperty lengthProperty() {
+        return this.length;
+    }
+
+    @Override
+    public String getPrecision() {
+        return this.precisionProperty().getValue();
+    }
+
+    @Override
+    public StringProperty precisionProperty() {
+        return this.precision;
+    }
+
+    @Override
+    public Boolean isSigned() {
+        return this.signProperty().getValue();
+    }
+
+    @Override
+    public Property<Boolean> signProperty() {
+        return this.sign;
     }
 }

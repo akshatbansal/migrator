@@ -24,6 +24,9 @@
                 <ComboBox fx:id="format" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
             </HBox>
 
+            <VBox fx:id="paramsBox">
+            </VBox>
+
             <HBox styleClass="form__row">
                 <HBox styleClass="form__row-label" alignment="center_left">
                     <Text text="default" />

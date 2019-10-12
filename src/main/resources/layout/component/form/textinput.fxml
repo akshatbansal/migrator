@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<HBox xmlns:fx="http://javafx.com/fxml" styleClass="form__row">
+    <HBox styleClass="form__row-label" alignment="center_left">
+        <Text fx:id="label" />
+    </HBox>
+    <TextField fx:id="field" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
+</HBox>

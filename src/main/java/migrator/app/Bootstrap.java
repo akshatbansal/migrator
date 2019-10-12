@@ -6,6 +6,18 @@ import java.util.List;
 
 import migrator.app.code.CodeManager;
 import migrator.app.database.driver.DatabaseDriverManager;
+import migrator.app.database.format.ColumnFormat;
+import migrator.app.database.format.ColumnFormatManager;
+import migrator.app.database.format.SimpleColumnFormat;
+import migrator.app.database.format.columns.BooleanFormat;
+import migrator.app.database.format.columns.CharFormat;
+import migrator.app.database.format.columns.DateFormat;
+import migrator.app.database.format.columns.DatetimeFormat;
+import migrator.app.database.format.columns.DecimalFormat;
+import migrator.app.database.format.columns.FloatFormat;
+import migrator.app.database.format.columns.IntegerFormat;
+import migrator.app.database.format.columns.LongFormat;
+import migrator.app.database.format.columns.StringFormat;
 import migrator.app.domain.column.service.ColumnActiveState;
 import migrator.app.domain.column.service.ColumnFactory;
 import migrator.app.domain.column.service.ColumnRepository;
@@ -29,6 +41,7 @@ import migrator.app.extension.Extension;
 import migrator.app.migration.Migration;
 import migrator.app.router.ActiveRoute;
 import migrator.app.toast.AutohideToastService;
+import migrator.lib.config.MapConfig;
 
 public class Bootstrap {
     protected List<Extension> extensions;
@@ -54,6 +67,20 @@ public class Bootstrap {
     }
 
     protected void initialize(ConfigContainer config) {
+        MapConfig<ColumnFormat>  columnFormatsConfig = config.getColumnFormatConfig();
+        columnFormatsConfig.add("boolean", new BooleanFormat());
+        columnFormatsConfig.add("char", new CharFormat());
+        columnFormatsConfig.add("date", new DateFormat());
+        columnFormatsConfig.add("datetime", new DatetimeFormat());
+        columnFormatsConfig.add("decimal", new DecimalFormat());
+        columnFormatsConfig.add("float", new FloatFormat());
+        columnFormatsConfig.add("integer", new IntegerFormat());
+        columnFormatsConfig.add("long", new LongFormat());
+        columnFormatsConfig.add("string", new StringFormat());
+        columnFormatsConfig.add("text", new SimpleColumnFormat("text"));
+        columnFormatsConfig.add("time", new SimpleColumnFormat("time"));
+        columnFormatsConfig.add("timestamp", new SimpleColumnFormat("timestamp"));
+
         ColumnRepository columnRepository = new ColumnRepository();
         IndexRepository indexRepository = new IndexRepository();
         
@@ -73,6 +100,11 @@ public class Bootstrap {
         config.codeManagerConfig().set(
             new CodeManager(config.getCodeConfig())
         );
+        config.columnFormatManagerConfig().set(
+            new ColumnFormatManager(
+                config.getColumnFormatConfig()
+            )
+        );
 
         config.connectionFactoryConfig().set(
             new ConnectionFactory()
@@ -89,7 +121,9 @@ public class Bootstrap {
             )
         );
         config.columnFactoryConfig().set(
-            new ColumnFactory()
+            new ColumnFactory(
+                config.columnFormatManagerConfig().get()
+            )
         );
         config.indexFactoryConfig().set(
             new IndexFactory()

@@ -12,4 +12,10 @@ public interface ColumnProperty {
     public String getDefaultValue();
     public Property<Boolean> nullProperty();
     public Boolean isNullEnabled();
+    public String getLength();
+    public StringProperty lengthProperty();
+    public String getPrecision();
+    public StringProperty precisionProperty();
+    public Boolean isSigned();
+    public Property<Boolean> signProperty();
 }
