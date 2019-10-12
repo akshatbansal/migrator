@@ -2,6 +2,7 @@ package migrator.app.domain.column;
 
 import org.junit.jupiter.api.Test;
 
+import migrator.app.database.format.FakeColumnFormatManager;
 import migrator.app.domain.column.service.ColumnFactory;
 import migrator.app.domain.table.model.Column;
 
@@ -13,11 +14,13 @@ public class ColumnFactoryTest {
 
     @BeforeEach
     public void setUp() {
-        this.columnFactory = new ColumnFactory();
+        this.columnFactory = new ColumnFactory(
+            new FakeColumnFormatManager()
+        );
     }
 
     @Test public void testCreateNotChangedHasChangedValuesEqualToOriginal() {
-        Column column = this.columnFactory.createNotChanged("column_name", "format", "default", true);
+        Column column = this.columnFactory.createNotChanged("column_name", "format", "default", true, "255");
     
         assertEquals("column_name", column.getChange().getName());
         assertEquals("format", column.getChange().getFormat());
@@ -26,13 +29,13 @@ public class ColumnFactoryTest {
     }
 
     @Test public void testCreateNotChangedIsNoneType() {
-        Column column = this.columnFactory.createNotChanged("column_name", "format", "default", true);
+        Column column = this.columnFactory.createNotChanged("column_name", "format", "default", true, "255");
     
         assertNull(column.getChange().getCommand().getType());
     }
 
     @Test public void testCreateNotChangedHasInitializedValuesSetAsOriginal() {
-        Column column = this.columnFactory.createNotChanged("column_name", "format", "default", true);
+        Column column = this.columnFactory.createNotChanged("column_name", "format", "default", true, "255");
 
         assertNull(column.getChange().getCommand().getType());
         assertEquals("column_name", column.getOriginalName());
@@ -42,7 +45,7 @@ public class ColumnFactoryTest {
     }
 
     @Test public void testCreateNotChangedHasInitializedValuesSetAsCurrent() {
-        Column column = this.columnFactory.createNotChanged("column_name", "format", "default", true);
+        Column column = this.columnFactory.createNotChanged("column_name", "format", "default", true, "255");
 
         assertNull(column.getChange().getCommand().getType());
         assertEquals("column_name", column.getName());

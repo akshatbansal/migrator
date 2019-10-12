@@ -5,15 +5,17 @@ import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import migrator.app.database.driver.DatabaseDriver;
+import migrator.app.domain.project.model.Project;
+import migrator.app.domain.table.model.Column;
+import migrator.app.domain.table.model.Index;
+import migrator.app.domain.table.model.Table;
 
 public class FakeDatabaseDriver implements DatabaseDriver {
-    protected ObservableList<List<String>> columns;
-    protected ObservableList<String> databases;
-    protected ObservableList<List<String>> indexes;
-    protected ObservableList<String> tables;
+    protected ObservableList<Column> columns;
+    protected ObservableList<Index> indexes;
+    protected ObservableList<Table> tables;
 
-    public FakeDatabaseDriver(List<String> databases, List<String> tables, List<List<String>> columns, List<List<String>> indexes) {
-        this.databases = FXCollections.observableArrayList(databases);
+    public FakeDatabaseDriver(List<Table> tables, List<Column> columns, List<Index> indexes) {
         this.tables = FXCollections.observableArrayList(tables);
         this.columns = FXCollections.observableArrayList(columns);
         this.indexes = FXCollections.observableArrayList(indexes);
@@ -26,22 +28,17 @@ public class FakeDatabaseDriver implements DatabaseDriver {
     public void disconnect() {}
 
     @Override
-    public ObservableList<List<String>> getColumns(String tableName) {
+    public ObservableList<Column> getColumns(String tableName) {
         return this.columns;
     }
 
     @Override
-    public ObservableList<String> getDatabases() {
-        return this.databases;
-    }
-
-    @Override
-    public ObservableList<List<String>> getIndexes(String tableName) {
+    public ObservableList<Index> getIndexes(String tableName) {
         return this.indexes;
     }
 
     @Override
-    public ObservableList<String> getTables() {
+    public ObservableList<Table> getTables(Project project) {
         return this.tables;
     }
 
