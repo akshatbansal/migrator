@@ -17,7 +17,8 @@ import migrator.app.domain.table.service.TableGuiKit;
 import migrator.app.domain.table.service.TableActiveState;
 import migrator.app.domain.table.service.TableFactory;
 import migrator.app.router.ActiveRoute;
-import migrator.ext.javafx.component.CardListComponent;
+import migrator.ext.javafx.component.card.CardListComponent;
+import migrator.ext.javafx.component.card.withmarks.CardWithMarksComponentFactory;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
 import migrator.lib.emitter.Subscription;
@@ -51,7 +52,8 @@ public class JavafxTableList extends ViewComponent implements TableList {
 
         this.cardListComponent = new CardListComponent<>(
             this.tableActiveState.getList(),
-            new TableCardFactory(), 
+            new TableCardFactory(),
+            new CardWithMarksComponentFactory(viewLoader),
             viewLoader
         );
 

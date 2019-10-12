@@ -1,8 +1,8 @@
 package migrator.ext.javafx.table.component;
 
 import migrator.app.domain.table.model.Table;
-import migrator.ext.javafx.component.Card;
-import migrator.ext.javafx.component.CardFactory;
+import migrator.ext.javafx.component.card.Card;
+import migrator.ext.javafx.component.card.CardFactory;
 
 public class TableCardFactory implements CardFactory<Table> {
     @Override

@@ -8,7 +8,8 @@ import migrator.app.domain.project.component.ProjectList;
 import migrator.app.domain.project.model.Project;
 import migrator.app.domain.project.service.ProjectGuiKit;
 import migrator.app.domain.project.service.ProjectService;
-import migrator.ext.javafx.component.CardListComponent;
+import migrator.ext.javafx.component.card.CardListComponent;
+import migrator.ext.javafx.component.card.simple.SimpleCardComponentFactory;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
 
@@ -27,6 +28,7 @@ public class JavafxProjectList extends ViewComponent implements ProjectList {
         this.cardList = new CardListComponent<>(
             this.projectService.getList(),
             new ProjectCardFactory(),
+            new SimpleCardComponentFactory<>(viewLoader),
             this.viewLoader
         );
 
