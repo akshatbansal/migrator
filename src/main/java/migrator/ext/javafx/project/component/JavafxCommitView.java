@@ -11,7 +11,6 @@ import migrator.app.Gui;
 import migrator.app.domain.project.component.CommitView;
 import migrator.app.domain.project.model.Project;
 import migrator.app.domain.table.model.Table;
-import migrator.app.domain.table.service.TableActiveState;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.app.migration.model.ColumnChange;
 import migrator.app.migration.model.IndexChange;

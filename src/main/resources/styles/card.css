@@ -52,9 +52,14 @@
     -fx-text-fill: #f4f4f4;
 }
 
+.card__body {
+    padding: 0 10 10 10;
+    -fx-padding: 0 10 10 10;
+}
+
 .card__footer {
-    padding: 10 10 10 10;
-    -fx-padding: 10 10 10 10;
+    padding: 0 10 10 10;
+    -fx-padding: 0 10 10 10;
 }
 
 .card {

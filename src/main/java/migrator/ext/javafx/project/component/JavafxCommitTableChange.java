@@ -1,12 +1,20 @@
 package migrator.ext.javafx.project.component;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import migrator.app.migration.model.ChangeCommand;
+import migrator.app.migration.model.ColumnChange;
+import migrator.app.migration.model.IndexChange;
 import migrator.app.migration.model.TableChange;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
+import migrator.ext.javafx.project.component.commit.ColumnChangeTextComponent;
+import migrator.ext.javafx.project.component.commit.IndexChangeTextComponent;
 import migrator.ext.javafx.project.component.commit.TableChangeTextComponent;
 
 public class JavafxCommitTableChange extends ViewComponent {
@@ -24,10 +32,32 @@ public class JavafxCommitTableChange extends ViewComponent {
             tableChange.getName()
         );
 
+        List<Node> nodes = new LinkedList<>();
         TableChangeTextComponent changeTextComponent = new TableChangeTextComponent(tableChange);
-        changes.getChildren().setAll(
-            (Node) changeTextComponent.getContent()
-        );
+        if (changeTextComponent.getContent() != null) {
+            nodes.add((Node) changeTextComponent.getContent());
+        }
+        if (!tableChange.getCommand().isType(ChangeCommand.DELETE)) {
+            for (ColumnChange columnChange : tableChange.getColumnsChanges()) {
+                ColumnChangeTextComponent columnChangeTextComponent = new ColumnChangeTextComponent(columnChange);
+                if (columnChangeTextComponent.getContent() == null) {
+                    continue;
+                }
+                nodes.add(
+                    (Node) columnChangeTextComponent.getContent()
+                );
+            }
+            for (IndexChange indexChange : tableChange.getIndexesChanges()) {
+                IndexChangeTextComponent indexChangeTextComponent = new IndexChangeTextComponent(indexChange);
+                if (indexChangeTextComponent.getContent() == null) {
+                    continue;
+                }
+                nodes.add(
+                    (Node) indexChangeTextComponent.getContent()
+                );
+            }
+        }
+        changes.getChildren().setAll(nodes);
     }
 
 
