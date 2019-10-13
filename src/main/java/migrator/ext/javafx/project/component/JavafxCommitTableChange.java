@@ -29,7 +29,7 @@ public class JavafxCommitTableChange extends ViewComponent {
         this.loadView("/layout/project/commit/tablechange.fxml");
 
         this.title.textProperty().set(
-            tableChange.getName()
+            tableChange.getOriginalName()
         );
 
         List<Node> nodes = new LinkedList<>();

@@ -32,7 +32,7 @@ public class TableFactory {
         String repositoryKey = project.getName() + "." + tableName;
         return new Table(
             project,
-            new SimpleTableProperty(tableName), // original
+            new SimpleTableProperty(""), // original
             new SimpleTableProperty(tableName), // changed
             new ChangeCommand(ChangeCommand.CREATE),
             this.columnRepository.getList(repositoryKey),

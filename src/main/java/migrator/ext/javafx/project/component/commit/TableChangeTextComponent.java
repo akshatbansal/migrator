@@ -13,15 +13,7 @@ public class TableChangeTextComponent implements GuiNode {
     public TableChangeTextComponent(TableChange tableChange) {
         TextFlow diff = new TextFlow();
         diff.getStyleClass().add("list-item");
-        if (tableChange.hasNameChanged()) {
-            Text[] textParts = new Text[] {
-                new Text("rename table to "),
-                new Text(tableChange.getName())
-            };
-            textParts[1].getStyleClass().add("text--primary");
-            textParts[0].getStyleClass().add("text--white");
-            diff.getChildren().addAll(textParts);
-        } else if (tableChange.getCommand().isType(ChangeCommand.CREATE) ) {
+        if (tableChange.getCommand().isType(ChangeCommand.CREATE) ) {
             Text text = new Text("- create table");
             text.getStyleClass().add("text--white");
             diff.getChildren().add(text);
@@ -30,9 +22,19 @@ public class TableChangeTextComponent implements GuiNode {
             text.getStyleClass().add("text--white");
             diff.getChildren().add(text);
         } else if (tableChange.getCommand().isType(ChangeCommand.UPDATE)) {
-            Text text = new Text("- table properties changed");
-            text.getStyleClass().add("text--white");
-            diff.getChildren().add(text);
+            if (tableChange.hasNameChanged()) {
+                Text[] textParts = new Text[] {
+                    new Text("rename table to "),
+                    new Text(tableChange.getName())
+                };
+                textParts[1].getStyleClass().add("text--primary");
+                textParts[0].getStyleClass().add("text--white");
+                diff.getChildren().addAll(textParts);
+            } else {
+                Text text = new Text("- table properties changed");
+                text.getStyleClass().add("text--white");
+                diff.getChildren().add(text);
+            }
         }
 
         if (diff.getChildren().size() == 0) {
