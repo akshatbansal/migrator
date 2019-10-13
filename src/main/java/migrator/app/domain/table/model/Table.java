@@ -43,6 +43,9 @@ public class Table implements TableChange, ChangeListener<Object> {
     }
 
     public String getOriginalName() {
+        if (this.originalTable.getName().isEmpty()) {
+            return this.getName();
+        }
         return this.originalTable.getName();
     }
 

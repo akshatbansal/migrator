@@ -21,7 +21,7 @@ public class JavafxGui implements Gui {
     public JavafxGui(Container container, ViewLoader viewLoader, Window window) {
         this.breadcrumpsGuiKit = new JavafxBreadcrumpsGuiKit(viewLoader, container);
         this.tableGuiKit = new JavafxTableGuiKit(viewLoader, container, this);
-        this.projectGuiKit = new JavafxProjectGuiKit(viewLoader, container, window);
+        this.projectGuiKit = new JavafxProjectGuiKit(viewLoader, container, window, this);
     }
 
     @Override

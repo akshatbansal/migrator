@@ -12,8 +12,19 @@
     -fx-text-fill: #DAC26F;
 }
 
-.label {
+.label, .text--white {
     fill: #f4f4f4;
     -fx-fill: #f4f4f4;
     -fx-text-fill: #f4f4f4;
+}
+
+.text--primary {
+    fill: #20AAD6;
+    -fx-fill: #20AAD6;
+    -fx-text-fill: #20AAD6;
+}
+
+.list-item {
+    padding: 5 20 5 20;
+    -fx-padding: 5 20 5 20;
 }

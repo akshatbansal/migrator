@@ -1,6 +1,6 @@
 .toast {
-    -fx-background-color: #434343;
-    background-color: #434343;
+    -fx-background-color: #2F2F2F;
+    background-color: #2F2F2F;
     -fx-effect: dropshadow(three-pass-box, #252525, 10, 0, 0, 0);
     -fx-pref-width: 280pt;
     -fx-border-radius: 0;

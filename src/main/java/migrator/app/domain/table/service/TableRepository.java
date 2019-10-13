@@ -8,13 +8,8 @@ public class TableRepository extends ObservableListRepository<Table> {
         super();
     }
 
-    @Override
-    public Table get(String key, String id) {
-        return null;
-    }
-
-    @Override
-    public Table getOrCreate(String key, Table value) {
-        return null;
-    }
+   @Override
+   protected String getId(Table value) {
+       return value.getOriginal().getName();
+   }
 }

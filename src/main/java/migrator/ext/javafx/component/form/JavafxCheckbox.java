@@ -3,7 +3,6 @@ package migrator.ext.javafx.component.form;
 import javafx.beans.property.Property;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;

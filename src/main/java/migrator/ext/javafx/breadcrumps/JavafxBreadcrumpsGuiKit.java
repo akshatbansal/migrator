@@ -51,4 +51,18 @@ public class JavafxBreadcrumpsGuiKit implements BreadcrumpsGuiKit {
             )
         );
     }
+
+    @Override
+    public BreadcrumpsComponent createBreadcrumpsForCommit(Project project) {
+        return this.createBreadcrumps(
+            Arrays.asList(
+                new ProjectsBreadcrump(this.container.getProjectService()),
+                new SingleProjectBreadcrump(
+                    this.container.getProjectService(),
+                    project
+                ),
+                new VoidBreadcrump("commit changes")
+            )
+        );
+    }
 }
