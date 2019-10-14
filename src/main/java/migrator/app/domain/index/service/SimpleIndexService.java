@@ -8,6 +8,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import migrator.app.database.driver.DatabaseDriver;
 import migrator.app.database.driver.DatabaseDriverManager;
+import migrator.app.domain.project.model.Project;
+import migrator.app.domain.project.service.ProjectService;
 import migrator.app.domain.table.model.Index;
 import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableActiveState;
@@ -20,6 +22,7 @@ public class SimpleIndexService implements IndexService {
     protected ActiveState<Index> activeState;
     protected DatabaseDriverManager databaseDriverManager;
     protected TableActiveState tableActiveState;
+    protected ProjectService projectService;
 
     protected ChangeListener<Table> changeTableListener;
 
@@ -28,6 +31,7 @@ public class SimpleIndexService implements IndexService {
         IndexRepository indexRepository,
         ActiveState<Index> activeState,
         TableActiveState tableActiveState,
+        ProjectService projectService,
         DatabaseDriverManager databaseDriverManager
     ) {
         this.activeState = activeState;
@@ -35,6 +39,7 @@ public class SimpleIndexService implements IndexService {
         this.indexFactory = indexFactory;
         this.indexRepository = indexRepository;
         this.tableActiveState = tableActiveState;
+        this.projectService = projectService;
 
         this.changeTableListener = (ObservableValue<? extends Table> observable, Table oldValue, Table newValue) -> {
             this.onTableChange(newValue);
@@ -58,10 +63,11 @@ public class SimpleIndexService implements IndexService {
         if (activeTable == null) {
             return;
         }
-        String repositryKey = activeTable.getProject().getName() + "." + activeTable.getOriginalName();
+        Project project = this.projectService.getOpened().get();
+        String repositryKey = project.getName() + "." + activeTable.getOriginalName();
 
         DatabaseDriver databaseDriver  = this.databaseDriverManager
-            .createDriver(activeTable.getProject().getDatabase());
+            .createDriver(project.getDatabase());
         databaseDriver.connect();
 
         List<Index> indexes = new ArrayList<>();

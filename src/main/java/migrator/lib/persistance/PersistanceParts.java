@@ -1,9 +1,9 @@
-package migrator.persistance;
+package migrator.lib.persistance;
 
 import java.util.Iterator;
 import java.util.prefs.Preferences;
 
-public class PersistanceParts implements Iterable<String> {
+public class PersistanceParts implements Iterable<Persistance<Object>> {
     protected Preferences preferences;
     protected String key;
 
@@ -13,7 +13,7 @@ public class PersistanceParts implements Iterable<String> {
     }
 
     @Override
-    public Iterator<String> iterator() {
+    public Iterator<Persistance<Object>> iterator() {
         return new PartsIterator(this.preferences, this.key);
     }
     

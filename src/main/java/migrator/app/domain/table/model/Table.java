@@ -1,32 +1,40 @@
 package migrator.app.domain.table.model;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import migrator.app.domain.project.model.Project;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.app.migration.model.ColumnChange;
 import migrator.app.migration.model.IndexChange;
 import migrator.app.migration.model.TableChange;
 import migrator.app.migration.model.TableProperty;
 
-public class Table implements TableChange, ChangeListener<Object> {
+public class Table implements TableChange, ChangeListener<Object>, Serializable {
+    private static final long serialVersionUID = 7299905871196456955L;
     protected TableProperty originalTable;
     protected TableProperty changedTable;
-    protected Project project;
     protected ChangeCommand changeCommand;
-    protected ObservableList<Column> columns;
-    protected ObservableList<Index> indexes;
+    protected transient ObservableList<Column> columns;
+    protected transient ObservableList<Index> indexes;
 
-    public Table(Project project, TableProperty originalTable, TableProperty changedProperty, ChangeCommand changeCommand, ObservableList<Column> columns, ObservableList<Index> indexes) {
+    public Table(TableProperty originalTable, TableProperty changedProperty, ChangeCommand changeCommand, ObservableList<Column> columns, ObservableList<Index> indexes) {
         this.originalTable = originalTable;
         this.changedTable = changedProperty;
-        this.project = project;
         this.changeCommand = changeCommand;
         this.columns = columns;
         this.indexes = indexes;
 
+        this.initialize();
+    }
+
+    public void initialize() {
         this.changedTable.nameProperty().addListener(this);
     }
 
@@ -47,10 +55,6 @@ public class Table implements TableChange, ChangeListener<Object> {
             return this.getName();
         }
         return this.originalTable.getName();
-    }
-
-    public Project getProject() {
-        return this.project;
     }
 
     public String toString() {
@@ -106,5 +110,18 @@ public class Table implements TableChange, ChangeListener<Object> {
             return;
         }
         this.changeCommand.typeProperty().set(ChangeCommand.NONE);
+    }
+
+    private void writeObject(ObjectOutputStream s) throws IOException {
+        s.defaultWriteObject();
+    }
+
+    private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
+        s.defaultReadObject();
+
+        this.indexes = FXCollections.observableArrayList();
+        this.columns = FXCollections.observableArrayList();
+        
+        this.initialize();
     }
 }

@@ -1,5 +1,8 @@
 package migrator.app.domain.column.service;
 
+import javafx.beans.property.ObjectProperty;
+import migrator.app.domain.project.model.Project;
+import migrator.app.domain.project.service.ProjectService;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableActiveState;
@@ -10,17 +13,24 @@ public class ColumnActiveState extends SimpleActiveState<Column> {
     protected ColumnRepository repository;
     protected TableActiveState tableActiveState;
     protected ActiveRoute activeRoute;
+    protected ObjectProperty<Project> openedProject;
 
-    public ColumnActiveState(ColumnRepository repository, TableActiveState tableActiveState, ActiveRoute activeRoute) {
+    public ColumnActiveState(
+        ColumnRepository repository,
+        TableActiveState tableActiveState,
+        ActiveRoute activeRoute,
+        ProjectService projectService
+    ) {
         super();
         this.repository = repository;
         this.tableActiveState = tableActiveState;
         this.activeRoute = activeRoute;
+        this.openedProject = projectService.getOpened();
     }
 
     protected String getRepositoryKey() {
         Table table = this.tableActiveState.getActive().get();
-        return table.getProject().getName() + "." + table.getName();
+        return this.openedProject.get().getName() + "." + table.getName();
     }
 
     @Override
