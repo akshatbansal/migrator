@@ -22,3 +22,13 @@ cache:
 branches:
   only:
     - master
+
+deploy:
+  provider: releases
+  api_key: "$GITHUB_OAUTH_TOKEN"
+  file: "build/libs/migrator.jar"
+  file_glob: true
+  skip_cleanup: true
+  draft: true
+  on:
+    tags: true

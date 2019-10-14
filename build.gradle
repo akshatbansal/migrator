@@ -8,12 +8,12 @@
 
 plugins {
     // Apply the java plugin to add support for Java
-    java
+    id 'java'
 
     // Apply the application plugin to add support for building an application
-    application
+    id 'application'
 
-    id("org.openjfx.javafxplugin") version "0.0.8"
+    id 'org.openjfx.javafxplugin' version '0.0.8'
 }
 
 repositories {
@@ -24,11 +24,14 @@ repositories {
 
 dependencies {
     // This dependency is found on compile classpath of this component and consumers.
-    implementation("com.google.guava:guava:27.0.1-jre")
-    implementation("org.mariadb.jdbc:mariadb-java-client:2.1.2")
+    implementation 'com.google.guava:guava:27.0.1-jre'
+    implementation 'org.mariadb.jdbc:mariadb-java-client:2.1.2'
+
+    // sentry
+    implementation 'io.sentry:sentry:1.7.27'
 
     // Use JUnit test framework
-    testImplementation("org.junit.jupiter:junit-jupiter:5.5.2")
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.5.2'
 }
 
 tasks.test {
@@ -40,10 +43,19 @@ tasks.test {
 
 application {
     // Define the main class for the application
-    mainClassName = "migrator.JavafxApplication"
+    mainClassName = 'migrator.Main'
 }
 
 javafx {
-    version = "12"
-    modules("javafx.base", "javafx.controls", "javafx.fxml")
+    version = '12'
+    modules = ['javafx.base', 'javafx.controls', 'javafx.fxml']
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'migrator.Main'
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }

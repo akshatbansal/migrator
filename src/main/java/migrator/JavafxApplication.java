@@ -26,6 +26,7 @@ import migrator.ext.javafx.table.route.TableViewRoute;
 import migrator.ext.mysql.MysqlExtension;
 import migrator.ext.phinx.PhinxExtension;
 import migrator.ext.php.PhpExtension;
+import migrator.ext.sentry.SentryExtension;
 import migrator.app.Container;
 
 public class JavafxApplication extends Application {
@@ -35,7 +36,8 @@ public class JavafxApplication extends Application {
             Arrays.asList(
                 new PhinxExtension(),
                 new MysqlExtension(),
-                new PhpExtension()
+                new PhpExtension(),
+                new SentryExtension("https://6e22e8e794c7436a928598d033fab394@sentry.io/1778263")
             )
         );
         Container container = bootstrap.getContainer();
