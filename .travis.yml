@@ -23,9 +23,21 @@ branches:
   only:
     - master
 
-deploy:
-  provider: releases
-  api_key: $GITHUB_OAUTH_TOKEN
-  file: "build/libs/migrator.jar"
-  skip_cleanup: true
-  draft: true
+stages:
+  - test
+  - deploy
+
+jobs:
+  include:
+    - stage: deploy
+      if: branch = master
+      name: "Deploy Github Release"
+      script: skip
+      deploy:
+        provider: releases
+        api_key: $GITHUB_OAUTH_TOKEN
+        file: "build/libs/migrator.jar"
+        skip_cleanup: true
+        draft: true
+        on:
+          tags: true
