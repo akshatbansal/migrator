@@ -5,15 +5,11 @@ import migrator.app.ConfigContainer;
 import migrator.app.extension.Extension;
 
 public class SentryExtension implements Extension {
-    protected String dns;
-
-    public SentryExtension(String dns) {
-        this.dns = dns;
-    }
+    public SentryExtension() {}
 
     @Override
     public void load(ConfigContainer config) {
-        Sentry.init(this.dns);
+        Sentry.init();
         Thread.setDefaultUncaughtExceptionHandler(
             new ExceptionHandler()
         );

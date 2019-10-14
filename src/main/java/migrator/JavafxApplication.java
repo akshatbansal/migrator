@@ -37,7 +37,7 @@ public class JavafxApplication extends Application {
                 new PhinxExtension(),
                 new MysqlExtension(),
                 new PhpExtension(),
-                new SentryExtension("https://6e22e8e794c7436a928598d033fab394@sentry.io/1778263")
+                new SentryExtension()
             )
         );
         Container container = bootstrap.getContainer();
