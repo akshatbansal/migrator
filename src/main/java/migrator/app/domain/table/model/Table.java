@@ -38,6 +38,14 @@ public class Table implements TableChange, ChangeListener<Object>, Serializable 
         this.changedTable.nameProperty().addListener(this);
     }
 
+    public void setColumns(ObservableList<Column> columns) {
+        this.columns = columns;
+    }
+
+    public void setIndexes(ObservableList<Index> indexes) {
+        this.indexes = indexes;
+    }
+
     public String getId() {
         return this.getName();
     }

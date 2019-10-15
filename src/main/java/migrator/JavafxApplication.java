@@ -140,10 +140,16 @@ public class JavafxApplication extends Application {
                     );
                 }
                 this.container.getColumnRepository().setList(project.getName() + "." + table.getId(), columns);
-            }
-            for (Table table : this.container.getTableRepository().getList(project.getName())) {
+
                 ListPersistance<Index> indexListPersistance = new ListPersistance<>("indexes." + project.getName() + "." + table.getId());
                 this.container.getIndexRepository().setList(project.getName() + "." + table.getId(), indexListPersistance.load(new ArrayList<>()));
+
+                table.setColumns(
+                    this.container.getColumnRepository().getList(project.getName() + "." + table.getId())
+                );
+                table.setIndexes(
+                    this.container.getIndexRepository().getList(project.getName() + "." + table.getId())
+                );
             }
         }
     }
