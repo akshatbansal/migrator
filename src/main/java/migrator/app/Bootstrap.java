@@ -126,7 +126,8 @@ public class Bootstrap {
         config.tableFactoryConfig().set(
             new TableFactory(
                 config.columnRepositoryConfig().get(),
-                config.indexRepositoryConfig().get()
+                config.indexRepositoryConfig().get(),
+                idGenerator
             )
         );
         config.columnFactoryConfig().set(

@@ -49,7 +49,7 @@ public class SimpleTableService implements TableService {
         if (project == null) {
             return;
         }
-        String repositryKey = project.getName();
+        String repositryKey = project.getId();
 
         DatabaseDriver databaseDriver  = this.databaseDriverManager
             .createDriver(project.getDatabase());

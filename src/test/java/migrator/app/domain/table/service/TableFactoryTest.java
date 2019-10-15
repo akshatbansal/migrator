@@ -31,6 +31,7 @@ public class TableFactoryTest {
                     new Connection("localhost"),
                     "test_db"
                 ),
+                "id-1",
                 "project_name",
                 "phinx",
                 ""
@@ -48,6 +49,7 @@ public class TableFactoryTest {
                     new Connection("localhost"),
                     "test_db"
                 ),
+                "id-1",
                 "project_name",
                 "phinx",
                 ""
@@ -65,6 +67,7 @@ public class TableFactoryTest {
                     new Connection("localhost"),
                     "test_db"
                 ),
+                "id-1",
                 "project_name",
                 "phinx",
                 ""
@@ -82,6 +85,7 @@ public class TableFactoryTest {
                     new Connection("localhost"),
                     "test_db"
                 ),
+                "id-1",
                 "project_name",
                 "phinx",
                 ""
@@ -99,6 +103,7 @@ public class TableFactoryTest {
                     new Connection("localhost"),
                     "test_db"
                 ),
+                "id-1",
                 "project_name",
                 "phinx",
                 ""
@@ -116,6 +121,7 @@ public class TableFactoryTest {
                     new Connection("localhost"),
                     "test_db"
                 ),
+                "id-1",
                 "project_name",
                 "phinx",
                 ""
@@ -133,6 +139,7 @@ public class TableFactoryTest {
                     new Connection("localhost"),
                     "test_db"
                 ),
+                "id-1",
                 "project_name",
                 "phinx",
                 ""

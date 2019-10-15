@@ -18,7 +18,7 @@ public class TableActiveState extends SimpleActiveState<Table> {
     }
 
     protected String getRepositoryKey() {
-        return this.projectService.getOpened().get().getName();
+        return this.projectService.getOpened().get().getId();
     }
 
     @Override
