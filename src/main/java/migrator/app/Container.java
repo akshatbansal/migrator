@@ -4,6 +4,7 @@ import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.database.format.ColumnFormatManager;
 import migrator.app.domain.column.service.ColumnActiveState;
 import migrator.app.domain.column.service.ColumnFactory;
+import migrator.app.domain.column.service.ColumnRepository;
 import migrator.app.domain.column.service.ColumnService;
 import migrator.app.domain.connection.service.ConnectionFactory;
 import migrator.app.domain.connection.service.ConnectionService;
@@ -11,6 +12,7 @@ import migrator.app.domain.database.service.DatabaseFactory;
 import migrator.app.domain.database.service.DatabaseService;
 import migrator.app.domain.index.service.IndexActiveState;
 import migrator.app.domain.index.service.IndexFactory;
+import migrator.app.domain.index.service.IndexRepository;
 import migrator.app.domain.index.service.IndexService;
 import migrator.app.domain.project.service.ProjectFactory;
 import migrator.app.domain.project.service.ProjectService;
@@ -117,5 +119,13 @@ public class Container {
 
     public TableRepository getTableRepository() {
         return this.config.tableRepositoryConfig().get();
+    }
+
+    public ColumnRepository getColumnRepository() {
+        return this.config.columnRepositoryConfig().get();
+    }
+
+    public IndexRepository getIndexRepository() {
+        return this.config.indexRepositoryConfig().get();
     }
 }

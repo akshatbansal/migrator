@@ -1,10 +1,16 @@
 package migrator.app.domain.connection.model;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Connection {
+public class Connection implements Serializable {
+    private static final long serialVersionUID = -9103144481928774650L;
     protected transient StringProperty name;
     protected transient StringProperty user;
     protected transient StringProperty password;
@@ -29,6 +35,10 @@ public class Connection {
         this.port = new SimpleStringProperty(port);
         this.driver = new SimpleStringProperty(driver);
         this.url = new SimpleStringProperty("");
+        this.initialize();
+    }
+
+    protected void initialize() {
         this.url.bind(Bindings.concat(this.driver, "://", this.host, ":", this.port));
     }
 
@@ -104,15 +114,28 @@ public class Connection {
         return this.getName();
     }
 
-    // private void writeObject(ObjectOutputStream s) throws IOException {
-    //     s.defaultWriteObject();
-    //     s.writeUTF(this.url.get());
-    //     s.writeUTF(this.name.get());
-    // }
+    private void writeObject(ObjectOutputStream s) throws IOException {
+        s.defaultWriteObject();
+        s.writeUTF(this.name.get());
+        s.writeUTF(this.host.get());
+        s.writeUTF(this.port.get());
+        s.writeUTF(this.driver.get());
+        s.writeUTF(this.user.get());
+        s.writeUTF(this.password.get());
 
-    // private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
-        // s.defaultReadObject();
-    //     this.name.set(s.readUTF());
-    //     this.url.set(s.readUTF());
-    // }
+        s.writeUTF(this.url.get());
+    }
+
+    private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
+        s.defaultReadObject();
+        this.name = new SimpleStringProperty(s.readUTF());
+        this.host = new SimpleStringProperty(s.readUTF());
+        this.port = new SimpleStringProperty(s.readUTF());
+        this.driver = new SimpleStringProperty(s.readUTF());
+        this.user = new SimpleStringProperty(s.readUTF());
+        this.password = new SimpleStringProperty(s.readUTF());
+
+        this.url = new SimpleStringProperty(s.readUTF());
+        this.initialize();
+    }
 }

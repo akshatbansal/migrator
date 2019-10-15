@@ -93,7 +93,7 @@ public class SimpleCardComponent<T> extends ViewComponent implements CardCompone
         this.pane.getStyleClass().remove("card--create");
         this.pane.getStyleClass().remove("card--update");
         this.pane.getStyleClass().remove("card--delete");
-        if (changeType != null) {
+        if (changeType != null && !changeType.isEmpty()) {
             this.pane.getStyleClass().add("card--" + changeType);
         }
     }

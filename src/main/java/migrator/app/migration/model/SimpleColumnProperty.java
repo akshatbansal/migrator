@@ -1,18 +1,24 @@
 package migrator.app.migration.model;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class SimpleColumnProperty implements ColumnProperty {
-    protected StringProperty name;
-    protected StringProperty format;
-    protected StringProperty defaultValue;
-    protected Property<Boolean> enableNull;
-    protected StringProperty length;
-    protected StringProperty precision;
-    protected Property<Boolean> sign;
+public class SimpleColumnProperty implements ColumnProperty, Serializable {
+    private static final long serialVersionUID = 5618191683285049699L;
+    protected transient StringProperty name;
+    protected transient StringProperty format;
+    protected transient StringProperty defaultValue;
+    protected transient Property<Boolean> enableNull;
+    protected transient StringProperty length;
+    protected transient StringProperty precision;
+    protected transient Property<Boolean> sign;
 
     public SimpleColumnProperty(String name, String format, String defaultValue, Boolean enableNull, String length, Boolean sign, String precision) {
         this.name = new SimpleStringProperty(name);
@@ -92,5 +98,29 @@ public class SimpleColumnProperty implements ColumnProperty {
     @Override
     public Property<Boolean> signProperty() {
         return this.sign;
+    }
+
+    private void writeObject(ObjectOutputStream s) throws IOException {
+        s.defaultWriteObject();
+
+        s.writeUTF(this.name.get());
+        s.writeUTF(this.format.get());
+        s.writeUTF(this.defaultValue.get());
+        s.writeBoolean(this.enableNull.getValue());
+        s.writeUTF(this.length.get());
+        s.writeUTF(this.precision.get());
+        s.writeBoolean(this.sign.getValue());
+    }
+
+    private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
+        s.defaultReadObject();
+
+        this.name = new SimpleStringProperty(s.readUTF());
+        this.format = new SimpleStringProperty(s.readUTF());
+        this.defaultValue = new SimpleStringProperty(s.readUTF());
+        this.enableNull = new SimpleObjectProperty<>(s.readBoolean());
+        this.length = new SimpleStringProperty(s.readUTF());
+        this.precision = new SimpleStringProperty(s.readUTF());
+        this.sign = new SimpleObjectProperty<>(s.readBoolean());
     }
 }

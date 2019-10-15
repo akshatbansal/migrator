@@ -8,6 +8,7 @@ import migrator.app.database.format.ColumnFormat;
 import migrator.app.database.format.ColumnFormatManager;
 import migrator.app.domain.column.service.ColumnActiveState;
 import migrator.app.domain.column.service.ColumnFactory;
+import migrator.app.domain.column.service.ColumnRepository;
 import migrator.app.domain.column.service.ColumnService;
 import migrator.app.domain.connection.service.ConnectionFactory;
 import migrator.app.domain.connection.service.ConnectionService;
@@ -15,6 +16,7 @@ import migrator.app.domain.database.service.DatabaseFactory;
 import migrator.app.domain.database.service.DatabaseService;
 import migrator.app.domain.index.service.IndexActiveState;
 import migrator.app.domain.index.service.IndexFactory;
+import migrator.app.domain.index.service.IndexRepository;
 import migrator.app.domain.index.service.IndexService;
 import migrator.app.domain.project.service.ProjectFactory;
 import migrator.app.domain.project.service.ProjectService;
@@ -61,6 +63,8 @@ public class ConfigContainer {
     private ValueConfig<IndexActiveState> indexActiveState;
 
     private ValueConfig<TableRepository> tableRepository;
+    private ValueConfig<ColumnRepository> columnRepository;
+    private ValueConfig<IndexRepository> indexRepository;
 
     public ConfigContainer() {
         this.migrationConfig = new MigrationConfig();
@@ -94,6 +98,8 @@ public class ConfigContainer {
         this.tableActiveState = new ValueConfig<>();
 
         this.tableRepository = new ValueConfig<>();
+        this.columnRepository = new ValueConfig<>();
+        this.indexRepository = new ValueConfig<>();
     }
 
     public MapConfig<ColumnFormat> getColumnFormatConfig() {
@@ -198,5 +204,13 @@ public class ConfigContainer {
 
     public ValueConfig<TableRepository> tableRepositoryConfig() {
         return this.tableRepository;
+    }
+
+    public ValueConfig<ColumnRepository> columnRepositoryConfig() {
+        return this.columnRepository;
+    }
+
+    public ValueConfig<IndexRepository> indexRepositoryConfig() {
+        return this.indexRepository;
     }
 }

@@ -1,14 +1,20 @@
 package migrator.app.domain.project.model;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import migrator.app.domain.database.model.DatabaseConnection;
 
-public class Project {
+public class Project implements Serializable {
+    private static final long serialVersionUID = 8438644134414504238L;
     protected DatabaseConnection databaseConnection;
-    protected StringProperty name;
-    protected StringProperty outputType;
-    protected StringProperty folder;
+    protected transient StringProperty name;
+    protected transient StringProperty outputType;
+    protected transient StringProperty folder;
 
     public Project(DatabaseConnection databaseConnection, String name, String outputType, String folder) {
         this.databaseConnection = databaseConnection;
@@ -43,5 +49,19 @@ public class Project {
 
     public String getFolder() {
         return this.folderProperty().get();
+    }
+
+    private void writeObject(ObjectOutputStream s) throws IOException {
+        s.defaultWriteObject();
+        s.writeUTF(this.name.get());
+        s.writeUTF(this.outputType.get());
+        s.writeUTF(this.folder.get());
+    }
+
+    private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
+        s.defaultReadObject();
+        this.name = new SimpleStringProperty(s.readUTF());
+        this.outputType = new SimpleStringProperty(s.readUTF());
+        this.folder = new SimpleStringProperty(s.readUTF());
     }
 }
