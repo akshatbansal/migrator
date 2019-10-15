@@ -34,13 +34,13 @@ public class ColumnFactoryTest {
     @Test public void testCreateNotChangedIsNoneType() {
         Column column = this.columnFactory.createNotChanged("column_name", "format", "default", true, "255");
     
-        assertNull(column.getChange().getCommand().getType());
+        assertEquals("", column.getChange().getCommand().getType());
     }
 
     @Test public void testCreateNotChangedHasInitializedValuesSetAsOriginal() {
         Column column = this.columnFactory.createNotChanged("column_name", "format", "default", true, "255");
 
-        assertNull(column.getChange().getCommand().getType());
+        assertEquals("", column.getChange().getCommand().getType());
         assertEquals("column_name", column.getOriginalName());
         assertEquals("format", column.getOriginalFormat());
         assertEquals("default", column.getOriginalDefaultValue());
@@ -50,7 +50,7 @@ public class ColumnFactoryTest {
     @Test public void testCreateNotChangedHasInitializedValuesSetAsCurrent() {
         Column column = this.columnFactory.createNotChanged("column_name", "format", "default", true, "255");
 
-        assertNull(column.getChange().getCommand().getType());
+        assertEquals("", column.getChange().getCommand().getType());
         assertEquals("column_name", column.getName());
         assertEquals("format", column.getFormat());
         assertEquals("default", column.getDefaultValue());

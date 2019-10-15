@@ -49,6 +49,7 @@ public class PhinxMigrationGeneratorTest {
 
     @Test public void testPhpMigrationCreateTableWithColumn() {
         TableChange change = new Table(
+            "id-1",
             new SimpleTableProperty("table_name"),
             new SimpleTableProperty("table_name"),
             new ChangeCommand("create"),
@@ -83,6 +84,7 @@ public class PhinxMigrationGeneratorTest {
 
     @Test public void testPhpMigrationRenameTable() {
         TableChange change = new Table(
+            "id-1",
             new SimpleTableProperty("table_name"),
             new SimpleTableProperty("new_table_name"),
             new ChangeCommand("update"),
@@ -108,9 +110,10 @@ public class PhinxMigrationGeneratorTest {
 
     @Test public void testPhpMigrationUpdateTableAddColumn() {
         TableChange change = new Table(
+            "id-1",
             new SimpleTableProperty("table_name"),
             new SimpleTableProperty("table_name"),
-            new ChangeCommand(null),
+            new ChangeCommand(""),
             FXCollections.observableArrayList(
                 Arrays.asList(
                     new Column(
@@ -142,9 +145,10 @@ public class PhinxMigrationGeneratorTest {
 
     @Test public void testPhpMigrationUpdateTableRemoveColumn() {
         TableChange change = new Table(
+            "id-1",
             new SimpleTableProperty("table_name"),
             new SimpleTableProperty("table_name"),
-            new ChangeCommand(null),
+            new ChangeCommand(""),
             FXCollections.observableArrayList(
                 Arrays.asList(
                     new Column(
@@ -176,9 +180,10 @@ public class PhinxMigrationGeneratorTest {
 
     @Test public void testPhpMigrationUpdateTableRenameColumn() {
         TableChange change = new Table(
+            "id-1",
             new SimpleTableProperty("table_name"),
             new SimpleTableProperty("table_name"),
-            new ChangeCommand(null),
+            new ChangeCommand(""),
             FXCollections.observableArrayList(
                 Arrays.asList(
                     new Column(
@@ -210,6 +215,7 @@ public class PhinxMigrationGeneratorTest {
 
     @Test public void testPhpMigrationDeleteTable() {
         TableChange change = new Table(
+            "id-1",
             new SimpleTableProperty("table_name"),
             new SimpleTableProperty("table_name"),
             new ChangeCommand("delete"),
@@ -233,6 +239,7 @@ public class PhinxMigrationGeneratorTest {
 
     @Test public void testPhpMigrationCreateTableWithColumnAndIndex() {
         TableChange change = new Table(
+            "id-1",
             new SimpleTableProperty("table_name"),
             new SimpleTableProperty("table_name"),
             new ChangeCommand("create"),
@@ -283,10 +290,10 @@ public class PhinxMigrationGeneratorTest {
 
     @Test public void testPhpMigrationRemoveIndex() {
         TableChange change = new Table(
-            
+            "id-1",
             new SimpleTableProperty("table_name"),
             new SimpleTableProperty("table_name"),
-            new ChangeCommand(null),
+            new ChangeCommand(""),
             FXCollections.observableArrayList(),
             FXCollections.observableArrayList(
                 Arrays.asList(
@@ -317,9 +324,10 @@ public class PhinxMigrationGeneratorTest {
 
     @Test public void testPhpMigrationNoChangeRetunrnsEmptyCommand() {
         TableChange change = new Table(
+            "id-1",
             new SimpleTableProperty("table_name"),
             new SimpleTableProperty("table_name"),
-            new ChangeCommand(null),
+            new ChangeCommand(""),
             FXCollections.observableArrayList(),
             FXCollections.observableArrayList()
         );
@@ -329,9 +337,10 @@ public class PhinxMigrationGeneratorTest {
 
     @Test public void testPhpMigrationGenerateChangedColumnFormat() {
         TableChange change = new Table(
+            "id-1",
             new SimpleTableProperty("table_name"),
             new SimpleTableProperty("table_name"),
-            new ChangeCommand(null),
+            new ChangeCommand(""),
             FXCollections.observableArrayList(
                 Arrays.asList(
                     new Column(
@@ -363,9 +372,10 @@ public class PhinxMigrationGeneratorTest {
 
     @Test public void testPhpMigrationGenerateChangedColumnDefaultValue() {
         TableChange change = new Table(
+            "id-1",
             new SimpleTableProperty("table_name"),
             new SimpleTableProperty("table_name"),
-            new ChangeCommand(null),
+            new ChangeCommand(""),
             FXCollections.observableArrayList(
                 Arrays.asList(
                     new Column(
@@ -400,9 +410,10 @@ public class PhinxMigrationGeneratorTest {
             new SimpleColumnFormat("string", true, false, false, new LengthColumnFormatter("string"))
         );
         TableChange change = new Table(
+            "id-1",
             new SimpleTableProperty("table_name"),
             new SimpleTableProperty("table_name"),
-            new ChangeCommand(null),
+            new ChangeCommand(""),
             FXCollections.observableArrayList(
                 Arrays.asList(
                     new Column(
@@ -437,9 +448,10 @@ public class PhinxMigrationGeneratorTest {
             new SimpleColumnFormat("string", true, false, true, new PrecisionColumnFormatter("string"))
         );
         TableChange change = new Table(
+            "id-1",
             new SimpleTableProperty("table_name"),
             new SimpleTableProperty("table_name"),
-            new ChangeCommand(null),
+            new ChangeCommand(""),
             FXCollections.observableArrayList(
                 Arrays.asList(
                     new Column(
@@ -474,9 +486,10 @@ public class PhinxMigrationGeneratorTest {
             new SimpleColumnFormat("string", true, true, false, new LengthColumnFormatter("string"))
         );
         TableChange change = new Table(
+            "id-1",
             new SimpleTableProperty("table_name"),
             new SimpleTableProperty("table_name"),
-            new ChangeCommand(null),
+            new ChangeCommand(""),
             FXCollections.observableArrayList(
                 Arrays.asList(
                     new Column(

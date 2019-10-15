@@ -9,6 +9,7 @@ import migrator.app.domain.index.service.IndexRepository;
 import migrator.app.domain.project.model.Project;
 import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableFactory;
+import migrator.lib.uid.SessionIncrementalGenerator;
 
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,7 +21,8 @@ public class TableFactoryTest {
     public void setUp() {
         this.tableFactory = new TableFactory(
             new ColumnRepository(),
-            new IndexRepository()
+            new IndexRepository(),
+            new SessionIncrementalGenerator("test")
         );
     }
 
@@ -57,7 +59,7 @@ public class TableFactoryTest {
             "test_table"
         );
     
-        assertNull(table.getChange().getCommand().getType());
+        assertEquals("", table.getChange().getCommand().getType());
     }
 
     @Test public void testCreateNotChangedHasOriginalValuesSet() {

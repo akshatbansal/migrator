@@ -22,7 +22,7 @@ public class IndexFactoryTest {
     @Test public void testCreateNotChangedCreatesIndexWithChangeCommandNone() {
         Index index = this.indexFactory.createNotChanged("index_name", new ArrayList<>());
 
-        assertNull(index.getChangeCommand().getType());
+        assertEquals("", index.getChangeCommand().getType());
     }
 
     @Test public void testCreateNotChangedSetsOriginalValuesByArguments() {
