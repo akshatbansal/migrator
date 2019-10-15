@@ -21,10 +21,19 @@ public class Table implements TableChange, ChangeListener<Object>, Serializable 
     protected TableProperty originalTable;
     protected TableProperty changedTable;
     protected ChangeCommand changeCommand;
+    protected String id;
     protected transient ObservableList<Column> columns;
     protected transient ObservableList<Index> indexes;
 
-    public Table(TableProperty originalTable, TableProperty changedProperty, ChangeCommand changeCommand, ObservableList<Column> columns, ObservableList<Index> indexes) {
+    public Table(
+        String id,
+        TableProperty originalTable,
+        TableProperty changedProperty,
+        ChangeCommand changeCommand,
+        ObservableList<Column> columns,
+        ObservableList<Index> indexes
+    ) {
+        this.id = id;
         this.originalTable = originalTable;
         this.changedTable = changedProperty;
         this.changeCommand = changeCommand;
@@ -47,7 +56,7 @@ public class Table implements TableChange, ChangeListener<Object>, Serializable 
     }
 
     public String getId() {
-        return this.getName();
+        return this.id;
     }
 
     public String getName() {

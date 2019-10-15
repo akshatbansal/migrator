@@ -15,12 +15,18 @@ public class Project implements Serializable {
     protected transient StringProperty name;
     protected transient StringProperty outputType;
     protected transient StringProperty folder;
+    protected String id;
 
-    public Project(DatabaseConnection databaseConnection, String name, String outputType, String folder) {
+    public Project(DatabaseConnection databaseConnection, String id, String name, String outputType, String folder) {
         this.databaseConnection = databaseConnection;
+        this.id = id;
         this.name = new SimpleStringProperty(name);
         this.outputType = new SimpleStringProperty(outputType);
         this.folder = new SimpleStringProperty(folder);
+    }
+
+    public String getId() {
+        return this.id;
     }
 
     public DatabaseConnection getDatabase() {

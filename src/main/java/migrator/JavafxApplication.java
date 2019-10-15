@@ -129,26 +129,26 @@ public class JavafxApplication extends Application {
             );
         
         for (Project project : this.container.getProjectService().getList()) {
-            ListPersistance<Table> tableListPersistance = new ListPersistance<>("tables." + project.getName());
-            this.container.getTableRepository().setList(project.getName(), tableListPersistance.load(new ArrayList<>()));
-            for (Table table : this.container.getTableRepository().getList(project.getName())) {
-                ListPersistance<Column> columnListPersistance = new ListPersistance<>("columns." + project.getName() + "." + table.getId());
+            ListPersistance<Table> tableListPersistance = new ListPersistance<>("tables." + project.getId());
+            this.container.getTableRepository().setList(project.getId(), tableListPersistance.load(new ArrayList<>()));
+            for (Table table : this.container.getTableRepository().getList(project.getId())) {
+                ListPersistance<Column> columnListPersistance = new ListPersistance<>("columns." + project.getId() + "." + table.getId());
                 List<Column> columns = columnListPersistance.load(new ArrayList<>());
                 for (Column column : columns) {
                     column.setColumnFormatManager(
                         this.container.getColumnFormatManager()
                     );
                 }
-                this.container.getColumnRepository().setList(project.getName() + "." + table.getId(), columns);
+                this.container.getColumnRepository().setList(project.getId() + "." + table.getId(), columns);
 
-                ListPersistance<Index> indexListPersistance = new ListPersistance<>("indexes." + project.getName() + "." + table.getId());
-                this.container.getIndexRepository().setList(project.getName() + "." + table.getId(), indexListPersistance.load(new ArrayList<>()));
+                ListPersistance<Index> indexListPersistance = new ListPersistance<>("indexes." + project.getId() + "." + table.getId());
+                this.container.getIndexRepository().setList(project.getId() + "." + table.getId(), indexListPersistance.load(new ArrayList<>()));
 
                 table.setColumns(
-                    this.container.getColumnRepository().getList(project.getName() + "." + table.getId())
+                    this.container.getColumnRepository().getList(project.getId() + "." + table.getId())
                 );
                 table.setIndexes(
-                    this.container.getIndexRepository().getList(project.getName() + "." + table.getId())
+                    this.container.getIndexRepository().getList(project.getId() + "." + table.getId())
                 );
             }
         }
@@ -160,20 +160,20 @@ public class JavafxApplication extends Application {
             this.container.getProjectService().getList()
         );
         for (Project project : this.container.getProjectService().getList()) {
-            ListPersistance<Table> listPersistance = new ListPersistance<>("tables." + project.getName());
+            ListPersistance<Table> listPersistance = new ListPersistance<>("tables." + project.getId());
             listPersistance.store(
-                this.container.getTableRepository().getList(project.getName())
+                this.container.getTableRepository().getList(project.getId())
             );
-            for (Table table : this.container.getTableRepository().getList(project.getName())) {
-                ListPersistance<Column> columnListPersistance = new ListPersistance<>("columns." + project.getName() + "." + table.getId());
+            for (Table table : this.container.getTableRepository().getList(project.getId())) {
+                ListPersistance<Column> columnListPersistance = new ListPersistance<>("columns." + project.getId() + "." + table.getId());
                 columnListPersistance.store(
-                    this.container.getColumnRepository().getList(project.getName() + "." + table.getId())
+                    this.container.getColumnRepository().getList(project.getId() + "." + table.getId())
                 );
             }
-            for (Table table : this.container.getTableRepository().getList(project.getName())) {
-                ListPersistance<Index> indexListPersistance = new ListPersistance<>("indexes." + project.getName() + "." + table.getId());
+            for (Table table : this.container.getTableRepository().getList(project.getId())) {
+                ListPersistance<Index> indexListPersistance = new ListPersistance<>("indexes." + project.getId() + "." + table.getId());
                 indexListPersistance.store(
-                    this.container.getIndexRepository().getList(project.getName() + "." + table.getId())  
+                    this.container.getIndexRepository().getList(project.getId() + "." + table.getId())  
                 );
             }
         }

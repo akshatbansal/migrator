@@ -62,7 +62,7 @@ public class SimpleColumnService implements ColumnService {
             return;
         }
         Project project = this.projectService.getOpened().get();
-        String repositryKey = project.getName() + "." + activeTable.getOriginalName();
+        String repositryKey = project.getId() + "." + activeTable.getId();
 
         DatabaseDriver databaseDriver  = this.databaseDriverManager
             .createDriver(project.getDatabase());

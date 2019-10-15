@@ -30,7 +30,7 @@ public class ColumnActiveState extends SimpleActiveState<Column> {
 
     protected String getRepositoryKey() {
         Table table = this.tableActiveState.getActive().get();
-        return this.openedProject.get().getName() + "." + table.getName();
+        return this.openedProject.get().getId() + "." + table.getId();
     }
 
     @Override

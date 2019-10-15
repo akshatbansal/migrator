@@ -1,5 +1,6 @@
 package migrator.app;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -42,6 +43,8 @@ import migrator.app.migration.Migration;
 import migrator.app.router.ActiveRoute;
 import migrator.app.toast.AutohideToastService;
 import migrator.lib.config.MapConfig;
+import migrator.lib.uid.Generator;
+import migrator.lib.uid.SessionIncrementalGenerator;
 
 public class Bootstrap {
     protected List<Extension> extensions;
@@ -80,6 +83,9 @@ public class Bootstrap {
         columnFormatsConfig.add("text", new SimpleColumnFormat("text"));
         columnFormatsConfig.add("time", new SimpleColumnFormat("time"));
         columnFormatsConfig.add("timestamp", new SimpleColumnFormat("timestamp"));
+
+        String session = Long.toString(System.currentTimeMillis());
+        Generator idGenerator = new SessionIncrementalGenerator(session);
         
         config.columnRepositoryConfig().set(
             new ColumnRepository()
@@ -120,7 +126,8 @@ public class Bootstrap {
         config.tableFactoryConfig().set(
             new TableFactory(
                 config.columnRepositoryConfig().get(),
-                config.indexRepositoryConfig().get()
+                config.indexRepositoryConfig().get(),
+                idGenerator
             )
         );
         config.columnFactoryConfig().set(
@@ -134,7 +141,8 @@ public class Bootstrap {
 
         config.projectFactoryConfig().set(
             new ProjectFactory(
-                config.databaseFactoryConfig().get()
+                config.databaseFactoryConfig().get(),
+                idGenerator
             )
         );
 

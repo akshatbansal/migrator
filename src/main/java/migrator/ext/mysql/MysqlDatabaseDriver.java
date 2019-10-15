@@ -239,6 +239,6 @@ public class MysqlDatabaseDriver implements DatabaseDriver {
             return m.group(0);
         }
         
-        return null;
+        return "";
     }
 }
