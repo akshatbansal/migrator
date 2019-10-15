@@ -1,6 +1,8 @@
 package migrator;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -9,9 +11,10 @@ import javafx.stage.Stage;
 import migrator.app.Bootstrap;
 import migrator.app.Gui;
 import migrator.app.Router;
-import migrator.app.domain.connection.model.Connection;
-import migrator.app.domain.database.model.DatabaseConnection;
 import migrator.app.domain.project.model.Project;
+import migrator.app.domain.table.model.Column;
+import migrator.app.domain.table.model.Index;
+import migrator.app.domain.table.model.Table;
 import migrator.ext.javafx.JavafxGui;
 import migrator.ext.javafx.MainController;
 import migrator.ext.javafx.component.JavafxLayout;
@@ -27,11 +30,18 @@ import migrator.ext.mysql.MysqlExtension;
 import migrator.ext.phinx.PhinxExtension;
 import migrator.ext.php.PhpExtension;
 import migrator.ext.sentry.SentryExtension;
+import migrator.lib.persistance.ListPersistance;
+import migrator.lib.persistance.Persistance;
 import migrator.app.Container;
 
 public class JavafxApplication extends Application {
+    protected Persistance<List<Project>> projectsPersistance;
+    protected Container container;
+    
     @Override
     public void start(Stage primaryStage) throws Exception {
+        this.projectsPersistance = new ListPersistance<>("project.list");
+
         Bootstrap bootstrap = new Bootstrap(
             Arrays.asList(
                 new PhinxExtension(),
@@ -40,32 +50,21 @@ public class JavafxApplication extends Application {
                 new SentryExtension()
             )
         );
-        Container container = bootstrap.getContainer();
-        container.getTableService().start();
-        container.getColumnService().start();
-        container.getIndexService().start();
+        this.container = bootstrap.getContainer();
+        this.container.getTableService().start();
+        this.container.getColumnService().start();
+        this.container.getIndexService().start();
 
-        // Seed data
-        container.getProjectService()
-            .add(
-                new Project(
-                    new DatabaseConnection(
-                        new Connection("localhost"), 
-                        "ovaldo"
-                    ), 
-                    "project#1",
-                    "phinx",
-                    "/home/arksys/Documents/peto/projekty/migrator-test"
-                )
-            );
+        // Seed data from persistance
+        this.seed();
 
         ViewLoader viewLoader = new ViewLoader();
-        Gui gui = new JavafxGui(container, viewLoader, primaryStage);
-        MainController mainController = new MainController(viewLoader, container);
+        Gui gui = new JavafxGui(this.container, viewLoader, primaryStage);
+        MainController mainController = new MainController(viewLoader, this.container);
 
         JavafxLayout layout = new JavafxLayout(mainController.getBodyPane(), mainController.getSidePane());
 
-        Router router = new Router(container.getActiveRoute());
+        Router router = new Router(this.container.getActiveRoute());
         router.connect(
             "table.index",
             new TableIndexRoute(gui.getTableKit(), layout)
@@ -121,5 +120,63 @@ public class JavafxApplication extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    protected void seed() {
+        this.container.getProjectService().getList()
+            .setAll(
+                this.projectsPersistance.load(new ArrayList<>())
+            );
+        
+        for (Project project : this.container.getProjectService().getList()) {
+            ListPersistance<Table> tableListPersistance = new ListPersistance<>("tables." + project.getName());
+            this.container.getTableRepository().setList(project.getName(), tableListPersistance.load(new ArrayList<>()));
+            for (Table table : this.container.getTableRepository().getList(project.getName())) {
+                ListPersistance<Column> columnListPersistance = new ListPersistance<>("columns." + project.getName() + "." + table.getId());
+                List<Column> columns = columnListPersistance.load(new ArrayList<>());
+                for (Column column : columns) {
+                    column.setColumnFormatManager(
+                        this.container.getColumnFormatManager()
+                    );
+                }
+                this.container.getColumnRepository().setList(project.getName() + "." + table.getId(), columns);
+
+                ListPersistance<Index> indexListPersistance = new ListPersistance<>("indexes." + project.getName() + "." + table.getId());
+                this.container.getIndexRepository().setList(project.getName() + "." + table.getId(), indexListPersistance.load(new ArrayList<>()));
+
+                table.setColumns(
+                    this.container.getColumnRepository().getList(project.getName() + "." + table.getId())
+                );
+                table.setIndexes(
+                    this.container.getIndexRepository().getList(project.getName() + "." + table.getId())
+                );
+            }
+        }
+    }
+
+    @Override
+    public void stop() throws Exception {
+        this.projectsPersistance.store(
+            this.container.getProjectService().getList()
+        );
+        for (Project project : this.container.getProjectService().getList()) {
+            ListPersistance<Table> listPersistance = new ListPersistance<>("tables." + project.getName());
+            listPersistance.store(
+                this.container.getTableRepository().getList(project.getName())
+            );
+            for (Table table : this.container.getTableRepository().getList(project.getName())) {
+                ListPersistance<Column> columnListPersistance = new ListPersistance<>("columns." + project.getName() + "." + table.getId());
+                columnListPersistance.store(
+                    this.container.getColumnRepository().getList(project.getName() + "." + table.getId())
+                );
+            }
+            for (Table table : this.container.getTableRepository().getList(project.getName())) {
+                ListPersistance<Index> indexListPersistance = new ListPersistance<>("indexes." + project.getName() + "." + table.getId());
+                indexListPersistance.store(
+                    this.container.getIndexRepository().getList(project.getName() + "." + table.getId())  
+                );
+            }
+        }
+        super.stop();
     }
 }

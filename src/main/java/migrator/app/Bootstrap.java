@@ -1,5 +1,6 @@
 package migrator.app;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -42,6 +43,8 @@ import migrator.app.migration.Migration;
 import migrator.app.router.ActiveRoute;
 import migrator.app.toast.AutohideToastService;
 import migrator.lib.config.MapConfig;
+import migrator.lib.uid.Generator;
+import migrator.lib.uid.SessionIncrementalGenerator;
 
 public class Bootstrap {
     protected List<Extension> extensions;
@@ -81,9 +84,15 @@ public class Bootstrap {
         columnFormatsConfig.add("time", new SimpleColumnFormat("time"));
         columnFormatsConfig.add("timestamp", new SimpleColumnFormat("timestamp"));
 
-        ColumnRepository columnRepository = new ColumnRepository();
-        IndexRepository indexRepository = new IndexRepository();
+        String session = Long.toString(System.currentTimeMillis());
+        Generator idGenerator = new SessionIncrementalGenerator(session);
         
+        config.columnRepositoryConfig().set(
+            new ColumnRepository()
+        );
+        config.indexRepositoryConfig().set(
+            new IndexRepository()
+        );
         config.tableRepositoryConfig().set(
             new TableRepository()
         );
@@ -116,8 +125,8 @@ public class Bootstrap {
         );
         config.tableFactoryConfig().set(
             new TableFactory(
-                columnRepository,
-                indexRepository
+                config.columnRepositoryConfig().get(),
+                config.indexRepositoryConfig().get()
             )
         );
         config.columnFactoryConfig().set(
@@ -131,7 +140,8 @@ public class Bootstrap {
 
         config.projectFactoryConfig().set(
             new ProjectFactory(
-                config.databaseFactoryConfig().get()
+                config.databaseFactoryConfig().get(),
+                idGenerator
             )
         );
 
@@ -171,33 +181,37 @@ public class Bootstrap {
         );
         config.columnActiveStateConfig().set(
             new ColumnActiveState(
-                columnRepository, 
+                config.columnRepositoryConfig().get(), 
                 config.tableActiveStateConfig().get(),
-                config.activeRouteConfig().get()
+                config.activeRouteConfig().get(),
+                config.projectServiceConfig().get()
             )
         );
         config.columnServiceConfig().set(
             new SimpleColumnService(
-                columnRepository,
+                config.columnRepositoryConfig().get(),
                 config.columnActiveStateConfig().get(),   
                 config.columnFactoryConfig().get(),
                 config.tableActiveStateConfig().get(),
+                config.projectServiceConfig().get(),
                 config.databaseDriverManagerConfig().get()
             )
         );
         config.indexActiveStateConfig().set(
             new IndexActiveState(
-                indexRepository,
+                config.indexRepositoryConfig().get(),
                 config.tableActiveStateConfig().get(),
-                config.activeRouteConfig().get()
+                config.activeRouteConfig().get(),
+                config.projectServiceConfig().get()
             )
         );
         config.indexServiceConfig().set(
             new SimpleIndexService(
                 config.indexFactoryConfig().get(),
-                indexRepository,
+                config.indexRepositoryConfig().get(),
                 config.indexActiveStateConfig().get(),
                 config.tableActiveStateConfig().get(),
+                config.projectServiceConfig().get(),
                 config.databaseDriverManagerConfig().get()
             )
         );

@@ -8,6 +8,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import migrator.app.database.driver.DatabaseDriver;
 import migrator.app.database.driver.DatabaseDriverManager;
+import migrator.app.domain.project.model.Project;
+import migrator.app.domain.project.service.ProjectService;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableActiveState;
@@ -22,12 +24,14 @@ public class SimpleColumnService implements ColumnService {
     protected ColumnFactory columnFactory;
     protected DatabaseDriverManager databaseDriverManager;
     protected ChangeListener<Table> onTableChangeListener;
+    protected ProjectService projectService;
 
     public SimpleColumnService(
         Repository<Column> columnRepository,
         ActiveState<Column> columnActiveState,
         ColumnFactory columnFactory,
         TableActiveState tableActiveState,
+        ProjectService projectService,
         DatabaseDriverManager databaseDriverManager
     ) {
         this.tableActiveState = tableActiveState;
@@ -35,6 +39,7 @@ public class SimpleColumnService implements ColumnService {
         this.columnActiveState = columnActiveState;
         this.columnFactory = columnFactory;
         this.databaseDriverManager = databaseDriverManager;
+        this.projectService = projectService;
         
         this.onTableChangeListener = (ObservableValue<? extends Table> observable, Table oldValue, Table newValue) -> {
             this.onTableSelect(newValue);
@@ -56,10 +61,11 @@ public class SimpleColumnService implements ColumnService {
         if (activeTable == null) {
             return;
         }
-        String repositryKey = activeTable.getProject().getName() + "." + activeTable.getOriginalName();
+        Project project = this.projectService.getOpened().get();
+        String repositryKey = project.getName() + "." + activeTable.getOriginalName();
 
         DatabaseDriver databaseDriver  = this.databaseDriverManager
-            .createDriver(activeTable.getProject().getDatabase());
+            .createDriver(project.getDatabase());
         databaseDriver.connect();
 
         List<Column> columns = new ArrayList<>();

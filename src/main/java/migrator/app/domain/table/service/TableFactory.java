@@ -19,7 +19,6 @@ public class TableFactory {
     public Table createNotChanged(Project project, String tableName) {
         String repositoryKey = project.getName() + "." + tableName;
         return new Table(
-            project,
             new SimpleTableProperty(tableName), // original
             new SimpleTableProperty(tableName), // changed
             new ChangeCommand(ChangeCommand.NONE),
@@ -31,7 +30,6 @@ public class TableFactory {
     public Table createWithCreateChange(Project project, String tableName) {
         String repositoryKey = project.getName() + "." + tableName;
         return new Table(
-            project,
             new SimpleTableProperty(""), // original
             new SimpleTableProperty(tableName), // changed
             new ChangeCommand(ChangeCommand.CREATE),

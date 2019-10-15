@@ -29,13 +29,13 @@ public class JavafxBreadcrumpsGuiKit implements BreadcrumpsGuiKit {
     }
 
     @Override
-    public BreadcrumpsComponent createBreadcrumps(Table table) {
+    public BreadcrumpsComponent createBreadcrumps(Table table, Project project) {
         return this.createBreadcrumps(
             Arrays.asList(
                 new ProjectsBreadcrump(this.container.getProjectService()),
                 new SingleProjectBreadcrump(
                     this.container.getProjectService(),
-                    table.getProject()
+                    project
                 ),
                 new VoidBreadcrump(table.nameProperty())
             )

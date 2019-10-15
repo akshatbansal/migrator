@@ -1,5 +1,10 @@
 package migrator.app.domain.table.model;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -10,12 +15,13 @@ import migrator.app.migration.model.ChangeCommand;
 import migrator.app.migration.model.ColumnChange;
 import migrator.app.migration.model.ColumnProperty;
 
-public class Column implements Changable, ColumnChange, ChangeListener<Object> {
-    protected ColumnFormatManager columnFormatManager;
+public class Column implements Changable, ColumnChange, ChangeListener<Object>, Serializable {
+    private static final long serialVersionUID = 7548712804607681520L;
+    protected transient ColumnFormatManager columnFormatManager;
     protected ColumnProperty originalColumn;
     protected ColumnProperty changedColumn;
     protected ChangeCommand changeCommand;
-    protected StringProperty fullFormatProperty;
+    protected transient StringProperty fullFormatProperty;
 
     public Column(
         ColumnFormatManager columnFormatManager,
@@ -27,6 +33,11 @@ public class Column implements Changable, ColumnChange, ChangeListener<Object> {
         this.originalColumn = originalColumn;
         this.changedColumn = changedColumn;
         this.changeCommand = changeCommand;
+        
+        this.initialize();
+    }
+
+    protected void initialize() {
         this.fullFormatProperty = new SimpleStringProperty();
         this.refreshFullFormat();
 
@@ -37,6 +48,11 @@ public class Column implements Changable, ColumnChange, ChangeListener<Object> {
         this.changedColumn.lengthProperty().addListener(this);
         this.changedColumn.precisionProperty().addListener(this);
         this.changedColumn.signProperty().addListener(this);
+    }
+
+    public void setColumnFormatManager(ColumnFormatManager columnFormatManager) {
+        this.columnFormatManager = columnFormatManager;
+        this.refreshFullFormat();
     }
 
     public StringProperty nameProperty() {
@@ -238,8 +254,20 @@ public class Column implements Changable, ColumnChange, ChangeListener<Object> {
     }
 
     protected void refreshFullFormat() {
+        if (this.columnFormatManager == null) {
+            return;
+        }
         this.fullFormatProperty.set(
             this.columnFormatManager.getFormatter(this.getFormat()).format(this.getLength(), this.getPrecision())
         );
+    }
+
+    private void writeObject(ObjectOutputStream s) throws IOException {
+        s.defaultWriteObject();
+    }
+
+    private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
+        s.defaultReadObject();
+        this.initialize();
     }
 }

@@ -53,10 +53,10 @@ public class JavafxTableForm extends ViewComponent implements TableForm {
 
     protected void onChangeTypeChange(String changeType) {
         this.manageBox.getChildren().clear();
-        if (changeType != ChangeCommand.DELETE) {
+        if (!changeType.equals(ChangeCommand.DELETE)) {
             this.manageBox.getChildren().add(this.removeButton);
         }
-        if (changeType == ChangeCommand.DELETE || changeType == ChangeCommand.UPDATE) {
+        if (changeType.equals(ChangeCommand.DELETE) || changeType.equals(ChangeCommand.UPDATE)) {
             this.manageBox.getChildren().add(this.restoreButton);
         }
     }

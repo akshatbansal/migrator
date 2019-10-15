@@ -1,12 +1,18 @@
 package migrator.app.domain.table.model;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.app.migration.model.IndexChange;
 import migrator.app.migration.model.IndexProperty;
 
-public class Index implements Changable, IndexChange {
+public class Index implements Changable, IndexChange, Serializable {
+    private static final long serialVersionUID = 6910944874040909876L;
     protected IndexProperty originalIndex;
     protected IndexProperty changedIndex;
     protected ChangeCommand changeCommand;
@@ -100,5 +106,13 @@ public class Index implements Changable, IndexChange {
     @Override
     public IndexProperty getOriginal() {
         return this.originalIndex;
+    }
+
+    private void writeObject(ObjectOutputStream s) throws IOException {
+        s.defaultWriteObject();
+    }
+
+    private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
+        s.defaultReadObject();
     }
 }

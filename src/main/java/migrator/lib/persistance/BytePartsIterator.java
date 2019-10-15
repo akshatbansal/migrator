@@ -1,14 +1,14 @@
-package migrator.persistance;
+package migrator.lib.persistance;
 
 import java.util.Iterator;
 import java.util.prefs.Preferences;
 
-public class PartsIterator implements Iterator<String> {
+public class BytePartsIterator implements Iterator<BytePersistance> {
     protected Preferences preferences;
     protected String key;
     protected Integer index;
 
-    public PartsIterator(Preferences preferences, String key) {
+    public BytePartsIterator(Preferences preferences, String key) {
         this.preferences = preferences;
         this.key = key;
         this.index = 0;
@@ -30,11 +30,9 @@ public class PartsIterator implements Iterator<String> {
     }
 
     @Override
-    public String next() {
+    public BytePersistance next() {
         Integer currentIndex = this.index;
         this.index++;
-        return this.getKey(currentIndex);
+        return new BytePersistance(this.preferences, this.getKey(currentIndex));
     }
-
-    
 }

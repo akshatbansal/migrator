@@ -24,7 +24,7 @@ public class TableChangeTextComponent implements GuiNode {
         } else if (tableChange.getCommand().isType(ChangeCommand.UPDATE)) {
             if (tableChange.hasNameChanged()) {
                 Text[] textParts = new Text[] {
-                    new Text("rename table to "),
+                    new Text("- rename table to "),
                     new Text(tableChange.getName())
                 };
                 textParts[1].getStyleClass().add("text--primary");
