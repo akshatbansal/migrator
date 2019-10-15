@@ -62,8 +62,6 @@ public class SimpleTableService implements TableService {
             );
         }
 
-        System.out.println("On Project open");
-        System.out.println(this.tableRepository.getList(repositryKey));
         for (Table table : this.tableRepository.getList(repositryKey)) {
             if (!table.getCommand().isType(ChangeCommand.CREATE)) {
                 continue;

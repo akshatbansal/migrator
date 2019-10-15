@@ -38,6 +38,10 @@ public class Table implements TableChange, ChangeListener<Object>, Serializable 
         this.changedTable.nameProperty().addListener(this);
     }
 
+    public String getId() {
+        return this.getName();
+    }
+
     public String getName() {
         return this.changedTable.getName();
     }

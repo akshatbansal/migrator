@@ -80,10 +80,13 @@ public class Bootstrap {
         columnFormatsConfig.add("text", new SimpleColumnFormat("text"));
         columnFormatsConfig.add("time", new SimpleColumnFormat("time"));
         columnFormatsConfig.add("timestamp", new SimpleColumnFormat("timestamp"));
-
-        ColumnRepository columnRepository = new ColumnRepository();
-        IndexRepository indexRepository = new IndexRepository();
         
+        config.columnRepositoryConfig().set(
+            new ColumnRepository()
+        );
+        config.indexRepositoryConfig().set(
+            new IndexRepository()
+        );
         config.tableRepositoryConfig().set(
             new TableRepository()
         );
@@ -116,8 +119,8 @@ public class Bootstrap {
         );
         config.tableFactoryConfig().set(
             new TableFactory(
-                columnRepository,
-                indexRepository
+                config.columnRepositoryConfig().get(),
+                config.indexRepositoryConfig().get()
             )
         );
         config.columnFactoryConfig().set(
@@ -171,7 +174,7 @@ public class Bootstrap {
         );
         config.columnActiveStateConfig().set(
             new ColumnActiveState(
-                columnRepository, 
+                config.columnRepositoryConfig().get(), 
                 config.tableActiveStateConfig().get(),
                 config.activeRouteConfig().get(),
                 config.projectServiceConfig().get()
@@ -179,7 +182,7 @@ public class Bootstrap {
         );
         config.columnServiceConfig().set(
             new SimpleColumnService(
-                columnRepository,
+                config.columnRepositoryConfig().get(),
                 config.columnActiveStateConfig().get(),   
                 config.columnFactoryConfig().get(),
                 config.tableActiveStateConfig().get(),
@@ -189,7 +192,7 @@ public class Bootstrap {
         );
         config.indexActiveStateConfig().set(
             new IndexActiveState(
-                indexRepository,
+                config.indexRepositoryConfig().get(),
                 config.tableActiveStateConfig().get(),
                 config.activeRouteConfig().get(),
                 config.projectServiceConfig().get()
@@ -198,7 +201,7 @@ public class Bootstrap {
         config.indexServiceConfig().set(
             new SimpleIndexService(
                 config.indexFactoryConfig().get(),
-                indexRepository,
+                config.indexRepositoryConfig().get(),
                 config.indexActiveStateConfig().get(),
                 config.tableActiveStateConfig().get(),
                 config.projectServiceConfig().get(),

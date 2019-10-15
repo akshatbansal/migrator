@@ -2,9 +2,7 @@ package migrator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -14,6 +12,8 @@ import migrator.app.Bootstrap;
 import migrator.app.Gui;
 import migrator.app.Router;
 import migrator.app.domain.project.model.Project;
+import migrator.app.domain.table.model.Column;
+import migrator.app.domain.table.model.Index;
 import migrator.app.domain.table.model.Table;
 import migrator.ext.javafx.JavafxGui;
 import migrator.ext.javafx.MainController;
@@ -36,13 +36,11 @@ import migrator.app.Container;
 
 public class JavafxApplication extends Application {
     protected Persistance<List<Project>> projectsPersistance;
-    protected Map<String, Persistance<List<Table>>> tablePersistance;
     protected Container container;
     
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.projectsPersistance = new ListPersistance<>("project.list");
-        this.tablePersistance = new HashMap<>();
 
         Bootstrap bootstrap = new Bootstrap(
             Arrays.asList(
@@ -131,9 +129,22 @@ public class JavafxApplication extends Application {
             );
         
         for (Project project : this.container.getProjectService().getList()) {
-            ListPersistance<Table> listPersistance = new ListPersistance<>("tables." + project.getName());
-            this.container.getTableRepository().setList(project.getName(), listPersistance.load(new ArrayList<>()));
-            // this.tablePersistance.put(project.getName(), listPersistance);
+            ListPersistance<Table> tableListPersistance = new ListPersistance<>("tables." + project.getName());
+            this.container.getTableRepository().setList(project.getName(), tableListPersistance.load(new ArrayList<>()));
+            for (Table table : this.container.getTableRepository().getList(project.getName())) {
+                ListPersistance<Column> columnListPersistance = new ListPersistance<>("columns." + project.getName() + "." + table.getId());
+                List<Column> columns = columnListPersistance.load(new ArrayList<>());
+                for (Column column : columns) {
+                    column.setColumnFormatManager(
+                        this.container.getColumnFormatManager()
+                    );
+                }
+                this.container.getColumnRepository().setList(project.getName() + "." + table.getId(), columns);
+            }
+            for (Table table : this.container.getTableRepository().getList(project.getName())) {
+                ListPersistance<Index> indexListPersistance = new ListPersistance<>("indexes." + project.getName() + "." + table.getId());
+                this.container.getIndexRepository().setList(project.getName() + "." + table.getId(), indexListPersistance.load(new ArrayList<>()));
+            }
         }
     }
 
@@ -147,6 +158,18 @@ public class JavafxApplication extends Application {
             listPersistance.store(
                 this.container.getTableRepository().getList(project.getName())
             );
+            for (Table table : this.container.getTableRepository().getList(project.getName())) {
+                ListPersistance<Column> columnListPersistance = new ListPersistance<>("columns." + project.getName() + "." + table.getId());
+                columnListPersistance.store(
+                    this.container.getColumnRepository().getList(project.getName() + "." + table.getId())
+                );
+            }
+            for (Table table : this.container.getTableRepository().getList(project.getName())) {
+                ListPersistance<Index> indexListPersistance = new ListPersistance<>("indexes." + project.getName() + "." + table.getId());
+                indexListPersistance.store(
+                    this.container.getIndexRepository().getList(project.getName() + "." + table.getId())  
+                );
+            }
         }
         super.stop();
     }
