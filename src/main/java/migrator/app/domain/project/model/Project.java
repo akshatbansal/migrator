@@ -9,12 +9,18 @@ public class Project {
     protected StringProperty name;
     protected StringProperty outputType;
     protected StringProperty folder;
+    protected String id;
 
-    public Project(DatabaseConnection databaseConnection, String name, String outputType, String folder) {
+    public Project(DatabaseConnection databaseConnection, String id, String name, String outputType, String folder) {
         this.databaseConnection = databaseConnection;
+        this.id = id;
         this.name = new SimpleStringProperty(name);
         this.outputType = new SimpleStringProperty(outputType);
         this.folder = new SimpleStringProperty(folder);
+    }
+
+    public String getId() {
+        return this.id;
     }
 
     public DatabaseConnection getDatabase() {
