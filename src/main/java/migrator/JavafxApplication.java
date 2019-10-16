@@ -1,8 +1,11 @@
 package migrator;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -33,6 +36,7 @@ import migrator.ext.sentry.SentryExtension;
 import migrator.lib.persistance.ListPersistance;
 import migrator.lib.persistance.Persistance;
 import migrator.app.Container;
+import migrator.app.EnviromentConfig;
 
 public class JavafxApplication extends Application {
     protected Persistance<List<Project>> projectsPersistance;
@@ -42,12 +46,18 @@ public class JavafxApplication extends Application {
     public void start(Stage primaryStage) throws Exception {
         this.projectsPersistance = new ListPersistance<>("project.list");
 
+        String env = "production";
+        if (System.getenv("MIGRATOR_ENV") != null) {
+            env = System.getenv("MIGRATOR_ENV");
+        }
+        EnviromentConfig enviromentConfig = new EnviromentConfig(env);
+
         Bootstrap bootstrap = new Bootstrap(
             Arrays.asList(
                 new PhinxExtension(),
                 new MysqlExtension(),
                 new PhpExtension(),
-                new SentryExtension()
+                new SentryExtension(enviromentConfig.getProperties("sentry"))
             )
         );
         this.container = bootstrap.getContainer();
