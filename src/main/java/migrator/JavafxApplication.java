@@ -1,8 +1,11 @@
 package migrator;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -42,12 +45,16 @@ public class JavafxApplication extends Application {
     public void start(Stage primaryStage) throws Exception {
         this.projectsPersistance = new ListPersistance<>("project.list");
 
+        Properties properties = new Properties();
+        InputStream input = getClass().getClassLoader().getResourceAsStream("config/production/sentry.properties");
+        properties.load(input);
+
         Bootstrap bootstrap = new Bootstrap(
             Arrays.asList(
                 new PhinxExtension(),
                 new MysqlExtension(),
                 new PhpExtension(),
-                new SentryExtension()
+                new SentryExtension(properties)
             )
         );
         this.container = bootstrap.getContainer();
