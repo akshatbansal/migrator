@@ -5,11 +5,11 @@
 
 One to two paragraph statement about your product and what it does.
 
-![preview](https://gph.is/g/apVxpG3)
+![preview](https://media.giphy.com/media/cmBgK26y8jbIEM2Q6J/giphy.gif)
 
 ## Installation
 
-Download the latest [release](https://github.com/pipan/migrator/releases/download/v0.1.0/migrator.jar)
+Download the latest [release](https://github.com/pipan/migrator/releases/download/v0.1.1/migrator.jar)
 
 ```sh
 java -jar migrator.jar
