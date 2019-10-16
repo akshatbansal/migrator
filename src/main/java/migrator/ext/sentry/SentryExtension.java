@@ -15,7 +15,9 @@ public class SentryExtension implements Extension {
 
     @Override
     public void load(ConfigContainer config) {
-        System.out.println(this.properties.getProperty("dsn", ""));
+        config.loggerConfig().set(
+            new SentryLogger()
+        );
         Sentry.init(properties.getProperty("dsn", ""));
         Thread.setDefaultUncaughtExceptionHandler(
             new ExceptionHandler()

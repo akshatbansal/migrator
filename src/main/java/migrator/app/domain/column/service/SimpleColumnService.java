@@ -48,8 +48,7 @@ public class SimpleColumnService implements ColumnService {
 
     @Override
     public void start() {
-        this.tableActiveState.getActive().addListener(this.onTableChangeListener);
-        
+        this.tableActiveState.getActive().addListener(this.onTableChangeListener);   
     }
 
     @Override
@@ -126,10 +125,34 @@ public class SimpleColumnService implements ColumnService {
             return dbValue;
         }
 
+        if (!repositoryValue.hasNameChanged()) {
+            repositoryValue.nameProperty().setValue(dbValue.getOriginal().getName());    
+        }
         repositoryValue.getOriginal().nameProperty().set(dbValue.getOriginal().getName());
+        if (!repositoryValue.hasFormatChanged()) {
+            repositoryValue.formatProperty().setValue(dbValue.getOriginal().getFormat());    
+        }
         repositoryValue.getOriginal().formatProperty().set(dbValue.getOriginal().getFormat());
+        if (!repositoryValue.hasDefaultValueChanged()) {
+            repositoryValue.defaultValueProperty().setValue(dbValue.getOriginal().getDefaultValue());    
+        }
         repositoryValue.getOriginal().defaultValueProperty().set(dbValue.getOriginal().getDefaultValue());
+        if (!repositoryValue.hasNullEnabledChanged()) {
+            repositoryValue.nullProperty().setValue(dbValue.getOriginal().isNullEnabled());    
+        }
         repositoryValue.getOriginal().nullProperty().setValue(dbValue.getOriginal().isNullEnabled());
+        if (!repositoryValue.hasLengthChanged()) {
+            repositoryValue.lengthProperty().setValue(dbValue.getOriginal().getLength());    
+        }
+        repositoryValue.getOriginal().lengthProperty().setValue(dbValue.getOriginal().getLength());
+        if (!repositoryValue.hasSignChanged()) {
+            repositoryValue.signProperty().setValue(dbValue.getOriginal().isSigned());
+        }
+        repositoryValue.getOriginal().signProperty().setValue(dbValue.getOriginal().isSigned());
+        if (!repositoryValue.hasPrecisionChanged()) {
+            repositoryValue.precisionProperty().setValue(dbValue.getOriginal().getPrecision());
+        }
+        repositoryValue.getOriginal().precisionProperty().setValue(dbValue.getOriginal().getPrecision());
         return repositoryValue;
     }
 }

@@ -7,7 +7,6 @@ import javafx.scene.text.Text;
 import migrator.app.Container;
 import migrator.app.Gui;
 import migrator.app.breadcrumps.BreadcrumpsComponent;
-import migrator.app.domain.project.service.ProjectService;
 import migrator.app.domain.table.component.TableView;
 import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableGuiKit;

@@ -22,6 +22,7 @@ cache:
 branches:
   only:
     - master
+    - release
 
 stages:
   - test
@@ -30,7 +31,7 @@ stages:
 jobs:
   include:
     - stage: deploy
-      if: branch = master
+      if: branch = release
       name: "Deploy Github Release"
       script: skip
       deploy:
