@@ -1,11 +1,8 @@
 package migrator;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 
 import javafx.application.Application;
 import javafx.scene.Scene;

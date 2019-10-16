@@ -1,6 +1,5 @@
 package migrator.app;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -43,6 +42,7 @@ import migrator.app.migration.Migration;
 import migrator.app.router.ActiveRoute;
 import migrator.app.toast.AutohideToastService;
 import migrator.lib.config.MapConfig;
+import migrator.lib.logger.SystemLogger;
 import migrator.lib.uid.Generator;
 import migrator.lib.uid.SessionIncrementalGenerator;
 
@@ -87,6 +87,9 @@ public class Bootstrap {
         String session = Long.toString(System.currentTimeMillis());
         Generator idGenerator = new SessionIncrementalGenerator(session);
         
+        config.loggerConfig().set(
+            new SystemLogger()
+        );
         config.columnRepositoryConfig().set(
             new ColumnRepository()
         );
@@ -111,7 +114,8 @@ public class Bootstrap {
         );
         config.columnFormatManagerConfig().set(
             new ColumnFormatManager(
-                config.getColumnFormatConfig()
+                config.getColumnFormatConfig(),
+                config.loggerConfig()
             )
         );
 

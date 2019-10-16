@@ -144,7 +144,9 @@ public class MysqlDatabaseDriver implements DatabaseDriver {
                 this.getFormat(dbFormat),
                 defaultValue,
                 rs.getString(3) == "YES" ? true : false,
-                this.getLength(dbFormat)
+                this.getLength(dbFormat),
+                this.getSign(dbFormat),
+                this.getPrecision(dbFormat)
             );
             currentColumns.add(column);
         }
@@ -229,6 +231,15 @@ public class MysqlDatabaseDriver implements DatabaseDriver {
         if (dbFormat.startsWith("int")) {
             return "integer";
         }
+        if (dbFormat.startsWith("tinyint")) {
+            return "boolean";
+        }
+        if (dbFormat.startsWith("char")) {
+            return "char";
+        }
+        if (dbFormat.startsWith("double")) {
+            return "decimal";
+        }
         return dbFormat;
     }
 
@@ -240,5 +251,19 @@ public class MysqlDatabaseDriver implements DatabaseDriver {
         }
         
         return "";
+    }
+
+    protected String getPrecision(String dbFormat) {
+        Pattern p = Pattern.compile(",(\\d+)");
+        Matcher m = p.matcher(dbFormat);
+        if (m.find()) {
+            return m.group(1);
+        }
+        
+        return "";
+    }
+
+    protected Boolean getSign(String dbFormat) {
+        return !dbFormat.endsWith("unsigned");
     }
 }

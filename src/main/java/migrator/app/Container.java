@@ -25,12 +25,17 @@ import migrator.app.code.CodeManager;
 import migrator.app.migration.Migration;
 import migrator.app.router.ActiveRoute;
 import migrator.app.toast.ToastService;
+import migrator.lib.logger.Logger;
 
 public class Container {
     protected ConfigContainer config;
 
     public Container(ConfigContainer config) {
         this.config = config;
+    }
+
+    public Logger getLogger() {
+        return this.config.loggerConfig().get();
     }
 
     public ActiveRoute getActiveRoute() {

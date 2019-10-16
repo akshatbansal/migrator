@@ -30,6 +30,7 @@ import migrator.app.router.ActiveRoute;
 import migrator.app.toast.ToastService;
 import migrator.lib.config.MapConfig;
 import migrator.lib.config.ValueConfig;
+import migrator.lib.logger.Logger;
 
 public class ConfigContainer {
     private MigrationConfig migrationConfig;
@@ -42,6 +43,7 @@ public class ConfigContainer {
     private ValueConfig<DatabaseDriverManager> databaseDriverManager;
     private ValueConfig<CodeManager> codeManager;
     private ValueConfig<ColumnFormatManager> columnFormatManager;
+    private ValueConfig<Logger> logger;
 
     private ValueConfig<ConnectionFactory> connectionFactory;
     private ValueConfig<DatabaseFactory> databaseFactory;
@@ -71,6 +73,7 @@ public class ConfigContainer {
         this.databaseDriverConfig = new DatabaseDriverConfig();
         this.codeConfig = new CodeConfig();
         this.columnFormatConfig = new MapConfig<>();
+        this.logger = new ValueConfig<>();
 
         this.activeRoute = new ValueConfig<>();
         this.migration = new ValueConfig<>();
@@ -124,6 +127,10 @@ public class ConfigContainer {
 
     public ValueConfig<Migration> migrationConfig() {
         return this.migration;
+    }
+
+    public ValueConfig<Logger> loggerConfig() {
+        return this.logger;
     }
 
     public ValueConfig<ColumnFormatManager> columnFormatManagerConfig() {
