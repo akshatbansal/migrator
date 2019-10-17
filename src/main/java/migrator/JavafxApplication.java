@@ -6,6 +6,7 @@ import java.util.List;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import migrator.app.Bootstrap;
@@ -120,7 +121,11 @@ public class JavafxApplication extends Application {
             getClass().getResource("/styles/scroll.css").toExternalForm(),
             getClass().getResource("/styles/main.css").toExternalForm()
         );
+        
         primaryStage.setTitle("Migrator");
+        primaryStage.getIcons().add(
+            new Image(getClass().getResourceAsStream("/images/logo.png"))
+        );
         primaryStage.setScene(scene);
         primaryStage.show();
     }

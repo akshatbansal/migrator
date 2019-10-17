@@ -3,7 +3,9 @@
 
 [![Build Status](https://travis-ci.com/pipan/migrator.svg?branch=master)](https://travis-ci.com/pipan/migrator)
 
-One to two paragraph statement about your product and what it does.
+Application that generate migration files for file based database migrations like Phinx or Flyway. This application provides GUI and handles creating migration files for different languages.
+
+Migrations are used to change database structure when application evolve and you need to propagate this change to multiple servers and dvelopers.
 
 ![preview](https://media.giphy.com/media/cmBgK26y8jbIEM2Q6J/giphy.gif)
 
