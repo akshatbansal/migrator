@@ -121,6 +121,14 @@ public class JavafxApplication extends Application {
             getClass().getResource("/styles/scroll.css").toExternalForm(),
             getClass().getResource("/styles/main.css").toExternalForm()
         );
+        container.getHotkeyService().connectKeyboard("find", "CTRL+F");
+        container.getHotkeyService().connectKeyboard("cancel", "ESCAPE");
+        scene.getRoot().setOnKeyPressed((e) -> {
+            this.container.getHotkeyService()
+                .keyPressed(
+                    container.getHotkeyFactory().create(e.getCode().getCode(), e.isControlDown(), e.isShiftDown())
+                );
+        });
         
         primaryStage.setTitle("Migrator");
         primaryStage.getIcons().add(

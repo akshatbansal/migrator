@@ -30,6 +30,8 @@ import migrator.app.router.ActiveRoute;
 import migrator.app.toast.ToastService;
 import migrator.lib.config.MapConfig;
 import migrator.lib.config.ValueConfig;
+import migrator.lib.hotkyes.HotkeyFactory;
+import migrator.lib.hotkyes.HotkeysService;
 import migrator.lib.logger.Logger;
 
 public class ConfigContainer {
@@ -44,6 +46,8 @@ public class ConfigContainer {
     private ValueConfig<CodeManager> codeManager;
     private ValueConfig<ColumnFormatManager> columnFormatManager;
     private ValueConfig<Logger> logger;
+    private ValueConfig<HotkeyFactory> hotkeyFactory;
+    private ValueConfig<HotkeysService> hotkeyService;
 
     private ValueConfig<ConnectionFactory> connectionFactory;
     private ValueConfig<DatabaseFactory> databaseFactory;
@@ -74,6 +78,8 @@ public class ConfigContainer {
         this.codeConfig = new CodeConfig();
         this.columnFormatConfig = new MapConfig<>();
         this.logger = new ValueConfig<>();
+        this.hotkeyFactory = new ValueConfig<>();
+        this.hotkeyService = new ValueConfig<>();
 
         this.activeRoute = new ValueConfig<>();
         this.migration = new ValueConfig<>();
@@ -103,6 +109,14 @@ public class ConfigContainer {
         this.tableRepository = new ValueConfig<>();
         this.columnRepository = new ValueConfig<>();
         this.indexRepository = new ValueConfig<>();
+    }
+
+    public ValueConfig<HotkeyFactory> getHoteyFactory() {
+        return this.hotkeyFactory;
+    }
+
+    public ValueConfig<HotkeysService> getHoteyService() {
+        return this.hotkeyService;
     }
 
     public MapConfig<ColumnFormat> getColumnFormatConfig() {

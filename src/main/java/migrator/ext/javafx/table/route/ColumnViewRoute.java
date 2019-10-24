@@ -2,10 +2,10 @@ package migrator.ext.javafx.table.route;
 
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.service.TableGuiKit;
-import migrator.app.router.RouteConnection;
+import migrator.app.router.GuiNodeConnection;
 import migrator.ext.javafx.component.JavafxLayout;
 
-public class ColumnViewRoute implements RouteConnection<Column> {
+public class ColumnViewRoute extends GuiNodeConnection<Column> {
     protected TableGuiKit tableGuiKit;
     protected JavafxLayout layout;
 

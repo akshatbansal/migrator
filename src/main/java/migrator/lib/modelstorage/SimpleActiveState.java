@@ -4,19 +4,28 @@ import java.util.List;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ListChangeListener.Change;
 
-public class SimpleActiveState<T> implements ActiveState<T> {
+abstract public class SimpleActiveState<T> implements ActiveState<T> {
     protected ObjectProperty<T> activated;
     protected ObjectProperty<T> focused;
     protected ObservableList<T> list;
+    protected ObservableList<T> fullList;
+    protected StringProperty searchProperty;
 
     public SimpleActiveState() {
         this.activated = new SimpleObjectProperty<>();
         this.focused = new SimpleObjectProperty<>();
         this.list = FXCollections.observableArrayList();
+        this.fullList = FXCollections.observableArrayList();
+        this.searchProperty = new SimpleStringProperty("");
+        this.searchProperty.addListener((observable, oldValue, newValue) -> {
+            this.applyFilter();
+        });
 
         this.list.addListener((Change<? extends T> change) -> {
             this.onListChange();
@@ -84,17 +93,20 @@ public class SimpleActiveState<T> implements ActiveState<T> {
 
     @Override
     public void setListAll(List<T> list) {
-        this.list.setAll(list);
+        this.fullList.setAll(list);
+        this.applyFilter();
     }
 
     @Override
     public void add(T item) {
-        this.list.add(item);
+        this.fullList.add(item);
+        this.applyFilter();
     }
 
     @Override
     public void remove(T item) {
-        this.list.remove(item);
+        this.fullList.remove(item);
+        this.applyFilter();
     }
 
     @Override
@@ -102,4 +114,21 @@ public class SimpleActiveState<T> implements ActiveState<T> {
         this.add(item);
         this.activate(item);
     }
+
+    @Override
+    public void clearFilter() {
+        this.search("");
+    }
+
+    @Override
+    public void search(String searchString) {
+        this.searchProperty.set(searchString);
+    }
+
+    @Override
+    public StringProperty searchProperty() {
+        return this.searchProperty;
+    }
+
+    abstract protected void applyFilter();
 }

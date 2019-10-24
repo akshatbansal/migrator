@@ -1,5 +1,8 @@
 package migrator.app.domain.table.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import migrator.app.domain.project.service.ProjectService;
 import migrator.app.domain.table.model.Table;
 import migrator.app.router.ActiveRoute;
@@ -45,5 +48,18 @@ public class TableActiveState extends SimpleActiveState<Table> {
     public void deactivate() {
         super.deactivate();
         this.activeRoute.changeTo("table.index");
+    }
+
+    @Override
+    protected void applyFilter() {
+        String searchString = this.searchProperty().get();
+        List<Table> filtered = new ArrayList<>();
+        for (Table item : this.fullList) {
+            if (!searchString.isEmpty() && !item.getName().contains(searchString)) {
+                continue;
+            }
+            filtered.add(item);
+        }
+        this.list.setAll(filtered);
     }
 }

@@ -8,6 +8,7 @@ import migrator.app.router.RouteConnection;
 
 public class Router {
     protected Map<String, RouteConnection> routes;
+    protected RouteConnection<?> activeConnection;
 
     public Router(ActiveRoute activeRoute) {
         this.routes = new HashMap<>();
@@ -27,6 +28,10 @@ public class Router {
             System.out.println("Route does not exists '" + routeName + "'");
             return;
         }
+        if (this.activeConnection != null) {
+            this.activeConnection.hide();
+        }
+        this.activeConnection = this.routes.get(routeName);
         this.routes.get(routeName).show(routeData);
     }
 }
