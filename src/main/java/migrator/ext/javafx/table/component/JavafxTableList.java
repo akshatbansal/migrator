@@ -63,10 +63,7 @@ public class JavafxTableList extends ViewComponent implements TableList {
         this.searchComponent = new SearchComponent(viewLoader, this.tableActiveState.searchProperty());
 
         Subscription<Hotkey> subscription = container.getHotkeyService().on("find", (hotkey) -> {
-            this.searchBox.getChildren().add(
-                (Node) this.searchComponent.getContent()
-            );
-            this.searchComponent.focus();
+            this.showSearch();
         });
         this.subscriptions.add(subscription);
 
@@ -80,6 +77,13 @@ public class JavafxTableList extends ViewComponent implements TableList {
         this.loadView("/layout/table/index.fxml");
     }
 
+    protected void showSearch() {
+        this.searchBox.getChildren().add(
+            (Node) this.searchComponent.getContent()
+        );
+        this.searchComponent.focus();
+    }
+
     @FXML public void initialize() {
         this.tableCards.getChildren()
             .setAll(
@@ -90,6 +94,10 @@ public class JavafxTableList extends ViewComponent implements TableList {
             .setAll(
                 (Node) this.breadcrumpsComponent.getContent()
             );
+
+        if (!this.tableActiveState.searchProperty().get().isEmpty()) {
+            this.showSearch();
+        }
     }
 
     @Override
