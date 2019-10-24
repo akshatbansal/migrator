@@ -42,6 +42,8 @@ import migrator.app.migration.Migration;
 import migrator.app.router.ActiveRoute;
 import migrator.app.toast.AutohideToastService;
 import migrator.lib.config.MapConfig;
+import migrator.lib.hotkyes.HotkeyFactory;
+import migrator.lib.hotkyes.SimpleHotkeysService;
 import migrator.lib.logger.SystemLogger;
 import migrator.lib.uid.Generator;
 import migrator.lib.uid.SessionIncrementalGenerator;
@@ -98,6 +100,13 @@ public class Bootstrap {
         );
         config.tableRepositoryConfig().set(
             new TableRepository()
+        );
+
+        config.getHoteyFactory().set(
+            new HotkeyFactory()
+        );
+        config.getHoteyService().set(
+            new SimpleHotkeysService()
         );
 
         config.activeRouteConfig().set(

@@ -3,10 +3,10 @@ package migrator.ext.javafx.project.route;
 import migrator.app.domain.project.service.ProjectGuiKit;
 import migrator.app.domain.project.service.ProjectService;
 import migrator.app.router.ActiveRoute;
-import migrator.app.router.RouteConnection;
+import migrator.app.router.GuiNodeConnection;
 import migrator.ext.javafx.component.JavafxLayout;
 
-public class ProjectIndexRoute implements RouteConnection<Object> {
+public class ProjectIndexRoute extends GuiNodeConnection<Object> {
     protected JavafxLayout layout;
     protected ProjectGuiKit projectGuiKit;
     protected ProjectService projectService;

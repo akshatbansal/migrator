@@ -25,6 +25,8 @@ import migrator.app.code.CodeManager;
 import migrator.app.migration.Migration;
 import migrator.app.router.ActiveRoute;
 import migrator.app.toast.ToastService;
+import migrator.lib.hotkyes.HotkeyFactory;
+import migrator.lib.hotkyes.HotkeysService;
 import migrator.lib.logger.Logger;
 
 public class Container {
@@ -132,5 +134,13 @@ public class Container {
 
     public IndexRepository getIndexRepository() {
         return this.config.indexRepositoryConfig().get();
+    }
+
+    public HotkeyFactory getHotkeyFactory() {
+        return this.config.getHoteyFactory().get();
+    }
+
+    public HotkeysService getHotkeyService() {
+        return this.config.getHoteyService().get();
     }
 }

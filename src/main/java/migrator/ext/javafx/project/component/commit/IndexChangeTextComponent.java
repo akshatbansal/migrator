@@ -42,4 +42,7 @@ public class IndexChangeTextComponent implements GuiNode {
     public Object getContent() {
         return this.node;
     }
+
+    @Override
+    public void destroy() {}
 }

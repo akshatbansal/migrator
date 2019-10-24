@@ -3,6 +3,7 @@ package migrator.lib.modelstorage;
 import java.util.List;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 
 public interface ActiveState<T> {
@@ -19,4 +20,8 @@ public interface ActiveState<T> {
     public void add(T item);
     public void remove(T item);
     public void addAndActivate(T item);
+
+    public void search(String searchString);
+    public void clearFilter();
+    public StringProperty searchProperty();
 }

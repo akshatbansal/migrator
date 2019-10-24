@@ -9,7 +9,7 @@
 
 <BorderPane xmlns:fx="http://javafx.com/fxml" VBox.vgrow="ALWAYS">
     <center>
-        <VBox >
+        <VBox>
             <HBox styleClass="form__row">
                 <HBox styleClass="form__row-label" alignment="center_left">
                     <Text styleClass="label" text="name" />

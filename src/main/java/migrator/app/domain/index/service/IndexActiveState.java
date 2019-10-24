@@ -58,4 +58,9 @@ public class IndexActiveState extends SimpleActiveState<Index> {
         super.deactivate();
         this.activeRoute.changeTo("table.view", this.tableActiveState.getActive().get());
     }
+
+    @Override
+    protected void applyFilter() {
+        this.list.setAll(this.fullList);
+    }
 }

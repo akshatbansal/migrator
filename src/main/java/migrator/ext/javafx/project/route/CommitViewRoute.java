@@ -2,11 +2,10 @@ package migrator.ext.javafx.project.route;
 
 import migrator.app.domain.project.model.Project;
 import migrator.app.domain.project.service.ProjectGuiKit;
-import migrator.app.router.RouteConnection;
+import migrator.app.router.GuiNodeConnection;
 import migrator.ext.javafx.component.JavafxLayout;
 
-public class CommitViewRoute implements RouteConnection
-<Project> {
+public class CommitViewRoute extends GuiNodeConnection<Project> {
     protected JavafxLayout layout;
     protected ProjectGuiKit projectGuiKit;
 

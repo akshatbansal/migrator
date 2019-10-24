@@ -25,6 +25,8 @@ java -jar migrator.jar
 
 // TODO
 
+release: https://github.com/aktau/github-release
+
 ## Release History
 
 * 0.1.1

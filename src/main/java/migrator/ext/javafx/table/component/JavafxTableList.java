@@ -1,8 +1,5 @@
 package migrator.ext.javafx.table.component;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.FlowPane;
@@ -19,12 +16,13 @@ import migrator.app.domain.table.service.TableFactory;
 import migrator.app.router.ActiveRoute;
 import migrator.ext.javafx.component.card.CardListComponent;
 import migrator.ext.javafx.component.card.withmarks.CardWithMarksComponentFactory;
+import migrator.ext.javafx.component.SearchComponent;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
 import migrator.lib.emitter.Subscription;
+import migrator.lib.hotkyes.Hotkey;
 
 public class JavafxTableList extends ViewComponent implements TableList {
-    protected List<Subscription<Table>> subscriptions;
     protected TableFactory tableFactory;
     protected TableActiveState tableActiveState;
     protected ProjectService projectService;
@@ -32,10 +30,12 @@ public class JavafxTableList extends ViewComponent implements TableList {
     protected BreadcrumpsComponent breadcrumpsComponent;
     protected ActiveRoute activeRoute;
     protected CardListComponent<Table> cardListComponent;
+    protected SearchComponent searchComponent;
 
     @FXML protected FlowPane tables;
     @FXML protected VBox breadcrumpsContainer;
     @FXML protected VBox tableCards;
+    @FXML protected VBox searchBox;
 
     public JavafxTableList(ViewLoader viewLoader, Container container, Gui gui) {
         super(viewLoader);
@@ -48,7 +48,6 @@ public class JavafxTableList extends ViewComponent implements TableList {
         this.breadcrumpsComponent = gui.getBreadcrumps().createBreadcrumps(
             this.projectService.getOpened().get()
         );
-        this.subscriptions = new LinkedList<>();
 
         this.cardListComponent = new CardListComponent<>(
             this.tableActiveState.getList(),
@@ -60,6 +59,23 @@ public class JavafxTableList extends ViewComponent implements TableList {
         this.cardListComponent.onPrimary((Table eventTable) -> {
             this.tableActiveState.activate(eventTable);
         });
+
+        this.searchComponent = new SearchComponent(viewLoader, this.tableActiveState.searchProperty());
+
+        Subscription<Hotkey> subscription = container.getHotkeyService().on("find", (hotkey) -> {
+            this.searchBox.getChildren().add(
+                (Node) this.searchComponent.getContent()
+            );
+            this.searchComponent.focus();
+        });
+        this.subscriptions.add(subscription);
+
+        subscription = container.getHotkeyService().on("cancel", (hotkey) -> {
+            this.searchComponent.clear();
+            this.searchBox.getChildren().clear();
+            System.out.println("close find");
+        });
+        this.subscriptions.add(subscription);
 
         this.loadView("/layout/table/index.fxml");
     }
