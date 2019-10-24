@@ -2,5 +2,3 @@ theme: jekyll-theme-cayman
 title: Migrator
 description: Java application for generating database migration files
 show_downloads: true
-github:
-  v0.2.1: https://github.com/pipan/migrator/releases/download/v0.2.1/migrator.jar
