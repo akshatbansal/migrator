@@ -2,3 +2,4 @@ theme: jekyll-theme-cayman
 title: Migrator
 description: Java application for generating database migration files
 show_downloads: true
+google_analytics: UA-149953912-1
