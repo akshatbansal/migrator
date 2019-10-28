@@ -107,5 +107,10 @@ release: https://github.com/aktau/github-release
 * add tooltips to butons
 * allow changing column order
 * add tests
-* add support for flyway migrations
-* add support for postgre DB
+* add support for frameworks:
+  * flyway (JAVA)
+  * fluid (.NET)
+  * db-migrate (nodejs)
+* add support for databases:
+  * add support for postgre DB
+* allow data seeding
