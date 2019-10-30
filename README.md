@@ -88,13 +88,13 @@ Distributed under the MIT license. See ``LICENSE`` for more information.
 
 ## Contributing
 
-1. Fork it (<https://github.com/pipan/migrator/fork>)
-2. Create your feature branch (`git checkout -b feature/fooBar`)
-3. Commit your changes (`git commit -am 'Add some fooBar'`)
-4. Push to the branch (`git push origin feature/fooBar`)
-5. Create a new Pull Request
+Have you found a bug?
 
-### Code structure
+Do you wan to share your ideas how to improve this application?
+
+Are you looking for some little thing to code?
+
+Look at the [contribution manual](CONTRIBUTING.md)
 
 ### Deploy
 
