@@ -41,6 +41,12 @@ When you find a suitable issue for you, then clone the repository create new bra
 
 > You can create pull request sonner if you need to discus something during coding process
 
+1. Fork it (<https://github.com/pipan/migrator/fork>)
+2. Create your feature branch (`git checkout -b feature/fooBar`)
+3. Commit your changes (`git commit -am 'Add some fooBar'`)
+4. Push to the branch (`git push origin feature/fooBar`)
+5. Create a new Pull Request
+
 #### Project folder structure
 
 > TODO
