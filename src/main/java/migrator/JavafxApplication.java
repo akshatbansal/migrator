@@ -27,6 +27,7 @@ import migrator.ext.javafx.table.route.ColumnViewRoute;
 import migrator.ext.javafx.table.route.IndexViewRoute;
 import migrator.ext.javafx.table.route.TableIndexRoute;
 import migrator.ext.javafx.table.route.TableViewRoute;
+import migrator.ext.mariadb.MariadbExtension;
 import migrator.ext.mysql.MysqlExtension;
 import migrator.ext.phinx.PhinxExtension;
 import migrator.ext.php.PhpExtension;
@@ -54,6 +55,7 @@ public class JavafxApplication extends Application {
             Arrays.asList(
                 new PhinxExtension(),
                 new MysqlExtension(),
+                new MariadbExtension(),
                 new PhpExtension(),
                 new SentryExtension(enviromentConfig.getProperties("sentry"))
             )
