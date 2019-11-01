@@ -3,6 +3,8 @@
 
 [![Build Status](https://travis-ci.com/pipan/migrator.svg?branch=master)](https://travis-ci.com/pipan/migrator)
 
+![migrator icon](src/main/resources/images/splash_small.png)
+
 Application that generate migration files for file based database migrations like Phinx or Flyway. This application provides GUI and handles creating migration files for different languages.
 
 Migrations are used to change database structure when application evolves and you need to share this change with multiple servers or dvelopers.
@@ -53,6 +55,11 @@ Select project by clicking on `open` button of a project card.
 ![craete migration file](https://media.giphy.com/media/dY0y5gabkE5wKijvyr/giphy.gif)
 
 ## Release History
+
+* 0.3.0
+  * Features
+    * added support for MariaDB
+    * added support for PostgreSQL
 
 * 0.2.2
   * deploy .jar for all platforms
