@@ -31,6 +31,7 @@ import migrator.ext.mariadb.MariadbExtension;
 import migrator.ext.mysql.MysqlExtension;
 import migrator.ext.phinx.PhinxExtension;
 import migrator.ext.php.PhpExtension;
+import migrator.ext.postgresql.PostgresqlExtension;
 import migrator.ext.sentry.SentryExtension;
 import migrator.lib.persistance.ListPersistance;
 import migrator.lib.persistance.Persistance;
@@ -56,6 +57,7 @@ public class JavafxApplication extends Application {
                 new PhinxExtension(),
                 new MysqlExtension(),
                 new MariadbExtension(),
+                new PostgresqlExtension(),
                 new PhpExtension(),
                 new SentryExtension(enviromentConfig.getProperties("sentry"))
             )
@@ -200,5 +202,9 @@ public class JavafxApplication extends Application {
             }
         }
         super.stop();
+    }
+
+    public Container getContainer() {
+        return this.container;
     }
 }
