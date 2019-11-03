@@ -1,5 +1,7 @@
 package migrator.ext.javafx.table.component;
 
+import java.util.Arrays;
+
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.FlowPane;
@@ -7,8 +9,13 @@ import javafx.scene.layout.VBox;
 import migrator.app.Container;
 import migrator.app.Gui;
 import migrator.app.breadcrumps.BreadcrumpsComponent;
+import migrator.app.domain.column.service.ColumnActiveState;
+import migrator.app.domain.column.service.ColumnFactory;
+import migrator.app.domain.index.service.IndexActiveState;
+import migrator.app.domain.index.service.IndexFactory;
 import migrator.app.domain.project.service.ProjectService;
 import migrator.app.domain.table.component.TableList;
+import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableGuiKit;
 import migrator.app.domain.table.service.TableActiveState;
@@ -31,6 +38,10 @@ public class JavafxTableList extends ViewComponent implements TableList {
     protected ActiveRoute activeRoute;
     protected CardListComponent<Table> cardListComponent;
     protected SearchComponent searchComponent;
+    protected ColumnActiveState columnActiveState;
+    protected ColumnFactory columnFactory;
+    protected IndexActiveState indexActiveState;
+    protected IndexFactory indexFactory;
 
     @FXML protected FlowPane tables;
     @FXML protected VBox breadcrumpsContainer;
@@ -44,6 +55,10 @@ public class JavafxTableList extends ViewComponent implements TableList {
         this.tableActiveState = container.getTableActiveState();
         this.projectService = container.getProjectService();
         this.guiKit = gui.getTableKit();
+        this.columnActiveState = container.getColumnActiveState();
+        this.columnFactory = container.getColumnFactory();
+        this.indexActiveState = container.getIndexActiveState();
+        this.indexFactory = container.getIndexFactory();
 
         this.breadcrumpsComponent = gui.getBreadcrumps().createBreadcrumps(
             this.projectService.getOpened().get()
@@ -104,6 +119,18 @@ public class JavafxTableList extends ViewComponent implements TableList {
     @FXML public void addTable() {
         Table newTable = this.tableFactory.createWithCreateChange(this.projectService.getOpened().get(), "new_table");
         this.tableActiveState.addAndActivate(newTable);
+        
+        Column idColumn = this.columnFactory.createWithCreateChange("id", "integer", "", false, "11", false, "");
+        this.columnActiveState.add(idColumn);
+        this.columnActiveState.add(
+            this.columnFactory.createWithCreateChange("created_at", "timestamp", "CURRENT_TIMESTAMP", false, "", false, "")
+        );
+        this.columnActiveState.add(
+            this.columnFactory.createWithCreateChange("modified_at", "timestamp", "CURRENT_TIMESTAMP", false, "", false, "")
+        );
+        this.indexActiveState.add(
+            this.indexFactory.createWithCreateChange("primary", Arrays.asList(idColumn.nameProperty()))
+        );
     }
 
     @Override
