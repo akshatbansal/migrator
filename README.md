@@ -60,6 +60,9 @@ Select project by clicking on `open` button of a project card.
   * Features
     * added support for MariaDB
     * added support for PostgreSQL
+    * new table container default columns (id, created_at, modified_at) and default index (primary)
+    * rounded corners for cards, buttons and form elements
+  * Bugfixes
 
 * 0.2.2
   * deploy .jar for all platforms
