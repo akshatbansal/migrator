@@ -1,5 +1,6 @@
 .form__row {
     -fx-padding: 10 20 10 20;
+    padding: 10 20 10 20;
 }
 
 .background-medium .form__row-label {
@@ -8,27 +9,36 @@
 
 .background-medium .text-field, .background-medium .combo-box {
     -fx-text-fill: #f4f4f4;
-    -fx-border-radius: 0;
-    -fx-background-radius: 0;
+    -fx-border-radius: 3;
+    border-radius: 3;
+    -fx-background-radius: 3;
     -fx-background-color: transparent;
+    background-color: transparent;
     -fx-border-color: #f4f4f4;
+    border-color: #f4f4f4;
 }
 
 .background-medium .combo-box .cell {
     -fx-text-fill: #f4f4f4;
     -fx-background-color: #434343;
+    background-color: #434343;
 }
 
 .background-medium .text-field:focused, .background-medium .combo-box:focused {
     -fx-border-color: #20AAD6;
+    border-color: #20AAD6;
 }
 
 .check-box .box {
     -fx-background-color: transparent;
+    background-color: transparent;
     -fx-border-color: #ffffff;
+    border-color: #ffffff;
     -fx-border-width: 1px;
+    border-width: 1px;
 }
 
 .check-box:focused .box {
     -fx-border-color: #20AAD6;
+    border-color: #20AAD6;
 }

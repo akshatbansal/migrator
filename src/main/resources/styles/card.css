@@ -1,11 +1,10 @@
 .card {
     -fx-background-color: #434343;
     background-color: #434343;
-    -fx-effect: dropshadow(three-pass-box, #252525, 10, 0, 0, 0);
-    -fx-pref-width: 280pt;
-    -fx-border-radius: 0;
-    border-radius: 0;
-    -fx-background-raius: 0;
+    -fx-pref-width: 300;
+    -fx-border-radius: 4;
+    border-radius: 4;
+    -fx-background-radius: 4;
     -fx-border-color: transparent;
     border-color: transparent;
 }
@@ -15,7 +14,8 @@
 }
 
 .card.card--active {
-    -fx-effect: dropshadow(three-pass-box, #20AAD6, 10, 0, 0, 0);
+    -fx-border-color: #20AAD6;
+    border-color: #20AAD6;
 }
 
 .card.card--create {
@@ -60,13 +60,6 @@
 .card__footer {
     padding: 0 10 10 10;
     -fx-padding: 0 10 10 10;
-}
-
-.card {
-    background-color: #434343;
-    -fx-background-color: #434343;
-    -fx-effect: dropshadow(three-pass-box, #252525, 10, 0, 0, 0);
-    -fx-pref-width: 300;
 }
 
 .marks__square {

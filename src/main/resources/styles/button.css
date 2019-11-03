@@ -1,8 +1,11 @@
 .button {
-    -fx-border-radius: 0;
-    -fx-background-radius: 0;
+    border-radius: 3;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
     -fx-cursor: hand;
+    cursor: hand;
     -fx-padding: 6 15 6 15;
+    padding: 6 15 6 15;
 }
 
 .button:pressed {
@@ -11,39 +14,48 @@
 }
 
 .button.btn-primary {
+    background-color: #178fb8;
     -fx-background-color: #178fb8;
     -fx-text-fill: #f4f4f4;
 }
 .button.btn-secondary {
+    background-color: transparent;
     -fx-background-color: transparent;
     -fx-text-fill: #178fb8;
 }
 .button.btn-danger {
+    background-color: transparent;
     -fx-background-color: transparent;
     -fx-text-fill: #e63e3e;
 }
 .button.btn-link {
+    background-color: transparent;
     -fx-background-color: transparent;
     -fx-text-fill: #434343;
 }
 .button.btn-link.btn-link--active {
+    background-color: transparent;
     -fx-background-color: transparent;
     -fx-text-fill: #2F2F2F;
 }
 
 .button.btn-primary:hover {
+    background-color: #20AAD6;
     -fx-background-color: #20AAD6;
 }
 .button.btn-secondary:hover, .button.btn-link:hover, .button.btn-link.btn-link--active:hover {
     -fx-text-fill: #20AAD6;
+    background-color: #606060;
     -fx-background-color: #606060;
 }
 .button.btn-danger:hover {
     -fx-text-fill: #ee4e4e;
+    background-color: #606060;
     -fx-background-color: #606060;
 }
 
 .button.btn-icon {
+    background-color: transparent;
     -fx-background-color: transparent;
     -fx-text-fill: #f4f4f4;
 }
