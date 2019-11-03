@@ -28,9 +28,13 @@ public class IndexFactory {
     }
 
     public Index createWithCreateChange(String indexName) {
+        return this.createWithCreateChange(indexName, new ArrayList<>());
+    }
+
+    public Index createWithCreateChange(String indexName, List<StringProperty> columns) {
         return new Index(
-            this.simpleIndexProperty(indexName, new ArrayList<>()),
-            this.simpleIndexProperty(indexName, new ArrayList<>()),
+            this.simpleIndexProperty(indexName, new ArrayList<>(columns)),
+            this.simpleIndexProperty(indexName, new ArrayList<>(columns)),
             new ChangeCommand(ChangeCommand.CREATE)
         );
     }

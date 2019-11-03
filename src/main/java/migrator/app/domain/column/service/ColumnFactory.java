@@ -13,10 +13,14 @@ public class ColumnFactory {
     }
 
     public Column createWithCreateChange(String columnName) {
+        return this.createWithCreateChange(columnName, "string", "", false, "255", true, "");
+    }
+
+    public Column createWithCreateChange(String columnName, String format, String defaultValue, Boolean nullEnabled, String length, Boolean signed, String precision) {
         return new Column(
             this.columnFormatManager,
-            new SimpleColumnProperty(columnName, "string", "", false, "255", true, ""), // original
-            new SimpleColumnProperty(columnName, "string", "", false, "255", true, ""), // changed
+            new SimpleColumnProperty(columnName, format, defaultValue, nullEnabled, length, signed, precision), // original
+            new SimpleColumnProperty(columnName, format, defaultValue, nullEnabled, length, signed, precision), // changed
             new ChangeCommand(ChangeCommand.CREATE)
         );
     }
