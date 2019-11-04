@@ -13,10 +13,15 @@ import migrator.app.domain.table.component.ColumnList;
 import migrator.app.domain.table.model.Column;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
+import migrator.lib.emitter.Emitter;
+import migrator.lib.emitter.EventEmitter;
+import migrator.lib.emitter.Subscriber;
+import migrator.lib.emitter.Subscription;
 
 public class JavafxColumnList extends ViewComponent implements ColumnList {
     protected ColumnActiveState columnActiveState;
     protected ColumnFactory columnFactory;
+    protected Emitter<Column> selectEmitter;
 
     @FXML protected TableView<Column> columns;
 
@@ -24,6 +29,7 @@ public class JavafxColumnList extends ViewComponent implements ColumnList {
         super(viewLoader);
         this.columnActiveState = container.getColumnActiveState();
         this.columnFactory = container.getColumnFactory();
+        this.selectEmitter = new EventEmitter<>();
         
         this.loadView("/layout/table/column/index.fxml");
 
@@ -48,6 +54,11 @@ public class JavafxColumnList extends ViewComponent implements ColumnList {
         this.columns.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> obs, Number oldSelection, Number newSelection) -> {
             Column selectedColumn = this.columns.getSelectionModel().getSelectedItem();
             this.columnActiveState.activate(selectedColumn);
+            if (selectedColumn != null) {
+                this.selectEmitter.emit("select", selectedColumn);
+            } else {
+                this.selectEmitter.emit("deselect");
+            }
         });
         this.draw();
     }
@@ -57,5 +68,14 @@ public class JavafxColumnList extends ViewComponent implements ColumnList {
         Column newColumn = this.columnFactory.createWithCreateChange("new_column");
         this.columnActiveState.add(newColumn);
         this.columns.getSelectionModel().select(newColumn);
+    }
+
+    public Subscription<Column> onSelect(Subscriber<Column> subscriber) {
+        return this.selectEmitter.on("select", subscriber);
+    }
+
+    @Override
+    public void deselect() {
+        this.columns.getSelectionModel().clearSelection();
     }
 }

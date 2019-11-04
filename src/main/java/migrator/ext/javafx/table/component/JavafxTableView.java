@@ -7,7 +7,11 @@ import javafx.scene.text.Text;
 import migrator.app.Container;
 import migrator.app.Gui;
 import migrator.app.breadcrumps.BreadcrumpsComponent;
+import migrator.app.domain.table.component.ColumnList;
+import migrator.app.domain.table.component.IndexList;
 import migrator.app.domain.table.component.TableView;
+import migrator.app.domain.table.model.Column;
+import migrator.app.domain.table.model.Index;
 import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableGuiKit;
 import migrator.ext.javafx.component.ViewComponent;
@@ -17,6 +21,8 @@ public class JavafxTableView extends ViewComponent implements TableView {
     protected BreadcrumpsComponent breadcrumpsComponent;
     protected TableGuiKit tableGuiKit;
     protected Table table;
+    protected ColumnList columnList;
+    protected IndexList indexList;
 
     @FXML protected VBox breadcrumpsContainer;
     @FXML protected VBox body;
@@ -37,10 +43,20 @@ public class JavafxTableView extends ViewComponent implements TableView {
 
         this.breadcrumpsContainer.getChildren().setAll((Node) this.breadcrumpsComponent.getContent());
 
+        this.columnList = this.tableGuiKit.createColumnList();
+        this.indexList = this.tableGuiKit.createIndexList();
+
+        this.columnList.onSelect((Column selectedColumn) -> {
+            this.indexList.deselect();
+        });
+        this.indexList.onSelect((Index selectedIndex) -> {
+            this.columnList.deselect();
+        });
+
         this.body.getChildren()
             .setAll(
-                (Node) this.tableGuiKit.createColumnList().getContent(),
-                (Node) this.tableGuiKit.createIndexList().getContent()
+                (Node) this.columnList.getContent(),
+                (Node) this.indexList.getContent()
             );
     }
 }
