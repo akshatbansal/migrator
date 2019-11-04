@@ -63,6 +63,8 @@ Select project by clicking on `open` button of a project card.
     * new table contains default columns (id, created_at, modified_at) and default index (primary)
     * rounded corners for cards, buttons and form elements
   * Bugfixes
+    * deselecting indexes table row after selecting column
+    * deselecting columns table row after selecting index
 
 * 0.2.2
   * deploy .jar for all platforms
