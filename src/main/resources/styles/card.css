@@ -65,6 +65,9 @@
 .marks__square {
     -fx-pref-width: 6px;
     -fx-pref-height: 6px;
+    -fx-border-radius: 1px;
+    border-radius: 1px;
+    -fx-background-radius: 1px;
 }
 
 .marks__square--create {
