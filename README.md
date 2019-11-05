@@ -65,6 +65,7 @@ Select project by clicking on `open` button of a project card.
   * Bugfixes
     * deselecting indexes table row after selecting column
     * deselecting columns table row after selecting index
+    * added tooltips for create project, create table, create column and create index buttons
 
 * 0.2.2
   * deploy .jar for all platforms
