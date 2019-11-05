@@ -23,6 +23,9 @@
                                 </image>
                             </ImageView>
                         </graphic>
+                        <tooltip>
+                            <Tooltip text="Create project"/>
+                        </tooltip>
                     </Button>
                 </HBox>
                 <VBox fx:id="projectCards"></VBox>

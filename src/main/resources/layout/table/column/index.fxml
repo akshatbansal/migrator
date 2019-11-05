@@ -47,6 +47,9 @@
                          </image>
                     </ImageView>
                </graphic>
+               <tooltip>
+                    <Tooltip text="Create column"/>
+               </tooltip>
           </Button>
      </HBox>
 </VBox>
