@@ -24,6 +24,9 @@
                                     </image>
                                 </ImageView>
                             </graphic>
+                            <tooltip>
+                                <Tooltip text="Create table"/>
+                            </tooltip>
                         </Button>
                         <Button onAction="#commit" styleClass="btn-primary">
                             <graphic>
