@@ -39,7 +39,9 @@ public class Connection implements Serializable {
     }
 
     protected void initialize() {
-        this.url.bind(Bindings.concat(this.driver, "://", this.host, ":", this.port));
+        this.url.bind(
+            Bindings.concat(this.driver, "://", this.host, ":", this.port)
+        );
     }
 
     public StringProperty urlProperty() {
