@@ -24,7 +24,9 @@ public class DatabaseConnection implements Serializable {
     }
 
     protected void initialize() {
-        this.url.bind(Bindings.concat(this.connection.getUrl(), "/", this.database));
+        this.url.bind(
+            Bindings.concat(this.connection.urlProperty(), "/", this.database)
+        );
     }
 
     public String getDatabase() {
