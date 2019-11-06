@@ -69,9 +69,13 @@ public class MysqlDatabaseDriver implements DatabaseDriver {
     @Override
     public void connect() {
         try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
             this.mysql = DriverManager.getConnection("jdbc:" + this.url, this.user, this.password);
             this.error = null;
         } catch (SQLException ex) {
+            this.mysql = null;
+            this.error = "Cannot connect to " + this.url + ". Reason: " + ex.getMessage();
+        } catch (ClassNotFoundException ex) {
             this.mysql = null;
             this.error = "Cannot connect to " + this.url + ". Reason: " + ex.getMessage();
         }
