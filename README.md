@@ -3,6 +3,8 @@
 
 [![Build Status](https://travis-ci.com/pipan/migrator.svg?branch=master)](https://travis-ci.com/pipan/migrator)
 
+![migrator icon](src/main/resources/images/splash_small.png)
+
 Application that generate migration files for file based database migrations like Phinx or Flyway. This application provides GUI and handles creating migration files for different languages.
 
 Migrations are used to change database structure when application evolves and you need to share this change with multiple servers or dvelopers.
@@ -11,7 +13,7 @@ Migrations are used to change database structure when application evolves and yo
 
 ## Installation
 
-Download the latest [release](https://github.com/pipan/migrator/releases/download/v0.2.2/migrator.jar)
+Download the latest [release](https://github.com/pipan/migrator/releases/download/v0.3.0/migrator.jar)
 
 ```sh
 java -jar migrator.jar
@@ -46,13 +48,25 @@ Select project by clicking on `open` button of a project card. If your database 
 
 Select project by clicking on `open` button of a project card.
 
-1. Click on `:heavy_check_mark:` button in the upper right corner
+1. Click on :heavy_check_mark: button in the upper right corner
 2. Name this migration. This name will be used to generate migration file name.
 3. Click on the commit button
 
 ![craete migration file](https://media.giphy.com/media/dY0y5gabkE5wKijvyr/giphy.gif)
 
 ## Release History
+
+* 0.3.0
+  * Features
+    * added support for MariaDB
+    * added support for PostgreSQL
+    * new table contains default columns (id, created_at, modified_at) and default index (primary)
+    * rounded corners for cards, buttons and form elements
+    * added auto increment column attribute
+  * Bugfixes
+    * deselecting indexes table row after selecting column
+    * deselecting columns table row after selecting index
+    * added tooltips for create project, create table, create column and create index buttons
 
 * 0.2.2
   * deploy .jar for all platforms
@@ -105,15 +119,12 @@ release: https://github.com/aktau/github-release
 
 ## TODO
 
-* add auto increment option to columns
 * add analytics
-* add tooltips to butons
 * allow changing column order
 * add tests
 * add support for frameworks:
   * flyway (JAVA)
   * fluid (.NET)
   * db-migrate (nodejs)
-* add support for databases:
-  * add support for postgre DB
 * allow data seeding
+* set database connection info from project (phinx config, ...)
