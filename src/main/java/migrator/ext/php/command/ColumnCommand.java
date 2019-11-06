@@ -36,6 +36,11 @@ public class ColumnCommand {
         if (this.columnChange.hasSignAttribute() && this.columnChange.isSigned() != null) {
             options.add("'signed' => " + this.columnChange.isSigned());
         }
+
+        if (this.columnChange.hasAutoIncrementAttribute() && this.columnChange.isAutoIncrement() != null) {
+            options.add("'identity' => " + this.columnChange.isAutoIncrement());
+        }
+
         if (options.size() == 0) {
             return "";
         }

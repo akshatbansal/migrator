@@ -6,4 +6,5 @@ public interface ColumnFormat {
     public Boolean isSigned();
     public Boolean hasPrecision();
     public ColumnFormatter getFormatter();
+    public Boolean hasAutoIncrement();
 }

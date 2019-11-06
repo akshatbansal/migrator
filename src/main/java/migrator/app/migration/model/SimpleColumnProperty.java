@@ -19,8 +19,9 @@ public class SimpleColumnProperty implements ColumnProperty, Serializable {
     protected transient StringProperty length;
     protected transient StringProperty precision;
     protected transient Property<Boolean> sign;
+    protected transient Property<Boolean> autoIncrement;
 
-    public SimpleColumnProperty(String name, String format, String defaultValue, Boolean enableNull, String length, Boolean sign, String precision) {
+    public SimpleColumnProperty(String name, String format, String defaultValue, Boolean enableNull, String length, Boolean sign, String precision, Boolean autoIncrement) {
         this.name = new SimpleStringProperty(name);
         this.format = new SimpleStringProperty(format);
         this.defaultValue = new SimpleStringProperty(defaultValue);
@@ -28,6 +29,7 @@ public class SimpleColumnProperty implements ColumnProperty, Serializable {
         this.length = new SimpleStringProperty(length);
         this.precision = new SimpleStringProperty(precision);
         this.sign = new SimpleObjectProperty<>(sign);
+        this.autoIncrement = new SimpleObjectProperty<>(autoIncrement);
     }
 
     @Override
@@ -100,6 +102,16 @@ public class SimpleColumnProperty implements ColumnProperty, Serializable {
         return this.sign;
     }
 
+    @Override
+    public Property<Boolean> autoIncrementProperty() {
+        return this.autoIncrement;
+    }
+
+    @Override
+    public Boolean isAutoIncrement() {
+        return this.autoIncrementProperty().getValue();
+    }
+
     private void writeObject(ObjectOutputStream s) throws IOException {
         s.defaultWriteObject();
 
@@ -110,6 +122,7 @@ public class SimpleColumnProperty implements ColumnProperty, Serializable {
         s.writeUTF(this.length.get());
         s.writeUTF(this.precision.get());
         s.writeBoolean(this.sign.getValue());
+        s.writeBoolean(this.autoIncrement.getValue());
     }
 
     private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
@@ -122,5 +135,6 @@ public class SimpleColumnProperty implements ColumnProperty, Serializable {
         this.length = new SimpleStringProperty(s.readUTF());
         this.precision = new SimpleStringProperty(s.readUTF());
         this.sign = new SimpleObjectProperty<>(s.readBoolean());
+        this.autoIncrement = new SimpleObjectProperty<>(s.readBoolean());
     }
 }

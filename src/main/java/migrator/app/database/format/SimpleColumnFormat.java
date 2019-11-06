@@ -5,6 +5,7 @@ public class SimpleColumnFormat implements ColumnFormat {
     protected Boolean length;
     protected Boolean signed;
     protected Boolean precision;
+    protected Boolean autoIncrement;
     protected ColumnFormatter formatter;
 
     public SimpleColumnFormat(
@@ -12,17 +13,19 @@ public class SimpleColumnFormat implements ColumnFormat {
         Boolean length,
         Boolean signed,
         Boolean precision,
+        Boolean autoIncrement,
         ColumnFormatter formatter
     ) {
         this.name = name;
         this.length = length;
         this.signed = signed;
         this.precision = precision;
+        this.autoIncrement = autoIncrement;
         this.formatter = formatter;
     }
 
     public SimpleColumnFormat(String name) {
-        this(name, false, false, false, new NameColumnFormatter(name));
+        this(name, false, false, false, false, new NameColumnFormatter(name));
     }
 
     @Override
@@ -48,5 +51,10 @@ public class SimpleColumnFormat implements ColumnFormat {
     @Override
     public ColumnFormatter getFormatter() {
         return this.formatter;
+    }
+
+    @Override
+    public Boolean hasAutoIncrement() {
+        return this.autoIncrement;
     }
 }

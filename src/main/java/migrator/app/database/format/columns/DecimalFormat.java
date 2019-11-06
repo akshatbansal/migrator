@@ -5,6 +5,6 @@ import migrator.app.database.format.SimpleColumnFormat;
 
 public class DecimalFormat extends SimpleColumnFormat {
     public DecimalFormat() {
-        super("decimal", true, true, true, new PrecisionColumnFormatter("decimal"));
+        super("decimal", true, true, true, false, new PrecisionColumnFormatter("decimal"));
     }
 }

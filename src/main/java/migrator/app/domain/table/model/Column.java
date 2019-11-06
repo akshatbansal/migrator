@@ -48,6 +48,7 @@ public class Column implements Changable, ColumnChange, ChangeListener<Object>, 
         this.changedColumn.lengthProperty().addListener(this);
         this.changedColumn.precisionProperty().addListener(this);
         this.changedColumn.signProperty().addListener(this);
+        this.changedColumn.autoIncrementProperty().addListener(this);
     }
 
     public void setColumnFormatManager(ColumnFormatManager columnFormatManager) {
@@ -143,6 +144,26 @@ public class Column implements Changable, ColumnChange, ChangeListener<Object>, 
     }
 
     @Override
+    public Property<Boolean> autoIncrementProperty() {
+        return this.changedColumn.autoIncrementProperty();
+    }
+
+    @Override
+    public Boolean isAutoIncrement() {
+        return this.autoIncrementProperty().getValue();
+    }
+
+    @Override
+    public Boolean hasAutoIncrementAttribute() {
+        return this.columnFormatManager.getFormat(this.getFormat()).hasAutoIncrement();
+    }
+
+    @Override
+    public Boolean hasAutoIncrementChanged() {
+        return this.hasAutoIncrementAttribute() && this.isAutoIncrement() != this.getOriginal().isAutoIncrement();
+    }
+
+    @Override
     public String getPrecision() {
         return this.precisionProperty().getValue();
     }
@@ -183,6 +204,9 @@ public class Column implements Changable, ColumnChange, ChangeListener<Object>, 
         this.changedColumn.lengthProperty().set(this.originalColumn.getLength());
         this.changedColumn.precisionProperty().set(this.originalColumn.getPrecision());
         this.changedColumn.signProperty().setValue(this.originalColumn.isSigned());
+        this.changedColumn.autoIncrementProperty().setValue(
+            this.originalColumn.isAutoIncrement()
+        );
 
         this.changeCommand.setType(ChangeCommand.NONE);
         
@@ -246,7 +270,7 @@ public class Column implements Changable, ColumnChange, ChangeListener<Object>, 
             return;
         }
         
-        if (this.hasNameChanged() || this.hasFormatChanged() || this.hasDefaultValueChanged() || this.hasNullEnabledChanged() || this.hasLengthChanged() || this.hasPrecisionChanged() || this.hasSignChanged()) {
+        if (this.hasNameChanged() || this.hasFormatChanged() || this.hasDefaultValueChanged() || this.hasNullEnabledChanged() || this.hasLengthChanged() || this.hasPrecisionChanged() || this.hasSignChanged() || this.hasAutoIncrementChanged()) {
             this.changeCommand.typeProperty().set(ChangeCommand.UPDATE);
             return;
         }
