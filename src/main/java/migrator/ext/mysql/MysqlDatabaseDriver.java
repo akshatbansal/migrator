@@ -146,7 +146,8 @@ public class MysqlDatabaseDriver implements DatabaseDriver {
                 rs.getString(3) == "YES" ? true : false,
                 this.getLength(dbFormat),
                 this.getSign(dbFormat),
-                this.getPrecision(dbFormat)
+                this.getPrecision(dbFormat),
+                false
             );
             currentColumns.add(column);
         }

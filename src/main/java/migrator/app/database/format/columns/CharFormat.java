@@ -5,6 +5,6 @@ import migrator.app.database.format.SimpleColumnFormat;
 
 public class CharFormat extends SimpleColumnFormat {
     public CharFormat() {
-        super("char", true, false, false, new LengthColumnFormatter("char"));
+        super("char", true, false, false, false, new LengthColumnFormatter("char"));
     }
 }

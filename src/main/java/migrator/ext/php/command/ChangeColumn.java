@@ -15,7 +15,7 @@ public class ChangeColumn extends ColumnCommand implements CodeCommand {
             php += "\t->renameColumn('" + this.columnChange.getOriginal().getName() + "', '" + this.columnChange.getName() + "')\n";
         }
 
-        if (this.columnChange.hasFormatChanged() || this.columnChange.hasDefaultValueChanged() || this.columnChange.hasNullEnabledChanged() || this.columnChange.hasLengthChanged() || this.columnChange.hasPrecisionChanged() || this.columnChange.hasSignChanged()) {
+        if (this.columnChange.hasFormatChanged() || this.columnChange.hasDefaultValueChanged() || this.columnChange.hasNullEnabledChanged() || this.columnChange.hasLengthChanged() || this.columnChange.hasPrecisionChanged() || this.columnChange.hasSignChanged() || this.columnChange.hasAutoIncrementChanged()) {
             String options = this.getOptions();
             php += "\t->changeColumn('" + this.columnChange.getOriginal().getName() + "', '" + this.columnChange.getFormat() + "'";
             if (!options.isEmpty()) {

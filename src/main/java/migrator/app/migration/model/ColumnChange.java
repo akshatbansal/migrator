@@ -9,9 +9,11 @@ public interface ColumnChange extends ColumnProperty {
     public Boolean hasNullEnabledChanged();
     public Boolean hasLengthChanged();
     public Boolean hasSignChanged();
+    public Boolean hasAutoIncrementChanged();
     public Boolean hasPrecisionChanged();
     public Boolean hasLengthAttribute();
     public Boolean hasPrecisionAttribute();
     public Boolean hasSignAttribute();
+    public Boolean hasAutoIncrementAttribute();
     public void restore();
 }

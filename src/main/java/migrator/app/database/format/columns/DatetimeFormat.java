@@ -5,6 +5,6 @@ import migrator.app.database.format.SimpleColumnFormat;
 
 public class DatetimeFormat extends SimpleColumnFormat {
     public DatetimeFormat() {
-        super("datetime", false, false, false, new NameColumnFormatter("datetime"));
+        super("datetime", false, false, false, false, new NameColumnFormatter("datetime"));
     }
 }

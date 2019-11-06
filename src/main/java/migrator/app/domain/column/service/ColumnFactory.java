@@ -13,23 +13,23 @@ public class ColumnFactory {
     }
 
     public Column createWithCreateChange(String columnName) {
-        return this.createWithCreateChange(columnName, "string", "", false, "255", true, "");
+        return this.createWithCreateChange(columnName, "string", "", false, "255", true, "", false);
     }
 
-    public Column createWithCreateChange(String columnName, String format, String defaultValue, Boolean nullEnabled, String length, Boolean signed, String precision) {
+    public Column createWithCreateChange(String columnName, String format, String defaultValue, Boolean nullEnabled, String length, Boolean signed, String precision, Boolean autoIncrement) {
         return new Column(
             this.columnFormatManager,
-            new SimpleColumnProperty(columnName, format, defaultValue, nullEnabled, length, signed, precision), // original
-            new SimpleColumnProperty(columnName, format, defaultValue, nullEnabled, length, signed, precision), // changed
+            new SimpleColumnProperty(columnName, format, defaultValue, nullEnabled, length, signed, precision, autoIncrement), // original
+            new SimpleColumnProperty(columnName, format, defaultValue, nullEnabled, length, signed, precision, autoIncrement), // changed
             new ChangeCommand(ChangeCommand.CREATE)
         );
     }
 
-    public Column createNotChanged(String columnName, String format, String defaultValue, Boolean enableNull, String length, Boolean sign, String precision) {
+    public Column createNotChanged(String columnName, String format, String defaultValue, Boolean enableNull, String length, Boolean sign, String precision, Boolean autoIncrement) {
         return new Column(
             this.columnFormatManager,
-            new SimpleColumnProperty(columnName, format, defaultValue, enableNull, length, sign, precision), // original
-            new SimpleColumnProperty(columnName, format, defaultValue, enableNull, length, sign, precision), // changed
+            new SimpleColumnProperty(columnName, format, defaultValue, enableNull, length, sign, precision, autoIncrement), // original
+            new SimpleColumnProperty(columnName, format, defaultValue, enableNull, length, sign, precision, autoIncrement), // changed
             new ChangeCommand(ChangeCommand.NONE)
         );
     }

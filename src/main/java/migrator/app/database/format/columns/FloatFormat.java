@@ -5,6 +5,6 @@ import migrator.app.database.format.SimpleColumnFormat;
 
 public class FloatFormat extends SimpleColumnFormat {
     public FloatFormat() {
-        super("float", true, true, true, new PrecisionColumnFormatter("float"));
+        super("float", true, true, true, false, new PrecisionColumnFormatter("float"));
     }
 }

@@ -109,6 +109,12 @@ public class JavafxColumnForm extends ViewComponent implements ColumnForm {
                     (Node) signed.getContent()
                 );
             }
+            if (columnFormat.hasAutoIncrement()) {
+                JavafxCheckbox autoIncrement = new JavafxCheckbox(this.viewLoader, this.column.autoIncrementProperty(), "auto increment");
+                this.paramsBox.getChildren().add(
+                    (Node) autoIncrement.getContent()
+                );
+            }
         }
     }
 

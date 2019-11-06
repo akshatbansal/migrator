@@ -18,4 +18,6 @@ public interface ColumnProperty {
     public StringProperty precisionProperty();
     public Boolean isSigned();
     public Property<Boolean> signProperty();
+    public Boolean isAutoIncrement();
+    public Property<Boolean> autoIncrementProperty();
 }

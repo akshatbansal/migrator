@@ -144,7 +144,8 @@ public class PostgresqlDatabaseDriver implements DatabaseDriver {
                 rs.getString(3) == "YES" ? true : false,
                 this.getLength(rs.getString(5), rs.getString(6)),
                 false,
-                this.getPrecision(rs.getString(7))
+                this.getPrecision(rs.getString(7)),
+                false
             );
             currentColumns.add(column);
         }

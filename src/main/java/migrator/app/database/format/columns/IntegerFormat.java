@@ -5,6 +5,6 @@ import migrator.app.database.format.SimpleColumnFormat;
 
 public class IntegerFormat extends SimpleColumnFormat {
     public IntegerFormat() {
-        super("integer", true, true, false, new LengthColumnFormatter("integer"));
+        super("integer", true, true, false, true, new LengthColumnFormatter("integer"));
     }
 }

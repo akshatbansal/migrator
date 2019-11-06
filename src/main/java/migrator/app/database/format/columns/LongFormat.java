@@ -5,6 +5,6 @@ import migrator.app.database.format.SimpleColumnFormat;
 
 public class LongFormat extends SimpleColumnFormat {
     public LongFormat() {
-        super("long", true, true, false, new LengthColumnFormatter("long"));
+        super("long", true, true, false, true, new LengthColumnFormatter("long"));
     }
 }
