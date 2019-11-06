@@ -62,6 +62,7 @@ Select project by clicking on `open` button of a project card.
     * added support for PostgreSQL
     * new table contains default columns (id, created_at, modified_at) and default index (primary)
     * rounded corners for cards, buttons and form elements
+    * added auto increment column attribute
   * Bugfixes
     * deselecting indexes table row after selecting column
     * deselecting columns table row after selecting index
@@ -118,15 +119,12 @@ release: https://github.com/aktau/github-release
 
 ## TODO
 
-* add auto increment option to columns
 * add analytics
-* add tooltips to butons
 * allow changing column order
 * add tests
 * add support for frameworks:
   * flyway (JAVA)
   * fluid (.NET)
   * db-migrate (nodejs)
-* add support for databases:
-  * add support for postgre DB
 * allow data seeding
+* set database connection info from project (phinx config, ...)
