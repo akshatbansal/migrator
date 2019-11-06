@@ -48,7 +48,7 @@ Select project by clicking on `open` button of a project card. If your database 
 
 Select project by clicking on `open` button of a project card.
 
-1. Click on `:heavy_check_mark:` button in the upper right corner
+1. Click on :heavy_check_mark: button in the upper right corner
 2. Name this migration. This name will be used to generate migration file name.
 3. Click on the commit button
 
