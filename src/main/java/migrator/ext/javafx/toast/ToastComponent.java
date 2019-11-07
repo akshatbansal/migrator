@@ -1,8 +1,8 @@
 package migrator.ext.javafx.toast;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
 import migrator.app.toast.Toast;
 import migrator.app.toast.ToastService;
 import migrator.ext.javafx.component.ViewComponent;
@@ -12,7 +12,7 @@ public class ToastComponent extends ViewComponent {
     protected Toast toast;
     protected ToastService toastService;
 
-    @FXML protected Text message;
+    @FXML protected Label message;
     @FXML protected HBox pane;
 
     public ToastComponent(Toast toast, ToastService toastService, ViewLoader viewLoader) {
@@ -24,6 +24,7 @@ public class ToastComponent extends ViewComponent {
     }
 
     @FXML public void initialize() {
+        this.message.wrapTextProperty().set(true);
         this.message.textProperty().set(this.toast.getMessage());
         this.pane.getStyleClass().add("toast--" + this.toast.getType());
     }
