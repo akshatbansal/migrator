@@ -5,8 +5,20 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
 
 <HBox xmlns:fx="http://javafx.com/fxml" fx:id="pane" styleClass="form__row,background-medium" spacing="10">
     <TextField fx:id="searchField" />
-    <Button styleClass="btn-secondary" onAction="#clear" text="x" />
+    <Button styleClass="btn-secondary" onAction="#clear">
+        <graphic>
+            <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@/images/close_white.png" />
+                </image>
+            </ImageView>
+        </graphic>
+        <tooltip>
+            <Tooltip text="Close"/>
+        </tooltip>
+    </Button>
 </HBox>
