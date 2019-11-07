@@ -13,7 +13,8 @@ public class MysqlExtension implements Extension {
         databaseDriverConfig.addDriver("mysql", new MysqlDatabaseDriverFactory(
             config.tableFactoryConfig().get(),
             config.columnFactoryConfig().get(),
-            config.indexFactoryConfig().get()
+            config.indexFactoryConfig().get(),
+            config.loggerConfig()
         ));
     }
 }

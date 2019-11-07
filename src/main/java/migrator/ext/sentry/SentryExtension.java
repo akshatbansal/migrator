@@ -18,6 +18,7 @@ public class SentryExtension implements Extension {
         config.loggerConfig().set(
             new SentryLogger()
         );
+        
         Sentry.init(properties.getProperty("dsn", ""));
         Thread.setDefaultUncaughtExceptionHandler(
             new ExceptionHandler()

@@ -13,7 +13,8 @@ public class MariadbExtension implements Extension {
         databaseDriverConfig.addDriver("mariadb", new MysqlDatabaseDriverFactory(
             config.tableFactoryConfig().get(),
             config.columnFactoryConfig().get(),
-            config.indexFactoryConfig().get()
+            config.indexFactoryConfig().get(),
+            config.loggerConfig()
         ));
     }
 }

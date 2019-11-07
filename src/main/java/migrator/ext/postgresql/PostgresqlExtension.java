@@ -12,7 +12,8 @@ public class PostgresqlExtension implements Extension {
         databaseDriverConfig.addDriver("postgresql", new PostgresqlDatabaseDriverFactory(
             config.tableFactoryConfig().get(),
             config.columnFactoryConfig().get(),
-            config.indexFactoryConfig().get()
+            config.indexFactoryConfig().get(),
+            config.loggerConfig()
         ));
     }
 }
