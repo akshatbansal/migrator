@@ -63,6 +63,7 @@ Select project by clicking on `open` button of a project card.
   * Bugfixes
     * realtime update database connection when changing project database connection
     * visible long error messages - multiline toasts
+    * close buttons have images instead of `x`
 
 * 0.3.0
   * Features
