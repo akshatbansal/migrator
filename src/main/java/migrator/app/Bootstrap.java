@@ -40,7 +40,7 @@ import migrator.app.ConfigContainer;
 import migrator.app.extension.Extension;
 import migrator.app.migration.Migration;
 import migrator.app.router.ActiveRoute;
-import migrator.app.toast.AutohideToastService;
+import migrator.app.toast.PermanentToastService;
 import migrator.lib.config.MapConfig;
 import migrator.lib.hotkyes.HotkeyFactory;
 import migrator.lib.hotkyes.SimpleHotkeysService;
@@ -166,7 +166,7 @@ public class Bootstrap {
             new DatabaseService()
         );
         config.toastServiceConfig().set(
-            new AutohideToastService(5000)
+            new PermanentToastService()
         );
         config.projectServiceConfig().set(
             new ProjectService(
