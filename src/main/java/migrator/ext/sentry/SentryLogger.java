@@ -33,4 +33,12 @@ public class SentryLogger implements Logger {
         Sentry.capture(message);
         Sentry.getContext().clear();
     }
+
+    @Override
+    public void error(Exception exception) {
+        exception.printStackTrace();
+        Sentry.getContext().addExtra("type", "error");
+        Sentry.capture(exception);
+        Sentry.getContext().clear();
+    }
 }

@@ -20,4 +20,9 @@ public class SystemLogger implements Logger {
     public void warning(String message) {
         System.out.println(message);
     }
+
+    @Override
+    public void error(Exception exception) {
+        this.error(exception.getMessage());
+    }
 }
