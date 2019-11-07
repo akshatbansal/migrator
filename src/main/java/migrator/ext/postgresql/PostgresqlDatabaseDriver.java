@@ -88,8 +88,7 @@ public class PostgresqlDatabaseDriver implements DatabaseDriver {
             this.mysql.close();
             this.mysql = null;
         } catch (SQLException ex) {
-            ex.printStackTrace();
-            this.logger.error(ex.getMessage());
+            this.logger.error(ex);
         }
     }
 

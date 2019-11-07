@@ -95,7 +95,7 @@ public class MysqlDatabaseDriver implements DatabaseDriver {
             this.mysql.close();
             this.mysql = null;
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            this.logger.error(ex);
         }
     }
 
