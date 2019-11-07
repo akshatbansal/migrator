@@ -50,7 +50,6 @@ public class ProjectService {
     }
 
     public void open(Project project) {
-        System.out.println("OPEN");
         if (project != null) {
             DatabaseDriver databaseDriver  = this.databaseDriverManager
                 .createDriver(project.getDatabase());
