@@ -56,6 +56,14 @@ Select project by clicking on `open` button of a project card.
 
 ## Release History
 
+* 0.3.1
+  * Features
+    * added logging for database driver errors
+    * permanent toasts
+  * Bugfixes
+    * realtime update database connection when changing project database connection
+    * visible long error messages - multiline toasts
+
 * 0.3.0
   * Features
     * added support for MariaDB
