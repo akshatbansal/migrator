@@ -24,6 +24,7 @@ import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Index;
 import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableFactory;
+import migrator.lib.logger.Logger;
 
 public class PostgresqlDatabaseDriver implements DatabaseDriver {
     protected String url;
@@ -32,6 +33,7 @@ public class PostgresqlDatabaseDriver implements DatabaseDriver {
     protected TableFactory tableFactory;
     protected ColumnFactory columnFactory;
     protected IndexFactory indexFactory;
+    protected Logger logger;
 
     protected Connection mysql;
     protected ObservableList<Table> tables;
@@ -43,6 +45,7 @@ public class PostgresqlDatabaseDriver implements DatabaseDriver {
         TableFactory tableFactory,
         ColumnFactory columnFactory,
         IndexFactory indexFactory,
+        Logger logger,
         String url,
         String user,
         String password
@@ -50,10 +53,11 @@ public class PostgresqlDatabaseDriver implements DatabaseDriver {
         this.tableFactory = tableFactory;
         this.columnFactory = columnFactory;
         this.indexFactory = indexFactory;
+        this.logger = logger;
         this.url = url;
         this.user = user;
         this.password = password;
-        this.connect();
+
         this.tables = FXCollections.observableArrayList();
         this.columns = FXCollections.observableArrayList();
         this.indexes = FXCollections.observableArrayList();
@@ -72,6 +76,7 @@ public class PostgresqlDatabaseDriver implements DatabaseDriver {
         } catch (SQLException ex) {
             this.mysql = null;
             this.error = "Cannot connect to " + this.url + ". Reason: " + ex.getMessage();
+            this.logger.info(this.error);
         }
     }
 
@@ -83,7 +88,7 @@ public class PostgresqlDatabaseDriver implements DatabaseDriver {
             this.mysql.close();
             this.mysql = null;
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            this.logger.error(ex);
         }
     }
 

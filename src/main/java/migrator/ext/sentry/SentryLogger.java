@@ -21,6 +21,9 @@ public class SentryLogger implements Logger {
     @Override
     public void info(String message) {
         System.out.println(message);
+        Sentry.getContext().addExtra("type", "info");
+        Sentry.capture(message);
+        Sentry.getContext().clear();
     }
 
     @Override
@@ -28,6 +31,14 @@ public class SentryLogger implements Logger {
         System.out.println(message);
         Sentry.getContext().addExtra("type", "warning");
         Sentry.capture(message);
+        Sentry.getContext().clear();
+    }
+
+    @Override
+    public void error(Exception exception) {
+        exception.printStackTrace();
+        Sentry.getContext().addExtra("type", "error");
+        Sentry.capture(exception);
         Sentry.getContext().clear();
     }
 }
