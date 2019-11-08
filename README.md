@@ -58,12 +58,13 @@ Select project by clicking on `open` button of a project card.
 
 * 0.3.1
   * Features
-    * added logging for database driver errors
-    * permanent toasts
+    * Added logging for database driver errors
+    * Permanent toasts
   * Bugfixes
-    * realtime update database connection when changing project database connection
-    * visible long error messages - multiline toasts
-    * close buttons have images instead of `x`
+    * Agter changing database connection data, you don't have to restart application to be able to conenct to database. Data for connection are changed in real time.
+    * If something bad happens, you can see entire error messages
+    * Close buttons have images instead of `x` character
+    * Application sends error reports to correct environment
 
 * 0.3.0
   * Features
