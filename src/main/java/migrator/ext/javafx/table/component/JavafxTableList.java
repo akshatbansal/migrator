@@ -85,7 +85,6 @@ public class JavafxTableList extends ViewComponent implements TableList {
         subscription = container.getHotkeyService().on("cancel", (hotkey) -> {
             this.searchComponent.clear();
             this.searchBox.getChildren().clear();
-            System.out.println("close find");
         });
         this.subscriptions.add(subscription);
 

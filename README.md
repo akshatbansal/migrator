@@ -13,7 +13,7 @@ Migrations are used to change database structure when application evolves and yo
 
 ## Installation
 
-Download the latest [release](https://github.com/pipan/migrator/releases/download/v0.3.0/migrator.jar)
+Download the latest [release](https://github.com/pipan/migrator/releases/download/v0.3.1/migrator.jar)
 
 ```sh
 java -jar migrator.jar
@@ -55,6 +55,16 @@ Select project by clicking on `open` button of a project card.
 ![craete migration file](https://media.giphy.com/media/dY0y5gabkE5wKijvyr/giphy.gif)
 
 ## Release History
+
+* 0.3.1
+  * Features
+    * Added logging for database driver errors
+    * Permanent toasts
+  * Bugfixes
+    * Agter changing database connection data, you don't have to restart application to be able to conenct to database. Data for connection are changed in real time.
+    * If something bad happens, you can see entire error messages
+    * Close buttons have images instead of `x` character
+    * Application sends error reports to correct environment
 
 * 0.3.0
   * Features
