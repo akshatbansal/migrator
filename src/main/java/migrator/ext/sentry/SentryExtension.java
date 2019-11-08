@@ -18,12 +18,10 @@ public class SentryExtension implements Extension {
         config.loggerConfig().set(
             new SentryLogger()
         );
-        
-        String sentryInit = properties.getProperty("dsn", "");
-        if (!sentryInit.isEmpty()) {
-            sentryInit += "?environment=" + properties.getProperty("environment", "");
-        }
-        Sentry.init(sentryInit);
+
+        Sentry.init(
+            properties.getProperty("dsn", "")
+        );
         Thread.setDefaultUncaughtExceptionHandler(
             new ExceptionHandler()
         );
