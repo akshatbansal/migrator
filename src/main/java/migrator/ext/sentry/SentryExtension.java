@@ -19,7 +19,11 @@ public class SentryExtension implements Extension {
             new SentryLogger()
         );
         
-        Sentry.init(properties.getProperty("dsn", ""));
+        String sentryInit = properties.getProperty("dsn", "");
+        if (!sentryInit.isEmpty()) {
+            sentryInit += "?environment=" + properties.getProperty("environment", "");
+        }
+        Sentry.init(sentryInit);
         Thread.setDefaultUncaughtExceptionHandler(
             new ExceptionHandler()
         );
