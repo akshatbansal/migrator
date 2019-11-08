@@ -27,7 +27,6 @@ import migrator.ext.javafx.component.SearchComponent;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
 import migrator.lib.emitter.Subscription;
-import migrator.lib.hotkyes.Hotkey;
 
 public class JavafxTableList extends ViewComponent implements TableList {
     protected TableFactory tableFactory;
@@ -77,13 +76,17 @@ public class JavafxTableList extends ViewComponent implements TableList {
 
         this.searchComponent = new SearchComponent(viewLoader, this.tableActiveState.searchProperty());
 
-        Subscription<Hotkey> subscription = container.getHotkeyService().on("find", (hotkey) -> {
+        Subscription<?> subscription = container.getHotkeyService().on("find", (hotkey) -> {
             this.showSearch();
         });
         this.subscriptions.add(subscription);
 
         subscription = container.getHotkeyService().on("cancel", (hotkey) -> {
-            this.searchComponent.clear();
+            this.searchComponent.close();
+        });
+        this.subscriptions.add(subscription);
+
+        subscription = this.searchComponent.onClose((Object _any) -> {
             this.searchBox.getChildren().clear();
         });
         this.subscriptions.add(subscription);
