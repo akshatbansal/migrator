@@ -2,6 +2,7 @@ package migrator.ext.javafx.table.route;
 
 import java.util.List;
 
+import javafx.application.Platform;
 import migrator.app.domain.table.component.TableList;
 import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableGuiKit;
@@ -19,9 +20,11 @@ public class TableIndexRoute extends GuiNodeConnection<List<Table>> {
 
     @Override
     public void show(List<Table> routeData) {
-        TableList tableList = this.tableGuiKit.createList();
-        this.layout.clearSide();
-        this.guiNodes.add(tableList);
-        this.layout.renderBody(tableList);
+        Platform.runLater(() -> {
+            TableList tableList = this.tableGuiKit.createList();
+            this.layout.clearSide();
+            this.guiNodes.add(tableList);
+            this.layout.renderBody(tableList);
+        });
     }
 }

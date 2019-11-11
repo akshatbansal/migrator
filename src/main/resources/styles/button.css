@@ -63,3 +63,9 @@
 .button.btn-icon:hover {
     -fx-text-fill: #20AAD6;
 }
+
+.button.btn-primary:disabled {
+    background-color: #6D8992;
+    -fx-background-color: #6D8992;
+    -fx-text-fill: #f4f4f4;
+}

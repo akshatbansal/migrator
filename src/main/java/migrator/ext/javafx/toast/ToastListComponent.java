@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.collections.ListChangeListener.Change;
 import javafx.fxml.FXML;
@@ -36,14 +37,16 @@ public class ToastListComponent extends ViewComponent {
     }
 
     protected void render() {
-        List<Node> childrens = new ArrayList<>();
-        this.pane.getChildren().clear();
-        Iterator<Toast> iterator = this.list.iterator();
-        while (iterator.hasNext()) {
-            Toast value = iterator.next();
-            ToastComponent toastComponent = new ToastComponent(value, this.toastService , this.viewLoader);
-            childrens.add((Node) toastComponent.getContent());
-        }
-        this.pane.getChildren().setAll(childrens);
+        Platform.runLater(() -> {
+            List<Node> childrens = new ArrayList<>();
+            this.pane.getChildren().clear();
+            Iterator<Toast> iterator = this.list.iterator();
+            while (iterator.hasNext()) {
+                Toast value = iterator.next();
+                ToastComponent toastComponent = new ToastComponent(value, this.toastService , this.viewLoader);
+                childrens.add((Node) toastComponent.getContent());
+            }
+            this.pane.getChildren().setAll(childrens);
+        });
     }
 }

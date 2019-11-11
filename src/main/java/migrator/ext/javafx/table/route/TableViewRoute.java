@@ -1,5 +1,6 @@
 package migrator.ext.javafx.table.route;
 
+import javafx.application.Platform;
 import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableGuiKit;
 import migrator.app.router.GuiNodeConnection;
@@ -16,11 +17,13 @@ public class TableViewRoute extends GuiNodeConnection<Table> {
 
     @Override
     public void show(Table routeData) {
-        this.layout.renderBody(
-            this.tableGuiKit.createView(routeData)
-        );
-        this.layout.renderSide(
-            this.tableGuiKit.createForm(routeData)
-        );
+        Platform.runLater(() -> {
+            this.layout.renderBody(
+                this.tableGuiKit.createView(routeData)
+            );
+            this.layout.renderSide(
+                this.tableGuiKit.createForm(routeData)
+            );
+        });
     }
 }

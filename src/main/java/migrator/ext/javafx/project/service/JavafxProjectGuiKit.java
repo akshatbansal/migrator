@@ -30,7 +30,7 @@ public class JavafxProjectGuiKit implements ProjectGuiKit {
 
     @Override
     public ProjectForm createForm(Project project) {
-        return new JavafxProjectForm(project, this.viewLoader, this.container, this.window);
+        return new JavafxProjectForm(project, this.viewLoader, this.container, this.window, this.gui.getLoadingIndicator());
     }
 
     @Override

@@ -90,9 +90,8 @@
         </VBox>
     </center>
     <bottom>
-        <HBox styleClass="form__row" alignment="center_right" spacing="10">
+        <HBox fx:id="buttonsBox" styleClass="form__row" alignment="center_right" spacing="10">
             <Button text="Close" onAction="#close" styleClass="btn-secondary" />
-            <Button text="Open" onAction="#open" styleClass="btn-primary" />
         </HBox>
     </bottom>
 </BorderPane>
