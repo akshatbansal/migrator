@@ -1,5 +1,7 @@
 package migrator.ext.javafx;
 
-public interface UseCase {
-    public void run();
+public class UseCase {
+    public static void runOnThread(Runnable runnable) {
+        new Thread(runnable).start();
+    }
 }

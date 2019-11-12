@@ -35,8 +35,13 @@ public class ProjectService {
     }
 
     public void select(Project project) {
+        if (this.selected.get() != null) {
+            this.selected.get().blur();
+        }
+
         this.selected.set(project);
         if (project != null) {
+            this.selected.get().focus();
             this.activeRoute.changeTo("project.view", project);
         }
     }
@@ -52,8 +57,10 @@ public class ProjectService {
 
     public void open(Project project) {
         if (project != null) {
+            project.disable();
             DatabaseDriver databaseDriver = this.databaseDriverManager.createDriver(project.getDatabase());
             databaseDriver.connect();
+            project.enable();
             if (!databaseDriver.isConnected()) {
                 this.toastService.error(databaseDriver.getError());
                 return;

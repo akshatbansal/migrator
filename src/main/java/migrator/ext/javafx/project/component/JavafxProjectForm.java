@@ -5,7 +5,7 @@ import java.io.File;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -17,12 +17,9 @@ import migrator.app.domain.project.model.Project;
 import migrator.app.domain.project.service.ProjectService;
 import migrator.app.loading.LoadingIndicator;
 import migrator.app.migration.Migration;
+import migrator.ext.javafx.UseCase;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
-import migrator.ext.javafx.component.button.AsyncButtonComponent;
-import migrator.ext.javafx.component.button.ButtonBuilder;
-import migrator.ext.javafx.project.service.OpenProjectUseCase;
-import migrator.lib.emitter.Subscription;
 
 public class JavafxProjectForm extends ViewComponent implements ProjectForm {
     protected DatabaseDriverManager databaseDriverManager;
@@ -31,7 +28,6 @@ public class JavafxProjectForm extends ViewComponent implements ProjectForm {
     protected ProjectService projectService;
     protected Window window;
     protected LoadingIndicator loadingIndicator;
-    protected AsyncButtonComponent openProjectButton;
 
     @FXML protected TextField name;
     @FXML protected ComboBox<String> outputType;
@@ -43,6 +39,7 @@ public class JavafxProjectForm extends ViewComponent implements ProjectForm {
     @FXML protected TextField user;
     @FXML protected PasswordField password;
     @FXML protected HBox buttonsBox;
+    @FXML protected Button openButton;
 
     public JavafxProjectForm(Project project, ViewLoader viewLoader, Container container, Window window, LoadingIndicator loadingIndicator) {
         super(viewLoader);
@@ -53,24 +50,11 @@ public class JavafxProjectForm extends ViewComponent implements ProjectForm {
         this.window = window;
         this.loadingIndicator = loadingIndicator;
 
-        ButtonBuilder buttonBuilder = new ButtonBuilder();
-        this.openProjectButton = buttonBuilder.primary()
-            .withText("Open")
-            .withTooltip("Open project")
-            .buildAsync(new OpenProjectUseCase(projectService, project));
-
-        Subscription<Void> subscription = this.openProjectButton.onAction((e) -> {
-            this.loadingIndicator.start();
-        });
-        this.openProjectButton.onTaskEnded((e) -> {
-            this.loadingIndicator.stop();
-        });
-        this.subscriptions.add(subscription);
-
         this.loadView("/layout/project/form.fxml");
 
-        this.buttonsBox.getChildren()
-            .add((Node) this.openProjectButton.getContent());
+        project.disabledProperty().addListener((oservable, oldValue, newValue) -> {
+            this.openButton.setDisable(newValue);
+        });
     }
 
     @FXML
@@ -97,7 +81,11 @@ public class JavafxProjectForm extends ViewComponent implements ProjectForm {
     }
 
     @Override
-    @FXML public void open() {}
+    @FXML public void open() {
+        UseCase.runOnThread(() -> {
+            this.projectService.open(project);
+        });
+    }
 
     @Override
     @FXML public void delete() {

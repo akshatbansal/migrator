@@ -5,17 +5,26 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import migrator.app.domain.database.model.DatabaseConnection;
 
 public class Project implements Serializable {
     private static final long serialVersionUID = 8438644134414504238L;
+    public static final String INTERNAL_STATE_NONE = "NONE";
+    public static final String INTERNAL_STATE_OPENING = "OPENING";
+    public static final String INTERNAL_STATE_OPEN = "OPEN";
+
     protected DatabaseConnection databaseConnection;
     protected transient StringProperty name;
     protected transient StringProperty outputType;
     protected transient StringProperty folder;
     protected String id;
+
+    protected transient BooleanProperty disabled;
+    protected transient BooleanProperty focused;
 
     public Project(DatabaseConnection databaseConnection, String id, String name, String outputType, String folder) {
         this.databaseConnection = databaseConnection;
@@ -23,6 +32,13 @@ public class Project implements Serializable {
         this.name = new SimpleStringProperty(name);
         this.outputType = new SimpleStringProperty(outputType);
         this.folder = new SimpleStringProperty(folder);
+
+        this.initialize();
+    }
+
+    private void initialize() {
+        this.disabled = new SimpleBooleanProperty();
+        this.focused = new SimpleBooleanProperty();
     }
 
     public String getId() {
@@ -57,6 +73,26 @@ public class Project implements Serializable {
         return this.folderProperty().get();
     }
 
+    public void focus() {
+        this.focused.set(true);
+    }
+    public void blur() {
+        this.focused.set(false);
+    }
+    public BooleanProperty focusedProperty() {
+        return this.focused;
+    }
+
+    public void enable() {
+        this.disabled.set(false);
+    }
+    public void disable() {
+        this.disabled.set(true);
+    }
+    public BooleanProperty disabledProperty() {
+        return this.disabled;
+    }
+
     private void writeObject(ObjectOutputStream s) throws IOException {
         s.defaultWriteObject();
         s.writeUTF(this.name.get());
@@ -69,5 +105,7 @@ public class Project implements Serializable {
         this.name = new SimpleStringProperty(s.readUTF());
         this.outputType = new SimpleStringProperty(s.readUTF());
         this.folder = new SimpleStringProperty(s.readUTF());
+        
+        this.initialize();
     }
 }

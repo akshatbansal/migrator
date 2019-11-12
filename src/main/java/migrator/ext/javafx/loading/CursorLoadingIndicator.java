@@ -1,6 +1,5 @@
 package migrator.ext.javafx.loading;
 
-import javafx.scene.Cursor;
 import javafx.stage.Window;
 import migrator.app.loading.LoadingIndicator;
 

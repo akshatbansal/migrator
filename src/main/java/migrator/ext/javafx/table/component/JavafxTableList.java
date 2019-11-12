@@ -18,17 +18,18 @@ import migrator.app.domain.table.component.TableList;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableGuiKit;
+import migrator.app.domain.table.service.TableActivator;
 import migrator.app.domain.table.service.TableActiveState;
 import migrator.app.domain.table.service.TableFactory;
 import migrator.app.router.ActiveRoute;
 import migrator.ext.javafx.component.card.CardListComponent;
-import migrator.ext.javafx.component.card.withmarks.CardWithMarksComponentFactory;
+// import migrator.ext.javafx.component.card.withmarks.CardWithMarksComponentFactory;
 import migrator.ext.javafx.component.SearchComponent;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
 import migrator.lib.emitter.Subscription;
 
-public class JavafxTableList extends ViewComponent implements TableList {
+public class JavafxTableList extends ViewComponent implements TableList, TableActivator {
     protected TableFactory tableFactory;
     protected TableActiveState tableActiveState;
     protected ProjectService projectService;
@@ -65,14 +66,9 @@ public class JavafxTableList extends ViewComponent implements TableList {
 
         this.cardListComponent = new CardListComponent<>(
             this.tableActiveState.getList(),
-            new TableCardFactory(),
-            new CardWithMarksComponentFactory(viewLoader),
+            new TableCardFactory(viewLoader, this),
             viewLoader
         );
-
-        this.cardListComponent.onPrimary((Table eventTable) -> {
-            this.tableActiveState.activate(eventTable);
-        });
 
         this.searchComponent = new SearchComponent(viewLoader, this.tableActiveState.searchProperty());
 
@@ -138,5 +134,10 @@ public class JavafxTableList extends ViewComponent implements TableList {
     @Override
     @FXML public void commit() {
         this.activeRoute.changeTo("commit.view", this.projectService.getOpened().get());
+    }
+
+    @Override
+    public void activateTable(Table table) {
+        this.tableActiveState.activate(table);
     }
 }
