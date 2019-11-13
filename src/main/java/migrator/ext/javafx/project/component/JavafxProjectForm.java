@@ -83,7 +83,9 @@ public class JavafxProjectForm extends ViewComponent implements ProjectForm {
     @Override
     @FXML public void open() {
         UseCase.runOnThread(() -> {
+            this.loadingIndicator.start();
             this.projectService.open(project);
+            this.loadingIndicator.stop();
         });
     }
 

@@ -1,5 +1,6 @@
 package migrator.ext.javafx.loading;
 
+import javafx.application.Platform;
 import javafx.stage.Window;
 import migrator.app.loading.LoadingIndicator;
 
@@ -12,11 +13,15 @@ public class CursorLoadingIndicator implements LoadingIndicator {
 
     @Override
     public void start() {
-        this.window.getScene().getRoot().getStyleClass().add("loading");
+        Platform.runLater(() -> {
+            this.window.getScene().getRoot().getStyleClass().add("loading");
+        });
     }
 
     @Override
     public void stop() {
-        this.window.getScene().getRoot().getStyleClass().remove("loading");
+        Platform.runLater(() -> {
+            this.window.getScene().getRoot().getStyleClass().remove("loading");
+        });
     }
 }

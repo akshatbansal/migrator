@@ -19,8 +19,7 @@ public class ProjectService {
     protected ObjectProperty<Project> opened;
     protected ObservableList<Project> list;
 
-    public ProjectService(ProjectFactory factory, DatabaseDriverManager databaseDriverManager,
-            ToastService toastService, ActiveRoute activeRoute) {
+    public ProjectService(ProjectFactory factory, DatabaseDriverManager databaseDriverManager, ToastService toastService, ActiveRoute activeRoute) {
         this.factory = factory;
         this.databaseDriverManager = databaseDriverManager;
         this.toastService = toastService;
@@ -57,6 +56,9 @@ public class ProjectService {
 
     public void open(Project project) {
         if (project != null) {
+            if (project.disabledProperty().get()) {
+                return;
+            }
             project.disable();
             DatabaseDriver databaseDriver = this.databaseDriverManager.createDriver(project.getDatabase());
             databaseDriver.connect();

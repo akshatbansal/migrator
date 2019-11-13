@@ -23,7 +23,6 @@ import migrator.app.domain.table.service.TableActiveState;
 import migrator.app.domain.table.service.TableFactory;
 import migrator.app.router.ActiveRoute;
 import migrator.ext.javafx.component.card.CardListComponent;
-// import migrator.ext.javafx.component.card.withmarks.CardWithMarksComponentFactory;
 import migrator.ext.javafx.component.SearchComponent;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;

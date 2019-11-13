@@ -35,7 +35,7 @@ public class JavafxProjectGuiKit implements ProjectGuiKit {
 
     @Override
     public ProjectList createList() {
-        return new JavafxProjectList(this.viewLoader, this.container, this);
+        return new JavafxProjectList(this.viewLoader, this.container, this, this.gui.getLoadingIndicator());
     }
 
     @Override

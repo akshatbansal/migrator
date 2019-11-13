@@ -13,9 +13,6 @@ import migrator.app.domain.database.model.DatabaseConnection;
 
 public class Project implements Serializable {
     private static final long serialVersionUID = 8438644134414504238L;
-    public static final String INTERNAL_STATE_NONE = "NONE";
-    public static final String INTERNAL_STATE_OPENING = "OPENING";
-    public static final String INTERNAL_STATE_OPEN = "OPEN";
 
     protected DatabaseConnection databaseConnection;
     protected transient StringProperty name;
