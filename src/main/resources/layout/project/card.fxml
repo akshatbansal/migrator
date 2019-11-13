@@ -11,6 +11,15 @@
         <Text fx:id="name" styleClass="card__header-title" />
     </HBox>
     <HBox styleClass="card__footer" alignment="center_right" spacing="10" fx:id="buttonBox" HBox.hgrow="ALWAYS" maxWidth="Infinity" >
-        
+        <Button onAction="#edit" text="Edit" styleClass="btn-secondary">
+            <tooltip>
+                <Tooltip text="Edit project" />
+            </tooltip>
+        </Button>
+        <Button fx:id="openButton" onAction="#open" text="Open" styleClass="btn-primary">
+            <tooltip>
+                <Tooltip text="Open project" />
+            </tooltip>
+        </Button>
     </HBox>
 </VBox>

@@ -84,7 +84,7 @@ public class JavafxIndexForm extends ViewComponent implements IndexForm {
         if (changeType != ChangeCommand.DELETE) {
             this.manageBox.getChildren().add(this.removeButton);
         }
-        if (changeType == ChangeCommand.DELETE || changeType == ChangeCommand.UPDATE) {
+        if (changeType.equals(ChangeCommand.DELETE) || changeType.equals(ChangeCommand.UPDATE)) {
             this.manageBox.getChildren().add(this.restoreButton);
         }
     }

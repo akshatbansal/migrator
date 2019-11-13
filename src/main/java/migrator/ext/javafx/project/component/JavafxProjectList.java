@@ -7,46 +7,40 @@ import migrator.app.Container;
 import migrator.app.domain.project.component.ProjectList;
 import migrator.app.domain.project.model.Project;
 import migrator.app.domain.project.service.ProjectGuiKit;
+import migrator.app.domain.project.service.ProjectOpener;
+import migrator.app.domain.project.service.ProjectSelector;
 import migrator.app.domain.project.service.ProjectService;
+import migrator.app.loading.LoadingIndicator;
 import migrator.ext.javafx.component.card.CardListComponent;
-import migrator.ext.javafx.component.card.simple.SimpleCardComponentFactory;
+import migrator.ext.javafx.UseCase;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
 
-public class JavafxProjectList extends ViewComponent implements ProjectList {
+public class JavafxProjectList extends ViewComponent implements ProjectList, ProjectOpener, ProjectSelector {
     protected ProjectService projectService;
     protected ProjectGuiKit projectGuiKit;
     protected CardListComponent<Project> cardList;
+    protected LoadingIndicator loadingIndicator;
 
     @FXML protected VBox projectCards;
 
-    public JavafxProjectList(ViewLoader viewLoader, Container container, ProjectGuiKit projectGuiKit) {
+    public JavafxProjectList(ViewLoader viewLoader, Container container, ProjectGuiKit projectGuiKit, LoadingIndicator loadingIndicator) {
         super(viewLoader);
         this.projectService = container.getProjectService();
         this.projectGuiKit = projectGuiKit;
+        this.loadingIndicator = loadingIndicator;
 
         this.cardList = new CardListComponent<>(
             this.projectService.getList(),
-            new ProjectCardFactory(),
-            new SimpleCardComponentFactory<>(viewLoader),
+            new ProjectCardFactory(
+                this.viewLoader,
+                this,
+                this
+            ),
             this.viewLoader
         );
 
-        this.cardList.onSecondary((Project eventDataProject) -> {
-            this.projectService.select(eventDataProject);
-        });
-
-        this.cardList.onPrimary((Project eventDataProject) -> {
-            this.projectService.open(eventDataProject);
-        });
-
         this.loadView("/layout/project/list.fxml");
-
-        this.projectService.getSelected()
-            .addListener((obs, oldValue, newValue) -> {
-                this.cardList.focus(newValue);
-            });
-        this.cardList.focus(this.projectService.getSelected().get());
     }
 
     @FXML public void initialize() {
@@ -61,5 +55,19 @@ public class JavafxProjectList extends ViewComponent implements ProjectList {
             .create("new_project");
         this.projectService.add(newProject);
         this.projectService.select(newProject);
+    }
+
+    @Override
+    public void openProject(Project project) {
+        UseCase.runOnThread(() -> {
+            this.loadingIndicator.start();
+            this.projectService.open(project);
+            this.loadingIndicator.stop();
+        });
+    }
+
+    @Override
+    public void selectProject(Project project) {
+        this.projectService.select(project);
     }
 }

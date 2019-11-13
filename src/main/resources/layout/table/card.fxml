@@ -20,7 +20,11 @@
             </HBox>
         </VBox>
         <HBox alignment="center_right" spacing="10" fx:id="buttonBox" HBox.hgrow="ALWAYS" maxWidth="Infinity" >
-            
+            <Button text="Edit" onAction="#edit" styleClass="btn-primary">
+                <tooltip>
+                    <Tooltip Text="Update table" />
+                </tooltip>
+            </Button>
         </HBox>
     </HBox>
 </VBox>

@@ -6,26 +6,38 @@
 
 .foreground-dark {
     -fx-fill: #606060;
+    fill: #606060;
     -fx-text-fill: #606060;
 }
 
 .background-light {
     -fx-background-color: #606060;
+    background-color: #606060;
 }
 
 .background-medium {
-    -fx-background-color: #434343;   
+    -fx-background-color: #434343;
+    background-color: #434343;   
 }
 
 .background-dark {
-    -fx-background-color: #2F2F2F;   
+    -fx-background-color: #2F2F2F;
+    background-color: #2F2F2F;   
 }
 
 .breadcrumps {
     -fx-padding: 10 20 0 20;
+    padding: 10 20 0 20;
     -fx-background-color: transparent;
+    background-color: transparent;
 }
 
 .debug {
     -fx-background-color: #aa6655;
+    background-color: #aa6655;
+}
+
+.loading {
+    cursor: wait;
+    -fx-cursor: wait;
 }
