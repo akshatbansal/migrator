@@ -1,26 +1,44 @@
 package migrator.app.domain.table.model;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.app.migration.model.IndexChange;
 import migrator.app.migration.model.IndexProperty;
+import migrator.app.migration.model.Modification;
 
-public class Index implements Changable, IndexChange, Serializable {
-    private static final long serialVersionUID = 6910944874040909876L;
+public class Index implements Changable, IndexChange, Modification<IndexProperty> {
+    protected String id;
+    protected String tableId;
     protected IndexProperty originalIndex;
     protected IndexProperty changedIndex;
     protected ChangeCommand changeCommand;
 
-    public Index(IndexProperty originalIndex, IndexProperty changedIndex, ChangeCommand changeCommand) {
+    public Index(
+        String id,
+        String tableId,
+        IndexProperty originalIndex,
+        IndexProperty changedIndex,
+        ChangeCommand changeCommand
+    ) {
+        this.id = id;
+        this.tableId = tableId;
         this.originalIndex = originalIndex;
         this.changedIndex = changedIndex;
         this.changeCommand = changeCommand;
+    }
+
+    @Override
+    public String getUniqueKey() {
+        return this.id;
+    }
+
+    public String getTableId() {
+        return this.tableId;
+    }
+
+    public void setTableId(String tableId) {
+        this.tableId = tableId;
     }
 
     public StringProperty nameProperty() {
@@ -108,11 +126,19 @@ public class Index implements Changable, IndexChange, Serializable {
         return this.originalIndex;
     }
 
-    private void writeObject(ObjectOutputStream s) throws IOException {
-        s.defaultWriteObject();
-    }
+    public void updateOriginal(IndexProperty indexProperty) {
+        this.getOriginal().nameProperty().set(
+            indexProperty.getName()
+        );
+        this.getChange().nameProperty().set(
+            indexProperty.getName()
+        );
 
-    private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
-        s.defaultReadObject();
+        this.getOriginal().columnsProperty().setAll(
+            indexProperty.columnsProperty()
+        );
+        this.getChange().columnsProperty().setAll(
+            indexProperty.columnsProperty()
+        );
     }
 }

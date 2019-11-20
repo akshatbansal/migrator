@@ -57,8 +57,10 @@ public class PhinxMigrationGeneratorTest {
                 Arrays.asList(
                     new Column(
                         this.columnFormatManager,
-                        new SimpleColumnProperty("column_name", "string", null, false, "255", false, "", false),
-                        new SimpleColumnProperty("column_name", "string", null, false, "255", false, "", false),
+                        "1",
+                        "1",
+                        new SimpleColumnProperty("1", "column_name", "string", null, false, "255", false, "", false),
+                        new SimpleColumnProperty("2", "column_name", "string", null, false, "255", false, "", false),
                         new ChangeCommand("create")
                     )
                 )
@@ -118,8 +120,10 @@ public class PhinxMigrationGeneratorTest {
                 Arrays.asList(
                     new Column(
                         this.columnFormatManager,
-                        new SimpleColumnProperty("column_name", "column_format", null, false, "255", false, "", false),
-                        new SimpleColumnProperty("column_name", "column_format", null, false, "255", false, "", false),
+                        "1",
+                        "1",
+                        new SimpleColumnProperty("1", "column_name", "column_format", null, false, "255", false, "", false),
+                        new SimpleColumnProperty("2", "column_name", "column_format", null, false, "255", false, "", false),
                         new ChangeCommand("create")
                     )
                 )
@@ -153,8 +157,10 @@ public class PhinxMigrationGeneratorTest {
                 Arrays.asList(
                     new Column(
                         this.columnFormatManager,
-                        new SimpleColumnProperty("column_name", "column_format", null, false, "255", false, "", false),
-                        new SimpleColumnProperty("column_name", "column_format", null, false, "255", false, "", false),
+                        "1",
+                        "1",
+                        new SimpleColumnProperty("1", "column_name", "column_format", null, false, "255", false, "", false),
+                        new SimpleColumnProperty("1", "column_name", "column_format", null, false, "255", false, "", false),
                         new ChangeCommand("delete")
                     )
                 )
@@ -188,8 +194,10 @@ public class PhinxMigrationGeneratorTest {
                 Arrays.asList(
                     new Column(
                         this.columnFormatManager,
-                        new SimpleColumnProperty("column_name", "column_format", "", false, "255", false, "", false),
-                        new SimpleColumnProperty("new_column_name", "column_format", "", false, "255", false, "", false),
+                        "1",
+                        "1",
+                        new SimpleColumnProperty("1", "column_name", "column_format", "", false, "255", false, "", false),
+                        new SimpleColumnProperty("2", "new_column_name", "column_format", "", false, "255", false, "", false),
                         new ChangeCommand("update")
                     )
                 )
@@ -247,14 +255,18 @@ public class PhinxMigrationGeneratorTest {
                 Arrays.asList(
                     new Column(
                         this.columnFormatManager,
-                        new SimpleColumnProperty("id", "integer", null, false, "11", true, "", false),
-                        new SimpleColumnProperty("id", "integer", null, false, "11", true, "", false),
+                        "1",
+                        "1",
+                        new SimpleColumnProperty("1", "id", "integer", null, false, "11", true, "", false),
+                        new SimpleColumnProperty("2", "id", "integer", null, false, "11", true, "", false),
                         new ChangeCommand("create")
                     ),
                     new Column(
                         this.columnFormatManager,
-                        new SimpleColumnProperty("name", "string", null, false, "255", false, "", false),
-                        new SimpleColumnProperty("name", "string", null, false, "255", false, "", false),
+                        "2",
+                        "1",
+                        new SimpleColumnProperty("3", "name", "string", null, false, "255", false, "", false),
+                        new SimpleColumnProperty("4", "name", "string", null, false, "255", false, "", false),
                         new ChangeCommand("create")
                     )
                 )
@@ -262,8 +274,10 @@ public class PhinxMigrationGeneratorTest {
             FXCollections.observableArrayList(
                 Arrays.asList(
                     new Index(
-                        new SimpleIndexProperty("id_name", Arrays.asList()),
-                        new SimpleIndexProperty("id_name", Arrays.asList(new SimpleStringProperty("id"), new SimpleStringProperty("name"))),
+                        "1",
+                        "1",
+                        new SimpleIndexProperty("1", "id_name", Arrays.asList()),
+                        new SimpleIndexProperty("2", "id_name", Arrays.asList(new SimpleStringProperty("id"), new SimpleStringProperty("name"))),
                         new ChangeCommand("create")
                     )
                 )
@@ -298,8 +312,10 @@ public class PhinxMigrationGeneratorTest {
             FXCollections.observableArrayList(
                 Arrays.asList(
                     new Index(
-                        new SimpleIndexProperty("id_name", Arrays.asList()),
-                        new SimpleIndexProperty("id_name", Arrays.asList()),
+                        "1",
+                        "1",
+                        new SimpleIndexProperty("1", "id_name", Arrays.asList()),
+                        new SimpleIndexProperty("2", "id_name", Arrays.asList()),
                         new ChangeCommand("delete")
                     )
                 )
@@ -345,8 +361,10 @@ public class PhinxMigrationGeneratorTest {
                 Arrays.asList(
                     new Column(
                         this.columnFormatManager,
-                        new SimpleColumnProperty("column_name", "column_format", null, false, "255", false, "", false),
-                        new SimpleColumnProperty("column_name", "string", null, false, "255", false, "", false),
+                        "1",
+                        "1",
+                        new SimpleColumnProperty("1", "column_name", "column_format", null, false, "255", false, "", false),
+                        new SimpleColumnProperty("2", "column_name", "string", null, false, "255", false, "", false),
                         new ChangeCommand("update")
                     )
                 )
@@ -380,8 +398,10 @@ public class PhinxMigrationGeneratorTest {
                 Arrays.asList(
                     new Column(
                         this.columnFormatManager,
-                        new SimpleColumnProperty("column_name", "string", "", false, "255", false, "", false),
-                        new SimpleColumnProperty("column_name", "string", "default_value", false, "255", false, "", false),
+                        "1",
+                        "1",
+                        new SimpleColumnProperty("1", "column_name", "string", "", false, "255", false, "", false),
+                        new SimpleColumnProperty("2", "column_name", "string", "default_value", false, "255", false, "", false),
                         new ChangeCommand("update")
                     )
                 )
@@ -418,8 +438,10 @@ public class PhinxMigrationGeneratorTest {
                 Arrays.asList(
                     new Column(
                         columnFormatManager,
-                        new SimpleColumnProperty("column_name", "string", "", false, "255", false, "", false),
-                        new SimpleColumnProperty("column_name", "string", "", false, "250", false, "", false),
+                        "1",
+                        "1",
+                        new SimpleColumnProperty("1", "column_name", "string", "", false, "255", false, "", false),
+                        new SimpleColumnProperty("2", "column_name", "string", "", false, "250", false, "", false),
                         new ChangeCommand("update")
                     )
                 )
@@ -456,8 +478,10 @@ public class PhinxMigrationGeneratorTest {
                 Arrays.asList(
                     new Column(
                         columnFormatManager,
-                        new SimpleColumnProperty("column_name", "string", "", false, "10", false, "4", false),
-                        new SimpleColumnProperty("column_name", "string", "", false, "10", false, "5", false),
+                        "1",
+                        "1",
+                        new SimpleColumnProperty("1", "column_name", "string", "", false, "10", false, "4", false),
+                        new SimpleColumnProperty("2", "column_name", "string", "", false, "10", false, "5", false),
                         new ChangeCommand("update")
                     )
                 )
@@ -494,8 +518,10 @@ public class PhinxMigrationGeneratorTest {
                 Arrays.asList(
                     new Column(
                         columnFormatManager,
-                        new SimpleColumnProperty("column_name", "string", "", false, "10", true, "", false),
-                        new SimpleColumnProperty("column_name", "string", "", false, "10", false, "", false),
+                        "1",
+                        "1",
+                        new SimpleColumnProperty("1", "column_name", "string", "", false, "10", true, "", false),
+                        new SimpleColumnProperty("2", "column_name", "string", "", false, "10", false, "", false),
                         new ChangeCommand("update")
                     )
                 )
@@ -532,8 +558,10 @@ public class PhinxMigrationGeneratorTest {
                 Arrays.asList(
                     new Column(
                         columnFormatManager,
-                        new SimpleColumnProperty("column_name", "integer", "", false, "10", false, "", false),
-                        new SimpleColumnProperty("column_name", "integer", "", false, "10", false, "", true),
+                        "1",
+                        "1",
+                        new SimpleColumnProperty("1", "column_name", "integer", "", false, "10", false, "", false),
+                        new SimpleColumnProperty("2", "column_name", "integer", "", false, "10", false, "", true),
                         new ChangeCommand("update")
                     )
                 )

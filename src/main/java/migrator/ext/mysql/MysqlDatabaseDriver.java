@@ -21,7 +21,6 @@ import javafx.collections.ObservableList;
 import migrator.app.database.driver.DatabaseDriver;
 import migrator.app.domain.column.service.ColumnFactory;
 import migrator.app.domain.index.service.IndexFactory;
-import migrator.app.domain.project.model.Project;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Index;
 import migrator.app.domain.table.model.Table;
@@ -99,7 +98,7 @@ public class MysqlDatabaseDriver implements DatabaseDriver {
         }
     }
 
-    protected void refreshTables(Project project) throws SQLException {
+    protected void refreshTables() throws SQLException {
         if (this.mysql == null) {
             this.tables.clear();
             return;
@@ -111,15 +110,15 @@ public class MysqlDatabaseDriver implements DatabaseDriver {
         ResultSet rs = statement.executeQuery(sql);
         while (rs.next()) {
             currentTables.add(
-                this.tableFactory.createNotChanged(project, rs.getString(1))
+                this.tableFactory.createNotChanged("NULL", rs.getString(1))
             );
         }
         this.tables.setAll(currentTables);
     }
 
-    public ObservableList<Table> getTables(Project project) {
+    public ObservableList<Table> getTables() {
         try {
-            this.refreshTables(project);
+            this.refreshTables();
         } catch (SQLException ex) {
             ex.printStackTrace();
             this.tables.clear();
@@ -150,6 +149,7 @@ public class MysqlDatabaseDriver implements DatabaseDriver {
             }
             String dbFormat = rs.getString(2);
             Column column = this.columnFactory.createNotChanged(
+                "NULL",
                 rs.getString(1),
                 this.getFormat(dbFormat),
                 defaultValue,
@@ -192,6 +192,7 @@ public class MysqlDatabaseDriver implements DatabaseDriver {
             Entry<String, List<String>> entry = entryIterator.next();
             currentIndexes.add(
                 this.indexFactory.createNotChanged(
+                    "NULL",
                     entry.getKey(), 
                     entry.getValue()
                 )

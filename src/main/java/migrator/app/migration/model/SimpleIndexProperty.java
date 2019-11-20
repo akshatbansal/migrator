@@ -1,10 +1,5 @@
 package migrator.app.migration.model;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -14,17 +9,23 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ListChangeListener.Change;
 
-public class SimpleIndexProperty implements IndexProperty, Serializable {
-    private static final long serialVersionUID = -7211629526189915672L;
+public class SimpleIndexProperty implements IndexProperty {
+    protected String id;
     protected transient StringProperty name;
     protected transient ObservableList<StringProperty> columns;
     protected transient StringProperty columnsString;
 
-    public SimpleIndexProperty(String name, List<StringProperty> columns) {
+    public SimpleIndexProperty(String id, String name, List<StringProperty> columns) {
+        this.id = id;
         this.name = new SimpleStringProperty(name);
         this.columns = FXCollections.observableArrayList(columns);
 
         this.initialize();
+    }
+
+    @Override
+    public String getUniqueKey() {
+        return this.id;
     }
 
     protected void initialize() {
@@ -84,32 +85,5 @@ public class SimpleIndexProperty implements IndexProperty, Serializable {
             this.onColumnsChange();
         });
         this.columns.add(newColumn);
-    }
-
-    private void writeObject(ObjectOutputStream s) throws IOException {
-        s.defaultWriteObject();
-
-        s.writeUTF(this.name.get());
-        List<String> columns = new ArrayList<>();
-        for (StringProperty column : this.columns) {
-            columns.add(column.get());
-        }
-        s.writeObject(columns);
-    }
-
-    private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
-        s.defaultReadObject();
-
-        this.name = new SimpleStringProperty(s.readUTF());
-        this.columns = FXCollections.observableArrayList();
-
-        List<String> columns = (List<String>) s.readObject();
-        for (String column : columns) {
-            this.columns.add(
-                new SimpleStringProperty(column)
-            );
-        }
-
-        this.initialize();
     }
 }

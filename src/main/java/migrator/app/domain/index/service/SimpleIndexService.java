@@ -1,6 +1,5 @@
 package migrator.app.domain.index.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javafx.beans.value.ChangeListener;
@@ -8,6 +7,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import migrator.app.database.driver.DatabaseDriver;
 import migrator.app.database.driver.DatabaseDriverManager;
+import migrator.app.domain.index.IndexRepository;
 import migrator.app.domain.project.model.Project;
 import migrator.app.domain.project.service.ProjectService;
 import migrator.app.domain.table.model.Index;
@@ -15,6 +15,8 @@ import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableActiveState;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.lib.modelstorage.ActiveState;
+import migrator.lib.repository.diff.CompareListDiff;
+import migrator.lib.repository.diff.ListDiff;
 
 public class SimpleIndexService implements IndexService {
     protected IndexFactory indexFactory;
@@ -64,29 +66,22 @@ public class SimpleIndexService implements IndexService {
             return;
         }
         Project project = this.projectService.getOpened().get();
-        String repositryKey = project.getId() + "." + activeTable.getId();
 
         DatabaseDriver databaseDriver  = this.databaseDriverManager
             .createDriver(project.getDatabase());
         databaseDriver.connect();
 
-        List<Index> indexes = new ArrayList<>();
-        for (Index dbIndex : databaseDriver.getIndexes(activeTable.getOriginalName())) {
-            indexes.add(
-                this.mergeColumn(dbIndex, this.indexRepository.get(repositryKey, dbIndex.getOriginal().getName()))
-            );
+        List<Index> dbList = databaseDriver.getIndexes(activeTable.getOriginalName());
+        for (Index i : dbList) {
+            i.setTableId(activeTable.getUniqueKey());
         }
-
-        for (Index index : this.indexRepository.getList(repositryKey)) {
-            if (!index.getCommand().isType(ChangeCommand.CREATE)) {
-                continue;
-            }
-            indexes.add(index);
-        }
-        this.indexRepository.setList(repositryKey, indexes);
+        this.merge(
+            dbList,
+            this.indexRepository.findByTable(activeTable.getUniqueKey())
+        );
 
         this.activeState.setListAll(
-            this.indexRepository.getList(repositryKey)
+            this.indexRepository.findByTable(activeTable.getUniqueKey())
         );
     }
 
@@ -116,22 +111,25 @@ public class SimpleIndexService implements IndexService {
         this.activate(index);
     }
 
-    protected Index mergeColumn(Index dbValue, Index repositoryValue) {
-        if (dbValue == null) {
-            if (repositoryValue.getCommand().isType(ChangeCommand.CREATE)) {
-                return repositoryValue;
+    protected void merge(List<Index> dbList, List<Index> repoList) {
+        ListDiff<Index> diff = new CompareListDiff<>(dbList, repoList, (Index a, Index b) -> {
+            return a.getOriginal().getName().equals(
+                b.getOriginal().getName()
+            );
+        });
+        for (List<Index> indexPair : diff.getCommon()) {
+            indexPair.get(1).updateOriginal(
+                indexPair.get(0).getOriginal()
+            );
+        }
+        for (Index index : diff.getLeftMissing()) {
+            if (index.getChangeCommand().isType(ChangeCommand.CREATE)) {
+                continue;
             }
-            return null;
+            this.indexRepository.removeWith(index);
         }
-
-        if (repositoryValue == null) {
-            return dbValue;
+        for (Index index : diff.getRightMissing()) {
+            this.indexRepository.addWith(index);
         }
-
-        repositoryValue.getOriginal().nameProperty().set(dbValue.getOriginal().getName());
-        repositoryValue.getOriginal().columnsProperty().setAll(
-            dbValue.getOriginal().columnsProperty()
-        );
-        return repositoryValue;
     }
 }

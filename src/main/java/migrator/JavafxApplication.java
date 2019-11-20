@@ -13,9 +13,6 @@ import migrator.app.Bootstrap;
 import migrator.app.Gui;
 import migrator.app.Router;
 import migrator.app.domain.project.model.Project;
-import migrator.app.domain.table.model.Column;
-import migrator.app.domain.table.model.Index;
-import migrator.app.domain.table.model.Table;
 import migrator.ext.javafx.JavafxGui;
 import migrator.ext.javafx.MainController;
 import migrator.ext.javafx.component.JavafxLayout;
@@ -147,60 +144,62 @@ public class JavafxApplication extends Application {
     }
 
     protected void seed() {
+        this.container.getChangeCommandRepository().addAll(
+            this.container.getChangeCommandStorage().load()
+        );
+        this.container.getColumnPropertyRepository().addAll(
+            this.container.getColumnPropertyStorage().load()
+        );
+        this.container.getIndexPropertyRepository().addAll(
+            this.container.getIndexPropertyStorage().load()
+        );
+        this.container.getTablePropertyRepository().addAll(
+            this.container.getTablePropertyStorage().load()
+        );
+        this.container.getColumnRepository().addAll(
+            this.container.getColumnStorage().load()
+        );
+        this.container.getIndexRepository().addAll(
+            this.container.getIndexStorage().load()
+        );
+        this.container.getTableRepository().addAll(
+            this.container.getTableStorage().load()
+        );
+
         this.container.getProjectService().getList()
             .setAll(
                 this.projectsPersistance.load(new ArrayList<>())
             );
-        
-        for (Project project : this.container.getProjectService().getList()) {
-            ListPersistance<Table> tableListPersistance = new ListPersistance<>("tables." + project.getId());
-            this.container.getTableRepository().setList(project.getId(), tableListPersistance.load(new ArrayList<>()));
-            for (Table table : this.container.getTableRepository().getList(project.getId())) {
-                ListPersistance<Column> columnListPersistance = new ListPersistance<>("columns." + project.getId() + "." + table.getId());
-                List<Column> columns = columnListPersistance.load(new ArrayList<>());
-                for (Column column : columns) {
-                    column.setColumnFormatManager(
-                        this.container.getColumnFormatManager()
-                    );
-                }
-                this.container.getColumnRepository().setList(project.getId() + "." + table.getId(), columns);
-
-                ListPersistance<Index> indexListPersistance = new ListPersistance<>("indexes." + project.getId() + "." + table.getId());
-                this.container.getIndexRepository().setList(project.getId() + "." + table.getId(), indexListPersistance.load(new ArrayList<>()));
-
-                table.setColumns(
-                    this.container.getColumnRepository().getList(project.getId() + "." + table.getId())
-                );
-                table.setIndexes(
-                    this.container.getIndexRepository().getList(project.getId() + "." + table.getId())
-                );
-            }
-        }
     }
 
     @Override
     public void stop() throws Exception {
+        this.container.getChangeCommandStorage().store(
+            this.container.getChangeCommandRepository().getAll()
+        );
+        this.container.getColumnPropertyStorage().store(
+            this.container.getColumnPropertyRepository().getAll()
+        );
+        this.container.getIndexPropertyStorage().store(
+            this.container.getIndexPropertyRepository().getAll()
+        );
+        this.container.getTablePropertyStorage().store(
+            this.container.getTablePropertyRepository().getAll()
+        );
+        this.container.getColumnStorage().store(
+            this.container.getColumnRepository().getAll()
+        );
+        this.container.getIndexStorage().store(
+            this.container.getIndexRepository().getAll()
+        );
+        this.container.getTableStorage().store(
+            this.container.getTableRepository().getAll()
+        );
+
         this.projectsPersistance.store(
             this.container.getProjectService().getList()
         );
-        for (Project project : this.container.getProjectService().getList()) {
-            ListPersistance<Table> listPersistance = new ListPersistance<>("tables." + project.getId());
-            listPersistance.store(
-                this.container.getTableRepository().getList(project.getId())
-            );
-            for (Table table : this.container.getTableRepository().getList(project.getId())) {
-                ListPersistance<Column> columnListPersistance = new ListPersistance<>("columns." + project.getId() + "." + table.getId());
-                columnListPersistance.store(
-                    this.container.getColumnRepository().getList(project.getId() + "." + table.getId())
-                );
-            }
-            for (Table table : this.container.getTableRepository().getList(project.getId())) {
-                ListPersistance<Index> indexListPersistance = new ListPersistance<>("indexes." + project.getId() + "." + table.getId());
-                indexListPersistance.store(
-                    this.container.getIndexRepository().getList(project.getId() + "." + table.getId())  
-                );
-            }
-        }
+        
         super.stop();
     }
 

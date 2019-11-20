@@ -1,17 +1,12 @@
 package migrator.app.migration.model;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class SimpleColumnProperty implements ColumnProperty, Serializable {
-    private static final long serialVersionUID = 5618191683285049699L;
+public class SimpleColumnProperty implements ColumnProperty {
+    protected String id;
     protected transient StringProperty name;
     protected transient StringProperty format;
     protected transient StringProperty defaultValue;
@@ -21,7 +16,8 @@ public class SimpleColumnProperty implements ColumnProperty, Serializable {
     protected transient Property<Boolean> sign;
     protected transient Property<Boolean> autoIncrement;
 
-    public SimpleColumnProperty(String name, String format, String defaultValue, Boolean enableNull, String length, Boolean sign, String precision, Boolean autoIncrement) {
+    public SimpleColumnProperty(String id, String name, String format, String defaultValue, Boolean enableNull, String length, Boolean sign, String precision, Boolean autoIncrement) {
+        this.id = id;
         this.name = new SimpleStringProperty(name);
         this.format = new SimpleStringProperty(format);
         this.defaultValue = new SimpleStringProperty(defaultValue);
@@ -30,6 +26,11 @@ public class SimpleColumnProperty implements ColumnProperty, Serializable {
         this.precision = new SimpleStringProperty(precision);
         this.sign = new SimpleObjectProperty<>(sign);
         this.autoIncrement = new SimpleObjectProperty<>(autoIncrement);
+    }
+
+    @Override
+    public String getUniqueKey() {
+        return this.id;
     }
 
     @Override
@@ -110,31 +111,5 @@ public class SimpleColumnProperty implements ColumnProperty, Serializable {
     @Override
     public Boolean isAutoIncrement() {
         return this.autoIncrementProperty().getValue();
-    }
-
-    private void writeObject(ObjectOutputStream s) throws IOException {
-        s.defaultWriteObject();
-
-        s.writeUTF(this.name.get());
-        s.writeUTF(this.format.get());
-        s.writeUTF(this.defaultValue.get());
-        s.writeBoolean(this.enableNull.getValue());
-        s.writeUTF(this.length.get());
-        s.writeUTF(this.precision.get());
-        s.writeBoolean(this.sign.getValue());
-        s.writeBoolean(this.autoIncrement.getValue());
-    }
-
-    private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
-        s.defaultReadObject();
-
-        this.name = new SimpleStringProperty(s.readUTF());
-        this.format = new SimpleStringProperty(s.readUTF());
-        this.defaultValue = new SimpleStringProperty(s.readUTF());
-        this.enableNull = new SimpleObjectProperty<>(s.readBoolean());
-        this.length = new SimpleStringProperty(s.readUTF());
-        this.precision = new SimpleStringProperty(s.readUTF());
-        this.sign = new SimpleObjectProperty<>(s.readBoolean());
-        this.autoIncrement = new SimpleObjectProperty<>(s.readBoolean());
     }
 }

@@ -9,7 +9,7 @@ import java.util.Date;
 import migrator.lib.storage.Storage;
 import migrator.lib.stringformatter.StringFormatter;
 
-public class TimestampFileStorage implements Storage {
+public class TimestampFileStorage implements Storage<String> {
     protected File file;
     protected SimpleDateFormat dateFormat;
     protected StringFormatter fileNameFormatter;
@@ -40,5 +40,13 @@ public class TimestampFileStorage implements Storage {
             ex.printStackTrace();
         }
         
+    }
+
+    @Override
+    public void clear() {}
+
+    @Override
+    public String load() {
+        return "";
     }
 }

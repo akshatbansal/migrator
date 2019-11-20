@@ -2,8 +2,9 @@ package migrator.app.migration.model;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.StringProperty;
+import migrator.lib.repository.UniqueItem;
 
-public interface ColumnProperty {
+public interface ColumnProperty extends UniqueItem {
     public StringProperty nameProperty();
     public String getName();
     public StringProperty formatProperty();

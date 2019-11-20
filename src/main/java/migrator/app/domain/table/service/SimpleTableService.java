@@ -1,6 +1,5 @@
 package migrator.app.domain.table.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javafx.beans.value.ChangeListener;
@@ -10,10 +9,13 @@ import migrator.app.database.driver.DatabaseDriver;
 import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.domain.project.model.Project;
 import migrator.app.domain.project.service.ProjectService;
+import migrator.app.domain.table.TableRepository;
 import migrator.app.domain.table.model.Table;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.app.router.ActiveRoute;
 import migrator.lib.modelstorage.ActiveState;
+import migrator.lib.repository.diff.CompareListDiff;
+import migrator.lib.repository.diff.ListDiff;
 
 public class SimpleTableService implements TableService {
     protected TableFactory tableFactory;
@@ -49,29 +51,23 @@ public class SimpleTableService implements TableService {
         if (project == null) {
             return;
         }
-        String repositryKey = project.getId();
 
         DatabaseDriver databaseDriver  = this.databaseDriverManager
             .createDriver(project.getDatabase());
         databaseDriver.connect();
 
-        List<Table> tables = new ArrayList<>();
-        for (Table dbTable : databaseDriver.getTables(project)) {
-            tables.add(
-                this.mergeTable(dbTable, this.tableRepository.get(repositryKey, dbTable.getOriginal().getName()))
-            );
+        List<Table> dbList = databaseDriver.getTables();
+        for (Table t : dbList) {
+            t.setProjectId(project.getId());
         }
 
-        for (Table table : this.tableRepository.getList(repositryKey)) {
-            if (!table.getCommand().isType(ChangeCommand.CREATE)) {
-                continue;
-            }
-            tables.add(table);
-        }
-        this.tableRepository.setList(repositryKey, tables);
+        this.merge(
+            dbList,
+            this.tableRepository.findByProject(project.getId())
+        );
 
         this.activeState.setListAll(
-            this.tableRepository.getList(repositryKey)
+            this.tableRepository.findByProject(project.getId())
         );
     }
 
@@ -113,19 +109,25 @@ public class SimpleTableService implements TableService {
         return this.activeState.getList();
     }
 
-    protected Table mergeTable(Table dbValue, Table repositoryValue) {
-        if (dbValue == null) {
-            if (repositoryValue.getCommand().isType(ChangeCommand.CREATE)) {
-                return repositoryValue;
+    protected void merge(List<Table> dbList, List<Table> repoList) {
+        ListDiff<Table> diff = new CompareListDiff<>(dbList, repoList, (Table a, Table b) -> {
+            return a.getOriginal().getName().equals(
+                b.getOriginal().getName()
+            );
+        });
+        for (List<Table> tablePair : diff.getCommon()) {
+            tablePair.get(1).updateOriginal(
+                tablePair.get(0).getOriginal()
+            );
+        }
+        for (Table table : diff.getLeftMissing()) {
+            if (table.getChangeCommand().isType(ChangeCommand.CREATE)) {
+                continue;
             }
-            return null;
+            this.tableRepository.removeWith(table);
         }
-
-        if (repositoryValue == null) {
-            return dbValue;
+        for (Table table : diff.getRightMissing()) {
+            this.tableRepository.addWith(table);
         }
-
-        repositoryValue.getOriginal().nameProperty().set(dbValue.getOriginal().getName());
-        return repositoryValue;
     }
 }

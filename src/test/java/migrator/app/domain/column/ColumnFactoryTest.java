@@ -6,6 +6,7 @@ import migrator.app.database.format.FakeColumnFormatManager;
 import migrator.app.database.format.SimpleColumnFormat;
 import migrator.app.domain.column.service.ColumnFactory;
 import migrator.app.domain.table.model.Column;
+import migrator.lib.uid.SessionIncrementalGenerator;
 
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,7 +19,8 @@ public class ColumnFactoryTest {
         this.columnFactory = new ColumnFactory(
             new FakeColumnFormatManager(
                 new SimpleColumnFormat("format")
-            )
+            ),
+            new SessionIncrementalGenerator("ColumnFactory")
         );
     }
 

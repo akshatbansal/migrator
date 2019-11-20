@@ -1,10 +1,10 @@
 package migrator.app.domain.column.service;
 
 import javafx.beans.property.ObjectProperty;
+import migrator.app.domain.column.ColumnRepository;
 import migrator.app.domain.project.model.Project;
 import migrator.app.domain.project.service.ProjectService;
 import migrator.app.domain.table.model.Column;
-import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableActiveState;
 import migrator.app.router.ActiveRoute;
 import migrator.lib.modelstorage.SimpleActiveState;
@@ -28,20 +28,15 @@ public class ColumnActiveState extends SimpleActiveState<Column> {
         this.openedProject = projectService.getOpened();
     }
 
-    protected String getRepositoryKey() {
-        Table table = this.tableActiveState.getActive().get();
-        return this.openedProject.get().getId() + "." + table.getId();
-    }
-
     @Override
     public void add(Column item) {
-        this.repository.add(this.getRepositoryKey(), item);
+        this.repository.addWith(item);
         super.add(item);
     }
 
     @Override
     public void remove(Column item) {
-        this.repository.remove(this.getRepositoryKey(), item);
+        this.repository.removeWith(item);
         super.remove(item);
     }
 

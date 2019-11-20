@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import migrator.app.domain.index.service.IndexFactory;
 import migrator.app.domain.table.model.Index;
+import migrator.lib.uid.SessionIncrementalGenerator;
 
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,7 +17,9 @@ public class IndexFactoryTest {
 
     @BeforeEach
     public void setUp() {
-        this.indexFactory = new IndexFactory();
+        this.indexFactory = new IndexFactory(
+            new SessionIncrementalGenerator("IndexFactory")
+        );
     }
 
     @Test public void testCreateNotChangedCreatesIndexWithChangeCommandNone() {

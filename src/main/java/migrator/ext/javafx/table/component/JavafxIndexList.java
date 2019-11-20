@@ -9,6 +9,7 @@ import migrator.app.domain.index.service.IndexActiveState;
 import migrator.app.domain.index.service.IndexFactory;
 import migrator.app.domain.table.component.IndexList;
 import migrator.app.domain.table.model.Index;
+import migrator.app.domain.table.service.TableActiveState;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
 import migrator.lib.emitter.Emitter;
@@ -19,6 +20,7 @@ import migrator.lib.emitter.Subscription;
 public class JavafxIndexList extends ViewComponent implements IndexList {
     protected IndexActiveState indexActiveState;
     protected IndexFactory indexFactory;
+    protected TableActiveState tableActiveState;
     protected Emitter<Index> emitter;
 
     @FXML protected TableView<Index> indexes;
@@ -27,6 +29,7 @@ public class JavafxIndexList extends ViewComponent implements IndexList {
         super(viewLoader);
         this.indexActiveState = container.getIndexActiveState();
         this.indexFactory = container.getIndexFactory();
+        this.tableActiveState = container.getTableActiveState();
         this.emitter = new EventEmitter<>();
 
         this.loadView("/layout/table/index/index.fxml");
@@ -64,7 +67,7 @@ public class JavafxIndexList extends ViewComponent implements IndexList {
 
     @FXML
     public void addIndex() {
-        Index newIndex = this.indexFactory.createWithCreateChange("new_index");
+        Index newIndex = this.indexFactory.createWithCreateChange(this.tableActiveState.getActive().get().getUniqueKey(), "new_index");
         this.indexActiveState.add(newIndex);
         if (this.indexes != null) {
             this.indexes.getSelectionModel().select(newIndex);
