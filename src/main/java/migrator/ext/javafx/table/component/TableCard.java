@@ -54,11 +54,11 @@ public class TableCard extends ViewComponent implements CardComponent<Table> {
             );
         }
 
-        this.table.getCommand().typeProperty().addListener((obs, oldValue, newValue) -> {
+        this.table.getChangeCommand().typeProperty().addListener((obs, oldValue, newValue) -> {
             this.setChanged(oldValue, newValue);
         });
 
-        this.setChanged("", this.table.getCommand().getType());
+        this.setChanged("", this.table.getChangeCommand().getType());
     }
 
     protected void addMark(GuiNode node) {

@@ -2,13 +2,14 @@ package migrator.app.domain.table.service;
 
 import org.junit.jupiter.api.Test;
 
-import migrator.app.domain.column.service.ColumnRepository;
-import migrator.app.domain.connection.model.Connection;
-import migrator.app.domain.database.model.DatabaseConnection;
-import migrator.app.domain.index.service.IndexRepository;
-import migrator.app.domain.project.model.Project;
+import migrator.app.domain.column.ColumnRepository;
+import migrator.app.domain.index.IndexRepository;
 import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableFactory;
+import migrator.app.migration.model.ChangeCommand;
+import migrator.app.migration.model.ColumnProperty;
+import migrator.app.migration.model.IndexProperty;
+import migrator.lib.repository.UniqueRepository;
 import migrator.lib.uid.SessionIncrementalGenerator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -19,25 +20,25 @@ public class TableFactoryTest {
 
     @BeforeEach
     public void setUp() {
+        UniqueRepository<ChangeCommand> changeCommandRepo = new UniqueRepository<>();
+        UniqueRepository<IndexProperty> indexPropertyRepo = new UniqueRepository<>();
+        UniqueRepository<ColumnProperty> columnPropertyRepo = new UniqueRepository<>();
         this.tableFactory = new TableFactory(
-            new ColumnRepository(),
-            new IndexRepository(),
+            new ColumnRepository(
+                columnPropertyRepo,
+                changeCommandRepo
+            ),
+            new IndexRepository(
+                indexPropertyRepo,
+                changeCommandRepo
+            ),
             new SessionIncrementalGenerator("test")
         );
     }
 
     @Test public void testCreateNotChangedHasTableNameSet() {
         Table table = this.tableFactory.createNotChanged(
-            new Project(
-                new DatabaseConnection(
-                    new Connection("localhost"),
-                    "test_db"
-                ),
-                "id-1",
-                "project_name",
-                "phinx",
-                ""
-            ),
+            "1",
             "table_name"
         );
     
@@ -46,16 +47,7 @@ public class TableFactoryTest {
 
     @Test public void testCreateNotChangedIsNoneType() {
         Table table = this.tableFactory.createNotChanged(
-            new Project(
-                new DatabaseConnection(
-                    new Connection("localhost"),
-                    "test_db"
-                ),
-                "id-1",
-                "project_name",
-                "phinx",
-                ""
-            ),
+            "1",
             "test_table"
         );
     
@@ -64,16 +56,7 @@ public class TableFactoryTest {
 
     @Test public void testCreateNotChangedHasOriginalValuesSet() {
         Table table = this.tableFactory.createNotChanged(
-            new Project(
-                new DatabaseConnection(
-                    new Connection("localhost"),
-                    "test_db"
-                ),
-                "id-1",
-                "project_name",
-                "phinx",
-                ""
-            ),
+            "1",
             "table_name"
         );
     
@@ -82,16 +65,7 @@ public class TableFactoryTest {
 
     @Test public void testCreateNotChangedHasChangesEqualToOriginal() {
         Table table = this.tableFactory.createNotChanged(
-            new Project(
-                new DatabaseConnection(
-                    new Connection("localhost"),
-                    "test_db"
-                ),
-                "id-1",
-                "project_name",
-                "phinx",
-                ""
-            ),
+            "1",
             "test_table"
         );
     
@@ -100,16 +74,7 @@ public class TableFactoryTest {
 
     @Test public void testCreateWithCreateChangeByNameHasNameSet() {
         Table table = this.tableFactory.createWithCreateChange(
-            new Project(
-                new DatabaseConnection(
-                    new Connection("localhost"),
-                    "test_db"
-                ),
-                "id-1",
-                "project_name",
-                "phinx",
-                ""
-            ),
+            "1",
             "table_name"
         );
     
@@ -118,16 +83,7 @@ public class TableFactoryTest {
 
     @Test public void testCreateWithCreateChangeByNameIsCreateType() {
         Table table = this.tableFactory.createWithCreateChange(
-            new Project(
-                new DatabaseConnection(
-                    new Connection("localhost"),
-                    "test_db"
-                ),
-                "id-1",
-                "project_name",
-                "phinx",
-                ""
-            ),
+            "1",
             "test_table"
         );
     
@@ -136,16 +92,7 @@ public class TableFactoryTest {
 
     @Test public void testCreateWithCreateChangeByNameHasChangeSet() {
         Table table = this.tableFactory.createWithCreateChange(
-            new Project(
-                new DatabaseConnection(
-                    new Connection("localhost"),
-                    "test_db"
-                ),
-                "id-1",
-                "project_name",
-                "phinx",
-                ""
-            ),
+            "1",
             "table_name"
         );
     

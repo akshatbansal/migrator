@@ -12,7 +12,7 @@ public class TimestampFileStorageFactory {
         this.fileNameFormatter = fileNameFormatter;
     }
 
-    public Storage create(File file) {
+    public Storage<String> create(File file) {
         return new TimestampFileStorage(file, fileNameFormatter);
     }
 }

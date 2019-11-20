@@ -23,13 +23,13 @@ public class IndexFactoryTest {
     }
 
     @Test public void testCreateNotChangedCreatesIndexWithChangeCommandNone() {
-        Index index = this.indexFactory.createNotChanged("index_name", new ArrayList<>());
+        Index index = this.indexFactory.createNotChanged("1", "index_name", new ArrayList<>());
 
         assertEquals("", index.getChangeCommand().getType());
     }
 
     @Test public void testCreateNotChangedSetsOriginalValuesByArguments() {
-        Index index = this.indexFactory.createNotChanged("index_name", Arrays.asList("id", "name"));
+        Index index = this.indexFactory.createNotChanged("1", "index_name", Arrays.asList("id", "name"));
 
         assertEquals("index_name", index.getOriginalName());
         assertEquals(2, index.originalColumnsProperty().size());
