@@ -11,11 +11,11 @@ import javafx.collections.ListChangeListener.Change;
 
 public class SimpleIndexProperty implements IndexProperty {
     protected String id;
-    protected transient StringProperty name;
-    protected transient ObservableList<StringProperty> columns;
-    protected transient StringProperty columnsString;
+    protected StringProperty name;
+    protected ObservableList<ColumnProperty> columns;
+    protected StringProperty columnsString;
 
-    public SimpleIndexProperty(String id, String name, List<StringProperty> columns) {
+    public SimpleIndexProperty(String id, String name, List<ColumnProperty> columns) {
         this.id = id;
         this.name = new SimpleStringProperty(name);
         this.columns = FXCollections.observableArrayList(columns);
@@ -31,7 +31,7 @@ public class SimpleIndexProperty implements IndexProperty {
     protected void initialize() {
         this.columnsString = new SimpleStringProperty();
 
-        this.columns.addListener((Change<? extends StringProperty> change) -> {
+        this.columns.addListener((Change<? extends ColumnProperty> change) -> {
             this.onColumnsChange();
         });
         this.onColumnsChange();
@@ -39,14 +39,14 @@ public class SimpleIndexProperty implements IndexProperty {
 
     protected void onColumnsChange() {
         String newColumnString = "";
-        for (StringProperty column : this.columns) {
-            if (column.get() == null || column.get().isEmpty()) {
+        for (ColumnProperty column : this.columns) {
+            if (column == null) {
                 continue;
             }
             if (!newColumnString.isEmpty()) {
                 newColumnString += ", ";
             }
-            newColumnString += column.get();
+            newColumnString += column.getName();
         }
         if (newColumnString.isEmpty()) {
             newColumnString = null;
@@ -65,7 +65,7 @@ public class SimpleIndexProperty implements IndexProperty {
     }
 
     @Override
-    public ObservableList<StringProperty> columnsProperty() {
+    public ObservableList<ColumnProperty> columnsProperty() {
         return this.columns;
     }
 
@@ -74,16 +74,27 @@ public class SimpleIndexProperty implements IndexProperty {
         return this.columnsString;
     }
 
-    public StringProperty columnProperty(int index) {
+    public ColumnProperty columnProperty(int index) {
         return this.columns.get(index);
     }
 
     @Override
-    public void addColumn(String columnName) {
-        StringProperty newColumn = new SimpleStringProperty(columnName);
-        newColumn.addListener((ObservableValue<? extends String> obs, String oldValue, String newValue) -> {
-            this.onColumnsChange();
-        });
-        this.columns.add(newColumn);
+    public void addColumn(ColumnProperty column) {
+        if (column != null) {
+            column.nameProperty().addListener((ObservableValue<? extends String> obs, String oldValue, String newValue) -> {
+                this.onColumnsChange();
+            });
+        }
+        this.columns.add(column);
+    }
+
+    @Override
+    public void setColumnAt(int index, ColumnProperty column) {
+        if (column != null) {
+            column.nameProperty().addListener((ObservableValue<? extends String> obs, String oldValue, String newValue) -> {
+                this.onColumnsChange();
+            });
+        }
+        this.columns.set(index, column);
     }
 }

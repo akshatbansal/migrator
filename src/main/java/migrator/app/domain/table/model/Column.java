@@ -188,6 +188,11 @@ public class Column implements Changable, ColumnChange, ChangeListener<Object>, 
         return this;
     }
 
+    @Override
+    public ColumnProperty getModification() {
+        return this.changedColumn;
+    }
+
     public StringProperty changeTypeProperty() {
         return this.changeCommand.typeProperty();
     }
@@ -327,5 +332,10 @@ public class Column implements Changable, ColumnChange, ChangeListener<Object>, 
             this.precisionProperty().setValue(columnProperty.getPrecision());
         }
         this.getOriginal().precisionProperty().setValue(columnProperty.getPrecision());
+    }
+
+    @Override
+    public String toString() {
+        return this.getChange().getName();
     }
 }

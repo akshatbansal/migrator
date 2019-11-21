@@ -7,7 +7,8 @@ import migrator.lib.repository.UniqueItem;
 public interface IndexProperty extends UniqueItem {
     public StringProperty nameProperty();
     public String getName();
-    public ObservableList<StringProperty> columnsProperty();
+    public ObservableList<ColumnProperty> columnsProperty();
     public StringProperty columnsStringProperty();
-    public void addColumn(String columnName);
+    public void addColumn(ColumnProperty column);
+    public void setColumnAt(int index, ColumnProperty column);
 }

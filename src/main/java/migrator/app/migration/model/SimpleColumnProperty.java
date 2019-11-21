@@ -112,4 +112,9 @@ public class SimpleColumnProperty implements ColumnProperty {
     public Boolean isAutoIncrement() {
         return this.autoIncrementProperty().getValue();
     }
+
+    @Override
+    public String toString() {
+        return this.getName();
+    }
 }

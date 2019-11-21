@@ -3,10 +3,9 @@ package migrator.app.domain.index.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import migrator.app.domain.table.model.Index;
 import migrator.app.migration.model.ChangeCommand;
+import migrator.app.migration.model.ColumnProperty;
 import migrator.app.migration.model.IndexProperty;
 import migrator.app.migration.model.SimpleIndexProperty;
 import migrator.lib.uid.Generator;
@@ -18,7 +17,7 @@ public class IndexFactory {
         this.idGenerator = idGenerator;
     }
 
-    protected IndexProperty simpleIndexProperty(String name, List<StringProperty> columns) {
+    protected IndexProperty simpleIndexProperty(String name, List<ColumnProperty> columns) {
         return new SimpleIndexProperty(
             this.idGenerator.next(),
             name,
@@ -27,10 +26,7 @@ public class IndexFactory {
     }
 
     public Index createNotChanged(String tableId, String indexName, List<String> columns) {
-        List<StringProperty> columnsProperty = new ArrayList<>();
-        for (String column : columns) {
-            columnsProperty.add(new SimpleStringProperty(column));
-        }
+        List<ColumnProperty> columnsProperty = new ArrayList<>();
         return new Index(
             this.idGenerator.next(),
             tableId,
@@ -44,7 +40,7 @@ public class IndexFactory {
         return this.createWithCreateChange(tableId, indexName, new ArrayList<>());
     }
 
-    public Index createWithCreateChange(String tableId, String indexName, List<StringProperty> columns) {
+    public Index createWithCreateChange(String tableId, String indexName, List<ColumnProperty> columns) {
         return new Index(
             this.idGenerator.next(),
             tableId,

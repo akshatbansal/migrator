@@ -129,7 +129,7 @@ public class JavafxTableList extends ViewComponent implements TableList, TableAc
             this.indexFactory.createWithCreateChange(
                 this.tableActiveState.getActive().get().getUniqueKey(),
                 "primary",
-                Arrays.asList(idColumn.nameProperty())
+                Arrays.asList(idColumn.getChange())
             )
         );
     }

@@ -168,7 +168,9 @@ public class Bootstrap {
             Storages.getFileStorage(
                 new File(storageFoldePath.toString(), "index_property.json"),
                 new SimpleJsonListAdapter<>(
-                    new IndexPropertyAdapter()
+                    new IndexPropertyAdapter(
+                        config.columnPropertyRepositoryConfig().get()
+                    )
                 )
             )
         );
