@@ -9,7 +9,7 @@ import migrator.ext.javafx.component.ViewLoader;
 import migrator.app.Container;
 import migrator.app.domain.project.component.CommitForm;
 import migrator.app.domain.project.model.Project;
-import migrator.app.domain.table.service.TableRepository;
+import migrator.app.domain.table.TableRepository;
 import migrator.app.migration.Migration;
 import migrator.app.migration.MigrationGenerator;
 import migrator.app.migration.MigrationGeneratorFactory;
@@ -57,7 +57,7 @@ public class JavafxCommitForm extends ViewComponent implements CommitForm {
         MigrationGeneratorFactory generatorFactory = this.migration.getGenerator(outputType);
         MigrationGenerator generator = generatorFactory.create();
 
-        List<? extends TableChange> changes = this.tableRepository.getList(this.project.getId());
+        List<? extends TableChange> changes = this.tableRepository.findByProject(this.project.getId());
         generator.generateMigration(this.project.getFolder(), this.name.textProperty().get(), changes);
         this.toastService.success("Migration file crated.");
     }

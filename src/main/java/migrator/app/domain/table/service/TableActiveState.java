@@ -3,36 +3,30 @@ package migrator.app.domain.table.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import migrator.app.domain.project.service.ProjectService;
+import migrator.app.domain.table.TableRepository;
 import migrator.app.domain.table.model.Table;
 import migrator.app.router.ActiveRoute;
 import migrator.lib.modelstorage.SimpleActiveState;
 
 public class TableActiveState extends SimpleActiveState<Table> {
     protected TableRepository repository;
-    protected ProjectService projectService;
     protected ActiveRoute activeRoute;
 
-    public TableActiveState(TableRepository repository, ProjectService projectService, ActiveRoute activeRoute) {
+    public TableActiveState(TableRepository repository, ActiveRoute activeRoute) {
         super();
         this.repository = repository;
-        this.projectService = projectService;
         this.activeRoute = activeRoute;
-    }
-
-    protected String getRepositoryKey() {
-        return this.projectService.getOpened().get().getId();
     }
 
     @Override
     public void add(Table item) {
-        this.repository.add(this.getRepositoryKey(), item);
+        this.repository.addWith(item);
         super.add(item);
     }
 
     @Override
     public void remove(Table item) {
-        this.repository.remove(this.getRepositoryKey(), item);
+        this.repository.removeWith(item);
         super.remove(item);
     }
 

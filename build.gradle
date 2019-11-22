@@ -28,6 +28,7 @@ dependencies {
     implementation 'mysql:mysql-connector-java:8.0.18'
     implementation 'org.mariadb.jdbc:mariadb-java-client:2.5.1'
     implementation 'org.postgresql:postgresql:42.2.8'
+    implementation 'org.json:json:20190722'
     // sentry
     implementation 'io.sentry:sentry:1.7.27'
 

@@ -114,19 +114,23 @@ public class JavafxTableList extends ViewComponent implements TableList, TableAc
 
     @Override
     @FXML public void addTable() {
-        Table newTable = this.tableFactory.createWithCreateChange(this.projectService.getOpened().get(), "new_table");
+        Table newTable = this.tableFactory.createWithCreateChange(this.projectService.getOpened().get().getId(), "new_table");
         this.tableActiveState.addAndActivate(newTable);
         
-        Column idColumn = this.columnFactory.createWithCreateChange("id", "integer", "", false, "11", false, "", true);
+        Column idColumn = this.columnFactory.createWithCreateChange(newTable.getUniqueKey(), "id", "integer", "", false, "11", false, "", true);
         this.columnActiveState.add(idColumn);
         this.columnActiveState.add(
-            this.columnFactory.createWithCreateChange("created_at", "timestamp", "CURRENT_TIMESTAMP", false, "", false, "", false)
+            this.columnFactory.createWithCreateChange(newTable.getUniqueKey(), "created_at", "timestamp", "CURRENT_TIMESTAMP", false, "", false, "", false)
         );
         this.columnActiveState.add(
-            this.columnFactory.createWithCreateChange("modified_at", "timestamp", "CURRENT_TIMESTAMP", false, "", false, "", false)
+            this.columnFactory.createWithCreateChange(newTable.getUniqueKey(), "modified_at", "timestamp", "CURRENT_TIMESTAMP", false, "", false, "", false)
         );
         this.indexActiveState.add(
-            this.indexFactory.createWithCreateChange("primary", Arrays.asList(idColumn.nameProperty()))
+            this.indexFactory.createWithCreateChange(
+                this.tableActiveState.getActive().get().getUniqueKey(),
+                "primary",
+                Arrays.asList(idColumn.getChange())
+            )
         );
     }
 

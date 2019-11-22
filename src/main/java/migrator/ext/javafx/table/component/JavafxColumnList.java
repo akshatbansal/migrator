@@ -11,6 +11,7 @@ import migrator.app.domain.column.service.ColumnActiveState;
 import migrator.app.domain.column.service.ColumnFactory;
 import migrator.app.domain.table.component.ColumnList;
 import migrator.app.domain.table.model.Column;
+import migrator.app.domain.table.service.TableActiveState;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
 import migrator.lib.emitter.Emitter;
@@ -20,6 +21,7 @@ import migrator.lib.emitter.Subscription;
 
 public class JavafxColumnList extends ViewComponent implements ColumnList {
     protected ColumnActiveState columnActiveState;
+    protected TableActiveState tableActiveState;
     protected ColumnFactory columnFactory;
     protected Emitter<Column> selectEmitter;
 
@@ -29,6 +31,7 @@ public class JavafxColumnList extends ViewComponent implements ColumnList {
         super(viewLoader);
         this.columnActiveState = container.getColumnActiveState();
         this.columnFactory = container.getColumnFactory();
+        this.tableActiveState = container.getTableActiveState();
         this.selectEmitter = new EventEmitter<>();
         
         this.loadView("/layout/table/column/index.fxml");
@@ -65,7 +68,7 @@ public class JavafxColumnList extends ViewComponent implements ColumnList {
 
     @FXML
     public void addColumn() {
-        Column newColumn = this.columnFactory.createWithCreateChange("new_column");
+        Column newColumn = this.columnFactory.createWithCreateChange(this.tableActiveState.getActive().get().getUniqueKey(), "new_column");
         this.columnActiveState.add(newColumn);
         this.columns.getSelectionModel().select(newColumn);
     }

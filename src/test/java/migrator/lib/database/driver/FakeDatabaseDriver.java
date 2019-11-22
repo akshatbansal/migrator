@@ -5,7 +5,6 @@ import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import migrator.app.database.driver.DatabaseDriver;
-import migrator.app.domain.project.model.Project;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Index;
 import migrator.app.domain.table.model.Table;
@@ -28,17 +27,17 @@ public class FakeDatabaseDriver implements DatabaseDriver {
     public void disconnect() {}
 
     @Override
-    public ObservableList<Column> getColumns(String tableName) {
+    public ObservableList<Column> getColumns(Table table) {
         return this.columns;
     }
 
     @Override
-    public ObservableList<Index> getIndexes(String tableName) {
+    public ObservableList<Index> getIndexes(Table table) {
         return this.indexes;
     }
 
     @Override
-    public ObservableList<Table> getTables(Project project) {
+    public ObservableList<Table> getTables() {
         return this.tables;
     }
 

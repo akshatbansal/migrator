@@ -1,26 +1,45 @@
 package migrator.app.domain.table.model;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import migrator.app.migration.model.ChangeCommand;
+import migrator.app.migration.model.ColumnProperty;
 import migrator.app.migration.model.IndexChange;
 import migrator.app.migration.model.IndexProperty;
+import migrator.app.migration.model.Modification;
 
-public class Index implements Changable, IndexChange, Serializable {
-    private static final long serialVersionUID = 6910944874040909876L;
+public class Index implements Changable, IndexChange, Modification<IndexProperty> {
+    protected String id;
+    protected String tableId;
     protected IndexProperty originalIndex;
     protected IndexProperty changedIndex;
     protected ChangeCommand changeCommand;
 
-    public Index(IndexProperty originalIndex, IndexProperty changedIndex, ChangeCommand changeCommand) {
+    public Index(
+        String id,
+        String tableId,
+        IndexProperty originalIndex,
+        IndexProperty changedIndex,
+        ChangeCommand changeCommand
+    ) {
+        this.id = id;
+        this.tableId = tableId;
         this.originalIndex = originalIndex;
         this.changedIndex = changedIndex;
         this.changeCommand = changeCommand;
+    }
+
+    @Override
+    public String getUniqueKey() {
+        return this.id;
+    }
+
+    public String getTableId() {
+        return this.tableId;
+    }
+
+    public void setTableId(String tableId) {
+        this.tableId = tableId;
     }
 
     public StringProperty nameProperty() {
@@ -35,7 +54,7 @@ public class Index implements Changable, IndexChange, Serializable {
         return this.originalIndex.getName();
     }
 
-    public ObservableList<StringProperty> columnsProperty() {
+    public ObservableList<ColumnProperty> columnsProperty() {
         return this.changedIndex.columnsProperty();
     }
 
@@ -47,20 +66,20 @@ public class Index implements Changable, IndexChange, Serializable {
         return this.originalIndex.columnsStringProperty();
     }
 
-    public ObservableList<StringProperty> originalColumnsProperty() {
+    public ObservableList<ColumnProperty> originalColumnsProperty() {
         return this.originalIndex.columnsProperty();
     }
 
-    public StringProperty originalColumnProperty(int index) {
+    public ColumnProperty originalColumnProperty(int index) {
         return this.originalColumnsProperty().get(index);
     }
 
-    public StringProperty columnProperty(int index) {
+    public ColumnProperty columnProperty(int index) {
         return this.columnsProperty().get(index);
     }
 
-    public StringProperty columnPropertyOrCreate(int index) {
-        this.fillColumnsTo(index);
+    public ColumnProperty columnPropertyOrCreate(int index) {
+        this.fillColumnsTo(index + 1);
         return this.columnProperty(index);
     }
 
@@ -73,9 +92,14 @@ public class Index implements Changable, IndexChange, Serializable {
         return this;
     }
 
+    @Override
+    public IndexProperty getModification() {
+        return this.changedIndex;
+    }
+
     protected void fillColumnsTo(int index) {
-        while (this.columnsProperty().size() <= index) {
-            this.changedIndex.addColumn("");
+        while (this.columnsProperty().size() < index) {
+            this.changedIndex.addColumn(null);
         }
     }
 
@@ -99,8 +123,8 @@ public class Index implements Changable, IndexChange, Serializable {
     }
 
     @Override
-    public void addColumn(String columnName) {
-        this.changedIndex.addColumn(columnName);
+    public void addColumn(ColumnProperty column) {
+        this.changedIndex.addColumn(column);
     }
 
     @Override
@@ -108,11 +132,24 @@ public class Index implements Changable, IndexChange, Serializable {
         return this.originalIndex;
     }
 
-    private void writeObject(ObjectOutputStream s) throws IOException {
-        s.defaultWriteObject();
+    public void updateOriginal(IndexProperty indexProperty) {
+        this.getOriginal().nameProperty().set(
+            indexProperty.getName()
+        );
+        this.getChange().nameProperty().set(
+            indexProperty.getName()
+        );
+
+        this.getOriginal().columnsProperty().setAll(
+            indexProperty.columnsProperty()
+        );
+        this.getChange().columnsProperty().setAll(
+            indexProperty.columnsProperty()
+        );
     }
 
-    private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
-        s.defaultReadObject();
+    public void setColumnAt(int index, ColumnProperty column) {
+        this.fillColumnsTo(index);
+        this.getModification().setColumnAt(index, column);
     }
 }

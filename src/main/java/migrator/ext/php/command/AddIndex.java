@@ -3,8 +3,8 @@ package migrator.ext.php.command;
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.beans.property.StringProperty;
 import migrator.app.code.CodeCommand;
+import migrator.app.migration.model.ColumnProperty;
 import migrator.app.migration.model.IndexChange;
 
 public class AddIndex implements CodeCommand {
@@ -20,13 +20,13 @@ public class AddIndex implements CodeCommand {
     }
 
     private String getColumns() {
-        List<StringProperty> columnsProperty = this.indexChange.columnsProperty();
+        List<ColumnProperty> columnsProperty = this.indexChange.columnsProperty();
         List<String> columns = new ArrayList<>();
-        for (StringProperty columnProperty : columnsProperty) {
-            if (columnProperty.get().isEmpty()) {
+        for (ColumnProperty columnProperty : columnsProperty) {
+            if (columnProperty == null) {
                 continue;
             }
-            columns.add(columnProperty.get());
+            columns.add(columnProperty.getName());
         }
         String columnsString = String.join("', '", columns);
         if (!columnsString.isEmpty()) {

@@ -17,6 +17,7 @@ import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Index;
 import migrator.app.domain.table.service.TableActiveState;
 import migrator.app.migration.model.ChangeCommand;
+import migrator.app.migration.model.ColumnProperty;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
 
@@ -27,9 +28,9 @@ public class JavafxIndexForm extends ViewComponent implements IndexForm {
     protected Index index;
 
     @FXML protected TextField name;
-    @FXML protected ComboBox<String> column1;
-    @FXML protected ComboBox<String> column2;
-    @FXML protected ComboBox<String> column3;
+    @FXML protected ComboBox<ColumnProperty> column1;
+    @FXML protected ComboBox<ColumnProperty> column2;
+    @FXML protected ComboBox<ColumnProperty> column3;
     @FXML protected HBox manageBox;
     protected Button removeButton;
     protected Button restoreButton;
@@ -62,9 +63,19 @@ public class JavafxIndexForm extends ViewComponent implements IndexForm {
             return;
         }
         this.name.textProperty().bindBidirectional(index.nameProperty());
-        this.column1.valueProperty().bindBidirectional(index.columnPropertyOrCreate(0));
-        this.column2.valueProperty().bindBidirectional(index.columnPropertyOrCreate(1));
-        this.column3.valueProperty().bindBidirectional(index.columnPropertyOrCreate(2));
+
+        this.column1.valueProperty().addListener((observable, oldValue, newValue) -> {
+            index.setColumnAt(0, newValue);
+        });
+        this.column2.valueProperty().addListener((observable, oldValue, newValue) -> {
+            index.setColumnAt(1, newValue);
+        });
+        this.column3.valueProperty().addListener((observable, oldValue, newValue) -> {
+            index.setColumnAt(2, newValue);
+        });
+        this.column1.valueProperty().set(index.columnPropertyOrCreate(0));
+        this.column2.valueProperty().set(index.columnPropertyOrCreate(1));
+        this.column3.valueProperty().set(index.columnPropertyOrCreate(2));
 
         if (this.index.getChangeCommand().isType(ChangeCommand.CREATE)) {
             this.name.disableProperty().set(false);
@@ -90,14 +101,14 @@ public class JavafxIndexForm extends ViewComponent implements IndexForm {
     }
 
     @FXML public void initialize() {
-        List<String> columnNames = new ArrayList<>();
-        columnNames.add("");
+        List<ColumnProperty> columnOptions = new ArrayList<>();
+        columnOptions.add(null);
         for (Column column : this.columnActiveState.getList()) {
-            columnNames.add(column.getName());
+            columnOptions.add(column.getChange());
         }
-        this.column1.getItems().setAll(columnNames);
-        this.column2.getItems().setAll(columnNames);
-        this.column3.getItems().setAll(columnNames);
+        this.column1.getItems().setAll(columnOptions);
+        this.column2.getItems().setAll(columnOptions);
+        this.column3.getItems().setAll(columnOptions);
     }
 
     @FXML public void delete() {

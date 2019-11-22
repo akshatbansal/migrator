@@ -1,6 +1,5 @@
 package migrator.app.domain.column.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javafx.beans.value.ChangeListener;
@@ -8,6 +7,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import migrator.app.database.driver.DatabaseDriver;
 import migrator.app.database.driver.DatabaseDriverManager;
+import migrator.app.domain.column.ColumnRepository;
 import migrator.app.domain.project.model.Project;
 import migrator.app.domain.project.service.ProjectService;
 import migrator.app.domain.table.model.Column;
@@ -15,11 +15,12 @@ import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableActiveState;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.lib.modelstorage.ActiveState;
-import migrator.lib.modelstorage.Repository;
+import migrator.lib.diff.CompareListDiff;
+import migrator.lib.diff.ListDiff;
 
 public class SimpleColumnService implements ColumnService {
     protected TableActiveState tableActiveState;
-    protected Repository<Column> columnRepository;
+    protected ColumnRepository columnRepository;
     protected ActiveState<Column> columnActiveState;
     protected ColumnFactory columnFactory;
     protected DatabaseDriverManager databaseDriverManager;
@@ -27,7 +28,7 @@ public class SimpleColumnService implements ColumnService {
     protected ProjectService projectService;
 
     public SimpleColumnService(
-        Repository<Column> columnRepository,
+        ColumnRepository columnRepository,
         ActiveState<Column> columnActiveState,
         ColumnFactory columnFactory,
         TableActiveState tableActiveState,
@@ -61,29 +62,22 @@ public class SimpleColumnService implements ColumnService {
             return;
         }
         Project project = this.projectService.getOpened().get();
-        String repositryKey = project.getId() + "." + activeTable.getId();
 
         DatabaseDriver databaseDriver  = this.databaseDriverManager
             .createDriver(project.getDatabase());
         databaseDriver.connect();
 
-        List<Column> columns = new ArrayList<>();
-        for (Column dbColumn : databaseDriver.getColumns(activeTable.getOriginalName())) {
-            columns.add(
-                this.mergeColumn(dbColumn, this.columnRepository.get(repositryKey, dbColumn.getOriginal().getName()))
-            );
+        List<Column> dbList = databaseDriver.getColumns(activeTable);
+        for (Column c : dbList) {
+            c.setTableId(activeTable.getUniqueKey());
         }
-
-        for (Column column : this.columnRepository.getList(repositryKey)) {
-            if (!column.getCommand().isType(ChangeCommand.CREATE)) {
-                continue;
-            }
-            columns.add(column);
-        }
-        this.columnRepository.setList(repositryKey, columns);
+        this.merge(
+            dbList,
+            this.columnRepository.findByTable(activeTable.getUniqueKey())
+        );
 
         this.columnActiveState.setListAll(
-            this.columnRepository.getList(repositryKey)
+            this.columnRepository.findByTable(activeTable.getUniqueKey())
         );
     }
 
@@ -113,46 +107,26 @@ public class SimpleColumnService implements ColumnService {
         this.columnActiveState.remove(column);
     }
 
-    protected Column mergeColumn(Column dbValue, Column repositoryValue) {
-        if (dbValue == null) {
-            if (repositoryValue.getCommand().isType(ChangeCommand.CREATE)) {
-                return repositoryValue;
+    protected void merge(List<Column> dbList, List<Column> repoList) {
+        ListDiff<Column> diff = new CompareListDiff<>(dbList, repoList, (Column a, Column b) -> {
+            return a.getOriginal().getName().equals(
+                b.getOriginal().getName()
+            );
+        });
+
+        for (List<Column> columnPair : diff.getCommon()) {
+            columnPair.get(1).updateOriginal(
+                columnPair.get(0).getOriginal()
+            );
+        }
+        for (Column column : diff.getLeftMissing()) {
+            if (column.getChangeCommand().isType(ChangeCommand.CREATE)) {
+                continue;
             }
-            return null;
+            this.columnRepository.removeWith(column);
         }
-
-        if (repositoryValue == null) {
-            return dbValue;
+        for (Column column : diff.getRightMissing()) {
+            this.columnRepository.addWith(column);
         }
-
-        if (!repositoryValue.hasNameChanged()) {
-            repositoryValue.nameProperty().setValue(dbValue.getOriginal().getName());    
-        }
-        repositoryValue.getOriginal().nameProperty().set(dbValue.getOriginal().getName());
-        if (!repositoryValue.hasFormatChanged()) {
-            repositoryValue.formatProperty().setValue(dbValue.getOriginal().getFormat());    
-        }
-        repositoryValue.getOriginal().formatProperty().set(dbValue.getOriginal().getFormat());
-        if (!repositoryValue.hasDefaultValueChanged()) {
-            repositoryValue.defaultValueProperty().setValue(dbValue.getOriginal().getDefaultValue());    
-        }
-        repositoryValue.getOriginal().defaultValueProperty().set(dbValue.getOriginal().getDefaultValue());
-        if (!repositoryValue.hasNullEnabledChanged()) {
-            repositoryValue.nullProperty().setValue(dbValue.getOriginal().isNullEnabled());    
-        }
-        repositoryValue.getOriginal().nullProperty().setValue(dbValue.getOriginal().isNullEnabled());
-        if (!repositoryValue.hasLengthChanged()) {
-            repositoryValue.lengthProperty().setValue(dbValue.getOriginal().getLength());    
-        }
-        repositoryValue.getOriginal().lengthProperty().setValue(dbValue.getOriginal().getLength());
-        if (!repositoryValue.hasSignChanged()) {
-            repositoryValue.signProperty().setValue(dbValue.getOriginal().isSigned());
-        }
-        repositoryValue.getOriginal().signProperty().setValue(dbValue.getOriginal().isSigned());
-        if (!repositoryValue.hasPrecisionChanged()) {
-            repositoryValue.precisionProperty().setValue(dbValue.getOriginal().getPrecision());
-        }
-        repositoryValue.getOriginal().precisionProperty().setValue(dbValue.getOriginal().getPrecision());
-        return repositoryValue;
     }
 }

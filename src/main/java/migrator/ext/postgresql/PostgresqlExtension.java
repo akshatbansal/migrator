@@ -13,7 +13,8 @@ public class PostgresqlExtension implements Extension {
             config.tableFactoryConfig().get(),
             config.columnFactoryConfig().get(),
             config.indexFactoryConfig().get(),
-            config.loggerConfig()
+            config.loggerConfig(),
+            config.columnRepositoryConfig().get()
         ));
     }
 }

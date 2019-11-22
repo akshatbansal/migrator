@@ -1,10 +1,5 @@
 package migrator.app.domain.table.model;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -14,30 +9,33 @@ import migrator.app.database.format.ColumnFormatManager;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.app.migration.model.ColumnChange;
 import migrator.app.migration.model.ColumnProperty;
+import migrator.app.migration.model.Modification;
+import migrator.lib.repository.UniqueItem;
 
-public class Column implements Changable, ColumnChange, ChangeListener<Object>, Serializable {
-    private static final long serialVersionUID = 7548712804607681520L;
-    protected transient ColumnFormatManager columnFormatManager;
+public class Column implements Changable, ColumnChange, ChangeListener<Object>, UniqueItem, Modification<ColumnProperty> {
+    protected ColumnFormatManager columnFormatManager;
+    protected String id;
+    protected String tableId;
     protected ColumnProperty originalColumn;
     protected ColumnProperty changedColumn;
     protected ChangeCommand changeCommand;
-    protected transient StringProperty fullFormatProperty;
+    protected StringProperty fullFormatProperty;
 
     public Column(
         ColumnFormatManager columnFormatManager,
+        String id,
+        String tableId,
         ColumnProperty originalColumn,
         ColumnProperty changedColumn,
         ChangeCommand changeCommand
     ) {
         this.columnFormatManager = columnFormatManager;
+        this.id = id;
+        this.tableId = tableId;
         this.originalColumn = originalColumn;
         this.changedColumn = changedColumn;
         this.changeCommand = changeCommand;
         
-        this.initialize();
-    }
-
-    protected void initialize() {
         this.fullFormatProperty = new SimpleStringProperty();
         this.refreshFullFormat();
 
@@ -51,9 +49,17 @@ public class Column implements Changable, ColumnChange, ChangeListener<Object>, 
         this.changedColumn.autoIncrementProperty().addListener(this);
     }
 
-    public void setColumnFormatManager(ColumnFormatManager columnFormatManager) {
-        this.columnFormatManager = columnFormatManager;
-        this.refreshFullFormat();
+    @Override
+    public String getUniqueKey() {
+        return this.id;
+    }
+
+    public void setTableId(String tableId) {
+        this.tableId = tableId;
+    }
+
+    public String getTableId() {
+        return this.tableId;
     }
 
     public StringProperty nameProperty() {
@@ -182,6 +188,11 @@ public class Column implements Changable, ColumnChange, ChangeListener<Object>, 
         return this;
     }
 
+    @Override
+    public ColumnProperty getModification() {
+        return this.changedColumn;
+    }
+
     public StringProperty changeTypeProperty() {
         return this.changeCommand.typeProperty();
     }
@@ -286,12 +297,45 @@ public class Column implements Changable, ColumnChange, ChangeListener<Object>, 
         );
     }
 
-    private void writeObject(ObjectOutputStream s) throws IOException {
-        s.defaultWriteObject();
+    public void updateOriginal(ColumnProperty columnProperty) {
+        if (!this.hasNameChanged()) {
+            this.nameProperty().setValue(columnProperty.getName());    
+        }
+        this.getOriginal().nameProperty().set(columnProperty.getName());
+
+        if (!this.hasFormatChanged()) {
+            this.formatProperty().setValue(columnProperty.getFormat());
+        }
+        this.getOriginal().formatProperty().set(columnProperty.getFormat());
+
+        if (!this.hasDefaultValueChanged()) {
+            this.defaultValueProperty().setValue(columnProperty.getDefaultValue());    
+        }
+        this.getOriginal().defaultValueProperty().set(columnProperty.getDefaultValue());
+
+        if (!this.hasNullEnabledChanged()) {
+            this.nullProperty().setValue(columnProperty.isNullEnabled());    
+        }
+        this.getOriginal().nullProperty().setValue(columnProperty.isNullEnabled());
+
+        if (!this.hasLengthChanged()) {
+            this.lengthProperty().setValue(columnProperty.getLength());    
+        }
+        this.getOriginal().lengthProperty().setValue(columnProperty.getLength());
+
+        if (!this.hasSignChanged()) {
+            this.signProperty().setValue(columnProperty.isSigned());
+        }
+        this.getOriginal().signProperty().setValue(columnProperty.isSigned());
+
+        if (!this.hasPrecisionChanged()) {
+            this.precisionProperty().setValue(columnProperty.getPrecision());
+        }
+        this.getOriginal().precisionProperty().setValue(columnProperty.getPrecision());
     }
 
-    private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
-        s.defaultReadObject();
-        this.initialize();
+    @Override
+    public String toString() {
+        return this.getChange().getName();
     }
 }

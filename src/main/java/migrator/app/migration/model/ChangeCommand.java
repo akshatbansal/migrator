@@ -7,8 +7,9 @@ import java.io.Serializable;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import migrator.lib.repository.UniqueItem;
 
-public class ChangeCommand implements Serializable {
+public class ChangeCommand implements Serializable, UniqueItem {
     private static final long serialVersionUID = 5024506227307450694L;
     public static final String CREATE = "create";
     public static final String UPDATE = "update";
@@ -16,13 +17,16 @@ public class ChangeCommand implements Serializable {
     public static final String NONE = "";
 
     protected transient StringProperty name;
+    protected String id;
 
-    public ChangeCommand() {
-        this(ChangeCommand.NONE);
+    public ChangeCommand(String id, String name) {
+        this.id = id;
+        this.name = new SimpleStringProperty(name);
     }
 
-    public ChangeCommand(String name) {
-        this.name = new SimpleStringProperty(name);
+    @Override
+    public String getUniqueKey() {
+        return this.id;
     }
 
     public Boolean isType(String name) {

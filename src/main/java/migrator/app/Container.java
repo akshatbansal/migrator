@@ -2,32 +2,44 @@ package migrator.app;
 
 import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.database.format.ColumnFormatManager;
+import migrator.app.domain.column.ColumnRepository;
 import migrator.app.domain.column.service.ColumnActiveState;
 import migrator.app.domain.column.service.ColumnFactory;
-import migrator.app.domain.column.service.ColumnRepository;
 import migrator.app.domain.column.service.ColumnService;
 import migrator.app.domain.connection.service.ConnectionFactory;
 import migrator.app.domain.connection.service.ConnectionService;
 import migrator.app.domain.database.service.DatabaseFactory;
 import migrator.app.domain.database.service.DatabaseService;
+import migrator.app.domain.index.IndexRepository;
 import migrator.app.domain.index.service.IndexActiveState;
 import migrator.app.domain.index.service.IndexFactory;
-import migrator.app.domain.index.service.IndexRepository;
 import migrator.app.domain.index.service.IndexService;
 import migrator.app.domain.project.service.ProjectFactory;
 import migrator.app.domain.project.service.ProjectService;
 import migrator.app.domain.table.service.TableFactory;
-import migrator.app.domain.table.service.TableRepository;
 import migrator.app.domain.table.service.TableService;
+import migrator.app.domain.table.TableRepository;
+import migrator.app.domain.table.model.Column;
+import migrator.app.domain.table.model.Index;
+import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableActiveState;
+
+import java.util.Collection;
+
 import migrator.app.ConfigContainer;
 import migrator.app.code.CodeManager;
 import migrator.app.migration.Migration;
+import migrator.app.migration.model.ChangeCommand;
+import migrator.app.migration.model.ColumnProperty;
+import migrator.app.migration.model.IndexProperty;
+import migrator.app.migration.model.TableProperty;
 import migrator.app.router.ActiveRoute;
 import migrator.app.toast.ToastService;
 import migrator.lib.hotkyes.HotkeyFactory;
 import migrator.lib.hotkyes.HotkeysService;
 import migrator.lib.logger.Logger;
+import migrator.lib.repository.UniqueRepository;
+import migrator.lib.storage.Storage;
 
 public class Container {
     protected ConfigContainer config;
@@ -142,5 +154,49 @@ public class Container {
 
     public HotkeysService getHotkeyService() {
         return this.config.getHoteyService().get();
+    }
+
+    public UniqueRepository<IndexProperty> getIndexPropertyRepository() {
+        return this.config.indexPropertyRepositoryConfig().get();
+    }
+
+    public Storage<Collection<ChangeCommand>> getChangeCommandStorage() {
+        return this.config.changeCommandStorageConfig().get();
+    }
+
+    public Storage<Collection<ColumnProperty>> getColumnPropertyStorage() {
+        return this.config.columnPropertyStorageConfig().get();
+    }
+
+    public Storage<Collection<IndexProperty>> getIndexPropertyStorage() {
+        return this.config.indexPropertyStorageConfig().get();
+    }
+
+    public Storage<Collection<Column>> getColumnStorage() {
+        return this.config.columnStorageConfig().get();
+    }
+
+    public Storage<Collection<Index>> getIndexStorage() {
+        return this.config.indexStorageConfig().get();
+    }
+
+    public UniqueRepository<ChangeCommand> getChangeCommandRepository() {
+        return this.config.changeCommandRepositoryConfig().get();
+    }
+
+    public UniqueRepository<ColumnProperty> getColumnPropertyRepository() {
+        return this.config.columnPropertyRepositoryConfig().get();
+    }
+
+    public UniqueRepository<TableProperty> getTablePropertyRepository() {
+        return this.config.tablePropertyRepositoryConfig().get();
+    }
+
+    public Storage<Collection<Table>> getTableStorage() {
+        return this.config.tableStorageConfig().get();
+    }
+
+    public Storage<Collection<TableProperty>> getTablePropertyStorage() {
+        return this.config.tablePropertyStorageConfig().get();
     }
 }

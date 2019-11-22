@@ -1,32 +1,28 @@
 package migrator.app.domain.table.model;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.app.migration.model.ColumnChange;
 import migrator.app.migration.model.IndexChange;
+import migrator.app.migration.model.Modification;
 import migrator.app.migration.model.TableChange;
 import migrator.app.migration.model.TableProperty;
 
-public class Table implements TableChange, ChangeListener<Object>, Serializable {
-    private static final long serialVersionUID = 7299905871196456955L;
+public class Table implements TableChange, ChangeListener<Object>, Modification<TableProperty> {
     protected TableProperty originalTable;
     protected TableProperty changedTable;
     protected ChangeCommand changeCommand;
     protected String id;
-    protected transient ObservableList<Column> columns;
-    protected transient ObservableList<Index> indexes;
+    protected String projectId;
+    protected ObservableList<Column> columns;
+    protected ObservableList<Index> indexes;
 
     public Table(
         String id,
+        String projectId,
         TableProperty originalTable,
         TableProperty changedProperty,
         ChangeCommand changeCommand,
@@ -34,17 +30,22 @@ public class Table implements TableChange, ChangeListener<Object>, Serializable 
         ObservableList<Index> indexes
     ) {
         this.id = id;
+        this.projectId = projectId;
         this.originalTable = originalTable;
         this.changedTable = changedProperty;
         this.changeCommand = changeCommand;
         this.columns = columns;
         this.indexes = indexes;
 
-        this.initialize();
+        this.changedTable.nameProperty().addListener(this);
     }
 
-    public void initialize() {
-        this.changedTable.nameProperty().addListener(this);
+    public String getProjectId() {
+        return this.projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
     }
 
     public void setColumns(ObservableList<Column> columns) {
@@ -55,7 +56,8 @@ public class Table implements TableChange, ChangeListener<Object>, Serializable 
         this.indexes = indexes;
     }
 
-    public String getId() {
+    @Override
+    public String getUniqueKey() {
         return this.id;
     }
 
@@ -87,6 +89,11 @@ public class Table implements TableChange, ChangeListener<Object>, Serializable 
     }
 
     @Override
+    public TableProperty getModification() {
+        return this.changedTable;
+    }
+
+    @Override
     public void restore() {
         this.changedTable.nameProperty().set(this.originalTable.getName());
         this.changeCommand.setType(ChangeCommand.NONE);
@@ -97,9 +104,10 @@ public class Table implements TableChange, ChangeListener<Object>, Serializable 
         return this.columns;
     }
 
+    @Deprecated
     @Override
     public ChangeCommand getCommand() {
-        return this.changeCommand;
+        return this.getChangeCommand();
     }
 
     @Override
@@ -133,16 +141,20 @@ public class Table implements TableChange, ChangeListener<Object>, Serializable 
         this.changeCommand.typeProperty().set(ChangeCommand.NONE);
     }
 
-    private void writeObject(ObjectOutputStream s) throws IOException {
-        s.defaultWriteObject();
+    @Override
+    public ChangeCommand getChangeCommand() {
+        return this.changeCommand;
     }
 
-    private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
-        s.defaultReadObject();
-
-        this.indexes = FXCollections.observableArrayList();
-        this.columns = FXCollections.observableArrayList();
-        
-        this.initialize();
+    @Override
+    public void updateOriginal(TableProperty original) {
+        if (!this.hasNameChanged()) {
+            this.getChange().nameProperty().set(
+                original.getName()
+            );
+        }
+        this.getOriginal().nameProperty().set(
+            original.getName()
+        );
     }
 }

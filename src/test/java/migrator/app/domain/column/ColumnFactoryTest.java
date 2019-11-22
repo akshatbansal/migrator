@@ -6,6 +6,7 @@ import migrator.app.database.format.FakeColumnFormatManager;
 import migrator.app.database.format.SimpleColumnFormat;
 import migrator.app.domain.column.service.ColumnFactory;
 import migrator.app.domain.table.model.Column;
+import migrator.lib.uid.SessionIncrementalGenerator;
 
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,12 +19,13 @@ public class ColumnFactoryTest {
         this.columnFactory = new ColumnFactory(
             new FakeColumnFormatManager(
                 new SimpleColumnFormat("format")
-            )
+            ),
+            new SessionIncrementalGenerator("ColumnFactory")
         );
     }
 
     @Test public void testCreateNotChangedHasChangedValuesEqualToOriginal() {
-        Column column = this.columnFactory.createNotChanged("column_name", "format", "default", true, "255", true, "", false);
+        Column column = this.columnFactory.createNotChanged("1", "column_name", "format", "default", true, "255", true, "", false);
     
         assertEquals("column_name", column.getChange().getName());
         assertEquals("format", column.getChange().getFormat());
@@ -32,13 +34,13 @@ public class ColumnFactoryTest {
     }
 
     @Test public void testCreateNotChangedIsNoneType() {
-        Column column = this.columnFactory.createNotChanged("column_name", "format", "default", true, "255", true, "", false);
+        Column column = this.columnFactory.createNotChanged("1", "column_name", "format", "default", true, "255", true, "", false);
     
         assertEquals("", column.getChange().getCommand().getType());
     }
 
     @Test public void testCreateNotChangedHasInitializedValuesSetAsOriginal() {
-        Column column = this.columnFactory.createNotChanged("column_name", "format", "default", true, "255", true, "", false);
+        Column column = this.columnFactory.createNotChanged("1","column_name", "format", "default", true, "255", true, "", false);
 
         assertEquals("", column.getChange().getCommand().getType());
         assertEquals("column_name", column.getOriginalName());
@@ -48,7 +50,7 @@ public class ColumnFactoryTest {
     }
 
     @Test public void testCreateNotChangedHasInitializedValuesSetAsCurrent() {
-        Column column = this.columnFactory.createNotChanged("column_name", "format", "default", true, "255", true, "", false);
+        Column column = this.columnFactory.createNotChanged("1", "column_name", "format", "default", true, "255", true, "", false);
 
         assertEquals("", column.getChange().getCommand().getType());
         assertEquals("column_name", column.getName());
@@ -58,13 +60,13 @@ public class ColumnFactoryTest {
     }
 
     @Test public void testCreateWithCreateChangeByNameHasSetValuesInChangeCommand() {
-        Column column = this.columnFactory.createWithCreateChange("column_name");
+        Column column = this.columnFactory.createWithCreateChange("1", "column_name");
     
         assertEquals("column_name", column.getChange().getName());        
     }
 
     @Test public void testCreateWithCreateChangeByNameIsCreateType() {
-        Column column = this.columnFactory.createWithCreateChange("column_name");
+        Column column = this.columnFactory.createWithCreateChange("1", "column_name");
     
         assertEquals("create", column.getChange().getCommand().getType());
     }

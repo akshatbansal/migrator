@@ -35,7 +35,7 @@ public class PhinxMigrationGenerator implements MigrationGenerator {
             return true;
         }
 
-        Storage storage = this.timestampFileStorageFactory.create(
+        Storage<String> storage = this.timestampFileStorageFactory.create(
             new File(projectFolder + System.getProperty("file.separator") + name)
         );
         String className = this.classNameFormatter.format(name);
