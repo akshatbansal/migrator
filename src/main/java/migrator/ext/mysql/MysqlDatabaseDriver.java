@@ -19,12 +19,14 @@ import java.util.regex.Pattern;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import migrator.app.database.driver.DatabaseDriver;
+import migrator.app.domain.column.ColumnRepository;
 import migrator.app.domain.column.service.ColumnFactory;
 import migrator.app.domain.index.service.IndexFactory;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Index;
 import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableFactory;
+import migrator.app.migration.model.ColumnProperty;
 import migrator.lib.logger.Logger;
 
 public class MysqlDatabaseDriver implements DatabaseDriver {
@@ -34,6 +36,7 @@ public class MysqlDatabaseDriver implements DatabaseDriver {
     protected TableFactory tableFactory;
     protected ColumnFactory columnFactory;
     protected IndexFactory indexFactory;
+    protected ColumnRepository columnRepository;
     protected Logger logger;
 
     protected Connection mysql;
@@ -46,6 +49,7 @@ public class MysqlDatabaseDriver implements DatabaseDriver {
         TableFactory tableFactory,
         ColumnFactory columnFactory,
         IndexFactory indexFactory,
+        ColumnRepository columnRepository,
         Logger logger,
         String url,
         String user,
@@ -54,6 +58,7 @@ public class MysqlDatabaseDriver implements DatabaseDriver {
         this.tableFactory = tableFactory;
         this.columnFactory = columnFactory;
         this.indexFactory = indexFactory;
+        this.columnRepository = columnRepository;
         this.logger = logger;
         this.url = url;
         this.user = user;
@@ -127,12 +132,13 @@ public class MysqlDatabaseDriver implements DatabaseDriver {
         return this.tables;
     }
 
-    protected void refreshColumns(String tableName) throws SQLException {
+    protected void refreshColumns(Table table) throws SQLException {
         if (this.mysql == null) {
             this.columns.clear();
             return;
         }
 
+        String tableName = table.getOriginalName();
         if (!this.tableExists(tableName)) {
             this.columns.clear();
             return;
@@ -149,7 +155,7 @@ public class MysqlDatabaseDriver implements DatabaseDriver {
             }
             String dbFormat = rs.getString(2);
             Column column = this.columnFactory.createNotChanged(
-                "NULL",
+                table.getUniqueKey(),
                 rs.getString(1),
                 this.getFormat(dbFormat),
                 defaultValue,
@@ -164,12 +170,13 @@ public class MysqlDatabaseDriver implements DatabaseDriver {
         this.columns.setAll(currentColumns);
     }
 
-    protected void refreshIndexes(String tableName) throws SQLException {
+    protected void refreshIndexes(Table table) throws SQLException {
         if (this.mysql == null) {
             this.indexes.clear();
             return;
         }
 
+        String tableName = table.getOriginalName();
         if (!this.tableExists(tableName)) {
             this.indexes.clear();
             return;
@@ -178,21 +185,23 @@ public class MysqlDatabaseDriver implements DatabaseDriver {
         Statement statement = this.mysql.createStatement();
         String sql = "SHOW INDEX from " + tableName;
         ResultSet rs = statement.executeQuery(sql);
-        Map<String, List<String>> indexColumnsMap = new LinkedHashMap<>();
+        Map<String, List<ColumnProperty>> indexColumnsMap = new LinkedHashMap<>();
         while (rs.next()) {
             String indexName = rs.getString(3);
             if (!indexColumnsMap.containsKey(indexName)) {
                 indexColumnsMap.put(indexName, new ArrayList<>());
             }
-            indexColumnsMap.get(indexName).add(rs.getString(5));
+            indexColumnsMap.get(indexName).add(
+                this.getColumnPropertyByName(rs.getString(5), table.getUniqueKey())
+            );
         }
         List<Index> currentIndexes = new LinkedList<>();
-        Iterator<Entry<String, List<String>>> entryIterator = indexColumnsMap.entrySet().iterator();
+        Iterator<Entry<String, List<ColumnProperty>>> entryIterator = indexColumnsMap.entrySet().iterator();
         while (entryIterator.hasNext()) {
-            Entry<String, List<String>> entry = entryIterator.next();
+            Entry<String, List<ColumnProperty>> entry = entryIterator.next();
             currentIndexes.add(
                 this.indexFactory.createNotChanged(
-                    "NULL",
+                    table.getUniqueKey(),
                     entry.getKey(), 
                     entry.getValue()
                 )
@@ -202,9 +211,9 @@ public class MysqlDatabaseDriver implements DatabaseDriver {
     }
 
     @Override
-    public ObservableList<Column> getColumns(String tableName) {
+    public ObservableList<Column> getColumns(Table table) {
         try {
-            this.refreshColumns(tableName);
+            this.refreshColumns(table);
         } catch (SQLException ex) {
             ex.printStackTrace();
             this.columns.clear();
@@ -220,9 +229,9 @@ public class MysqlDatabaseDriver implements DatabaseDriver {
     }
 
     @Override
-    public ObservableList<Index> getIndexes(String tableName) {
+    public ObservableList<Index> getIndexes(Table table) {
         try {
-            this.refreshIndexes(tableName);
+            this.refreshIndexes(table);
         } catch (SQLException ex) {
             ex.printStackTrace();
             this.indexes.clear();
@@ -277,5 +286,14 @@ public class MysqlDatabaseDriver implements DatabaseDriver {
 
     protected Boolean getSign(String dbFormat) {
         return !dbFormat.endsWith("unsigned");
+    }
+
+    protected ColumnProperty getColumnPropertyByName(String columnName, String tableId) {
+        for (Column column : this.columnRepository.findByTable(tableId)) {
+            if (column.getOriginal().getName().equals(columnName)) {
+                return column.getChange();
+            }
+        }
+        return null;
     }
 }

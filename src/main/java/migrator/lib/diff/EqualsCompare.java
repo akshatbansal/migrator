@@ -1,4 +1,4 @@
-package migrator.lib.repository.diff;
+package migrator.lib.diff;
 
 public class EqualsCompare<T> implements DiffCompare<T> {
     @Override

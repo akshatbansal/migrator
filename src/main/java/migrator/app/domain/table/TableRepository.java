@@ -1,11 +1,11 @@
 package migrator.app.domain.table;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import migrator.app.domain.table.model.Table;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.app.migration.model.TableProperty;
+import migrator.lib.repository.RepositoryMapIndex;
 import migrator.lib.repository.UniqueRepository;
 
 public class TableRepository extends UniqueRepository<Table> {
@@ -16,16 +16,15 @@ public class TableRepository extends UniqueRepository<Table> {
         super();
         this.changeCommandRepo = changeCommandRepo;
         this.tablePropertyRepo = tablePropertyRepo;
+        this.indexes.add(
+            new RepositoryMapIndex<Table>((Table table) -> {
+                return table.getProjectId();
+            })
+        );
     }
 
     public List<Table> findByProject(String projectId) {
-        List<Table> byProject = new ArrayList<>();
-        for (Table table : this.getAll()) {
-            if (table.getProjectId().equals(projectId)) {
-                byProject.add(table);
-            }
-        }
-        return byProject;
+        return this.indexes.get(0).filter(projectId);
     }
 
     public void addWith(Table item) {

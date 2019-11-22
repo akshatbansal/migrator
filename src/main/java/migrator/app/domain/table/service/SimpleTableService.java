@@ -14,8 +14,8 @@ import migrator.app.domain.table.model.Table;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.app.router.ActiveRoute;
 import migrator.lib.modelstorage.ActiveState;
-import migrator.lib.repository.diff.CompareListDiff;
-import migrator.lib.repository.diff.ListDiff;
+import migrator.lib.diff.CompareListDiff;
+import migrator.lib.diff.ListDiff;
 
 public class SimpleTableService implements TableService {
     protected TableFactory tableFactory;

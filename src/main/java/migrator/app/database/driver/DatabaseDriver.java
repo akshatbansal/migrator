@@ -9,8 +9,8 @@ public interface DatabaseDriver {
     public void connect();
     public void disconnect();
     public ObservableList<Table> getTables();
-    public ObservableList<Column> getColumns(String tableName);
-    public ObservableList<Index> getIndexes(String tableName);
+    public ObservableList<Column> getColumns(Table table);
+    public ObservableList<Index> getIndexes(Table table);
     public Boolean isConnected();
     public String getError();
 }

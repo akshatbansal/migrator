@@ -15,8 +15,8 @@ import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableActiveState;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.lib.modelstorage.ActiveState;
-import migrator.lib.repository.diff.CompareListDiff;
-import migrator.lib.repository.diff.ListDiff;
+import migrator.lib.diff.CompareListDiff;
+import migrator.lib.diff.ListDiff;
 
 public class SimpleColumnService implements ColumnService {
     protected TableActiveState tableActiveState;
@@ -67,7 +67,7 @@ public class SimpleColumnService implements ColumnService {
             .createDriver(project.getDatabase());
         databaseDriver.connect();
 
-        List<Column> dbList = databaseDriver.getColumns(activeTable.getOriginalName());
+        List<Column> dbList = databaseDriver.getColumns(activeTable);
         for (Column c : dbList) {
             c.setTableId(activeTable.getUniqueKey());
         }

@@ -1,4 +1,4 @@
-package migrator.lib.repository.diff;
+package migrator.lib.diff;
 
 import java.util.Arrays;
 import java.util.Collection;

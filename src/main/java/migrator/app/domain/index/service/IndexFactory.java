@@ -25,13 +25,12 @@ public class IndexFactory {
         );
     }
 
-    public Index createNotChanged(String tableId, String indexName, List<String> columns) {
-        List<ColumnProperty> columnsProperty = new ArrayList<>();
+    public Index createNotChanged(String tableId, String indexName, List<ColumnProperty> columns) {
         return new Index(
             this.idGenerator.next(),
             tableId,
-            this.simpleIndexProperty(indexName, columnsProperty),
-            this.simpleIndexProperty(indexName, columnsProperty),
+            this.simpleIndexProperty(indexName, new ArrayList<>(columns)),
+            this.simpleIndexProperty(indexName, new ArrayList<>(columns)),
             new ChangeCommand(this.idGenerator.next(), ChangeCommand.NONE)
         );
     }

@@ -27,12 +27,12 @@ public class FakeDatabaseDriver implements DatabaseDriver {
     public void disconnect() {}
 
     @Override
-    public ObservableList<Column> getColumns(String tableName) {
+    public ObservableList<Column> getColumns(Table table) {
         return this.columns;
     }
 
     @Override
-    public ObservableList<Index> getIndexes(String tableName) {
+    public ObservableList<Index> getIndexes(Table table) {
         return this.indexes;
     }
 

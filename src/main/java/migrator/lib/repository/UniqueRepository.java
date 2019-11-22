@@ -2,18 +2,25 @@ package migrator.lib.repository;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 public class UniqueRepository<T extends UniqueItem> implements Repository<T> {
     protected Map<String, T> table;
+    protected List<RepositoryIndex<T>> indexes;
 
     public UniqueRepository() {
         this.table = new LinkedHashMap<>();
+        this.indexes = new LinkedList<>();
     }
 
     @Override
     public void add(T item) {
         this.table.put(item.getUniqueKey(), item);
+        for (RepositoryIndex<T> index : this.indexes) {
+            index.add(item);
+        }
     }
 
     @Override
@@ -23,6 +30,9 @@ public class UniqueRepository<T extends UniqueItem> implements Repository<T> {
         }
         for (T item : items) {
             this.table.put(item.getUniqueKey(), item);
+        }
+        for (RepositoryIndex<T> index : this.indexes) {
+            index.addAll(items);
         }
     }
 
@@ -34,6 +44,9 @@ public class UniqueRepository<T extends UniqueItem> implements Repository<T> {
     @Override
     public void remove(T item) {
         this.table.remove(item.getUniqueKey());
+        for (RepositoryIndex<T> index : this.indexes) {
+            index.remove(item);
+        }
     }
 
     @Override

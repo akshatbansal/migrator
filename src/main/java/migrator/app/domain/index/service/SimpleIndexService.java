@@ -15,8 +15,8 @@ import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableActiveState;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.lib.modelstorage.ActiveState;
-import migrator.lib.repository.diff.CompareListDiff;
-import migrator.lib.repository.diff.ListDiff;
+import migrator.lib.diff.CompareListDiff;
+import migrator.lib.diff.ListDiff;
 
 public class SimpleIndexService implements IndexService {
     protected IndexFactory indexFactory;
@@ -71,7 +71,7 @@ public class SimpleIndexService implements IndexService {
             .createDriver(project.getDatabase());
         databaseDriver.connect();
 
-        List<Index> dbList = databaseDriver.getIndexes(activeTable.getOriginalName());
+        List<Index> dbList = databaseDriver.getIndexes(activeTable);
         for (Index i : dbList) {
             i.setTableId(activeTable.getUniqueKey());
         }

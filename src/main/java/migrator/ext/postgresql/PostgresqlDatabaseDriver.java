@@ -17,12 +17,14 @@ import java.util.Map.Entry;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import migrator.app.database.driver.DatabaseDriver;
+import migrator.app.domain.column.ColumnRepository;
 import migrator.app.domain.column.service.ColumnFactory;
 import migrator.app.domain.index.service.IndexFactory;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Index;
 import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableFactory;
+import migrator.app.migration.model.ColumnProperty;
 import migrator.lib.logger.Logger;
 
 public class PostgresqlDatabaseDriver implements DatabaseDriver {
@@ -32,6 +34,7 @@ public class PostgresqlDatabaseDriver implements DatabaseDriver {
     protected TableFactory tableFactory;
     protected ColumnFactory columnFactory;
     protected IndexFactory indexFactory;
+    protected ColumnRepository columnRepository;
     protected Logger logger;
 
     protected Connection mysql;
@@ -44,6 +47,7 @@ public class PostgresqlDatabaseDriver implements DatabaseDriver {
         TableFactory tableFactory,
         ColumnFactory columnFactory,
         IndexFactory indexFactory,
+        ColumnRepository columnRepo,
         Logger logger,
         String url,
         String user,
@@ -52,6 +56,7 @@ public class PostgresqlDatabaseDriver implements DatabaseDriver {
         this.tableFactory = tableFactory;
         this.columnFactory = columnFactory;
         this.indexFactory = indexFactory;
+        this.columnRepository = columnRepo;
         this.logger = logger;
         this.url = url;
         this.user = user;
@@ -120,12 +125,13 @@ public class PostgresqlDatabaseDriver implements DatabaseDriver {
         return this.tables;
     }
 
-    protected void refreshColumns(String tableName) throws SQLException {
+    protected void refreshColumns(Table table) throws SQLException {
         if (this.mysql == null) {
             this.columns.clear();
             return;
         }
 
+        String tableName = table.getOriginalName();
         if (!this.tableExists(tableName)) {
             this.columns.clear();
             return;
@@ -142,7 +148,7 @@ public class PostgresqlDatabaseDriver implements DatabaseDriver {
             }
             String dbFormat = rs.getString(4);
             Column column = this.columnFactory.createNotChanged(
-                "NULL",
+                table.getUniqueKey(),
                 rs.getString(1),
                 this.getFormat(dbFormat),
                 defaultValue,
@@ -157,12 +163,13 @@ public class PostgresqlDatabaseDriver implements DatabaseDriver {
         this.columns.setAll(currentColumns);
     }
 
-    protected void refreshIndexes(String tableName) throws SQLException {
+    protected void refreshIndexes(Table table) throws SQLException {
         if (this.mysql == null) {
             this.indexes.clear();
             return;
         }
 
+        String tableName = table.getOriginalName();
         if (!this.tableExists(tableName)) {
             this.indexes.clear();
             return;
@@ -171,21 +178,23 @@ public class PostgresqlDatabaseDriver implements DatabaseDriver {
         Statement statement = this.mysql.createStatement();
         String sql = "select i.relname as index_name, a.attname as column_name from pg_class t, pg_class i, pg_index ix, pg_attribute a where t.oid = ix.indrelid and i.oid = ix.indexrelid and a.attrelid = t.oid and a.attnum = ANY(ix.indkey) and t.relkind = 'r' and t.relname like '" + tableName + "' order by t.relname, i.relname;";
         ResultSet rs = statement.executeQuery(sql);
-        Map<String, List<String>> indexColumnsMap = new LinkedHashMap<>();
+        Map<String, List<ColumnProperty>> indexColumnsMap = new LinkedHashMap<>();
         while (rs.next()) {
             String indexName = rs.getString(1);
             if (!indexColumnsMap.containsKey(indexName)) {
                 indexColumnsMap.put(indexName, new ArrayList<>());
             }
-            indexColumnsMap.get(indexName).add(rs.getString(2));
+            indexColumnsMap.get(indexName).add(
+                this.getColumnPropertyByName(rs.getString(2), table.getUniqueKey())
+            );
         }
         List<Index> currentIndexes = new LinkedList<>();
-        Iterator<Entry<String, List<String>>> entryIterator = indexColumnsMap.entrySet().iterator();
+        Iterator<Entry<String, List<ColumnProperty>>> entryIterator = indexColumnsMap.entrySet().iterator();
         while (entryIterator.hasNext()) {
-            Entry<String, List<String>> entry = entryIterator.next();
+            Entry<String, List<ColumnProperty>> entry = entryIterator.next();
             currentIndexes.add(
                 this.indexFactory.createNotChanged(
-                    "NULL",
+                    table.getUniqueKey(),
                     entry.getKey(), 
                     entry.getValue()
                 )
@@ -195,9 +204,9 @@ public class PostgresqlDatabaseDriver implements DatabaseDriver {
     }
 
     @Override
-    public ObservableList<Column> getColumns(String tableName) {
+    public ObservableList<Column> getColumns(Table table) {
         try {
-            this.refreshColumns(tableName);
+            this.refreshColumns(table);
         } catch (SQLException ex) {
             ex.printStackTrace();
             this.columns.clear();
@@ -213,9 +222,9 @@ public class PostgresqlDatabaseDriver implements DatabaseDriver {
     }
 
     @Override
-    public ObservableList<Index> getIndexes(String tableName) {
+    public ObservableList<Index> getIndexes(Table table) {
         try {
-            this.refreshIndexes(tableName);
+            this.refreshIndexes(table);
         } catch (SQLException ex) {
             ex.printStackTrace();
             this.indexes.clear();
@@ -268,5 +277,14 @@ public class PostgresqlDatabaseDriver implements DatabaseDriver {
             return "";
         }
         return Integer.toString(Math.max(Integer.parseInt(precision), 0));
+    }
+
+    protected ColumnProperty getColumnPropertyByName(String columnName, String tableId) {
+        for (Column column : this.columnRepository.findByTable(tableId)) {
+            if (column.getOriginal().getName().equals(columnName)) {
+                return column.getChange();
+            }
+        }
+        return null;
     }
 }

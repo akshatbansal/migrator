@@ -2,7 +2,6 @@ package migrator.ext.phinx;
 
 import org.junit.jupiter.api.Test;
 
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +18,7 @@ import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Index;
 import migrator.app.domain.table.model.Table;
 import migrator.app.migration.model.ChangeCommand;
+import migrator.app.migration.model.ColumnProperty;
 import migrator.app.migration.model.SimpleColumnProperty;
 import migrator.app.migration.model.SimpleIndexProperty;
 import migrator.app.migration.model.SimpleTableProperty;
@@ -252,6 +252,8 @@ public class PhinxMigrationGeneratorTest {
     }
 
     @Test public void testPhpMigrationCreateTableWithColumnAndIndex() {
+        ColumnProperty columnChange1 = new SimpleColumnProperty("2", "id", "integer", null, false, "11", true, "", false);
+        ColumnProperty columnChange2 = new SimpleColumnProperty("4", "name", "string", null, false, "255", false, "", false);
         TableChange change = new Table(
             "id-1",
             "1",
@@ -265,7 +267,7 @@ public class PhinxMigrationGeneratorTest {
                         "1",
                         "1",
                         new SimpleColumnProperty("1", "id", "integer", null, false, "11", true, "", false),
-                        new SimpleColumnProperty("2", "id", "integer", null, false, "11", true, "", false),
+                        columnChange1,
                         new ChangeCommand("2", "create")
                     ),
                     new Column(
@@ -273,7 +275,7 @@ public class PhinxMigrationGeneratorTest {
                         "2",
                         "1",
                         new SimpleColumnProperty("3", "name", "string", null, false, "255", false, "", false),
-                        new SimpleColumnProperty("4", "name", "string", null, false, "255", false, "", false),
+                        columnChange2,
                         new ChangeCommand("3", "create")
                     )
                 )
@@ -284,7 +286,7 @@ public class PhinxMigrationGeneratorTest {
                         "1",
                         "1",
                         new SimpleIndexProperty("1", "id_name", Arrays.asList()),
-                        new SimpleIndexProperty("2", "id_name", Arrays.asList(new SimpleStringProperty("id"), new SimpleStringProperty("name"))),
+                        new SimpleIndexProperty("2", "id_name", Arrays.asList(columnChange1, columnChange2)),
                         new ChangeCommand("4", "create")
                     )
                 )
