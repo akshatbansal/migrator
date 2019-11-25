@@ -12,6 +12,7 @@ import migrator.app.migration.model.IndexChange;
 import migrator.app.migration.model.TableChange;
 import migrator.ext.sql.command.AddColumnCommand;
 import migrator.ext.sql.command.ChangeColumnCommand;
+import migrator.ext.sql.command.CreateIndexCommand;
 import migrator.ext.sql.command.CreateTableCommand;
 import migrator.ext.sql.command.DropIndexCommand;
 import migrator.ext.sql.command.DropTableCommand;
@@ -36,6 +37,8 @@ public class SqlCommandFactory implements CodeCommandFactory {
     public CodeCommand index(IndexChange indexChange, TableChange tableChange) {
         if (indexChange.getCommand().isType(ChangeCommand.DELETE)) {
             return new DropIndexCommand(indexChange, tableChange.getName());
+        } else if (indexChange.getCommand().isType(ChangeCommand.CREATE)) {
+            return new CreateIndexCommand(tableChange.getName(), indexChange);
         }
         return new VoidCommand();
     }

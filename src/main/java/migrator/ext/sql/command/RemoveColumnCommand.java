@@ -13,6 +13,6 @@ public class RemoveColumnCommand implements CodeCommand {
 
     @Override
     public String toCode() {
-        return "ALTER TABLE " + this.tableName + " DROP COLUMN " + this.columnName + ";";
+        return "ALTER TABLE `" + this.tableName + "` DROP COLUMN `" + this.columnName + "`;";
     }
 }

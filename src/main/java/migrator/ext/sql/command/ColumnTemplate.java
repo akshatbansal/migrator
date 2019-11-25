@@ -16,7 +16,7 @@ public class ColumnTemplate implements StringTemplate {
 
     @Override
     public String render() {
-        String column = this.change.getName() + " " + this.columnChangeFormat(this.change);
+        String column = "`" + this.change.getName() + "` " + this.columnChangeFormat(this.change);
         if (this.change.hasSignAttribute() && !this.change.isSigned()) {
             column += " UNSIGNED";
         }

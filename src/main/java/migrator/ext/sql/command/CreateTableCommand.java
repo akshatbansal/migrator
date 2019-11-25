@@ -41,7 +41,7 @@ public class CreateTableCommand implements CodeCommand {
         templateReplace.put("INDEXES", indexSequence.toCode());
 
         StringTemplate createTableTemplate = new MapStringTemplate(
-            "CREATE TABLE IF NOT EXISTS {{NAME}} ({{COLUMNS}});{{INDEXES}}",
+            "CREATE TABLE IF NOT EXISTS `{{NAME}}` ({{COLUMNS}});{{INDEXES}}",
             templateReplace
         );
         return createTableTemplate.render();

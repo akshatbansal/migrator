@@ -24,7 +24,7 @@ public class SetDefaultCommand implements CodeCommand {
         templateReplace.put("COLUMN", this.change.getName());
         templateReplace.put("DEFAULT_VALUE", this.change.getDefaultValue());
         StringTemplate template = new MapStringTemplate(
-            "ALTER TABLE {{TABLE}} ALTER {{COLUMN}} SET DEFAULT '{{DEFAULT_VALUE}}';",
+            "ALTER TABLE `{{TABLE}}` ALTER `{{COLUMN}}` SET DEFAULT '{{DEFAULT_VALUE}}';",
             templateReplace
         );
         return template.render();

@@ -12,6 +12,6 @@ public class DropTableCommand implements CodeCommand {
 
     @Override
     public String toCode() {
-        return "DROP TABLE " + this.change.getOriginalName() + ";";
+        return "DROP TABLE `" + this.change.getOriginalName() + "`;";
     }
 }

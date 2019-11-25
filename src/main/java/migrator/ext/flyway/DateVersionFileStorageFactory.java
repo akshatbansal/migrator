@@ -35,10 +35,13 @@ public class DateVersionFileStorageFactory implements FileStorageFactory {
     private String getCurrentVersion(File file) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM");
         final String dateVersion = dateFormat.format(new Date());
-        File[] currentVersionFiles = file.listFiles((File dir, String name) -> {
+        File[] currentVersionFiles = file.getParentFile().listFiles((File dir, String name) -> {
             return name.startsWith(dateVersion);
         });
-        
-        return dateVersion + "." + currentVersionFiles.length;
+        int lastVersionNumber = 0;
+        if (currentVersionFiles != null) {
+            lastVersionNumber = currentVersionFiles.length;
+        }
+        return dateVersion + "." + lastVersionNumber;
     }
 }

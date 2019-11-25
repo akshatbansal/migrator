@@ -27,11 +27,14 @@ public class CreateIndexCommand implements CodeCommand {
         templateReplace.put("TABLE_NAME", this.tableName);
         List<String> columns = new LinkedList<>();
         for (ColumnProperty columnProperty : this.change.columnsProperty()) {
-            columns.add(columnProperty.getName());
+            if (columnProperty == null) {
+                continue;
+            }
+            columns.add("`" + columnProperty.getName() + "`");
         }
         templateReplace.put("COLUMNS", String.join(", ", columns));
         StringTemplate template = new MapStringTemplate(
-            "CREATE INDEX {{INDEX_NAME}} ON {{TABLE_NAME}}({{COLUMNS}});",
+            "CREATE INDEX `{{INDEX_NAME}}` ON `{{TABLE_NAME}}`({{COLUMNS}});",
             templateReplace
         );
         return template.render();

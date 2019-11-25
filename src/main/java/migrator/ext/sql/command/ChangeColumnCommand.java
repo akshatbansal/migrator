@@ -35,7 +35,7 @@ public class ChangeColumnCommand implements CodeCommand {
             templateVars.put("COLUMN", this.change.getOriginal().getName());
             templateVars.put("NEW_COLUMN", columnTemplate.render());
             StringTemplate template = new MapStringTemplate(
-                "ALTER TABLE {{TABLE}} CHANGE {{COLUMN}} {{NEW_COLUMN}};",
+                "ALTER TABLE `{{TABLE}}` CHANGE `{{COLUMN}}` {{NEW_COLUMN}};",
                 templateVars
             );
             code += template.render();

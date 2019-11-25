@@ -14,6 +14,6 @@ public class DropIndexCommand implements CodeCommand {
 
     @Override
     public String toCode() {
-        return "ALTER TABLE " + this.tableName + " DROP INDEX " + this.change.getName() + ";";
+        return "ALTER TABLE `" + this.tableName + "` DROP INDEX `" + this.change.getName() + "`;";
     }
 }
