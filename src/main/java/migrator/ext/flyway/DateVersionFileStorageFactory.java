@@ -22,8 +22,8 @@ public class DateVersionFileStorageFactory implements FileStorageFactory {
         String fileName = this.fileNameFormatter.format(
             file.getName()
         );
-        if (!fileName.endsWith(".php")) {
-            fileName += ".php";
+        if (!fileName.endsWith(".sql")) {
+            fileName += ".sql";
         }
 
         file = file.toPath()
