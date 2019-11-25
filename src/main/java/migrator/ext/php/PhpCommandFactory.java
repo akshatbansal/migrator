@@ -22,7 +22,8 @@ public class PhpCommandFactory implements CodeCommandFactory {
         return new DropTable(tableChange);
     }
 
-    public CodeCommand column(ColumnChange columnChange) {
+    @Override
+    public CodeCommand column(ColumnChange columnChange, TableChange tableChange) {
         if (columnChange.getCommand().isType(ChangeCommand.DELETE)) {
             return this.removeColumn(columnChange);
         } else if (columnChange.getCommand().isType(ChangeCommand.UPDATE)) {
@@ -33,6 +34,7 @@ public class PhpCommandFactory implements CodeCommandFactory {
         return new VoidCommand();
     }
 
+    @Override
     public CodeCommand table(TableChange tableChange) {
         if (tableChange.getCommand().isType(ChangeCommand.DELETE)) {
             return this.dropTable(tableChange);
@@ -44,7 +46,8 @@ public class PhpCommandFactory implements CodeCommandFactory {
         return this.saveTable(tableChange);
     }
 
-    public CodeCommand index(IndexChange indexChange) {
+    @Override
+    public CodeCommand index(IndexChange indexChange, TableChange tableChange) {
         if (indexChange.getCommand().isType(ChangeCommand.NONE)) {
             return new VoidCommand();
         }
