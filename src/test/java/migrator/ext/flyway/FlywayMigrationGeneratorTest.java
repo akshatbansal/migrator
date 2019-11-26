@@ -53,7 +53,7 @@ public class FlywayMigrationGeneratorTest {
                 columnBuilder.withTableId("1")
                     .withChange("create")
                     .withChangeName("column_name")
-                    .withChangeFormat("varchar")
+                    .withChangeFormat("string")
                     .withChangeLength("255")
                     .withChangeSign()
                     .build()
@@ -217,7 +217,7 @@ public class FlywayMigrationGeneratorTest {
         
         this.migrator.generateMigration("", "MigrationByMigrator", change);
         assertEquals(
-            "CREATE TABLE IF NOT EXISTS `table_name` (`id` integer(11) NOT NULL, `name` string(255) NOT NULL);CREATE INDEX `id_name` ON `table_name`(`id`, `name`);",
+            "CREATE TABLE IF NOT EXISTS `table_name` (`id` int(11) NOT NULL, `name` varchar(255) NOT NULL);CREATE INDEX `id_name` ON `table_name`(`id`, `name`);",
             this.storage.load()
         );
     }
@@ -355,7 +355,7 @@ public class FlywayMigrationGeneratorTest {
             .build();
         this.migrator.generateMigration("", "MigrationByMigrator", change);
         assertEquals(
-            "ALTER TABLE `table_name` CHANGE `id` `id` integer(11) NOT NULL;",
+            "ALTER TABLE `table_name` CHANGE `id` `id` int(11) NOT NULL;",
             this.storage.load()
         );
     }
@@ -421,7 +421,7 @@ public class FlywayMigrationGeneratorTest {
         
         this.migrator.generateMigration("", "MigrationByMigrator", change);
         assertEquals(
-            "ALTER TABLE `table_name` CHANGE `id` `id` string(12) NOT NULL;",
+            "ALTER TABLE `table_name` CHANGE `id` `id` varchar(12) NOT NULL;",
             this.storage.load()
         );
     }
@@ -456,7 +456,7 @@ public class FlywayMigrationGeneratorTest {
         
         this.migrator.generateMigration("", "MigrationByMigrator", change);
         assertEquals(
-            "ALTER TABLE `table_name` CHANGE `id` `id` string(11, 4) NOT NULL;",
+            "ALTER TABLE `table_name` CHANGE `id` `id` varchar(11, 4) NOT NULL;",
             this.storage.load()
         );
     }
@@ -489,7 +489,7 @@ public class FlywayMigrationGeneratorTest {
         
         this.migrator.generateMigration("", "MigrationByMigrator", change);
         assertEquals(
-            "ALTER TABLE `table_name` CHANGE `id` `id` string(11) UNSIGNED NOT NULL;",
+            "ALTER TABLE `table_name` CHANGE `id` `id` varchar(11) UNSIGNED NOT NULL;",
             this.storage.load()
         );
     }
@@ -522,7 +522,7 @@ public class FlywayMigrationGeneratorTest {
 
         this.migrator.generateMigration("", "MigrationByMigrator", change);
         assertEquals(
-            "ALTER TABLE `table_name` CHANGE `id` `id` string(11) auto_increment NOT NULL;",
+            "ALTER TABLE `table_name` CHANGE `id` `id` varchar(11) auto_increment NOT NULL;",
             this.storage.load()
         );
     }

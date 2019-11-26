@@ -32,7 +32,7 @@ public class ColumnTemplate implements StringTemplate {
     protected String columnChangeFormat(ColumnChange columnChange) {
         String templateString = "{{FORMAT}}";
         Map<String, String> templateReplace = new Hashtable<>();
-        templateReplace.put("FORMAT", columnChange.getFormat());
+        templateReplace.put("FORMAT", this.getSqlFormat(columnChange.getFormat()));
         if (columnChange.hasPrecisionAttribute()) {
             templateReplace.put("LENGTH", columnChange.getLength());
             templateReplace.put("PRECISION", columnChange.getPrecision());
@@ -46,5 +46,18 @@ public class ColumnTemplate implements StringTemplate {
             templateReplace
         );
         return template.render();
+    }
+
+    protected String getSqlFormat(String format) {
+        if (format.equals("string")) {
+            return "varchar";
+        } else if (format.equals("boolean")) {
+            return "tinyint(1)";
+        } else if (format.equals("integer")) {
+            return "int";
+        } else if (format.equals("long")) {
+            return "bigint";
+        }
+        return format;
     }
 }
