@@ -43,4 +43,8 @@ public class TableFactory {
             this.indexRepository.byTableProperty(tableId)
         );
     }
+
+    public TableBuilder getBuider() {
+        return new TableBuilder();
+    }
 }

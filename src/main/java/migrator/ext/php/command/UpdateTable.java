@@ -22,11 +22,11 @@ public class UpdateTable implements CodeCommand {
             php += "\t->renameTable('" + this.tableChange.getName() + "')\n";
         }
         for (ColumnChange columnChange : this.tableChange.getColumnsChanges()) {
-            CodeCommand columnPhpCommand = this.commandFactory.column(columnChange);
+            CodeCommand columnPhpCommand = this.commandFactory.column(columnChange, this.tableChange);
             php += columnPhpCommand.toCode();
         }
         for (IndexChange indexChange : this.tableChange.getIndexesChanges()) {
-            CodeCommand columnPhpCommand = this.commandFactory.index(indexChange);
+            CodeCommand columnPhpCommand = this.commandFactory.index(indexChange, this.tableChange);
             php += columnPhpCommand.toCode();
         }
         return  php + 

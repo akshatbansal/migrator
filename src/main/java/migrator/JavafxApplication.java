@@ -13,6 +13,7 @@ import migrator.app.Bootstrap;
 import migrator.app.Gui;
 import migrator.app.Router;
 import migrator.app.domain.project.model.Project;
+import migrator.ext.flyway.FlywayExtension;
 import migrator.ext.javafx.JavafxGui;
 import migrator.ext.javafx.MainController;
 import migrator.ext.javafx.component.JavafxLayout;
@@ -30,6 +31,7 @@ import migrator.ext.phinx.PhinxExtension;
 import migrator.ext.php.PhpExtension;
 import migrator.ext.postgresql.PostgresqlExtension;
 import migrator.ext.sentry.SentryExtension;
+import migrator.ext.sql.SqlExtension;
 import migrator.lib.persistance.ListPersistance;
 import migrator.lib.persistance.Persistance;
 import migrator.app.Container;
@@ -52,10 +54,12 @@ public class JavafxApplication extends Application {
         Bootstrap bootstrap = new Bootstrap(
             Arrays.asList(
                 new PhinxExtension(),
+                new FlywayExtension(),
                 new MysqlExtension(),
                 new MariadbExtension(),
                 new PostgresqlExtension(),
                 new PhpExtension(),
+                new SqlExtension(),
                 new SentryExtension(enviromentConfig.getProperties("sentry"))
             )
         );

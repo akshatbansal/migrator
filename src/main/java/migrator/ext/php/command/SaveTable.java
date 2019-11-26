@@ -21,11 +21,11 @@ public class SaveTable implements CodeCommand {
         String columnPhp = "";
         String indexPhp = "";
         for (ColumnChange columnChange : this.tableChange.getColumnsChanges()) {
-            CodeCommand columnPhpCommand = this.commandFactory.column(columnChange);
+            CodeCommand columnPhpCommand = this.commandFactory.column(columnChange, this.tableChange);
             columnPhp += columnPhpCommand.toCode();
         }
         for (IndexChange indexChange : this.tableChange.getIndexesChanges()) {
-            CodeCommand columnPhpCommand = this.commandFactory.index(indexChange);
+            CodeCommand columnPhpCommand = this.commandFactory.index(indexChange, this.tableChange);
             indexPhp += columnPhpCommand.toCode();
         }
 
