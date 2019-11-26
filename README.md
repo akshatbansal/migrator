@@ -13,7 +13,7 @@ Migrations are used to change database structure when application evolves and yo
 
 ## Installation
 
-Download the latest [release](https://github.com/pipan/migrator/releases/download/v0.3.1/migrator.jar)
+Download the latest [release](https://github.com/pipan/migrator/releases/download/v0.4.0/migrator.jar)
 
 ```sh
 java -jar migrator.jar
@@ -55,6 +55,16 @@ Select project by clicking on `open` button of a project card.
 ![craete migration file](https://media.giphy.com/media/dY0y5gabkE5wKijvyr/giphy.gif)
 
 ## Release History
+
+* 0.4.0
+  * Features
+    * Added Flyway support (with tests)
+    * Loading cursor indicator and buton diable for longer actions (opening project)
+    * Replace images in buttons with `+` sign
+  * Bugfixes
+    * Fixed columns not changing names in index whene column name is changed in column form
+    * Sentry logs errors in correct enviroment
+    * clicking `x` in searhc clears and closes search
 
 * 0.3.1
   * Features
