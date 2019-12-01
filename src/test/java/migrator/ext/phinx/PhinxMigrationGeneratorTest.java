@@ -471,7 +471,7 @@ public class PhinxMigrationGeneratorTest {
                 "\tpublic function change()\n" +
                 "\t{\n" +
                     "\t\t$this->table('table_name')\n" +
-                        "\t\t\t->changeColumn('column_name', 'string', ['null' => false, 'default' => '', 'length' => 250])\n" +
+                        "\t\t\t->changeColumn('column_name', 'string', ['null' => false, 'length' => 250])\n" +
                         "\t\t\t->save();\n" +
                 "\t}\n" +
             "}\n",
@@ -512,7 +512,7 @@ public class PhinxMigrationGeneratorTest {
                 "\tpublic function change()\n" +
                 "\t{\n" +
                     "\t\t$this->table('table_name')\n" +
-                        "\t\t\t->changeColumn('column_name', 'string', ['null' => false, 'default' => '', 'precision' => 10, 'scale' => 5])\n" +
+                        "\t\t\t->changeColumn('column_name', 'string', ['null' => false, 'precision' => 10, 'scale' => 5])\n" +
                         "\t\t\t->save();\n" +
                 "\t}\n" +
             "}\n",
@@ -553,7 +553,7 @@ public class PhinxMigrationGeneratorTest {
                 "\tpublic function change()\n" +
                 "\t{\n" +
                     "\t\t$this->table('table_name')\n" +
-                        "\t\t\t->changeColumn('column_name', 'string', ['null' => false, 'default' => '', 'length' => 10, 'signed' => false])\n" +
+                        "\t\t\t->changeColumn('column_name', 'string', ['null' => false, 'length' => 10, 'signed' => false])\n" +
                         "\t\t\t->save();\n" +
                 "\t}\n" +
             "}\n",
@@ -594,7 +594,7 @@ public class PhinxMigrationGeneratorTest {
                 "\tpublic function change()\n" +
                 "\t{\n" +
                     "\t\t$this->table('table_name')\n" +
-                        "\t\t\t->changeColumn('column_name', 'integer', ['null' => false, 'default' => '', 'length' => 10, 'signed' => false, 'identity' => true])\n" +
+                        "\t\t\t->changeColumn('column_name', 'integer', ['null' => false, 'length' => 10, 'signed' => false, 'identity' => true])\n" +
                         "\t\t\t->save();\n" +
                 "\t}\n" +
             "}\n",
