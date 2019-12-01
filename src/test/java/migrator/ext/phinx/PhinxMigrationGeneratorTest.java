@@ -76,7 +76,7 @@ public class PhinxMigrationGeneratorTest {
             "{\n" +
                 "\tpublic function change()\n" +
                 "\t{\n" +
-                    "\t\t$this->table('table_name')\n" +
+                    "\t\t$this->table('table_name', ['id' => false])\n" +
                         "\t\t\t->addColumn('column_name', 'string', ['null' => false])\n" +
                         "\t\t\t->create();\n" +
                 "\t}\n" +
@@ -300,7 +300,7 @@ public class PhinxMigrationGeneratorTest {
             "{\n" +
                 "\tpublic function change()\n" +
                 "\t{\n" +
-                    "\t\t$this->table('table_name')\n" +
+                    "\t\t$this->table('table_name', ['id' => false])\n" +
                         "\t\t\t->addColumn('id', 'integer', ['null' => false])\n" +
                         "\t\t\t->addColumn('name', 'string', ['null' => false])\n" +
                         "\t\t\t->addIndex(['id', 'name'], ['name' => 'id_name'])\n" +
