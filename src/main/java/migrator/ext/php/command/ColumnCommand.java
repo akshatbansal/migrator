@@ -21,7 +21,7 @@ public class ColumnCommand {
                 "'null' => " + this.columnChange.isNullEnabled()
             );
         }
-        if (this.columnChange.getDefaultValue() != null) {
+        if (this.columnChange.getDefaultValue() != null && !this.columnChange.getDefaultValue().isEmpty()) {
             options.add(
                 "'default' => '" + this.columnChange.getDefaultValue() + "'"
             );

@@ -21,7 +21,7 @@ public class CreateTable implements CodeCommand {
         if (this.tableChange.getCommand().isType(ChangeCommand.NONE) && this.tableChange.getColumnsChanges().size() == 0 && this.tableChange.getIndexesChanges().size() == 0) {
             return "";
         }
-        String php = "$this->table('" + this.tableChange.getOriginalName() + "')\n";
+        String php = "$this->table('" + this.tableChange.getOriginalName() + "', ['id' => false])\n";
         for (ColumnChange columnChange : this.tableChange.getColumnsChanges()) {
             CodeCommand columnPhpCommand = this.commandFactory.column(columnChange, this.tableChange);
             php += columnPhpCommand.toCode();

@@ -12,11 +12,17 @@ public class ColumnPropertyAdapter implements Adapter<ColumnProperty, JSONObject
         if (json == null) {
             return null;
         }
+
+        String defaultValue = null;
+        if (json.has("defaultValue")) {
+            defaultValue = json.getString("defaultValue");
+        }
+
         return new SimpleColumnProperty(
             json.getString("id"),
             json.getString("name"),
             json.getString("format"),
-            json.getString("defaultValue"),
+            defaultValue,
             json.getBoolean("nullEnabled"),
             json.getString("length"),
             json.getBoolean("sign"),

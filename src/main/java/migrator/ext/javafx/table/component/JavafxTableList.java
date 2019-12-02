@@ -117,7 +117,7 @@ public class JavafxTableList extends ViewComponent implements TableList, TableAc
         Table newTable = this.tableFactory.createWithCreateChange(this.projectService.getOpened().get().getId(), "new_table");
         this.tableActiveState.addAndActivate(newTable);
         
-        Column idColumn = this.columnFactory.createWithCreateChange(newTable.getUniqueKey(), "id", "integer", "", false, "11", false, "", true);
+        Column idColumn = this.columnFactory.createWithCreateChange(newTable.getUniqueKey(), "id", "integer", null, false, "11", false, "", true);
         this.columnActiveState.add(idColumn);
         this.columnActiveState.add(
             this.columnFactory.createWithCreateChange(newTable.getUniqueKey(), "created_at", "timestamp", "CURRENT_TIMESTAMP", false, "", false, "", false)
@@ -128,7 +128,7 @@ public class JavafxTableList extends ViewComponent implements TableList, TableAc
         this.indexActiveState.add(
             this.indexFactory.createWithCreateChange(
                 this.tableActiveState.getActive().get().getUniqueKey(),
-                "primary",
+                "primary_index",
                 Arrays.asList(idColumn.getChange())
             )
         );

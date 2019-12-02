@@ -143,8 +143,8 @@ release: https://github.com/aktau/github-release
 * allow changing column order
 * add tests
 * add support for frameworks:
-  * flyway (JAVA)
-  * fluid (.NET)
+  * evolve (.NET)
+  * fluent (.NET)
   * db-migrate (nodejs)
 * allow data seeding
 * set database connection info from project (phinx config, ...)
