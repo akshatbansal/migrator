@@ -244,7 +244,7 @@ public class PhinxMigrationGeneratorTest {
             "{\n" +
                 "\tpublic function change()\n" +
                 "\t{\n" +
-                    "\t\t$this->dropTable('table_name');\n" +
+                    "\t\t$this->table('table_name')->drop()->save();\n" +
                 "\t}\n" +
             "}\n",
             this.storage.load()
