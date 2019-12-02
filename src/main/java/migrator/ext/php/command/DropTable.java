@@ -12,6 +12,6 @@ public class DropTable implements CodeCommand {
 
     @Override
     public String toCode() {
-        return "$this->dropTable('" + this.tableChange.getOriginalName() + "');\n";
+        return "$this->table('" + this.tableChange.getOriginalName() + "')->drop()->save();\n";
     }
 }
