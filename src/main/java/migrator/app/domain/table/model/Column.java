@@ -235,7 +235,10 @@ public class Column implements Changable, ColumnChange, ChangeListener<Object>, 
 
     @Override
     public Boolean hasDefaultValueChanged() {
-        return !this.getDefaultValue().equals(this.getOriginal().getDefaultValue());
+        if (this.getDefaultValue() == null && this.getOriginal().getDefaultValue() == null) {
+            return false;
+        }
+        return this.getDefaultValue() == null || !this.getDefaultValue().equals(this.getOriginal().getDefaultValue());
     }
 
     @Override

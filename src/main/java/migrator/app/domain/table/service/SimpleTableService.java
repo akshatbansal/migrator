@@ -111,14 +111,24 @@ public class SimpleTableService implements TableService {
 
     protected void merge(List<Table> dbList, List<Table> repoList) {
         ListDiff<Table> diff = new CompareListDiff<>(dbList, repoList, (Table a, Table b) -> {
+            if (a.getChangeCommand().isType(ChangeCommand.CREATE)) {
+                return a.getChange().getName().equals(
+                    b.getChange().getName()
+                );
+            }
             return a.getOriginal().getName().equals(
                 b.getOriginal().getName()
             );
         });
         for (List<Table> tablePair : diff.getCommon()) {
-            tablePair.get(1).updateOriginal(
-                tablePair.get(0).getOriginal()
-            );
+            if (tablePair.get(1).getChangeCommand().isType(ChangeCommand.CREATE)) {
+                this.tableRepository.removeWith(tablePair.get(1));
+                this.tableRepository.addWith(tablePair.get(0));
+            } else {
+                tablePair.get(1).updateOriginal(
+                    tablePair.get(0).getOriginal()
+                );
+            }
         }
         for (Table table : diff.getLeftMissing()) {
             if (table.getChangeCommand().isType(ChangeCommand.CREATE)) {
