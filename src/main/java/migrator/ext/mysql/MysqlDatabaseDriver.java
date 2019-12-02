@@ -261,6 +261,9 @@ public class MysqlDatabaseDriver implements DatabaseDriver {
         if (dbFormat.startsWith("double")) {
             return "decimal";
         }
+        if (dbFormat.startsWith("bigint")) {
+            return "long";
+        }
         return dbFormat;
     }
 
