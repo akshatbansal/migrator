@@ -19,7 +19,7 @@ public class UpdateTable implements CodeCommand {
     public String toCode() {
         String php = "$this->table('" + this.tableChange.getOriginalName() + "')\n";
         if (this.tableChange.hasNameChanged()) {
-            php += "\t->renameTable('" + this.tableChange.getName() + "')\n";
+            php += "\t->rename('" + this.tableChange.getName() + "')\n";
         }
         for (ColumnChange columnChange : this.tableChange.getColumnsChanges()) {
             CodeCommand columnPhpCommand = this.commandFactory.column(columnChange, this.tableChange);

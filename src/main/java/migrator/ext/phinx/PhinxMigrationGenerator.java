@@ -5,28 +5,47 @@ import java.util.Arrays;
 import java.util.List;
 
 import migrator.lib.storage.Storage;
+import migrator.lib.stringformatter.PascalCaseFormatter;
 import migrator.lib.stringformatter.StringFormatter;
+import migrator.lib.stringformatter.UnderscoreFormatter;
 import migrator.app.code.CodeCommand;
 import migrator.app.code.CodeCommandFactory;
+import migrator.app.migration.FileStorageFactory;
 import migrator.app.migration.MigrationGenerator;
 import migrator.app.migration.model.TableChange;
+import migrator.app.toast.ToastService;
 
 public class PhinxMigrationGenerator implements MigrationGenerator {
-    protected TimestampFileStorageFactory timestampFileStorageFactory;
+    protected FileStorageFactory fileStorageFactory;
     protected CodeCommandFactory commandFactory;
     protected StringFormatter classNameFormatter;
+    protected StringFormatter fileNameFormatter;
+    protected StringFormatter timestampFormatter;
+    protected ToastService toastService;
 
     public PhinxMigrationGenerator(
-        TimestampFileStorageFactory timestampFileStorageFactory,
+        FileStorageFactory fileStorageFactory,
         CodeCommandFactory commandFactory,
-        StringFormatter classNameFormatter
+        ToastService toastService
     ) {
-        this.timestampFileStorageFactory = timestampFileStorageFactory;
+        this.fileStorageFactory = fileStorageFactory;
         this.commandFactory = commandFactory;
-        this.classNameFormatter = classNameFormatter;
+        this.classNameFormatter = new PascalCaseFormatter();
+        this.fileNameFormatter = new UnderscoreFormatter();
+        this.timestampFormatter = new TimestampFileNameFormatter();
+        this.toastService = toastService;
     }
 
     public Boolean generateMigration(String projectFolder, String name, List<? extends TableChange> changes) {
+        String formattedFileName = this.fileNameFormatter.format(name) + ".php";
+        File projectFolderFile = new File(projectFolder);
+        File[] sameNameFiles = projectFolderFile.listFiles((File dir, String fileInFolderName) -> {
+            return fileInFolderName.endsWith(formattedFileName);
+        });
+        if (sameNameFiles != null && sameNameFiles.length > 0) {
+            this.toastService.error("Commit name is the same as '" + sameNameFiles[0].getName() + "'. Change commit name.");
+            return false;
+        }
         String phinxContent = "";
         for (TableChange tableChange : changes) {
             phinxContent += this.toPhinxFormat(tableChange);
@@ -35,8 +54,8 @@ public class PhinxMigrationGenerator implements MigrationGenerator {
             return true;
         }
 
-        Storage<String> storage = this.timestampFileStorageFactory.create(
-            new File(projectFolder + System.getProperty("file.separator") + name)
+        Storage<String> storage = this.fileStorageFactory.create(
+            new File(projectFolder + System.getProperty("file.separator") + this.timestampFormatter.format(formattedFileName))
         );
         String className = this.classNameFormatter.format(name);
         storage.store(

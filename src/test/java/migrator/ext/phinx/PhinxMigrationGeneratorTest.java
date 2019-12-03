@@ -23,11 +23,11 @@ import migrator.app.migration.model.SimpleColumnProperty;
 import migrator.app.migration.model.SimpleIndexProperty;
 import migrator.app.migration.model.SimpleTableProperty;
 import migrator.app.migration.model.TableChange;
+import migrator.app.toast.PermanentToastService;
 import migrator.ext.phinx.PhinxMigrationGenerator;
 import migrator.ext.phinx.mock.FileStorage;
-import migrator.ext.phinx.mock.FakeTimestampFileStorageFactory;
+import migrator.ext.phinx.mock.FakeFileStorageFactory;
 import migrator.ext.php.PhpCommandFactory;
-import migrator.lib.stringformatter.PascalCaseFormatter;
 
 public class PhinxMigrationGeneratorTest {
     protected PhinxMigrationGenerator migrator;
@@ -41,9 +41,9 @@ public class PhinxMigrationGeneratorTest {
         );
         this.storage = new FileStorage();
         this.migrator = new PhinxMigrationGenerator(
-            new FakeTimestampFileStorageFactory(this.storage),
+            new FakeFileStorageFactory(this.storage),
             new PhpCommandFactory(),
-            new PascalCaseFormatter()
+            new PermanentToastService()
         );
     }
 
@@ -104,7 +104,7 @@ public class PhinxMigrationGeneratorTest {
                 "\tpublic function change()\n" +
                 "\t{\n" +
                     "\t\t$this->table('table_name')\n" +
-                        "\t\t\t->renameTable('new_table_name')\n" +
+                        "\t\t\t->rename('new_table_name')\n" +
                         "\t\t\t->update();\n" +
                 "\t}\n" +
             "}\n",
