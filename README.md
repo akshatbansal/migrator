@@ -13,7 +13,7 @@ Migrations are used to change database structure when application evolves and yo
 
 ## Installation
 
-Download the latest [release](https://github.com/pipan/migrator/releases/download/v0.4.0/migrator.jar)
+Download the latest [release](https://github.com/pipan/migrator/releases/download/v0.4.1/migrator.jar)
 
 ```sh
 java -jar migrator.jar
