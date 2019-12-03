@@ -10,7 +10,10 @@ public class PhinxExtension implements Extension {
         MigrationConfig migrationConfig = config.getMigrationConfig();
         migrationConfig.addGeneraotrFactory(
             "phinx",
-            new PhinxMigrationGeneratorFactory(config.codeManagerConfig().get())
+            new PhinxMigrationGeneratorFactory(
+                config.codeManagerConfig().get(),
+                config.toastServiceConfig().get()
+            )
         );
     }
 }

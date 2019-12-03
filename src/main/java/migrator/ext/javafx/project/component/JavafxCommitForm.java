@@ -58,8 +58,13 @@ public class JavafxCommitForm extends ViewComponent implements CommitForm {
         MigrationGenerator generator = generatorFactory.create();
 
         List<? extends TableChange> changes = this.tableRepository.findByProject(this.project.getId());
-        generator.generateMigration(this.project.getFolder(), this.name.textProperty().get(), changes);
-        this.toastService.success("Migration file crated.");
+        if (generator.generateMigration(
+            this.project.getFolder(),
+            this.name.textProperty().get(),
+            changes
+        )) {
+            this.toastService.success("Migration file crated.");
+        }
     }
 
     @FXML public void close() {

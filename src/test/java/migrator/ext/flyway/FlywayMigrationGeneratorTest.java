@@ -16,8 +16,8 @@ import migrator.app.domain.index.service.IndexBuilder;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.service.TableBuilder;
 import migrator.app.migration.model.TableChange;
+import migrator.ext.phinx.mock.FakeFileStorageFactory;
 import migrator.ext.phinx.mock.FileStorage;
-import migrator.ext.phinx.mock.FakeTimestampFileStorageFactory;
 import migrator.ext.sql.SqlCommandFactory;
 
 public class FlywayMigrationGeneratorTest {
@@ -33,7 +33,7 @@ public class FlywayMigrationGeneratorTest {
         this.storage = new FileStorage();
         this.migrator = new FlywayMigrationGenerator(
             new SqlCommandFactory(),
-            new FakeTimestampFileStorageFactory(this.storage)
+            new FakeFileStorageFactory(this.storage)
         );
     }
 
