@@ -56,6 +56,17 @@ Select project by clicking on `open` button of a project card.
 
 ## Release History
 
+* 0.4.1
+  * Features
+    * Phinx migration will warn you if you try to save migration with the same name
+    * Add `bigint` mysql format compatibility.
+  * Bugfixes
+    * New table is created with `primary_index` instead of `primary`. Index named `primary` was difficult to work with during running migrations.
+    * Default value for column is not always `''` but is `null` by default.
+    * Create table phinx command disables `id`. You have to specify `id` when creating migration.
+    * Tables with status created (green) where visible after running migrations and application show duplicates. Not anymore.
+    * Phinx drop table generates command in `->table()->drop()->save()` instead of `->dropTable()`
+
 * 0.4.0
   * Features
     * Added Flyway support (with tests)
