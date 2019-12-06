@@ -49,6 +49,7 @@ public class SimpleTableService implements TableService {
 
     protected void onProjectActivate(Project project) {
         if (project == null) {
+            this.activeState.deactivate();
             return;
         }
 

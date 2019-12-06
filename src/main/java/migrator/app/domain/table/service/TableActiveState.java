@@ -26,8 +26,13 @@ public class TableActiveState extends SimpleActiveState<Table> {
 
     @Override
     public void remove(Table item) {
+        Boolean removedActivated =  item == this.activated.get();
         this.repository.removeWith(item);
         super.remove(item);
+        if (removedActivated) {
+            this.deactivate();
+            this.activeRoute.changeTo("table.index");
+        }
     }
 
     @Override
@@ -41,7 +46,6 @@ public class TableActiveState extends SimpleActiveState<Table> {
     @Override
     public void deactivate() {
         super.deactivate();
-        this.activeRoute.changeTo("table.index");
     }
 
     @Override

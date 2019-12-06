@@ -32,10 +32,14 @@ public class JavafxBreadcrumpsGuiKit implements BreadcrumpsGuiKit {
     public BreadcrumpsComponent createBreadcrumps(Table table, Project project) {
         return this.createBreadcrumps(
             Arrays.asList(
-                new ProjectsBreadcrump(this.container.getProjectService()),
+                new ProjectsBreadcrump(
+                    this.container.getProjectService(),
+                    this.container.getTableActiveState()
+                ),
                 new SingleProjectBreadcrump(
                     this.container.getProjectService(),
-                    project
+                    project,
+                    this.container.getTableActiveState()
                 ),
                 new VoidBreadcrump(table.nameProperty())
             )
@@ -46,7 +50,10 @@ public class JavafxBreadcrumpsGuiKit implements BreadcrumpsGuiKit {
     public BreadcrumpsComponent createBreadcrumps(Project project) {
         return this.createBreadcrumps(
             Arrays.asList(
-                new ProjectsBreadcrump(this.container.getProjectService()),
+                new ProjectsBreadcrump(
+                    this.container.getProjectService(),
+                    this.container.getTableActiveState()
+                ),
                 new VoidBreadcrump(project.nameProperty())
             )
         );
@@ -56,10 +63,14 @@ public class JavafxBreadcrumpsGuiKit implements BreadcrumpsGuiKit {
     public BreadcrumpsComponent createBreadcrumpsForCommit(Project project) {
         return this.createBreadcrumps(
             Arrays.asList(
-                new ProjectsBreadcrump(this.container.getProjectService()),
+                new ProjectsBreadcrump(
+                    this.container.getProjectService(),
+                    this.container.getTableActiveState()
+                ),
                 new SingleProjectBreadcrump(
                     this.container.getProjectService(),
-                    project
+                    project,
+                    this.container.getTableActiveState()
                 ),
                 new VoidBreadcrump("commit changes")
             )
