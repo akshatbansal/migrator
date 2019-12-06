@@ -109,15 +109,26 @@ public class SimpleColumnService implements ColumnService {
 
     protected void merge(List<Column> dbList, List<Column> repoList) {
         ListDiff<Column> diff = new CompareListDiff<>(dbList, repoList, (Column a, Column b) -> {
+            if (a.getChangeCommand().isType(ChangeCommand.CREATE)) {
+                return a.getChange().getName().equals(
+                    b.getChange().getName()
+                );
+
+            }
             return a.getOriginal().getName().equals(
                 b.getOriginal().getName()
             );
         });
 
         for (List<Column> columnPair : diff.getCommon()) {
-            columnPair.get(1).updateOriginal(
-                columnPair.get(0).getOriginal()
-            );
+            if (columnPair.get(1).getChangeCommand().isType(ChangeCommand.CREATE)) {
+                this.columnRepository.removeWith(columnPair.get(1));
+                this.columnRepository.addWith(columnPair.get(0));
+            } else {
+                columnPair.get(1).updateOriginal(
+                    columnPair.get(0).getOriginal()
+                );
+            }
         }
         for (Column column : diff.getLeftMissing()) {
             if (column.getChangeCommand().isType(ChangeCommand.CREATE)) {
