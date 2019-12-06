@@ -52,7 +52,6 @@ public class SimpleIndexService implements IndexService {
     public void start() {
         this.tableActiveState.getActive()
             .addListener(this.changeTableListener);
-        
     }
 
     @Override
