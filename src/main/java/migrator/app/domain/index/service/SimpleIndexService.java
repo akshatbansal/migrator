@@ -113,14 +113,24 @@ public class SimpleIndexService implements IndexService {
 
     protected void merge(List<Index> dbList, List<Index> repoList) {
         ListDiff<Index> diff = new CompareListDiff<>(dbList, repoList, (Index a, Index b) -> {
+            if (a.getChangeCommand().isType(ChangeCommand.CREATE)) {
+                return a.getChange().getName().equals(
+                    b.getChange().getName()
+                );
+            }
             return a.getOriginal().getName().equals(
                 b.getOriginal().getName()
             );
         });
         for (List<Index> indexPair : diff.getCommon()) {
-            indexPair.get(1).updateOriginal(
-                indexPair.get(0).getOriginal()
-            );
+            if (indexPair.get(1).getChangeCommand().isType(ChangeCommand.CREATE)) {
+                this.indexRepository.removeWith(indexPair.get(1));
+                this.indexRepository.addWith(indexPair.get(0));
+            } else {
+                indexPair.get(1).updateOriginal(
+                    indexPair.get(0).getOriginal()
+                );
+            }
         }
         for (Index index : diff.getLeftMissing()) {
             if (index.getChangeCommand().isType(ChangeCommand.CREATE)) {
