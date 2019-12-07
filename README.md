@@ -57,6 +57,9 @@ Select project by clicking on `open` button of a project card.
 ## Release History
 
 * 0.4.3
+  * Features
+    * Added automatic tests for library classes
+    * Add primary key automaticaly and remove primary_index index when creating new table
   * Bugfixes
     * Flyway migraion file versioning changed according to standard
     * Flyway migration ignored default values in columns. Fixed.

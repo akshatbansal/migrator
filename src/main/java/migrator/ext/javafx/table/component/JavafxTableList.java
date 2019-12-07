@@ -125,13 +125,6 @@ public class JavafxTableList extends ViewComponent implements TableList, TableAc
         this.columnActiveState.add(
             this.columnFactory.createWithCreateChange(newTable.getUniqueKey(), "modified_at", "timestamp", "CURRENT_TIMESTAMP", false, "", false, "", false)
         );
-        this.indexActiveState.add(
-            this.indexFactory.createWithCreateChange(
-                this.tableActiveState.getActive().get().getUniqueKey(),
-                "primary_index",
-                Arrays.asList(idColumn.getChange())
-            )
-        );
     }
 
     @Override

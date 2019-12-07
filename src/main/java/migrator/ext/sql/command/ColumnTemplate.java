@@ -21,7 +21,7 @@ public class ColumnTemplate implements StringTemplate {
             column += " UNSIGNED";
         }
         if (this.change.hasAutoIncrementAttribute() && this.change.isAutoIncrement()) {
-            column += " auto_increment";
+            column += " auto_increment primary key";
         }
         if (!this.change.isNullEnabled()) {
             column += " NOT NULL";
