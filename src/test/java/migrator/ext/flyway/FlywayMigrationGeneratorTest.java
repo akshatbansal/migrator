@@ -522,7 +522,7 @@ public class FlywayMigrationGeneratorTest {
 
         this.migrator.generateMigration("", "MigrationByMigrator", change);
         assertEquals(
-            "ALTER TABLE `table_name` CHANGE `id` `id` varchar(11) auto_increment NOT NULL;",
+            "ALTER TABLE `table_name` CHANGE `id` `id` varchar(11) auto_increment primary key NOT NULL;",
             this.storage.load()
         );
     }
