@@ -56,6 +56,12 @@ Select project by clicking on `open` button of a project card.
 
 ## Release History
 
+* 0.4.3
+  * Bugfixes
+    * Flyway migraion file versioning changed according to standard
+    * Flyway migration ignored default values in columns. Fixed.
+    * Empty table name throwed mysql exception. Added condition to check for empty table names.
+
 * 0.4.2
   * Bugfixes
     * Refresh created columns and indexes after running migration

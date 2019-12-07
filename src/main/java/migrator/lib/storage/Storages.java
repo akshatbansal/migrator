@@ -4,10 +4,11 @@ import java.io.File;
 import java.util.prefs.Preferences;
 
 import migrator.lib.adapter.Adapter;
+import migrator.lib.adapter.StringAdapter;
 
 public class Storages {
     public static <T> Storage<T> getFileStorage(File file, Adapter<T, String> adapter) {
-        return new PersistantStorage<>(
+        return new AdapterStorage<>(
             new SimpleFileStorage(file),
             adapter
         );
@@ -18,7 +19,7 @@ public class Storages {
     }
 
     public static <T> Storage<T> getPreferencesStorage(Preferences preferences, String key, Adapter<T, String> adapter) {
-        return new PersistantStorage<>(
+        return new AdapterStorage<>(
             new SimplePreferencesStorage(preferences, key),
             adapter
         );

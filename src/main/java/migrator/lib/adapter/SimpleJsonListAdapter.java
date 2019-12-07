@@ -17,7 +17,7 @@ public class SimpleJsonListAdapter<T> implements Adapter<Collection<T>, String> 
 
     public Collection<T> concretize(String items) {
         List<T> list = new ArrayList<>();
-        if (items == null) {
+        if (items == null || items.isEmpty()) {
             return list;
         }
         try {

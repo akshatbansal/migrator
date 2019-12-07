@@ -7,63 +7,68 @@ import migrator.lib.adapter.Adapter;
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PersistantStorageTest {
+public class AdapterStorageTest {
     @BeforeEach public void setUp() {
 
     }
 
-    @Test public void testLoadingSimpleString() {
-        Storage<String> storage = new PersistantStorage<>(
-            new MockPersistantStorageType("initial"),
-            new StringAdapter()
+    @Test public void load_initialContentString_equalsInitial() {
+        MockStorageType mockStorageType = new MockStorageType("initial");
+        Storage<String> storage = new AdapterStorage<>(
+            mockStorageType,
+            new MockStringAdapter()
         );
 
         assertEquals("initial", storage.load());
     }
 
-    @Test public void testLoadingSimpleStringUndefined() {
-        Storage<String> storage = new PersistantStorage<>(
-            new MockPersistantStorageType(null),
-            new StringAdapter()
+    @Test public void load_initialContentNull_equalsNull() {
+        MockStorageType mockStorageType = new MockStorageType(null);
+        Storage<String> storage = new AdapterStorage<>(
+            mockStorageType,
+            new MockStringAdapter()
         );
 
         assertNull(storage.load());
     }
 
-    @Test public void testStoringSimpleString() {
-        Storage<String> storage = new PersistantStorage<>(
-            new MockPersistantStorageType(null),
-            new StringAdapter()
+    @Test public void store_string_storageContainsValue() {
+        MockStorageType mockStorageType = new MockStorageType(null);
+        Storage<String> storage = new AdapterStorage<>(
+            mockStorageType,
+            new MockStringAdapter()
         );
 
         storage.store("simple");
-        assertEquals("simple", storage.load());
+        assertEquals("simple", mockStorageType.load());
     }
 
-    @Test public void testStoringNullString() {
-        Storage<String> storage = new PersistantStorage<>(
-            new MockPersistantStorageType("init"),
-            new StringAdapter()
+    @Test public void store_null_storageContainsNull() {
+        MockStorageType mockStorageType = new MockStorageType("init");
+        Storage<String> storage = new AdapterStorage<>(
+            mockStorageType,
+            new MockStringAdapter()
         );
 
         storage.store(null);
         assertNull(storage.load());
     }
 
-    @Test public void testClearingSimpleString() {
-        Storage<String> storage = new PersistantStorage<>(
-            new MockPersistantStorageType(null),
-            new StringAdapter()
+    @Test public void clear_stoarge_containsNull() {
+        MockStorageType mockStorageType = new MockStorageType("simple");
+        Storage<String> storage = new AdapterStorage<>(
+            mockStorageType,
+            new MockStringAdapter()
         );
 
-        storage.store("simple");
         storage.clear();
-        assertNull(storage.load());
+
+        assertNull(mockStorageType.load());
     }
 
     @Test public void testLoadingAdapterValue() {
-        Storage<MockModel> storage = new PersistantStorage<>(
-            new MockPersistantStorageType("john:smith"),
+        Storage<MockModel> storage = new AdapterStorage<>(
+            new MockStorageType("john:smith"),
             new MockModelAdapter()
         );
 
@@ -73,8 +78,8 @@ public class PersistantStorageTest {
     }
 
     @Test public void testLoadingNullAdapterValue() {
-        Storage<MockModel> storage = new PersistantStorage<>(
-            new MockPersistantStorageType(null),
+        Storage<MockModel> storage = new AdapterStorage<>(
+            new MockStorageType(null),
             new MockModelAdapter()
         );
 
@@ -82,8 +87,8 @@ public class PersistantStorageTest {
     }
 
     @Test public void testStoringAdapterValue() {
-        Storage<MockModel> storage = new PersistantStorage<>(
-            new MockPersistantStorageType(null),
+        Storage<MockModel> storage = new AdapterStorage<>(
+            new MockStorageType(null),
             new MockModelAdapter()
         );
 
@@ -96,8 +101,8 @@ public class PersistantStorageTest {
     }
 
     @Test public void testStoringNullAdapterValue() {
-        Storage<MockModel> storage = new PersistantStorage<>(
-            new MockPersistantStorageType("john:smith"),
+        Storage<MockModel> storage = new AdapterStorage<>(
+            new MockStorageType("john:smith"),
             new MockModelAdapter()
         );
 
@@ -106,8 +111,8 @@ public class PersistantStorageTest {
     }
 
     @Test public void testClearingAdapterValue() {
-        Storage<MockModel> storage = new PersistantStorage<>(
-            new MockPersistantStorageType(null),
+        Storage<MockModel> storage = new AdapterStorage<>(
+            new MockStorageType(null),
             new MockModelAdapter()
         );
 
@@ -117,10 +122,10 @@ public class PersistantStorageTest {
         assertNull(storage.load());
     }
 
-    public class MockPersistantStorageType implements Storage<String> {
+    public class MockStorageType implements Storage<String> {
         protected String storedData;
 
-        public MockPersistantStorageType(String initialValue) {
+        public MockStorageType(String initialValue) {
             this.storedData = initialValue;
         }
 
@@ -155,6 +160,18 @@ public class PersistantStorageTest {
 
         public String getSurname() {
             return this.surname;
+        }
+    }
+
+    public class MockStringAdapter implements Adapter<String, String> {
+        @Override
+        public String concretize(String item) {
+            return item;
+        }
+
+        @Override
+        public String generalize(String item) {
+            return item;
         }
     }
 
