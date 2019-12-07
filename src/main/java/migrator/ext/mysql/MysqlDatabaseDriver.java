@@ -139,6 +139,10 @@ public class MysqlDatabaseDriver implements DatabaseDriver {
         }
 
         String tableName = table.getOriginalName();
+        if (tableName.isEmpty()) {
+            this.columns.clear();
+            return;
+        }
         if (!this.tableExists(tableName)) {
             this.columns.clear();
             return;
@@ -177,6 +181,10 @@ public class MysqlDatabaseDriver implements DatabaseDriver {
         }
 
         String tableName = table.getOriginalName();
+        if (tableName.isEmpty()) {
+            this.indexes.clear();
+            return;
+        }
         if (!this.tableExists(tableName)) {
             this.indexes.clear();
             return;
