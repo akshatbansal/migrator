@@ -27,14 +27,14 @@ public class DateVersionFileStorageFactory implements FileStorageFactory {
         }
 
         file = file.toPath()
-            .resolveSibling(dateVersion + "_" + fileName)
+            .resolveSibling(dateVersion + "__" + fileName)
             .toFile();
         return Storages.getSimpleFileStorage(file);
     }
 
     private String getCurrentVersion(File file) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM");
-        final String dateVersion = dateFormat.format(new Date());
+        final String dateVersion = "V" + dateFormat.format(new Date());
         File[] currentVersionFiles = file.getParentFile().listFiles((File dir, String name) -> {
             return name.startsWith(dateVersion);
         });
