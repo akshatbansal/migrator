@@ -2,11 +2,11 @@ package migrator.lib.storage;
 
 import migrator.lib.adapter.Adapter;
 
-public class PersistantStorage<T> implements Storage<T> {
+public class AdapterStorage<T> implements Storage<T> {
     protected Storage<String> storageType;
     protected Adapter<T, String> adapter;
 
-    public PersistantStorage(Storage<String> storageType, Adapter<T, String> adapter) {
+    public AdapterStorage(Storage<String> storageType, Adapter<T, String> adapter) {
         this.storageType = storageType;
         this.adapter = adapter;
     }

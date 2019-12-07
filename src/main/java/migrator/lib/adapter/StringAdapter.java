@@ -1,6 +1,4 @@
-package migrator.lib.storage;
-
-import migrator.lib.adapter.Adapter;
+package migrator.lib.adapter;
 
 public class StringAdapter implements Adapter<String, String> {
     @Override
