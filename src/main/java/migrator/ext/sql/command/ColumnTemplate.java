@@ -26,6 +26,9 @@ public class ColumnTemplate implements StringTemplate {
         if (!this.change.isNullEnabled()) {
             column += " NOT NULL";
         }
+        if (this.change.getDefaultValue() != null && !this.change.getDefaultValue().isEmpty()) {
+            column += " DEFAULT " + this.change.getDefaultValue();
+        }
         return column;
     }
 
