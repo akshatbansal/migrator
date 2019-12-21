@@ -1,7 +1,5 @@
 package migrator.ext.javafx.table.component;
 
-import java.util.Arrays;
-
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.FlowPane;

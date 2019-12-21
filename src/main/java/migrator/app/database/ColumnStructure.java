@@ -9,15 +9,15 @@ import migrator.lib.adapter.ListAdapter;
 
 public class ColumnStructure {
     protected DatabaseColumnDriver columnDriver;
-    protected Adapter<List<Map<String, String>>, List<ColumnProperty>> adapter;
+    protected Adapter<List<ColumnProperty>, List<Map<String, String>>> adapter;
 
-    public ColumnStructure(DatabaseColumnDriver columnDriver, Adapter<Map<String, String>, ColumnProperty> adapter) {
+    public ColumnStructure(DatabaseColumnDriver columnDriver, Adapter<ColumnProperty, Map<String, String>> adapter) {
         this.columnDriver = columnDriver;
         this.adapter = new ListAdapter<>(adapter);
     }
 
     public List<ColumnProperty> getForTable(String tableName) {
-        return this.adapter.generalize(
+        return this.adapter.concretize(
             this.columnDriver.getColumns(tableName)
         );
     }

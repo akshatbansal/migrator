@@ -23,6 +23,7 @@ public class Router {
         this.routes.put(name, connection);
     }
 
+    @SuppressWarnings("unchecked")
     public void show(String routeName, Object routeData) {
         if (!this.routes.containsKey(routeName)) {
             System.out.println("Route does not exists '" + routeName + "'");

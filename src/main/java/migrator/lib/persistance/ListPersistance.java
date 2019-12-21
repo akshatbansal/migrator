@@ -24,6 +24,7 @@ public class ListPersistance<T> implements Persistance<List<T>>  {
         return this.load(null);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<T> load(List<T> def) {
         List<T> list = new ArrayList<>();

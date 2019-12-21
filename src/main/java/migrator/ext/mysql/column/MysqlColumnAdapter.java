@@ -1,12 +1,13 @@
 package migrator.ext.mysql.column;
 
+import java.util.Hashtable;
 import java.util.Map;
 
 import migrator.app.migration.model.ColumnProperty;
 import migrator.app.migration.model.SimpleColumnProperty;
 import migrator.lib.adapter.Adapter;
 
-public class MysqlColumnAdapter implements Adapter<Map<String, String>, ColumnProperty> {
+public class MysqlColumnAdapter implements Adapter<ColumnProperty, Map<String, String>> {
     protected Adapter<Map<String, String>, String> formatAdapter;
 
     public MysqlColumnAdapter() {
@@ -14,13 +15,22 @@ public class MysqlColumnAdapter implements Adapter<Map<String, String>, ColumnPr
     }
 
     @Override
-    public Map<String, String> concretize(ColumnProperty item) {
-        // TODO Auto-generated method stub
-        return null;
+    public Map<String, String> generalize(ColumnProperty item) {
+        Map<String, String> formatMap = new Hashtable<>();
+        formatMap.put("format", item.getFormat());
+        formatMap.put("length", item.getLength());
+        formatMap.put("precision", item.getPrecision());
+
+        String format = this.formatAdapter.generalize(formatMap);
+
+        Map<String, String> result = new Hashtable<>();
+        result.put("name", item.getName());
+        result.put("format", format);
+        return result;
     }
 
     @Override
-    public ColumnProperty generalize(Map<String, String> item) {
+    public ColumnProperty concretize(Map<String, String> item) {
         if (item == null) {
             return null;
         }

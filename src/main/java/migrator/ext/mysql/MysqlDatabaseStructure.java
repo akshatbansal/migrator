@@ -11,12 +11,13 @@ import migrator.app.database.DatabaseIndexDriver;
 import migrator.app.database.DatabaseStructure;
 import migrator.app.database.DatabaseTableDriver;
 import migrator.app.database.IndexStructure;
+import migrator.app.database.TableStructure;
 import migrator.app.migration.model.ColumnProperty;
 import migrator.app.migration.model.IndexProperty;
 import migrator.app.migration.model.TableProperty;
 import migrator.ext.mysql.column.MysqlColumnAdapter;
 import migrator.ext.mysql.index.MysqlIndexAdapter;
-import migrator.ext.mysql.table.MysqlTableStructure;
+import migrator.ext.mysql.table.MysqlTableAdapter;
 
 public class MysqlDatabaseStructure implements DatabaseStructure {
     protected ObservableList<TableProperty> tables;
@@ -24,7 +25,7 @@ public class MysqlDatabaseStructure implements DatabaseStructure {
     protected Map<String, ObservableList<IndexProperty>> indexes;
 
     protected DatabaseIndexDriver mysqlIndexDriver;
-    protected MysqlTableStructure mysqlTableStructure;
+    protected TableStructure mysqlTableStructure;
     protected ColumnStructure columnStructure;
     protected Map<String, IndexStructure> indexStructures;
 
@@ -35,7 +36,7 @@ public class MysqlDatabaseStructure implements DatabaseStructure {
 
         this.mysqlIndexDriver = mysqlIndexDriver;
 
-        this.mysqlTableStructure = new MysqlTableStructure(mysqlTableDriver);
+        this.mysqlTableStructure = new TableStructure(mysqlTableDriver, new MysqlTableAdapter());
         this.columnStructure = new ColumnStructure(mysqlColumnDriver, new MysqlColumnAdapter());
         this.indexStructures = new Hashtable<>();
     }
@@ -85,6 +86,7 @@ public class MysqlDatabaseStructure implements DatabaseStructure {
     public class DefaultObservableMap<T, U> extends Hashtable<T, ObservableList<U>> {
         private static final long serialVersionUID = 5093889375181995701L;
 
+        @SuppressWarnings("unchecked")
         @Override
         public synchronized ObservableList<U> get(Object key) {
             if (!this.contains(key)) {

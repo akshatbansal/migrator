@@ -26,199 +26,208 @@ public class MysqlColumnAdapterTest {
         return dbColumn;
     }
 
-    @Test public void generalize_null_isNull() {
-        Adapter<Map<String, String>, ColumnProperty> adapter = new MysqlColumnAdapter();
+    @Test public void concretize_null_isNull() {
+        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
 
-        ColumnProperty result = adapter.generalize(null);
+        ColumnProperty result = adapter.concretize(null);
 
         assertNull(result);
     }
 
-    @Test public void generalize_column_hasName() {
-        Adapter<Map<String, String>, ColumnProperty> adapter = new MysqlColumnAdapter();
+    @Test public void concretize_column_hasName() {
+        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "varchar(10)", "YES");
-        ColumnProperty result = adapter.generalize(dbColumn);
+        ColumnProperty result = adapter.concretize(dbColumn);
 
         assertEquals("column_name", result.nameProperty().get());
     }
 
-    @Test public void generalize_column_hasNullEnabled() {
-        Adapter<Map<String, String>, ColumnProperty> adapter = new MysqlColumnAdapter();
+    @Test public void concretize_column_hasNullEnabled() {
+        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "varchar(10)", "YES");        
-        ColumnProperty result = adapter.generalize(dbColumn);
+        ColumnProperty result = adapter.concretize(dbColumn);
 
         assertTrue(result.nullProperty().getValue());
     }
 
-    @Test public void generalize_columnVarchar_hasFormatInApplicationForm() {
-        Adapter<Map<String, String>, ColumnProperty> adapter = new MysqlColumnAdapter();
+    @Test public void concretize_columnVarchar_hasFormatInApplicationForm() {
+        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "varchar(10)", "YES");
-        ColumnProperty result = adapter.generalize(dbColumn);
+        ColumnProperty result = adapter.concretize(dbColumn);
 
         assertEquals("string", result.formatProperty().get());
     }
 
-    @Test public void generalize_columnInt_hasFormatInApplicationForm() {
-        Adapter<Map<String, String>, ColumnProperty> adapter = new MysqlColumnAdapter();
+    @Test public void concretize_columnInt_hasFormatInApplicationForm() {
+        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "int(11)", "YES");
-        ColumnProperty result = adapter.generalize(dbColumn);
+        ColumnProperty result = adapter.concretize(dbColumn);
 
         assertEquals("integer", result.formatProperty().get());
     }
 
-    @Test public void generalize_columnTinyint_hasFormatInApplicationForm() {
-        Adapter<Map<String, String>, ColumnProperty> adapter = new MysqlColumnAdapter();
+    @Test public void concretize_columnTinyint_hasFormatInApplicationForm() {
+        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "tinyint(11)", "YES");
-        ColumnProperty result = adapter.generalize(dbColumn);
+        ColumnProperty result = adapter.concretize(dbColumn);
 
         assertEquals("boolean", result.formatProperty().get());
     }
 
-    @Test public void generalize_columnDouble_hasFormatInApplicationForm() {
-        Adapter<Map<String, String>, ColumnProperty> adapter = new MysqlColumnAdapter();
+    @Test public void concretize_columnDouble_hasFormatInApplicationForm() {
+        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "double(11,2)", "YES");
-        ColumnProperty result = adapter.generalize(dbColumn);
+        ColumnProperty result = adapter.concretize(dbColumn);
 
         assertEquals("decimal", result.formatProperty().get());
     }
 
-    @Test public void generalize_columnChar_hasFormatInApplicationForm() {
-        Adapter<Map<String, String>, ColumnProperty> adapter = new MysqlColumnAdapter();
+    @Test public void concretize_columnChar_hasFormatInApplicationForm() {
+        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "char(50)", "YES");
-        ColumnProperty result = adapter.generalize(dbColumn);
+        ColumnProperty result = adapter.concretize(dbColumn);
 
         assertEquals("char", result.formatProperty().get());
     }
 
-    @Test public void generalize_columnBigint_hasFormatInApplicationForm() {
-        Adapter<Map<String, String>, ColumnProperty> adapter = new MysqlColumnAdapter();
+    @Test public void concretize_columnBigint_hasFormatInApplicationForm() {
+        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "bigint(20)", "YES");
-        ColumnProperty result = adapter.generalize(dbColumn);
+        ColumnProperty result = adapter.concretize(dbColumn);
 
         assertEquals("long", result.formatProperty().get());
     }
 
-    @Test public void generalize_columnTimestamp_hasFormatInApplicationForm() {
-        Adapter<Map<String, String>, ColumnProperty> adapter = new MysqlColumnAdapter();
+    @Test public void concretize_columnTimestamp_hasFormatInApplicationForm() {
+        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "timestamp", "YES");
-        ColumnProperty result = adapter.generalize(dbColumn);
+        ColumnProperty result = adapter.concretize(dbColumn);
 
         assertEquals("timestamp", result.formatProperty().get());
     }
 
-    @Test public void generalize_columnDate_hasFormatInApplicationForm() {
-        Adapter<Map<String, String>, ColumnProperty> adapter = new MysqlColumnAdapter();
+    @Test public void concretize_columnDate_hasFormatInApplicationForm() {
+        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "date", "YES");
-        ColumnProperty result = adapter.generalize(dbColumn);
+        ColumnProperty result = adapter.concretize(dbColumn);
 
         assertEquals("date", result.formatProperty().get());
     }
 
-    @Test public void generalize_columnDatetime_hasFormatInApplicationForm() {
-        Adapter<Map<String, String>, ColumnProperty> adapter = new MysqlColumnAdapter();
+    @Test public void concretize_columnDatetime_hasFormatInApplicationForm() {
+        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "datetime", "YES");
-        ColumnProperty result = adapter.generalize(dbColumn);
+        ColumnProperty result = adapter.concretize(dbColumn);
 
         assertEquals("datetime", result.formatProperty().get());
     }
 
-    @Test public void generalize_columnTime_hasFormatInApplicationForm() {
-        Adapter<Map<String, String>, ColumnProperty> adapter = new MysqlColumnAdapter();
+    @Test public void concretize_columnTime_hasFormatInApplicationForm() {
+        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "time", "YES");
-        ColumnProperty result = adapter.generalize(dbColumn);
+        ColumnProperty result = adapter.concretize(dbColumn);
 
         assertEquals("time", result.formatProperty().get());
     }
 
-    @Test public void generalize_columnText_hasFormatInApplicationForm() {
-        Adapter<Map<String, String>, ColumnProperty> adapter = new MysqlColumnAdapter();
+    @Test public void concretize_columnText_hasFormatInApplicationForm() {
+        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "text", "YES");
-        ColumnProperty result = adapter.generalize(dbColumn);
+        ColumnProperty result = adapter.concretize(dbColumn);
 
         assertEquals("text", result.formatProperty().get());
     }
 
-    @Test public void generalize_columnFloat_hasFormatInApplicationForm() {
-        Adapter<Map<String, String>, ColumnProperty> adapter = new MysqlColumnAdapter();
+    @Test public void concretize_columnFloat_hasFormatInApplicationForm() {
+        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "float(8, 4)", "YES");
-        ColumnProperty result = adapter.generalize(dbColumn);
+        ColumnProperty result = adapter.concretize(dbColumn);
 
         assertEquals("float", result.formatProperty().get());
     }
 
-    @Test public void generalize_columnVarchar_hasFormatLength() {
-        Adapter<Map<String, String>, ColumnProperty> adapter = new MysqlColumnAdapter();
+    @Test public void concretize_columnUnknown_hasEmptyFormat() {
+        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
+
+        Map<String, String> dbColumn = this.createDbColumn("column_name", "unknown(8, 4)", "YES");
+        ColumnProperty result = adapter.concretize(dbColumn);
+
+        assertEquals("", result.formatProperty().get());
+    }
+
+    @Test public void concretize_columnVarchar_hasFormatLength() {
+        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "varchar(11)", "YES");
-        ColumnProperty result = adapter.generalize(dbColumn);
+        ColumnProperty result = adapter.concretize(dbColumn);
 
         assertEquals("11", result.lengthProperty().get());
     }
 
-    @Test public void generalize_columnChar_hasFormatLength() {
-        Adapter<Map<String, String>, ColumnProperty> adapter = new MysqlColumnAdapter();
+    @Test public void concretize_columnChar_hasFormatLength() {
+        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "char(50)", "YES");
-        ColumnProperty result = adapter.generalize(dbColumn);
+        ColumnProperty result = adapter.concretize(dbColumn);
 
         assertEquals("50", result.lengthProperty().get());
     }
 
-    @Test public void generalize_columnBigint_hasFormatLength() {
-        Adapter<Map<String, String>, ColumnProperty> adapter = new MysqlColumnAdapter();
+    @Test public void concretize_columnBigint_hasFormatLength() {
+        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "bigint(20)", "YES");
-        ColumnProperty result = adapter.generalize(dbColumn);
+        ColumnProperty result = adapter.concretize(dbColumn);
 
         assertEquals("20", result.lengthProperty().get());
     }
 
-    @Test public void generalize_columnDouble_hasFormatLength() {
-        Adapter<Map<String, String>, ColumnProperty> adapter = new MysqlColumnAdapter();
+    @Test public void concretize_columnDouble_hasFormatLength() {
+        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "double(11,2)", "YES");
-        ColumnProperty result = adapter.generalize(dbColumn);
+        ColumnProperty result = adapter.concretize(dbColumn);
 
         assertEquals("11", result.lengthProperty().get());
     }
 
-    @Test public void generalize_columnFloat_hasFormatLength() {
-        Adapter<Map<String, String>, ColumnProperty> adapter = new MysqlColumnAdapter();
+    @Test public void concretize_columnFloat_hasFormatLength() {
+        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "float(8,4)", "YES");
-        ColumnProperty result = adapter.generalize(dbColumn);
+        ColumnProperty result = adapter.concretize(dbColumn);
 
         assertEquals("8", result.lengthProperty().get());
     }
 
-    @Test public void generalize_columnDouble_hasFormatPrecision() {
-        Adapter<Map<String, String>, ColumnProperty> adapter = new MysqlColumnAdapter();
+    @Test public void concretize_columnDouble_hasFormatPrecision() {
+        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "double(11,2)", "YES");
-        ColumnProperty result = adapter.generalize(dbColumn);
+        ColumnProperty result = adapter.concretize(dbColumn);
 
         assertEquals("2", result.precisionProperty().get());
     }
 
-    @Test public void generalize_columnFloat_hasFormatPrecision() {
-        Adapter<Map<String, String>, ColumnProperty> adapter = new MysqlColumnAdapter();
+    @Test public void concretize_columnFloat_hasFormatPrecision() {
+        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "float(8,4)", "YES");
-        ColumnProperty result = adapter.generalize(dbColumn);
+        ColumnProperty result = adapter.concretize(dbColumn);
 
         assertEquals("4", result.precisionProperty().get());
     }
