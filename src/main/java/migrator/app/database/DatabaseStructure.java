@@ -9,4 +9,5 @@ public interface DatabaseStructure {
     public ObservableList<ColumnProperty> getColumns(String table);
     public ObservableList<IndexProperty> getIndexes(String table);
     public ObservableList<TableProperty> getTables();
+    public ConnectionResult<?> testConnection();
 }

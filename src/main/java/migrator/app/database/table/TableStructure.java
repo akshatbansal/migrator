@@ -1,8 +1,7 @@
-package migrator.app.database;
+package migrator.app.database.table;
 
 import java.util.List;
 
-import migrator.app.database.DatabaseTableDriver;
 import migrator.app.migration.model.TableProperty;
 import migrator.lib.adapter.Adapter;
 import migrator.lib.adapter.ListAdapter;

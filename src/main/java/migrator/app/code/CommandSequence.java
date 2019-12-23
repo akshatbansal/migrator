@@ -14,6 +14,9 @@ public class CommandSequence implements CodeCommand {
     @Override
     public String toCode() {
         String code = "";
+        if (this.commands == null) {
+            return code;
+        }
         for (CodeCommand command : this.commands) {
             code += command.toCode();
         }

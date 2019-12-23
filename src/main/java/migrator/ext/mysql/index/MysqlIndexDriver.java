@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import migrator.app.database.DatabaseIndexDriver;
+import migrator.app.database.ConnectionResult;
+import migrator.app.database.index.DatabaseIndexDriver;
 import migrator.ext.mysql.MysqlConnection;
 
 public class MysqlIndexDriver implements DatabaseIndexDriver {
@@ -24,14 +25,16 @@ public class MysqlIndexDriver implements DatabaseIndexDriver {
     @Override
     public List<List<String>> getIndexes(String tableName) {
         List<List<String>> indexes = new ArrayList<>();
-        Connection connection = this.mysqlConnection.connect();
-        if (connection == null) {
+        ConnectionResult<Connection> connectionResult = this.mysqlConnection.connect();
+        if (!connectionResult.isOk()) {
             return indexes;
         }
         
         if (tableName.isEmpty()) {
             return indexes;
         }
+
+        Connection connection = connectionResult.getConnection();
 
         try {
             Statement statement = connection.createStatement();

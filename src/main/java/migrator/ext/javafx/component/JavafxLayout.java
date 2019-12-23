@@ -13,7 +13,7 @@ public class JavafxLayout {
         this.side = side;
     }
 
-    protected void renderSide(Node node) {
+    public void renderSide(Node node) {
         if (node == null) {
             this.clearSide();
             return;
@@ -30,7 +30,7 @@ public class JavafxLayout {
         this.side.getChildren().clear();
     }
 
-    protected void renderBody(Node node) {
+    public void renderBody(Node node) {
         if (node == null) {
             this.clearBody();
             return;

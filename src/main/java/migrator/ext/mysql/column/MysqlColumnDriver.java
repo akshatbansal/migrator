@@ -9,7 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import migrator.app.database.DatabaseColumnDriver;
+import migrator.app.database.ConnectionResult;
+import migrator.app.database.column.DatabaseColumnDriver;
 import migrator.ext.mysql.MysqlConnection;
 
 public class MysqlColumnDriver implements DatabaseColumnDriver {
@@ -22,10 +23,16 @@ public class MysqlColumnDriver implements DatabaseColumnDriver {
     @Override
     public List<Map<String, String>> getColumns(String tableName) {
         List<Map<String, String>> columns = new LinkedList<>();
-        Connection connection = this.mysqlConnection.connect();
-        if (connection == null) {
+        ConnectionResult<Connection> connectionResult = this.mysqlConnection.connect();
+        if (!connectionResult.isOk()) {
             return columns;
         }
+        
+        if (tableName.isEmpty()) {
+            return columns;
+        }
+
+        Connection connection = connectionResult.getConnection();
 
         try {
             Statement statement = connection.createStatement();

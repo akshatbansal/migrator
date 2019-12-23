@@ -7,7 +7,8 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
-import migrator.app.database.DatabaseTableDriver;
+import migrator.app.database.ConnectionResult;
+import migrator.app.database.table.DatabaseTableDriver;
 import migrator.ext.mysql.MysqlConnection;
 
 public class MysqlTableDriver implements DatabaseTableDriver {
@@ -20,10 +21,12 @@ public class MysqlTableDriver implements DatabaseTableDriver {
     @Override
     public List<String> getTables() {
         List<String> tables = new LinkedList<>();
-        Connection connection = this.mysqlConnection.connect();
-        if (connection == null) {
+        ConnectionResult<Connection> connectionResult = this.mysqlConnection.connect();
+        if (connectionResult == null) {
             return tables;
         }
+
+        Connection connection = connectionResult.getConnection();
         
         try {
             Statement statement = connection.createStatement();

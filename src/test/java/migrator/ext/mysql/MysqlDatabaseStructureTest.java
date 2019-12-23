@@ -9,30 +9,33 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
-import migrator.app.database.DatabaseColumnDriver;
-import migrator.app.database.DatabaseIndexDriver;
-import migrator.app.database.DatabaseTableDriver;
+import migrator.app.database.DatabaseStructure;
+import migrator.app.database.SimpleDatabaseStructure;
+import migrator.app.database.column.DatabaseColumnDriver;
+import migrator.app.database.index.DatabaseIndexDriver;
+import migrator.app.database.table.DatabaseTableDriver;
 import migrator.app.migration.model.ColumnProperty;
 import migrator.app.migration.model.IndexProperty;
 import migrator.app.migration.model.TableProperty;
 
 public class MysqlDatabaseStructureTest {
-    private MysqlDatabaseStructure createStructure(List<String> tables, List<Map<String, String>> columns, List<List<String>> indexes) {
-        return new MysqlDatabaseStructure(
+    private DatabaseStructure createStructure(List<String> tables, List<Map<String, String>> columns, List<List<String>> indexes) {
+        return new SimpleDatabaseStructure(
             new MockTableDriver(tables),
             new MockColumnDriver(columns),
-            new MockIndexDriver(indexes)
+            new MockIndexDriver(indexes),
+            null
         );
     }
 
     @Test public void getTables_secondCall_sameReference() {
-        MysqlDatabaseStructure mysqlDatabaseStructure = this.createStructure(null, null, null);
+        DatabaseStructure mysqlDatabaseStructure = this.createStructure(null, null, null);
 
         assertEquals(mysqlDatabaseStructure.getTables(), mysqlDatabaseStructure.getTables());
     }
 
     @Test public void getTables_oneTableInDatabase_containsOneTable() {
-        MysqlDatabaseStructure mysqlDatabaseStructure = this.createStructure(Arrays.asList("table_name"), null, null);
+        DatabaseStructure mysqlDatabaseStructure = this.createStructure(Arrays.asList("table_name"), null, null);
 
         List<TableProperty> result = mysqlDatabaseStructure.getTables();
 
@@ -41,7 +44,7 @@ public class MysqlDatabaseStructureTest {
 
     @Test public void getTables_tableCountChange_containsTwoTables() {
         MockTableDriver tableDriver = new MockTableDriver(Arrays.asList("table_name"));
-        MysqlDatabaseStructure mysqlDatabaseStructure = new MysqlDatabaseStructure(tableDriver, null, null);
+        DatabaseStructure mysqlDatabaseStructure = new SimpleDatabaseStructure(tableDriver, null, null, null);
 
         tableDriver.set(Arrays.asList("table_name", "properties"));
         List<TableProperty> result = mysqlDatabaseStructure.getTables();
@@ -50,7 +53,7 @@ public class MysqlDatabaseStructureTest {
     }
 
     @Test public void getColumns_secondCallForTheSameTable_sameReference() {
-        MysqlDatabaseStructure mysqlDatabaseStructure = this.createStructure(null, null, null);
+        DatabaseStructure mysqlDatabaseStructure = this.createStructure(null, null, null);
 
         assertEquals(mysqlDatabaseStructure.getColumns("table_name"), mysqlDatabaseStructure.getColumns("table_name"));
     }
@@ -60,7 +63,7 @@ public class MysqlDatabaseStructureTest {
         column.put("name", "column_name");
         column.put("format", "varchar(10)");
         column.put("nullEnabled", "");
-        MysqlDatabaseStructure mysqlDatabaseStructure = this.createStructure(null, Arrays.asList(column), null);
+        DatabaseStructure mysqlDatabaseStructure = this.createStructure(null, Arrays.asList(column), null);
 
         List<ColumnProperty> result = mysqlDatabaseStructure.getColumns("table_name");
 
@@ -68,7 +71,7 @@ public class MysqlDatabaseStructureTest {
     }
 
     @Test public void getIndexes_secondCallForTheSameTable_sameReference() {
-        MysqlDatabaseStructure mysqlDatabaseStructure = this.createStructure(null, null, null);
+        DatabaseStructure mysqlDatabaseStructure = this.createStructure(null, null, null);
 
         assertEquals(mysqlDatabaseStructure.getIndexes("table_name"), mysqlDatabaseStructure.getIndexes("table_name"));
     }
@@ -78,7 +81,7 @@ public class MysqlDatabaseStructureTest {
             "index_name",
             "id"
         );
-        MysqlDatabaseStructure mysqlDatabaseStructure = this.createStructure(null, null, Arrays.asList(index));
+        DatabaseStructure mysqlDatabaseStructure = this.createStructure(null, null, Arrays.asList(index));
 
         List<IndexProperty> result = mysqlDatabaseStructure.getIndexes("table_name");
 

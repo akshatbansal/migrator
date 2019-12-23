@@ -1,4 +1,4 @@
-package migrator.app.database;
+package migrator.app.database.index;
 
 import java.util.List;
 

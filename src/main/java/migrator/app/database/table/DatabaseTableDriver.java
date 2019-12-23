@@ -1,4 +1,4 @@
-package migrator.app.database;
+package migrator.app.database.table;
 
 import java.util.List;
 

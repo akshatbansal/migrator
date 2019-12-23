@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
@@ -13,6 +14,7 @@ import migrator.app.Bootstrap;
 import migrator.app.Gui;
 import migrator.app.Router;
 import migrator.app.domain.project.model.Project;
+import migrator.app.gui.project.ProjectController;
 import migrator.ext.flyway.FlywayExtension;
 import migrator.ext.javafx.JavafxGui;
 import migrator.ext.javafx.MainController;
@@ -20,7 +22,6 @@ import migrator.ext.javafx.component.JavafxLayout;
 import migrator.ext.javafx.component.ViewLoader;
 import migrator.ext.javafx.project.route.CommitViewRoute;
 import migrator.ext.javafx.project.route.ProjectIndexRoute;
-import migrator.ext.javafx.project.route.ProjectViewRoute;
 import migrator.ext.javafx.table.route.ColumnViewRoute;
 import migrator.ext.javafx.table.route.IndexViewRoute;
 import migrator.ext.javafx.table.route.TableIndexRoute;
@@ -102,14 +103,18 @@ public class JavafxApplication extends Application {
             "project.index",
             new ProjectIndexRoute(
                 layout,
-                gui.getProject(),
-                container.getProjectService(),
-                container.getActiveRoute()
+                new ProjectController(
+                    FXCollections.observableArrayList(),
+                    FXCollections.observableArrayList(
+                        container.getDatabaseDriverManager().getDriverNames()
+                    ),
+                    FXCollections.observableArrayList(
+                        container.getMigration().getGeneratorNames()
+                    ),
+                    null
+                ),
+                primaryStage
             )
-        );
-        router.connect(
-            "project.view",
-            new ProjectViewRoute(layout, gui.getProject())
         );
 
         container.getActiveRoute().changeTo("project.index");
