@@ -24,6 +24,7 @@ import migrator.app.domain.project.service.ProjectFactory;
 import migrator.app.domain.project.service.ProjectService;
 import migrator.app.domain.table.service.TableFactory;
 import migrator.app.domain.table.service.TableService;
+import migrator.app.gui.GuiContainer;
 import migrator.app.domain.table.TableRepository;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Index;
@@ -60,6 +61,7 @@ public class ConfigContainer {
     private ValueConfig<HotkeyFactory> hotkeyFactory;
     private ValueConfig<HotkeysService> hotkeyService;
     private ValueConfig<ToastService> toastService;
+    private ValueConfig<GuiContainer> guiContainer;
 
     private ValueConfig<ConnectionFactory> connectionFactory;
     private ValueConfig<DatabaseFactory> databaseFactory;
@@ -104,6 +106,7 @@ public class ConfigContainer {
         this.logger = new ValueConfig<>();
         this.hotkeyFactory = new ValueConfig<>();
         this.hotkeyService = new ValueConfig<>();
+        this.guiContainer = new ValueConfig<>();
 
         this.activeRoute = new ValueConfig<>();
         this.migration = new ValueConfig<>();
@@ -314,5 +317,9 @@ public class ConfigContainer {
 
     public ValueConfig<Storage<Collection<Table>>> tableStorageConfig() {
         return this.tableStorage;
+    }
+
+    public ValueConfig<GuiContainer> guiContainerConfig() {
+        return this.guiContainer;
     }
 }

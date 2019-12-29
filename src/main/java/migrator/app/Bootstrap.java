@@ -6,22 +6,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import migrator.app.code.CodeManager;
 import migrator.app.database.driver.DatabaseDriverManager;
-import migrator.app.database.format.ColumnFormat;
-import migrator.app.database.format.ColumnFormatManager;
-import migrator.app.database.format.SimpleColumnFormat;
-import migrator.app.database.format.columns.BooleanFormat;
-import migrator.app.database.format.columns.CharFormat;
-import migrator.app.database.format.columns.DateFormat;
-import migrator.app.database.format.columns.DatetimeFormat;
-import migrator.app.database.format.columns.DecimalFormat;
-import migrator.app.database.format.columns.FloatFormat;
-import migrator.app.database.format.columns.IntegerFormat;
-import migrator.app.database.format.columns.LongFormat;
-import migrator.app.database.format.columns.StringFormat;
 import migrator.app.domain.column.ColumnAdapter;
 import migrator.app.domain.column.ColumnRepository;
 import migrator.app.domain.column.service.ColumnActiveState;
@@ -45,6 +34,8 @@ import migrator.app.domain.table.service.TableActiveState;
 import migrator.app.domain.table.service.TableFactory;
 import migrator.app.ConfigContainer;
 import migrator.app.extension.Extension;
+import migrator.app.gui.GuiContainer;
+import migrator.app.gui.column.format.ColumnFormatCollection;
 import migrator.app.migration.Migration;
 import migrator.app.migration.model.change.ChangeCommandAdapter;
 import migrator.app.migration.model.column.ColumnPropertyAdapter;
@@ -53,7 +44,6 @@ import migrator.app.migration.model.table.TablePropertyAdapter;
 import migrator.app.router.ActiveRoute;
 import migrator.app.toast.PermanentToastService;
 import migrator.lib.adapter.SimpleJsonListAdapter;
-import migrator.lib.config.MapConfig;
 import migrator.lib.hotkyes.HotkeyFactory;
 import migrator.lib.hotkyes.SimpleHotkeysService;
 import migrator.lib.logger.SystemLogger;
@@ -86,20 +76,6 @@ public class Bootstrap {
     }
 
     protected void initialize(ConfigContainer config) {
-        MapConfig<ColumnFormat>  columnFormatsConfig = config.getColumnFormatConfig();
-        columnFormatsConfig.add("boolean", new BooleanFormat());
-        columnFormatsConfig.add("char", new CharFormat());
-        columnFormatsConfig.add("date", new DateFormat());
-        columnFormatsConfig.add("datetime", new DatetimeFormat());
-        columnFormatsConfig.add("decimal", new DecimalFormat());
-        columnFormatsConfig.add("float", new FloatFormat());
-        columnFormatsConfig.add("integer", new IntegerFormat());
-        columnFormatsConfig.add("long", new LongFormat());
-        columnFormatsConfig.add("string", new StringFormat());
-        columnFormatsConfig.add("text", new SimpleColumnFormat("text"));
-        columnFormatsConfig.add("time", new SimpleColumnFormat("time"));
-        columnFormatsConfig.add("timestamp", new SimpleColumnFormat("timestamp"));
-
         Path storageFoldePath = Paths.get(System.getProperty("user.home"), ".migrator");
         if (Files.notExists(storageFoldePath)) {
             storageFoldePath.toFile().mkdirs();
@@ -110,12 +86,22 @@ public class Bootstrap {
         config.loggerConfig().set(
             new SystemLogger()
         );
-        config.columnFormatManagerConfig().set(
-            new ColumnFormatManager(
-                config.getColumnFormatConfig(),
-                config.loggerConfig()
-            )
-        );
+
+        GuiContainer guiContainer = new GuiContainer();
+        ColumnFormatCollection columnFormatCollection = guiContainer.getColumnFormatCollection();
+        columnFormatCollection.addFormat("boolean", new LinkedList<>());
+        columnFormatCollection.addFormat("char", Arrays.asList("length"));
+        columnFormatCollection.addFormat("date", new LinkedList<>());
+        columnFormatCollection.addFormat("datetime", new LinkedList<>());
+        columnFormatCollection.addFormat("decimal", Arrays.asList("length", "precision", "sign"));
+        columnFormatCollection.addFormat("float", Arrays.asList("length", "precision", "sign"));
+        columnFormatCollection.addFormat("integer", Arrays.asList("length", "sign", "autoIncrement"));
+        columnFormatCollection.addFormat("long", Arrays.asList("length", "sign", "autoIncrement"));
+        columnFormatCollection.addFormat("string", Arrays.asList("length"));
+        columnFormatCollection.addFormat("text", new LinkedList<>());
+        columnFormatCollection.addFormat("time", new LinkedList<>());
+        columnFormatCollection.addFormat("timestamp", new LinkedList<>());
+        config.guiContainerConfig().set(guiContainer);
 
         config.changeCommandRepositoryConfig().set(
             new UniqueRepository<>()
@@ -187,9 +173,9 @@ public class Bootstrap {
                 new File(storageFoldePath.toString(), "column.json"),
                 new SimpleJsonListAdapter<>(
                     new ColumnAdapter(
-                        config.columnFormatManagerConfig().get(),
                         config.columnPropertyRepositoryConfig().get(),
-                        config.changeCommandRepositoryConfig().get()
+                        config.changeCommandRepositoryConfig().get(),
+                        config.guiContainerConfig().get().getColumnFormatCollection()
                     )
                 )
             )
@@ -256,8 +242,8 @@ public class Bootstrap {
         );
         config.columnFactoryConfig().set(
             new ColumnFactory(
-                config.columnFormatManagerConfig().get(),
-                idGenerator
+                idGenerator,
+                config.guiContainerConfig().get().getColumnFormatCollection()
             )
         );
         config.indexFactoryConfig().set(

@@ -24,8 +24,37 @@
                 <ComboBox fx:id="format" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
             </HBox>
 
-            <VBox fx:id="paramsBox">
-            </VBox>
+            <HBox fx:id="lengthRow" styleClass="form__row">
+                <HBox styleClass="form__row-label" alignment="center_left">
+                    <Text styleClass="label" text="length" />
+                </HBox>
+                <TextField fx:id="length" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
+            </HBox>
+
+            <HBox fx:id="precisionRow" styleClass="form__row">
+                <HBox styleClass="form__row-label" alignment="center_left">
+                    <Text styleClass="label" text="precision" />
+                </HBox>
+                <TextField fx:id="precision" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
+            </HBox>
+
+            <HBox fx:id="signRow" styleClass="form__row">
+                <HBox styleClass="form__row-label" alignment="center_left">
+                    <Text styleClass="label" text="sign" />
+                </HBox>
+                <HBox HBox.hgrow="ALWAYS" maxWidth="Infinity" alignment="center_right">
+                    <CheckBox fx:id="sign" />
+                </HBox>
+            </HBox>
+
+            <HBox fx:id="autoIncrementRow" styleClass="form__row">
+                <HBox styleClass="form__row-label" alignment="center_left">
+                    <Text styleClass="label" text="auto increment" />
+                </HBox>
+                <HBox HBox.hgrow="ALWAYS" maxWidth="Infinity" alignment="center_right">
+                    <CheckBox fx:id="autoIncrement" />
+                </HBox>
+            </HBox>
 
             <HBox styleClass="form__row">
                 <HBox styleClass="form__row-label" alignment="center_left">

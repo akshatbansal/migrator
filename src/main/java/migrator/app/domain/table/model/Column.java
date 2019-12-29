@@ -5,15 +5,14 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import migrator.app.database.format.ColumnFormatManager;
+import migrator.app.gui.GuiModel;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.app.migration.model.ColumnChange;
 import migrator.app.migration.model.ColumnProperty;
 import migrator.app.migration.model.Modification;
 import migrator.lib.repository.UniqueItem;
 
-public class Column implements Changable, ColumnChange, ChangeListener<Object>, UniqueItem, Modification<ColumnProperty> {
-    protected ColumnFormatManager columnFormatManager;
+public class Column extends GuiModel implements Changable, ColumnChange, ChangeListener<Object>, UniqueItem, Modification<ColumnProperty> {
     protected String id;
     protected String tableId;
     protected ColumnProperty originalColumn;
@@ -22,14 +21,13 @@ public class Column implements Changable, ColumnChange, ChangeListener<Object>, 
     protected StringProperty fullFormatProperty;
 
     public Column(
-        ColumnFormatManager columnFormatManager,
         String id,
         String tableId,
         ColumnProperty originalColumn,
         ColumnProperty changedColumn,
         ChangeCommand changeCommand
     ) {
-        this.columnFormatManager = columnFormatManager;
+        super();
         this.id = id;
         this.tableId = tableId;
         this.originalColumn = originalColumn;
@@ -47,6 +45,13 @@ public class Column implements Changable, ColumnChange, ChangeListener<Object>, 
         this.changedColumn.precisionProperty().addListener(this);
         this.changedColumn.signProperty().addListener(this);
         this.changedColumn.autoIncrementProperty().addListener(this);
+
+        this.attribute("length").addListener((obs, ol, ne) -> {
+            this.refreshFullFormat();
+        });
+        this.attribute("precision").addListener((obs, ol ,ne) -> {
+            this.refreshFullFormat();
+        });
     }
 
     @Override
@@ -161,7 +166,7 @@ public class Column implements Changable, ColumnChange, ChangeListener<Object>, 
 
     @Override
     public Boolean hasAutoIncrementAttribute() {
-        return this.columnFormatManager.getFormat(this.getFormat()).hasAutoIncrement();
+        return this.attribute("autoIncrement").get();
     }
 
     @Override
@@ -258,20 +263,17 @@ public class Column implements Changable, ColumnChange, ChangeListener<Object>, 
 
     @Override
     public Boolean hasLengthAttribute() {
-        return this.columnFormatManager.getFormat(this.getFormat())
-            .hasLength();
+        return this.attribute("length").get();
     }
 
     @Override
     public Boolean hasPrecisionAttribute() {
-        return this.columnFormatManager.getFormat(this.getFormat())
-            .hasPrecision();
+        return this.attribute("precision").get();
     }
 
     @Override
     public Boolean hasSignAttribute() {
-        return this.columnFormatManager.getFormat(this.getFormat())
-            .isSigned();
+        return this.attribute("sign").get();
     }
 
     @Override
@@ -289,15 +291,6 @@ public class Column implements Changable, ColumnChange, ChangeListener<Object>, 
             return;
         }
         this.changeCommand.typeProperty().set(ChangeCommand.NONE);
-    }
-
-    protected void refreshFullFormat() {
-        if (this.columnFormatManager == null) {
-            return;
-        }
-        this.fullFormatProperty.set(
-            this.columnFormatManager.getFormatter(this.getFormat()).format(this.getLength(), this.getPrecision())
-        );
     }
 
     public void updateOriginal(ColumnProperty columnProperty) {
@@ -340,5 +333,17 @@ public class Column implements Changable, ColumnChange, ChangeListener<Object>, 
     @Override
     public String toString() {
         return this.getChange().getName();
+    }
+
+    private void refreshFullFormat() {
+        String fullFormat = this.formatProperty().get();
+        if (this.attribute("length").get()) {
+            fullFormat += "(" + this.getLength();
+            if (this.attribute("precision").get()) {
+                fullFormat += "," + this.getPrecision();
+            }
+            fullFormat += ")";
+        }
+        this.fullFormatProperty.set(fullFormat);
     }
 }
