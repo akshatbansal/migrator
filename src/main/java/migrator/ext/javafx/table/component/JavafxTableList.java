@@ -11,7 +11,6 @@ import migrator.app.domain.column.service.ColumnActiveState;
 import migrator.app.domain.column.service.ColumnFactory;
 import migrator.app.domain.index.service.IndexActiveState;
 import migrator.app.domain.index.service.IndexFactory;
-import migrator.app.domain.project.service.ProjectService;
 import migrator.app.domain.table.component.TableList;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Table;
@@ -29,7 +28,6 @@ import migrator.lib.emitter.Subscription;
 public class JavafxTableList extends ViewComponent implements TableList, TableActivator {
     protected TableFactory tableFactory;
     protected TableActiveState tableActiveState;
-    protected ProjectService projectService;
     protected TableGuiKit guiKit;
     protected BreadcrumpsComponent breadcrumpsComponent;
     protected ActiveRoute activeRoute;
@@ -50,16 +48,15 @@ public class JavafxTableList extends ViewComponent implements TableList, TableAc
         this.activeRoute = container.getActiveRoute();
         this.tableFactory = container.getTableFactory();
         this.tableActiveState = container.getTableActiveState();
-        this.projectService = container.getProjectService();
         this.guiKit = gui.getTableKit();
         this.columnActiveState = container.getColumnActiveState();
         this.columnFactory = container.getColumnFactory();
         this.indexActiveState = container.getIndexActiveState();
         this.indexFactory = container.getIndexFactory();
 
-        this.breadcrumpsComponent = gui.getBreadcrumps().createBreadcrumps(
-            this.projectService.getOpened().get()
-        );
+        // this.breadcrumpsComponent = gui.getBreadcrumps().createBreadcrumps(
+        //     this.projectService.getOpened().get()
+        // );
 
         this.cardListComponent = new CardListComponent<>(
             this.tableActiveState.getList(),
@@ -100,10 +97,10 @@ public class JavafxTableList extends ViewComponent implements TableList, TableAc
                 (Node) this.cardListComponent.getContent()
             );
 
-        this.breadcrumpsContainer.getChildren()
-            .setAll(
-                (Node) this.breadcrumpsComponent.getContent()
-            );
+        // this.breadcrumpsContainer.getChildren()
+        //     .setAll(
+        //         (Node) this.breadcrumpsComponent.getContent()
+        //     );
 
         if (!this.tableActiveState.searchProperty().get().isEmpty()) {
             this.showSearch();
@@ -112,22 +109,22 @@ public class JavafxTableList extends ViewComponent implements TableList, TableAc
 
     @Override
     @FXML public void addTable() {
-        Table newTable = this.tableFactory.createWithCreateChange(this.projectService.getOpened().get().getId(), "new_table");
-        this.tableActiveState.addAndActivate(newTable);
+        // Table newTable = this.tableFactory.createWithCreateChange(this.projectService.getOpened().get().getId(), "new_table");
+        // this.tableActiveState.addAndActivate(newTable);
         
-        Column idColumn = this.columnFactory.createWithCreateChange(newTable.getUniqueKey(), "id", "integer", null, false, "11", false, "", true);
-        this.columnActiveState.add(idColumn);
-        this.columnActiveState.add(
-            this.columnFactory.createWithCreateChange(newTable.getUniqueKey(), "created_at", "timestamp", "CURRENT_TIMESTAMP", false, "", false, "", false)
-        );
-        this.columnActiveState.add(
-            this.columnFactory.createWithCreateChange(newTable.getUniqueKey(), "modified_at", "timestamp", "CURRENT_TIMESTAMP", false, "", false, "", false)
-        );
+        // Column idColumn = this.columnFactory.createWithCreateChange(newTable.getUniqueKey(), "id", "integer", null, false, "11", false, "", true);
+        // this.columnActiveState.add(idColumn);
+        // this.columnActiveState.add(
+        //     this.columnFactory.createWithCreateChange(newTable.getUniqueKey(), "created_at", "timestamp", "CURRENT_TIMESTAMP", false, "", false, "", false)
+        // );
+        // this.columnActiveState.add(
+        //     this.columnFactory.createWithCreateChange(newTable.getUniqueKey(), "modified_at", "timestamp", "CURRENT_TIMESTAMP", false, "", false, "", false)
+        // );
     }
 
     @Override
     @FXML public void commit() {
-        this.activeRoute.changeTo("commit.view", this.projectService.getOpened().get());
+        // this.activeRoute.changeTo("commit.view", this.projectService.getOpened().get());
     }
 
     @Override

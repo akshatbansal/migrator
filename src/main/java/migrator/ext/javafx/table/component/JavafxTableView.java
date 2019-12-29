@@ -30,7 +30,7 @@ public class JavafxTableView extends ViewComponent implements TableView {
 
     public JavafxTableView(Table table, ViewLoader viewLoader, Container container, Gui gui) {
         super(viewLoader);
-        this.breadcrumpsComponent = gui.getBreadcrumps().createBreadcrumps(table, container.getProjectService().getOpened().get());
+        this.breadcrumpsComponent = gui.getBreadcrumps().createBreadcrumps(table, null);
         this.tableGuiKit = gui.getTableKit();
         this.table = table;
 

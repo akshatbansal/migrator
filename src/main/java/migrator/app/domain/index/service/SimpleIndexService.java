@@ -9,7 +9,6 @@ import migrator.app.database.driver.DatabaseDriver;
 import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.domain.index.IndexRepository;
 import migrator.app.domain.project.model.Project;
-import migrator.app.domain.project.service.ProjectService;
 import migrator.app.domain.table.model.Index;
 import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableActiveState;
@@ -24,7 +23,6 @@ public class SimpleIndexService implements IndexService {
     protected ActiveState<Index> activeState;
     protected DatabaseDriverManager databaseDriverManager;
     protected TableActiveState tableActiveState;
-    protected ProjectService projectService;
 
     protected ChangeListener<Table> changeTableListener;
 
@@ -33,7 +31,6 @@ public class SimpleIndexService implements IndexService {
         IndexRepository indexRepository,
         ActiveState<Index> activeState,
         TableActiveState tableActiveState,
-        ProjectService projectService,
         DatabaseDriverManager databaseDriverManager
     ) {
         this.activeState = activeState;
@@ -41,7 +38,6 @@ public class SimpleIndexService implements IndexService {
         this.indexFactory = indexFactory;
         this.indexRepository = indexRepository;
         this.tableActiveState = tableActiveState;
-        this.projectService = projectService;
 
         this.changeTableListener = (ObservableValue<? extends Table> observable, Table oldValue, Table newValue) -> {
             this.onTableChange(newValue);
@@ -64,24 +60,24 @@ public class SimpleIndexService implements IndexService {
         if (activeTable == null) {
             return;
         }
-        Project project = this.projectService.getOpened().get();
+        // Project project = this.projectService.getOpened().get();
 
-        DatabaseDriver databaseDriver  = this.databaseDriverManager
-            .createDriver(project.getDatabase());
-        databaseDriver.connect();
+        // DatabaseDriver databaseDriver  = this.databaseDriverManager
+        //     .createDriver(project.getDatabase());
+        // databaseDriver.connect();
 
-        List<Index> dbList = databaseDriver.getIndexes(activeTable);
-        for (Index i : dbList) {
-            i.setTableId(activeTable.getUniqueKey());
-        }
-        this.merge(
-            dbList,
-            this.indexRepository.findByTable(activeTable.getUniqueKey())
-        );
+        // List<Index> dbList = databaseDriver.getIndexes(activeTable);
+        // for (Index i : dbList) {
+        //     i.setTableId(activeTable.getUniqueKey());
+        // }
+        // this.merge(
+        //     dbList,
+        //     this.indexRepository.findByTable(activeTable.getUniqueKey())
+        // );
 
-        this.activeState.setListAll(
-            this.indexRepository.findByTable(activeTable.getUniqueKey())
-        );
+        // this.activeState.setListAll(
+        //     this.indexRepository.findByTable(activeTable.getUniqueKey())
+        // );
     }
 
     @Override

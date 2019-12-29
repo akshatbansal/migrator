@@ -8,7 +8,6 @@ import javafx.collections.ObservableList;
 import migrator.app.database.driver.DatabaseDriver;
 import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.domain.project.model.Project;
-import migrator.app.domain.project.service.ProjectService;
 import migrator.app.domain.table.TableRepository;
 import migrator.app.domain.table.model.Table;
 import migrator.app.migration.model.ChangeCommand;
@@ -22,7 +21,6 @@ public class SimpleTableService implements TableService {
     protected ActiveState<Table> activeState;
     protected TableRepository tableRepository;
     protected DatabaseDriverManager databaseDriverManager;
-    protected ProjectService projectService;
     protected ActiveRoute activeRoute;
     
     protected ChangeListener<Project> changeProjectListener;
@@ -32,14 +30,12 @@ public class SimpleTableService implements TableService {
         TableRepository tableRepository,
         ActiveState<Table> activeState,
         DatabaseDriverManager databaseDriverManager,
-        ProjectService projectService,
         ActiveRoute activeRoute
     ) {
         this.tableFactory = tableFactory;
         this.activeState = activeState;
         this.tableRepository = tableRepository;
         this.databaseDriverManager = databaseDriverManager;
-        this.projectService = projectService;
         this.activeRoute = activeRoute;
 
         this.changeProjectListener = (ObservableValue<? extends Project> observable, Project oldValue, Project newValue) -> {
@@ -74,14 +70,14 @@ public class SimpleTableService implements TableService {
 
     @Override
     public void start() {
-        this.projectService.getOpened()
-            .addListener(this.changeProjectListener);
+        // this.projectService.getOpened()
+            // .addListener(this.changeProjectListener);
     }
 
     @Override
     public void stop() {
-        this.projectService.getOpened()
-            .removeListener(this.changeProjectListener);
+        // this.projectService.getOpened()
+        //     .removeListener(this.changeProjectListener);
     }
 
     @Override

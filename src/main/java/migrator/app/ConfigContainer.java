@@ -21,8 +21,6 @@ import migrator.app.domain.index.IndexRepository;
 import migrator.app.domain.index.service.IndexActiveState;
 import migrator.app.domain.index.service.IndexFactory;
 import migrator.app.domain.index.service.IndexService;
-import migrator.app.domain.project.service.ProjectFactory;
-import migrator.app.domain.project.service.ProjectService;
 import migrator.app.domain.table.service.TableFactory;
 import migrator.app.domain.table.service.TableService;
 import migrator.app.domain.table.TableRepository;
@@ -70,9 +68,6 @@ public class ConfigContainer {
 
     private ValueConfig<UniqueRepository<ChangeCommand>> changeCommandRepository;
     private ValueConfig<Storage<Collection<ChangeCommand>>> changeCommandStorage;
-
-    private ValueConfig<ProjectFactory> projectFactory;
-    private ValueConfig<ProjectService> projectService;
 
     private ValueConfig<TableFactory> tableFactory;
     private ValueConfig<TableService> tableService;
@@ -122,9 +117,6 @@ public class ConfigContainer {
 
         this.changeCommandRepository = new ValueConfig<>();
         this.changeCommandStorage = new ValueConfig<>();
-
-        this.projectFactory = new ValueConfig<>();
-        this.projectService = new ValueConfig<>();
         
         this.tableFactory = new ValueConfig<>();
         this.tableActiveState = new ValueConfig<>();
@@ -219,10 +211,6 @@ public class ConfigContainer {
         return this.indexFactory;
     }
 
-    public ValueConfig<ProjectFactory> projectFactoryConfig() {
-        return this.projectFactory;
-    }
-
     public ValueConfig<ConnectionService> connectionServiceConfig() {
         return this.connectionService;
     }
@@ -241,10 +229,6 @@ public class ConfigContainer {
 
     public ValueConfig<IndexService> indexServiceConfig() {
         return this.indexService;
-    }
-
-    public ValueConfig<ProjectService> projectServiceConfig() {
-        return this.projectService;
     }
 
     public ValueConfig<ToastService> toastServiceConfig() {

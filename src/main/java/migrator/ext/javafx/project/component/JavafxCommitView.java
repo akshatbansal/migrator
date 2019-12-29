@@ -8,7 +8,6 @@ import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 import migrator.app.Container;
 import migrator.app.Gui;
-import migrator.app.domain.project.component.CommitView;
 import migrator.app.domain.project.model.Project;
 import migrator.app.domain.table.model.Table;
 import migrator.app.migration.model.ChangeCommand;
@@ -18,7 +17,7 @@ import migrator.app.migration.model.TableChange;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
 
-public class JavafxCommitView extends ViewComponent implements CommitView {
+public class JavafxCommitView extends ViewComponent {
     @FXML protected VBox breadcrumpsContainer;
     @FXML protected VBox body;
 

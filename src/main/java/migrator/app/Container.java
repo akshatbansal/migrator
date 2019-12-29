@@ -15,8 +15,6 @@ import migrator.app.domain.index.IndexRepository;
 import migrator.app.domain.index.service.IndexActiveState;
 import migrator.app.domain.index.service.IndexFactory;
 import migrator.app.domain.index.service.IndexService;
-import migrator.app.domain.project.service.ProjectFactory;
-import migrator.app.domain.project.service.ProjectService;
 import migrator.app.domain.table.service.TableFactory;
 import migrator.app.domain.table.service.TableService;
 import migrator.app.domain.table.TableRepository;
@@ -93,10 +91,6 @@ public class Container {
         return this.config.tableFactoryConfig().get();
     }
 
-    public ProjectFactory getProjectFactory() {
-        return this.config.projectFactoryConfig().get();
-    }
-
     public ConnectionService getConnectionService() {
         return this.config.connectionServiceConfig().get();
     }
@@ -115,10 +109,6 @@ public class Container {
 
     public IndexService getIndexService() {
         return this.config.indexServiceConfig().get();
-    }
-
-    public ProjectService getProjectService() {
-        return this.config.projectServiceConfig().get();
     }
 
     public ToastService getToastService() {

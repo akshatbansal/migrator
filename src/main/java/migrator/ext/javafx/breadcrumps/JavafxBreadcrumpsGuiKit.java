@@ -33,11 +33,9 @@ public class JavafxBreadcrumpsGuiKit implements BreadcrumpsGuiKit {
         return this.createBreadcrumps(
             Arrays.asList(
                 new ProjectsBreadcrump(
-                    this.container.getProjectService(),
                     this.container.getTableActiveState()
                 ),
                 new SingleProjectBreadcrump(
-                    this.container.getProjectService(),
                     project,
                     this.container.getTableActiveState()
                 ),
@@ -51,7 +49,6 @@ public class JavafxBreadcrumpsGuiKit implements BreadcrumpsGuiKit {
         return this.createBreadcrumps(
             Arrays.asList(
                 new ProjectsBreadcrump(
-                    this.container.getProjectService(),
                     this.container.getTableActiveState()
                 ),
                 new VoidBreadcrump(project.nameProperty())
@@ -64,11 +61,9 @@ public class JavafxBreadcrumpsGuiKit implements BreadcrumpsGuiKit {
         return this.createBreadcrumps(
             Arrays.asList(
                 new ProjectsBreadcrump(
-                    this.container.getProjectService(),
                     this.container.getTableActiveState()
                 ),
                 new SingleProjectBreadcrump(
-                    this.container.getProjectService(),
                     project,
                     this.container.getTableActiveState()
                 ),

@@ -7,7 +7,6 @@ import javafx.scene.control.TextField;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
 import migrator.app.Container;
-import migrator.app.domain.project.component.CommitForm;
 import migrator.app.domain.project.model.Project;
 import migrator.app.domain.table.TableRepository;
 import migrator.app.migration.Migration;
@@ -17,7 +16,7 @@ import migrator.app.migration.model.TableChange;
 import migrator.app.router.ActiveRoute;
 import migrator.app.toast.ToastService;
 
-public class JavafxCommitForm extends ViewComponent implements CommitForm {
+public class JavafxCommitForm extends ViewComponent {
     @FXML protected TextField name;
 
     protected ActiveRoute activeRoute;
@@ -37,7 +36,6 @@ public class JavafxCommitForm extends ViewComponent implements CommitForm {
         this.loadView("/layout/project/commit/form.fxml");
     }
 
-    @Override
     @FXML public void commit() {
         String outputType = this.project.getOutputType();
         if (outputType == null || outputType.isEmpty()) {

@@ -17,6 +17,11 @@ public class SimpleProjectContainer implements ProjectContainer {
     }
 
     @Override
+    public String getUniqueKey() {
+        return this.projectProperty.getUniqueKey();
+    }
+
+    @Override
     public DatabaseStructure getDatabaseStructure() {
         return this.databaseStructure;
     }

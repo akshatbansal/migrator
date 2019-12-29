@@ -1,13 +1,9 @@
 package migrator.app.gui.table;
 
-import java.util.List;
-
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 import migrator.app.gui.component.card.CardListComponent;
-import migrator.app.gui.component.card.SimpleCardComponentFactory;
 import migrator.ext.javafx.UseCase;
 import migrator.ext.javafx.component.ViewLoader;
 
@@ -39,9 +35,7 @@ public class TableListView {
     }
 
     @FXML public void addTable() {
-        // this.controller.create("new_project");
-        // List<ProjectGuiModel> projects = this.controller.getList();
-        // this.controller.select(projects.get(projects.size() - 1));
+        this.controller.create("new_table");
     }
 
     @FXML public void commit() {

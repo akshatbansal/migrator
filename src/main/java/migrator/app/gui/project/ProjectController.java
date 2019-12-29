@@ -9,11 +9,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ListChangeListener.Change;
 import migrator.app.database.ConnectionResult;
+import migrator.app.gui.ActiveProjectContainer;
 import migrator.app.project.ProjectContainer;
 import migrator.app.project.ProjectContainerFactory;
 import migrator.app.project.property.ProjectProperty;
 import migrator.app.project.property.SimpleDatabaseProperty;
 import migrator.app.project.property.SimpleProjectProperty;
+import migrator.app.router.ActiveRoute;
 import migrator.app.toast.ToastService;
 import migrator.lib.adapter.Adapter;
 
@@ -21,11 +23,12 @@ public class ProjectController {
     protected ObservableList<ProjectGuiModel> projects;
     protected ObservableList<ProjectProperty> properties;
     protected ObjectProperty<ProjectGuiModel> selected;
-    protected ObjectProperty<ProjectContainer> opened;
+    protected ActiveProjectContainer activeProjectContainer;
     
     protected ToastService toastService;
     protected ProjectContainerFactory projectContainerFactory;
     protected Adapter<ProjectGuiModel, ProjectProperty> adapter;
+    protected ActiveRoute activeRoute;
     
     protected ObservableList<String> databaseDrivers;
     protected ObservableList<String> outputs; 
@@ -34,16 +37,18 @@ public class ProjectController {
         ObservableList<ProjectProperty> properties,
         ObservableList<String> databaseDrivers,
         ObservableList<String> outputs,
-        ObjectProperty<ProjectContainer> opened,
+        ActiveProjectContainer activeProjectContainer,
         ProjectContainerFactory projectContainerFactory,
-        ToastService toastService
+        ToastService toastService,
+        ActiveRoute activeRoute
     ) {
         this.properties = properties;
         this.projects = FXCollections.observableArrayList();
         this.selected = new SimpleObjectProperty<>();
-        this.opened = opened;
+        this.activeProjectContainer = activeProjectContainer;
         this.projectContainerFactory = projectContainerFactory;
         this.toastService = toastService;
+        this.activeRoute = activeRoute;
 
         this.adapter = new ProjectGuiAdapter();
         this.databaseDrivers = databaseDrivers;
@@ -143,7 +148,7 @@ public class ProjectController {
 
     public void open(ProjectGuiModel project) {
         if (project == null) {
-            this.opened.set(null);
+            this.activeProjectContainer.deactivate();
             return;
         }
 
@@ -164,6 +169,8 @@ public class ProjectController {
             return;
         }
         
-        this.opened.set(projectContainer);
+        this.activeProjectContainer.activate(projectContainer);
+        this.activeRoute.changeTo("project.table");
+        
     }
 }
