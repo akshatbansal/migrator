@@ -22,7 +22,7 @@ public class MysqlTableDriver implements DatabaseTableDriver {
     public List<String> getTables() {
         List<String> tables = new LinkedList<>();
         ConnectionResult<Connection> connectionResult = this.mysqlConnection.connect();
-        if (connectionResult == null) {
+        if (!connectionResult.isOk()) {
             return tables;
         }
 

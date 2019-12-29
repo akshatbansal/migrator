@@ -5,7 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import javafx.application.Application;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
@@ -15,6 +18,12 @@ import migrator.app.Gui;
 import migrator.app.Router;
 import migrator.app.domain.project.model.Project;
 import migrator.app.gui.project.ProjectController;
+import migrator.app.gui.project.ProjectGuiModel;
+import migrator.app.gui.table.TableController;
+import migrator.app.migration.model.Modification;
+import migrator.app.migration.model.TableProperty;
+import migrator.app.project.ProjectContainer;
+import migrator.app.project.ProjectContainerFactory;
 import migrator.ext.flyway.FlywayExtension;
 import migrator.ext.javafx.JavafxGui;
 import migrator.ext.javafx.MainController;
@@ -78,46 +87,67 @@ public class JavafxApplication extends Application {
 
         JavafxLayout layout = new JavafxLayout(mainController.getBodyPane(), mainController.getSidePane());
 
+        ObservableList<Modification<TableProperty>> tables = FXCollections.observableArrayList();
+        ObjectProperty<ProjectContainer> openedProject = new SimpleObjectProperty<>();
+        openedProject.addListener((obs, ol, ne) -> {
+            if (ne != null) {
+                this.container.getActiveRoute().changeTo("project.table");
+                tables.addAll(
+                    ne.getModificationContainer().getTableCollection().getAll()
+                );
+            } else {
+                this.container.getActiveRoute().changeTo("project");
+            }
+        });
+
+        ProjectController projectController = new ProjectController(
+            FXCollections.observableArrayList(),
+            FXCollections.observableArrayList(
+                container.getDatabaseDriverManager().getDriverNames()
+            ),
+            FXCollections.observableArrayList(
+                container.getMigration().getGeneratorNames()
+            ),
+            openedProject,
+            new ProjectContainerFactory(
+                container.getDatabaseContainer()
+            ),
+            container.getToastService()
+        );
+
+        TableController tableController = new TableController(tables);
+
         Router router = new Router(this.container.getActiveRoute());
         router.connect(
-            "table.index",
-            new TableIndexRoute(gui.getTableKit(), layout)
+            "project.table",
+            new TableIndexRoute(layout, tableController)
         );
         router.connect(
-            "table.view",
+            "project.table.view",
             new TableViewRoute(gui.getTableKit(), layout)
         );
+        // router.connect(
+        //     "column.view",
+        //     new ColumnViewRoute(gui.getTableKit(), layout)
+        // );
+        // router.connect(
+        //     "index.view",
+        //     new IndexViewRoute(gui.getTableKit(), layout)
+        // );
         router.connect(
-            "column.view",
-            new ColumnViewRoute(gui.getTableKit(), layout)
-        );
-        router.connect(
-            "index.view",
-            new IndexViewRoute(gui.getTableKit(), layout)
-        );
-        router.connect(
-            "commit.view",
+            "project.commit",
             new CommitViewRoute(gui.getProject(), layout)
         );
         router.connect(
-            "project.index",
+            "project",
             new ProjectIndexRoute(
                 layout,
-                new ProjectController(
-                    FXCollections.observableArrayList(),
-                    FXCollections.observableArrayList(
-                        container.getDatabaseDriverManager().getDriverNames()
-                    ),
-                    FXCollections.observableArrayList(
-                        container.getMigration().getGeneratorNames()
-                    ),
-                    null
-                ),
+                projectController,
                 primaryStage
             )
         );
 
-        container.getActiveRoute().changeTo("project.index");
+        container.getActiveRoute().changeTo("project");
 
         Scene scene = new Scene((Pane) mainController.getContent(), 1280, 720);
         scene.getStylesheets().addAll(

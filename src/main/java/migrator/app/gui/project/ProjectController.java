@@ -34,12 +34,16 @@ public class ProjectController {
         ObservableList<ProjectProperty> properties,
         ObservableList<String> databaseDrivers,
         ObservableList<String> outputs,
-        ObjectProperty<ProjectContainer> opened
+        ObjectProperty<ProjectContainer> opened,
+        ProjectContainerFactory projectContainerFactory,
+        ToastService toastService
     ) {
         this.properties = properties;
         this.projects = FXCollections.observableArrayList();
         this.selected = new SimpleObjectProperty<>();
         this.opened = opened;
+        this.projectContainerFactory = projectContainerFactory;
+        this.toastService = toastService;
 
         this.adapter = new ProjectGuiAdapter();
         this.databaseDrivers = databaseDrivers;
@@ -48,6 +52,7 @@ public class ProjectController {
         properties.addListener((Change<? extends ProjectProperty> change) -> {
             while (change.next()) {
                 this.addProperties(change.getAddedSubList());
+                this.removeProperties(change.getRemoved());
             }
         });
         this.addProperties(properties);
@@ -94,7 +99,11 @@ public class ProjectController {
                 "mysql"
             )
         );
-        this.properties.add(project);
+        this.add(project);
+    }
+
+    public void remove(ProjectGuiModel project) {
+        this.properties.remove(project.getProjectProperty());
     }
 
     public ObservableList<ProjectGuiModel> getList() {
@@ -109,6 +118,19 @@ public class ProjectController {
             );
         }
         this.projects.addAll(models);
+    }
+
+    private void removeProperties(List<? extends ProjectProperty> properties) {
+        List<ProjectGuiModel> modelsToRemove = new LinkedList<>();
+        for (ProjectProperty property : properties) {
+            for (ProjectGuiModel project : this.projects) {
+                if (project.getProjectProperty() != property) {
+                    continue;
+                }
+                modelsToRemove.add(project);
+            }
+        }
+        this.projects.removeAll(modelsToRemove);
     }
 
     public ObservableList<String> getDatabaseDriverList() {
@@ -143,6 +165,5 @@ public class ProjectController {
         }
         
         this.opened.set(projectContainer);
-        // this.activeRoute.changeTo("table.index");
     }
 }

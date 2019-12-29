@@ -10,6 +10,9 @@ public class MysqlExtension implements Extension {
     public void load(ConfigContainer config) {
         DatabaseDriverConfig databaseDriverConfig = config.getDatabaseDriverConfig();
 
+        config.databseContainerConfig().get()
+            .addStrucutreFactory("mysql", new MysqlDatabaseStructureFactory());
+
         databaseDriverConfig.addDriver("mysql", new MysqlDatabaseDriverFactory(
             config.tableFactoryConfig().get(),
             config.columnFactoryConfig().get(),

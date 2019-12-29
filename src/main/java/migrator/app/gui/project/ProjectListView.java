@@ -7,6 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 import migrator.app.gui.component.card.CardListComponent;
 import migrator.app.gui.component.card.SimpleCardComponentFactory;
+import migrator.ext.javafx.UseCase;
 import migrator.ext.javafx.component.ViewLoader;
 
 public class ProjectListView {
@@ -16,8 +17,6 @@ public class ProjectListView {
     @FXML protected VBox projectCards;
 
     public ProjectListView(ProjectController controller) {
-        // this.projectService = container.getProjectService();
-        // this.projectGuiKit = projectGuiKit;
         // this.loadingIndicator = loadingIndicator;
         this.controller = controller;
         ViewLoader viewLoader = new ViewLoader();
@@ -37,6 +36,9 @@ public class ProjectListView {
         cards.event("edit").addListener((observable, oldValue, newValue) -> {
             this.controller.select(newValue.getValue());
         });
+        cards.event("open").addListener((observable, oldValue, newValue) -> {
+            this.controller.open(newValue.getValue());
+        });
     }
 
     @FXML public void newProject() {
@@ -46,11 +48,11 @@ public class ProjectListView {
     }
 
     public void openProject(ProjectGuiModel project) {
-        // UseCase.runOnThread(() -> {
-        //     this.loadingIndicator.start();
-        //     this.projectService.open(project);
-        //     this.loadingIndicator.stop();
-        // });
+        UseCase.runOnThread(() -> {
+            // this.loadingIndicator.start();
+            this.controller.open(project);
+            // this.loadingIndicator.stop();
+        });
     }
 
     public void selectProject(ProjectGuiModel project) {

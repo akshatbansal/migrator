@@ -1,5 +1,6 @@
 package migrator.app;
 
+import migrator.app.database.DatabaseContainer;
 import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.database.format.ColumnFormatManager;
 import migrator.app.domain.column.ColumnRepository;
@@ -198,5 +199,9 @@ public class Container {
 
     public Storage<Collection<TableProperty>> getTablePropertyStorage() {
         return this.config.tablePropertyStorageConfig().get();
+    }
+
+    public DatabaseContainer getDatabaseContainer() {
+        return this.config.databseContainerConfig().get();
     }
 }

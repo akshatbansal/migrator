@@ -12,8 +12,25 @@ import javafx.collections.FXCollections;
 
 import migrator.app.gui.project.ProjectController;
 import migrator.app.gui.project.ProjectGuiModel;
+import migrator.app.project.property.SimpleDatabaseProperty;
+import migrator.app.project.property.SimpleProjectProperty;
 
 public class ProjectControllerTest {
+    private ProjectGuiModel createProjectGuiModel() {
+        return new ProjectGuiModel(new SimpleProjectProperty(
+            "",
+            "",
+            "",
+            "",
+            new SimpleDatabaseProperty(
+                "",
+                "",
+                "",
+                ""
+            )
+        ));
+    }
+
     @Test public void select_null_previousNullDoesNothing() {
         ProjectController controller = new ProjectController(
             FXCollections.observableArrayList(),
@@ -34,7 +51,7 @@ public class ProjectControllerTest {
             new SimpleObjectProperty<>()
         );
 
-        ProjectGuiModel project = new ProjectGuiModel(null);
+        ProjectGuiModel project = this.createProjectGuiModel();
         controller.select(project);
         ObjectProperty<ProjectGuiModel> result = controller.selectedProperty();
 
@@ -48,7 +65,7 @@ public class ProjectControllerTest {
             new SimpleObjectProperty<>()
         );
 
-        controller.select(new ProjectGuiModel(null));
+        controller.select(this.createProjectGuiModel());
         controller.select(null);
         ObjectProperty<ProjectGuiModel> result = controller.selectedProperty();
 
@@ -62,7 +79,7 @@ public class ProjectControllerTest {
             new SimpleObjectProperty<>()
         );
 
-        ProjectGuiModel project = new ProjectGuiModel(null);
+        ProjectGuiModel project = this.createProjectGuiModel();
         controller.select(project);
 
         assertTrue(project.attribute("selected").get());
@@ -75,7 +92,7 @@ public class ProjectControllerTest {
             new SimpleObjectProperty<>()
         );
 
-        ProjectGuiModel project = new ProjectGuiModel(null);
+        ProjectGuiModel project = this.createProjectGuiModel();
         controller.select(project);
         controller.select(null);
 
@@ -102,7 +119,7 @@ public class ProjectControllerTest {
             new SimpleObjectProperty<>()
         );
 
-        ProjectGuiModel project = new ProjectGuiModel(null);
+        ProjectGuiModel project = this.createProjectGuiModel();
         controller.select(project);
         controller.deselect();
         ObjectProperty<ProjectGuiModel> result = controller.selectedProperty();
@@ -117,7 +134,7 @@ public class ProjectControllerTest {
             new SimpleObjectProperty<>()
         );
 
-        ProjectGuiModel project = new ProjectGuiModel(null);
+        ProjectGuiModel project = this.createProjectGuiModel();
         controller.select(project);
         controller.deselect();
 

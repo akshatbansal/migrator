@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import migrator.app.code.CodeManager;
+import migrator.app.database.MapDatabaseContainer;
 import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.database.format.ColumnFormat;
 import migrator.app.database.format.ColumnFormatManager;
@@ -246,6 +247,9 @@ public class Bootstrap {
             new DatabaseFactory(
                 config.connectionFactoryConfig().get()
             )
+        );
+        config.databseContainerConfig().set(
+            new MapDatabaseContainer()
         );
         config.tableFactoryConfig().set(
             new TableFactory(

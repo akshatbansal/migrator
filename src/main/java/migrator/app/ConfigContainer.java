@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import migrator.app.code.CodeConfig;
 import migrator.app.code.CodeManager;
+import migrator.app.database.DatabaseContainer;
 import migrator.app.database.driver.DatabaseDriverConfig;
 import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.database.format.ColumnFormat;
@@ -65,6 +66,7 @@ public class ConfigContainer {
     private ValueConfig<DatabaseFactory> databaseFactory;
     private ValueConfig<ConnectionService> connectionService;
     private ValueConfig<DatabaseService> databaseService;
+    private ValueConfig<DatabaseContainer> databaseContainer;
 
     private ValueConfig<UniqueRepository<ChangeCommand>> changeCommandRepository;
     private ValueConfig<Storage<Collection<ChangeCommand>>> changeCommandStorage;
@@ -116,6 +118,7 @@ public class ConfigContainer {
         this.connectionService = new ValueConfig<>();
         this.databaseService = new ValueConfig<>();        
         this.toastService = new ValueConfig<>();
+        this.databaseContainer= new ValueConfig<>();
 
         this.changeCommandRepository = new ValueConfig<>();
         this.changeCommandStorage = new ValueConfig<>();
@@ -314,5 +317,9 @@ public class ConfigContainer {
 
     public ValueConfig<Storage<Collection<Table>>> tableStorageConfig() {
         return this.tableStorage;
+    }
+
+    public ValueConfig<DatabaseContainer> databseContainerConfig() {
+        return this.databaseContainer;
     }
 }

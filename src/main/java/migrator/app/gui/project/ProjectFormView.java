@@ -11,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
+import migrator.ext.javafx.UseCase;
 import migrator.ext.javafx.component.ViewLoader;
 
 public class ProjectFormView {
@@ -89,7 +90,6 @@ public class ProjectFormView {
     }
 
     protected void setProject(ProjectGuiModel project) {
-        
         if (project == null) {
             return;
         }
@@ -132,15 +132,15 @@ public class ProjectFormView {
     }
 
     @FXML public void open() {
-        // UseCase.runOnThread(() -> {
-        //     this.loadingIndicator.start();
-        //     this.projectService.open(project);
-        //     this.loadingIndicator.stop();
-        // });
+        UseCase.runOnThread(() -> {
+            // this.loadingIndicator.start();
+            this.controller.open(this.controller.selectedProperty().get());
+            // this.loadingIndicator.stop();
+        });
     }
 
     @FXML public void delete() {
-        // this.projectService.remove(this.project);
+        this.controller.remove(this.controller.selectedProperty().get());
         this.close();
     }
 

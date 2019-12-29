@@ -7,9 +7,13 @@ import migrator.app.project.property.ProjectProperty;
 public class ProjectContainerFactory {
     protected DatabaseContainer databaseContainer;
 
+    public ProjectContainerFactory(DatabaseContainer databaseContainer) {
+        this.databaseContainer = databaseContainer;
+    }
+
     public ProjectContainer create(ProjectProperty projectProperty) {
         DatabaseProperty databaseProperty = projectProperty.getDatabase();
-        return new SimpleProjectContainer(
+        return new SimpleProjectContainer(  
             this.databaseContainer.getStructureFactoryFor(databaseProperty.driverProperty().getValue())
                 .create(
                     databaseProperty.urlProperty().getValue(),
