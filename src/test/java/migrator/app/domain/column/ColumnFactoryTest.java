@@ -2,10 +2,9 @@ package migrator.app.domain.column;
 
 import org.junit.jupiter.api.Test;
 
-import migrator.app.database.format.FakeColumnFormatManager;
-import migrator.app.database.format.SimpleColumnFormat;
 import migrator.app.domain.column.service.ColumnFactory;
 import migrator.app.domain.table.model.Column;
+import migrator.app.gui.column.format.ColumnFormatCollection;
 import migrator.lib.uid.SessionIncrementalGenerator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -17,10 +16,8 @@ public class ColumnFactoryTest {
     @BeforeEach
     public void setUp() {
         this.columnFactory = new ColumnFactory(
-            new FakeColumnFormatManager(
-                new SimpleColumnFormat("format")
-            ),
-            new SessionIncrementalGenerator("ColumnFactory")
+            new SessionIncrementalGenerator("ColumnFactory"),
+            new ColumnFormatCollection()
         );
     }
 

@@ -6,8 +6,6 @@ import migrator.app.code.CodeConfig;
 import migrator.app.code.CodeManager;
 import migrator.app.database.driver.DatabaseDriverConfig;
 import migrator.app.database.driver.DatabaseDriverManager;
-import migrator.app.database.format.ColumnFormat;
-import migrator.app.database.format.ColumnFormatManager;
 import migrator.app.domain.column.ColumnRepository;
 import migrator.app.domain.column.service.ColumnActiveState;
 import migrator.app.domain.column.service.ColumnFactory;
@@ -38,7 +36,6 @@ import migrator.app.migration.model.IndexProperty;
 import migrator.app.migration.model.TableProperty;
 import migrator.app.router.ActiveRoute;
 import migrator.app.toast.ToastService;
-import migrator.lib.config.MapConfig;
 import migrator.lib.config.ValueConfig;
 import migrator.lib.hotkyes.HotkeyFactory;
 import migrator.lib.hotkyes.HotkeysService;
@@ -50,13 +47,11 @@ public class ConfigContainer {
     private MigrationConfig migrationConfig;
     private DatabaseDriverConfig databaseDriverConfig;
     private CodeConfig codeConfig;
-    private MapConfig<ColumnFormat> columnFormatConfig;
 
     private ValueConfig<ActiveRoute> activeRoute;
     private ValueConfig<Migration> migration;
     private ValueConfig<DatabaseDriverManager> databaseDriverManager;
     private ValueConfig<CodeManager> codeManager;
-    private ValueConfig<ColumnFormatManager> columnFormatManager;
     private ValueConfig<Logger> logger;
     private ValueConfig<HotkeyFactory> hotkeyFactory;
     private ValueConfig<HotkeysService> hotkeyService;
@@ -102,7 +97,6 @@ public class ConfigContainer {
         this.migrationConfig = new MigrationConfig();
         this.databaseDriverConfig = new DatabaseDriverConfig();
         this.codeConfig = new CodeConfig();
-        this.columnFormatConfig = new MapConfig<>();
         this.logger = new ValueConfig<>();
         this.hotkeyFactory = new ValueConfig<>();
         this.hotkeyService = new ValueConfig<>();
@@ -112,7 +106,6 @@ public class ConfigContainer {
         this.migration = new ValueConfig<>();
         this.databaseDriverManager = new ValueConfig<>();
         this.codeManager = new ValueConfig<>();
-        this.columnFormatManager = new ValueConfig<>();
 
         this.connectionFactory = new ValueConfig<>();
         this.databaseFactory = new ValueConfig<>();
@@ -159,10 +152,6 @@ public class ConfigContainer {
         return this.hotkeyService;
     }
 
-    public MapConfig<ColumnFormat> getColumnFormatConfig() {
-        return this.columnFormatConfig;
-    }
-
     public MigrationConfig getMigrationConfig() {
         return this.migrationConfig;
     }
@@ -185,10 +174,6 @@ public class ConfigContainer {
 
     public ValueConfig<Logger> loggerConfig() {
         return this.logger;
-    }
-
-    public ValueConfig<ColumnFormatManager> columnFormatManagerConfig() {
-        return this.columnFormatManager;
     }
 
     public ValueConfig<DatabaseDriverManager> databaseDriverManagerConfig() {

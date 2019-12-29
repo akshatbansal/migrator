@@ -7,10 +7,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
 
-import migrator.app.database.ColumnFormatBuilder;
-import migrator.app.database.format.ColumnFormatManager;
-import migrator.app.database.format.FakeColumnFormatManager;
-import migrator.app.database.format.SimpleColumnFormat;
 import migrator.app.domain.column.service.ColumnBuilder;
 import migrator.app.domain.index.service.IndexBuilder;
 import migrator.app.domain.table.model.Column;
@@ -23,13 +19,9 @@ import migrator.ext.sql.SqlCommandFactory;
 public class FlywayMigrationGeneratorTest {
     protected FlywayMigrationGenerator migrator;
     protected FileStorage storage;
-    protected ColumnFormatManager columnFormatManager;
 
     @BeforeEach
     public void setUp() {
-        this.columnFormatManager = new FakeColumnFormatManager(
-            new SimpleColumnFormat("test")
-        );
         this.storage = new FileStorage();
         this.migrator = new FlywayMigrationGenerator(
             new SqlCommandFactory(),
@@ -38,14 +30,8 @@ public class FlywayMigrationGeneratorTest {
     }
 
     @Test public void testPhpMigrationCreateTableWithColumn() {
-        ColumnFormatBuilder columnFormatBuilder = new ColumnFormatBuilder();
         TableBuilder tableBuilder = new TableBuilder();
-        ColumnBuilder columnBuilder = new ColumnBuilder(
-            new FakeColumnFormatManager(
-                columnFormatBuilder.withLength()
-                    .build()
-            )
-        );
+        ColumnBuilder columnBuilder = new ColumnBuilder();
         TableChange change = tableBuilder.withChange("create")
             .withOriginalName("table_name")
             .withChangeName("table_name")
@@ -81,14 +67,8 @@ public class FlywayMigrationGeneratorTest {
     }
 
     @Test public void testPhpMigrationUpdateTableAddColumn() {
-        ColumnFormatBuilder columnFormatBuilder = new ColumnFormatBuilder();
         TableBuilder tableBuilder = new TableBuilder();
-        ColumnBuilder columnBuilder = new ColumnBuilder(
-            new FakeColumnFormatManager(
-                columnFormatBuilder.withLength()
-                    .build()
-            )
-        );
+        ColumnBuilder columnBuilder = new ColumnBuilder();
         TableChange change = tableBuilder.withOriginalName("table_name")
             .withChangeName("table_name")
             .withColumns(
@@ -109,14 +89,8 @@ public class FlywayMigrationGeneratorTest {
     }
 
     @Test public void testPhpMigrationUpdateTableRemoveColumn() {
-        ColumnFormatBuilder columnFormatBuilder = new ColumnFormatBuilder();
         TableBuilder tableBuilder = new TableBuilder();
-        ColumnBuilder columnBuilder = new ColumnBuilder(
-            new FakeColumnFormatManager(
-                columnFormatBuilder.withLength()
-                    .build()
-            )
-        );
+        ColumnBuilder columnBuilder = new ColumnBuilder();
         TableChange change = tableBuilder.withOriginalName("table_name")
             .withChangeName("table_name")
             .withColumns(
@@ -135,13 +109,8 @@ public class FlywayMigrationGeneratorTest {
     }
 
     @Test public void testPhpMigrationUpdateTableRenameColumn() {
-        ColumnFormatBuilder columnFormatBuilder = new ColumnFormatBuilder();
         TableBuilder tableBuilder = new TableBuilder();
-        ColumnBuilder columnBuilder = new ColumnBuilder(
-            new FakeColumnFormatManager(
-                columnFormatBuilder.build()
-            )
-        );
+        ColumnBuilder columnBuilder = new ColumnBuilder();
         TableChange change = tableBuilder.withOriginalName("table_name")
             .withChangeName("table_name")
             .withColumns(
@@ -173,20 +142,9 @@ public class FlywayMigrationGeneratorTest {
     }
 
     @Test public void testPhpMigrationCreateTableWithColumnAndIndex() {
-        ColumnFormatBuilder columnFormatBuilder = new ColumnFormatBuilder();
         TableBuilder tableBuilder = new TableBuilder();
-        ColumnBuilder columnBuilder1 = new ColumnBuilder(
-            new FakeColumnFormatManager(
-                columnFormatBuilder.withLength()
-                    .build()
-            )
-        );
-        ColumnBuilder columnBuilder2 = new ColumnBuilder(
-            new FakeColumnFormatManager(
-                columnFormatBuilder.withLength()
-                    .build()
-            )
-        );
+        ColumnBuilder columnBuilder1 = new ColumnBuilder();
+        ColumnBuilder columnBuilder2 = new ColumnBuilder();
         IndexBuilder indexBuilder = new IndexBuilder();
         Column column1 = columnBuilder1.withChange("create")
             .withChangeFormat("integer")
@@ -223,20 +181,9 @@ public class FlywayMigrationGeneratorTest {
     }
 
     @Test public void testPhpMigrationAndIndex() {
-        ColumnFormatBuilder columnFormatBuilder = new ColumnFormatBuilder();
         TableBuilder tableBuilder = new TableBuilder();
-        ColumnBuilder columnBuilder1 = new ColumnBuilder(
-            new FakeColumnFormatManager(
-                columnFormatBuilder.withLength()
-                    .build()
-            )
-        );
-        ColumnBuilder columnBuilder2 = new ColumnBuilder(
-            new FakeColumnFormatManager(
-                columnFormatBuilder.withLength()
-                    .build()
-            )
-        );
+        ColumnBuilder columnBuilder1 = new ColumnBuilder();
+        ColumnBuilder columnBuilder2 = new ColumnBuilder();
         IndexBuilder indexBuilder = new IndexBuilder();
         Column column1 = columnBuilder1.withChange("")
             .withChangeFormat("integer")
@@ -273,20 +220,9 @@ public class FlywayMigrationGeneratorTest {
     }
 
     @Test public void testPhpMigrationRemoveIndex() {
-        ColumnFormatBuilder columnFormatBuilder = new ColumnFormatBuilder();
         TableBuilder tableBuilder = new TableBuilder();
-        ColumnBuilder columnBuilder1 = new ColumnBuilder(
-            new FakeColumnFormatManager(
-                columnFormatBuilder.withLength()
-                    .build()
-            )
-        );
-        ColumnBuilder columnBuilder2 = new ColumnBuilder(
-            new FakeColumnFormatManager(
-                columnFormatBuilder.withLength()
-                    .build()
-            )
-        );
+        ColumnBuilder columnBuilder1 = new ColumnBuilder();
+        ColumnBuilder columnBuilder2 = new ColumnBuilder();
         IndexBuilder indexBuilder = new IndexBuilder();
         Column column1 = columnBuilder1.withChange("")
             .withChangeFormat("integer")
@@ -330,14 +266,8 @@ public class FlywayMigrationGeneratorTest {
     }
 
     @Test public void testPhpMigrationGenerateChangedColumnFormat() {
-        ColumnFormatBuilder columnFormatBuilder = new ColumnFormatBuilder();
         TableBuilder tableBuilder = new TableBuilder();
-        ColumnBuilder columnBuilder = new ColumnBuilder(
-            new FakeColumnFormatManager(
-                columnFormatBuilder.withLength()
-                    .build()
-            )
-        );
+        ColumnBuilder columnBuilder = new ColumnBuilder();
         TableChange change = tableBuilder.withChange("")
             .withOriginalName("table_name")
             .withChangeName("table_name")
@@ -361,14 +291,8 @@ public class FlywayMigrationGeneratorTest {
     }
 
     @Test public void testPhpMigrationGenerateChangedColumnDefaultValue() {
-        ColumnFormatBuilder columnFormatBuilder = new ColumnFormatBuilder();
         TableBuilder tableBuilder = new TableBuilder();
-        ColumnBuilder columnBuilder = new ColumnBuilder(
-            new FakeColumnFormatManager(
-                columnFormatBuilder.withLength()
-                    .build()
-            )
-        );
+        ColumnBuilder columnBuilder = new ColumnBuilder();
         TableChange change = tableBuilder.withChange("")
             .withOriginalName("table_name")
             .withChangeName("table_name")
@@ -395,14 +319,8 @@ public class FlywayMigrationGeneratorTest {
     }
 
     @Test public void testPhpMigrationGenerateChangedColumnFormatLength() {
-        ColumnFormatBuilder columnFormatBuilder = new ColumnFormatBuilder();
         TableBuilder tableBuilder = new TableBuilder();
-        ColumnBuilder columnBuilder = new ColumnBuilder(
-            new FakeColumnFormatManager(
-                columnFormatBuilder.withLength()
-                    .build()
-            )
-        );
+        ColumnBuilder columnBuilder = new ColumnBuilder();
         TableChange change = tableBuilder.withChange("")
             .withOriginalName("table_name")
             .withChangeName("table_name")
@@ -427,15 +345,8 @@ public class FlywayMigrationGeneratorTest {
     }
 
     @Test public void testPhpMigrationGenerateChangedColumnFormatPrecision() {
-        ColumnFormatBuilder columnFormatBuilder = new ColumnFormatBuilder();
         TableBuilder tableBuilder = new TableBuilder();
-        ColumnBuilder columnBuilder = new ColumnBuilder(
-            new FakeColumnFormatManager(
-                columnFormatBuilder.withLength()
-                    .withPrecision()
-                    .build()
-            )
-        );
+        ColumnBuilder columnBuilder = new ColumnBuilder();
         TableChange change = tableBuilder.withChange("")
             .withOriginalName("table_name")
             .withChangeName("table_name")
@@ -462,15 +373,8 @@ public class FlywayMigrationGeneratorTest {
     }
 
     @Test public void testPhpMigrationGenerateChangedColumnSigned() {
-        ColumnFormatBuilder columnFormatBuilder = new ColumnFormatBuilder();
         TableBuilder tableBuilder = new TableBuilder();
-        ColumnBuilder columnBuilder = new ColumnBuilder(
-            new FakeColumnFormatManager(
-                columnFormatBuilder.withLength()
-                    .withSign()
-                    .build()
-            )
-        );
+        ColumnBuilder columnBuilder = new ColumnBuilder();
         TableChange change = tableBuilder.withChange("")
             .withOriginalName("table_name")
             .withChangeName("table_name")
@@ -495,15 +399,8 @@ public class FlywayMigrationGeneratorTest {
     }
 
     @Test public void testPhpMigrationGenerateChangedColumnAutoIncrement() {
-        ColumnFormatBuilder columnFormatBuilder = new ColumnFormatBuilder();
         TableBuilder tableBuilder = new TableBuilder();
-        ColumnBuilder columnBuilder = new ColumnBuilder(
-            new FakeColumnFormatManager(
-                columnFormatBuilder.withLength()
-                    .withAutoIncrement()
-                    .build()
-            )
-        );
+        ColumnBuilder columnBuilder = new ColumnBuilder();
         TableChange change = tableBuilder.withChange("")
             .withOriginalName("table_name")
             .withChangeName("table_name")
