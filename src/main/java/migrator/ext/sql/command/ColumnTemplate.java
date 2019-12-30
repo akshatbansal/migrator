@@ -1,26 +1,27 @@
 package migrator.ext.sql.command;
 
-import java.util.Hashtable;
-import java.util.Map;
-
+import migrator.app.database.column.format.ApplicationColumnFormat;
 import migrator.app.migration.model.ColumnChange;
-import migrator.lib.stringtemplate.MapStringTemplate;
+import migrator.ext.sql.SqlColumnFormatAdapter;
 import migrator.lib.stringtemplate.StringTemplate;
 
 public class ColumnTemplate implements StringTemplate {
     protected ColumnChange change;
+    protected ApplicationColumnFormat columnFormat;
 
-    public ColumnTemplate(ColumnChange change) {
+    public ColumnTemplate(ColumnChange change, ApplicationColumnFormat columnFormat) {
         this.change = change;
+        this.columnFormat = columnFormat;
     }
 
     @Override
     public String render() {
-        String column = "`" + this.change.getName() + "` " + this.columnChangeFormat(this.change);
-        if (this.change.hasSignAttribute() && !this.change.isSigned()) {
+        SqlColumnFormatAdapter adapter = new SqlColumnFormatAdapter();
+        String column = "`" + this.change.getName() + "` " + adapter.generalize(change);
+        if (this.columnFormat.hasSign() && !this.change.isSigned()) {
             column += " UNSIGNED";
         }
-        if (this.change.hasAutoIncrementAttribute() && this.change.isAutoIncrement()) {
+        if (this.columnFormat.hasAutoIncrement() && this.change.isAutoIncrement()) {
             column += " auto_increment primary key";
         }
         if (!this.change.isNullEnabled()) {
@@ -30,37 +31,5 @@ public class ColumnTemplate implements StringTemplate {
             column += " DEFAULT " + this.change.getDefaultValue();
         }
         return column;
-    }
-
-    protected String columnChangeFormat(ColumnChange columnChange) {
-        String templateString = "{{FORMAT}}";
-        Map<String, String> templateReplace = new Hashtable<>();
-        templateReplace.put("FORMAT", this.getSqlFormat(columnChange.getFormat()));
-        if (columnChange.hasPrecisionAttribute()) {
-            templateReplace.put("LENGTH", columnChange.getLength());
-            templateReplace.put("PRECISION", columnChange.getPrecision());
-            templateString = "{{FORMAT}}({{LENGTH}}, {{PRECISION}})";
-        } else if (columnChange.hasLengthAttribute()) {
-            templateReplace.put("LENGTH", columnChange.getLength());
-            templateString = "{{FORMAT}}({{LENGTH}})";
-        }
-        StringTemplate template = new MapStringTemplate(
-            templateString,
-            templateReplace
-        );
-        return template.render();
-    }
-
-    protected String getSqlFormat(String format) {
-        if (format.equals("string")) {
-            return "varchar";
-        } else if (format.equals("boolean")) {
-            return "tinyint(1)";
-        } else if (format.equals("integer")) {
-            return "int";
-        } else if (format.equals("long")) {
-            return "bigint";
-        }
-        return format;
     }
 }

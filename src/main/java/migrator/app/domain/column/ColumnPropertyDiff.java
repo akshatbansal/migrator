@@ -1,10 +1,13 @@
 package migrator.app.domain.column;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 import migrator.app.database.column.format.ApplicationColumnFormat;
 import migrator.app.migration.model.ColumnProperty;
+import migrator.lib.diff.Diff;
+import migrator.lib.diff.ListDiff;
 
 public class ColumnPropertyDiff {
     protected ColumnProperty original;
@@ -104,5 +107,10 @@ public class ColumnPropertyDiff {
 
     public boolean hasChanged(String name) {
         return this.changes.contains(name);
+    }
+
+    public boolean hasChangedExcept(String name) {
+        ListDiff<String> listDiff = Diff.getSimpleListDiff(this.changes, Arrays.asList(name));
+        return !listDiff.getRightMissing().isEmpty();
     }
 }
