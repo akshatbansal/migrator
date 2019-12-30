@@ -31,4 +31,8 @@ public class GuiModel {
     public void disable(String name) {
         this.getOrCreateAttribute(name).set(false);
     }
+
+    public void setAttribute(String name, boolean value) {
+        this.getOrCreateAttribute(name).set(value);
+    }
 } 

@@ -1,5 +1,6 @@
 package migrator.app;
 
+import migrator.app.database.DatabaseContainer;
 import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.domain.column.ColumnRepository;
 import migrator.app.domain.column.service.ColumnActiveState;
@@ -197,6 +198,10 @@ public class Container {
     }
 
     public GuiContainer getGuiContainer() {
-        return config.guiContainerConfig().get();
+        return this.config.guiContainerConfig().get();
+    }
+
+    public DatabaseContainer getDatanaseContainer() {
+        return this.config.databaseContainerConfig().get();
     }
 }

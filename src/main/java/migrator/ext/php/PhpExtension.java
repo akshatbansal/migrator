@@ -9,6 +9,6 @@ public class PhpExtension implements Extension {
     public void load(ConfigContainer config) {
         CodeConfig codeConfig = config.getCodeConfig();
 
-        codeConfig.addCommandFactory("php", new PhpCommandFactory());
+        codeConfig.addCommandFactory("php", new PhpCommandFactory(config.databaseContainerConfig().get().getApplicationColumnFormatCollection()));
     }
 }

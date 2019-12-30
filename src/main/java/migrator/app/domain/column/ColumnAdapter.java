@@ -3,7 +3,7 @@ package migrator.app.domain.column;
 import org.json.JSONObject;
 
 import migrator.app.domain.table.model.Column;
-import migrator.app.gui.column.format.ColumnFormat;
+import migrator.app.gui.column.format.ColumnFormatOption;
 import migrator.app.gui.column.format.ColumnFormatCollection;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.app.migration.model.ColumnProperty;
@@ -30,7 +30,7 @@ public class ColumnAdapter implements Adapter<Column, JSONObject> {
             this.columnPropertyRepo.find(item.getString("changeId")),
             this.changeCommandRepo.find(item.getString("changeCommandId"))
         );
-        ColumnFormat columnFormat = this.columnFormatCollection.getFormatByName(column.getFormat());
+        ColumnFormatOption columnFormat = this.columnFormatCollection.getFormatByName(column.getFormat());
         columnFormat.updateModel(column);
 
         return column;

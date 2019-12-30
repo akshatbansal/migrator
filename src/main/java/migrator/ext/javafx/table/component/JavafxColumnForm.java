@@ -13,7 +13,7 @@ import migrator.app.domain.column.service.ColumnActiveState;
 import migrator.app.domain.table.component.ColumnForm;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.service.TableActiveState;
-import migrator.app.gui.column.format.ColumnFormat;
+import migrator.app.gui.column.format.ColumnFormatOption;
 import migrator.app.gui.column.format.ColumnFormatCollection;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.ext.javafx.component.ViewComponent;
@@ -26,7 +26,7 @@ public class JavafxColumnForm extends ViewComponent implements ColumnForm {
     protected ColumnFormatCollection columnFormatCollection;
 
     @FXML protected TextField name;
-    @FXML protected ComboBox<ColumnFormat> format;
+    @FXML protected ComboBox<ColumnFormatOption> format;
     @FXML protected TextField defaultText;
     @FXML protected TextField length;
     @FXML protected TextField precision;
@@ -67,7 +67,7 @@ public class JavafxColumnForm extends ViewComponent implements ColumnForm {
         );
         this.format.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             newValue.updateModel(this.column);
-            this.column.formatProperty().set(newValue.getName());
+            this.column.formatProperty().set(newValue.toString());
         });
 
         this.setColumn(column);
@@ -107,11 +107,8 @@ public class JavafxColumnForm extends ViewComponent implements ColumnForm {
     }
 
     protected void onFormatChange(String columnFormat) {
-        for (ColumnFormat format : this.columnFormatCollection.getObservable()) {
-            if (format.getName().equals(columnFormat)) {
-                this.format.getSelectionModel().select(format);
-            }
-        }
+        ColumnFormatOption format = this.columnFormatCollection.getFormatByName(columnFormat);
+        this.format.getSelectionModel().select(format);
     }
 
     protected void onChangeTypeChange(String changeType) {

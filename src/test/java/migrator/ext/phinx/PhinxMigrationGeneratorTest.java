@@ -9,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
 
+import migrator.app.database.column.format.ApplicationColumnFormatCollection;
+import migrator.app.database.column.format.SimpleAppColumnFormat;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Index;
 import migrator.app.domain.table.model.Table;
@@ -27,13 +29,19 @@ import migrator.ext.php.PhpCommandFactory;
 public class PhinxMigrationGeneratorTest {
     protected PhinxMigrationGenerator migrator;
     protected FileStorage storage;
+    protected ApplicationColumnFormatCollection appColumnFormatCollection;
 
     @BeforeEach
     public void setUp() {
+        this.appColumnFormatCollection = new ApplicationColumnFormatCollection();
+        this.appColumnFormatCollection.addFormat("string", new SimpleAppColumnFormat(true, false, false, false));
+        this.appColumnFormatCollection.addFormat("column_format", new SimpleAppColumnFormat(false, false, false, false));
+        this.appColumnFormatCollection.addFormat("integer", new SimpleAppColumnFormat(true, false, true, true));
+        this.appColumnFormatCollection.addFormat("decimal", new SimpleAppColumnFormat(true, true, true, false));
         this.storage = new FileStorage();
         this.migrator = new PhinxMigrationGenerator(
             new FakeFileStorageFactory(this.storage),
-            new PhpCommandFactory(),
+            new PhpCommandFactory(this.appColumnFormatCollection),
             new PermanentToastService()
         );
     }
@@ -67,7 +75,7 @@ public class PhinxMigrationGeneratorTest {
                 "\tpublic function change()\n" +
                 "\t{\n" +
                     "\t\t$this->table('table_name', ['id' => false])\n" +
-                        "\t\t\t->addColumn('column_name', 'string', ['null' => false])\n" +
+                        "\t\t\t->addColumn('column_name', 'string', ['null' => false, 'length' => 255])\n" +
                         "\t\t\t->create();\n" +
                 "\t}\n" +
             "}\n",
@@ -286,8 +294,8 @@ public class PhinxMigrationGeneratorTest {
                 "\tpublic function change()\n" +
                 "\t{\n" +
                     "\t\t$this->table('table_name', ['id' => false])\n" +
-                        "\t\t\t->addColumn('id', 'integer', ['null' => false])\n" +
-                        "\t\t\t->addColumn('name', 'string', ['null' => false])\n" +
+                        "\t\t\t->addColumn('id', 'integer', ['null' => false, 'length' => 11, 'signed' => true])\n" +
+                        "\t\t\t->addColumn('name', 'string', ['null' => false, 'length' => 255])\n" +
                         "\t\t\t->addIndex(['id', 'name'], ['name' => 'id_name'])\n" +
                         "\t\t\t->create();\n" +
                 "\t}\n" +
@@ -359,8 +367,8 @@ public class PhinxMigrationGeneratorTest {
                     new Column(
                         "1",
                         "1",
-                        new SimpleColumnProperty("1", "column_name", "column_format", null, false, "255", false, "", false),
-                        new SimpleColumnProperty("2", "column_name", "string", null, false, "255", false, "", false),
+                        new SimpleColumnProperty("1", "column_name", "column_format", "", false, "255", false, "", false),
+                        new SimpleColumnProperty("2", "column_name", "string", "", false, "255", false, "", false),
                         new ChangeCommand("2", "update")
                     )
                 )
@@ -376,7 +384,7 @@ public class PhinxMigrationGeneratorTest {
                 "\tpublic function change()\n" +
                 "\t{\n" +
                     "\t\t$this->table('table_name')\n" +
-                        "\t\t\t->changeColumn('column_name', 'string', ['null' => false])\n" +
+                        "\t\t\t->changeColumn('column_name', 'string', ['null' => false, 'length' => 255])\n" +
                         "\t\t\t->save();\n" +
                 "\t}\n" +
             "}\n",
@@ -413,7 +421,7 @@ public class PhinxMigrationGeneratorTest {
                 "\tpublic function change()\n" +
                 "\t{\n" +
                     "\t\t$this->table('table_name')\n" +
-                        "\t\t\t->changeColumn('column_name', 'string', ['null' => false, 'default' => 'default_value'])\n" +
+                        "\t\t\t->changeColumn('column_name', 'string', ['null' => false, 'default' => 'default_value', 'length' => 255])\n" +
                         "\t\t\t->save();\n" +
                 "\t}\n" +
             "}\n",
@@ -470,8 +478,8 @@ public class PhinxMigrationGeneratorTest {
                     new Column(
                         "1",
                         "1",
-                        new SimpleColumnProperty("1", "column_name", "string", "", false, "10", false, "4", false),
-                        new SimpleColumnProperty("2", "column_name", "string", "", false, "10", false, "5", false),
+                        new SimpleColumnProperty("1", "column_name", "decimal", "", false, "10", false, "4", false),
+                        new SimpleColumnProperty("2", "column_name", "decimal", "", false, "10", false, "5", false),
                         new ChangeCommand("2", "update")
                     )
                 )
@@ -487,7 +495,7 @@ public class PhinxMigrationGeneratorTest {
                 "\tpublic function change()\n" +
                 "\t{\n" +
                     "\t\t$this->table('table_name')\n" +
-                        "\t\t\t->changeColumn('column_name', 'string', ['null' => false, 'precision' => 10, 'scale' => 5])\n" +
+                        "\t\t\t->changeColumn('column_name', 'decimal', ['null' => false, 'precision' => 10, 'scale' => 5, 'signed' => false])\n" +
                         "\t\t\t->save();\n" +
                 "\t}\n" +
             "}\n",
@@ -507,8 +515,8 @@ public class PhinxMigrationGeneratorTest {
                     new Column(
                         "1",
                         "1",
-                        new SimpleColumnProperty("1", "column_name", "string", "", false, "10", true, "", false),
-                        new SimpleColumnProperty("2", "column_name", "string", "", false, "10", false, "", false),
+                        new SimpleColumnProperty("1", "column_name", "integer", "", false, "10", true, "", false),
+                        new SimpleColumnProperty("2", "column_name", "integer", "", false, "10", false, "", false),
                         new ChangeCommand("2", "update")
                     )
                 )
@@ -524,7 +532,7 @@ public class PhinxMigrationGeneratorTest {
                 "\tpublic function change()\n" +
                 "\t{\n" +
                     "\t\t$this->table('table_name')\n" +
-                        "\t\t\t->changeColumn('column_name', 'string', ['null' => false, 'length' => 10, 'signed' => false])\n" +
+                        "\t\t\t->changeColumn('column_name', 'integer', ['null' => false, 'length' => 10, 'signed' => false])\n" +
                         "\t\t\t->save();\n" +
                 "\t}\n" +
             "}\n",

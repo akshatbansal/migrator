@@ -6,10 +6,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import migrator.app.code.CodeManager;
+import migrator.app.database.DatabaseContainer;
+import migrator.app.database.column.format.ApplicationColumnFormat;
+import migrator.app.database.column.format.ApplicationColumnFormatCollection;
+import migrator.app.database.column.format.SimpleAppColumnFormat;
 import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.domain.column.ColumnAdapter;
 import migrator.app.domain.column.ColumnRepository;
@@ -35,7 +38,6 @@ import migrator.app.domain.table.service.TableFactory;
 import migrator.app.ConfigContainer;
 import migrator.app.extension.Extension;
 import migrator.app.gui.GuiContainer;
-import migrator.app.gui.column.format.ColumnFormatCollection;
 import migrator.app.migration.Migration;
 import migrator.app.migration.model.change.ChangeCommandAdapter;
 import migrator.app.migration.model.column.ColumnPropertyAdapter;
@@ -87,21 +89,65 @@ public class Bootstrap {
             new SystemLogger()
         );
 
-        GuiContainer guiContainer = new GuiContainer();
-        ColumnFormatCollection columnFormatCollection = guiContainer.getColumnFormatCollection();
-        columnFormatCollection.addFormat("boolean", new LinkedList<>());
-        columnFormatCollection.addFormat("char", Arrays.asList("length"));
-        columnFormatCollection.addFormat("date", new LinkedList<>());
-        columnFormatCollection.addFormat("datetime", new LinkedList<>());
-        columnFormatCollection.addFormat("decimal", Arrays.asList("length", "precision", "sign"));
-        columnFormatCollection.addFormat("float", Arrays.asList("length", "precision", "sign"));
-        columnFormatCollection.addFormat("integer", Arrays.asList("length", "sign", "autoIncrement"));
-        columnFormatCollection.addFormat("long", Arrays.asList("length", "sign", "autoIncrement"));
-        columnFormatCollection.addFormat("string", Arrays.asList("length"));
-        columnFormatCollection.addFormat("text", new LinkedList<>());
-        columnFormatCollection.addFormat("time", new LinkedList<>());
-        columnFormatCollection.addFormat("timestamp", new LinkedList<>());
-        config.guiContainerConfig().set(guiContainer);
+        ApplicationColumnFormat basicFormat = new SimpleAppColumnFormat(false, false, false, false);
+        ApplicationColumnFormat lengthFormat = new SimpleAppColumnFormat(true, false, false, false);
+        ApplicationColumnFormat intFormat = new SimpleAppColumnFormat(true, false, true, true);
+        ApplicationColumnFormat decimalFormat = new SimpleAppColumnFormat(true, true, true, false);
+        DatabaseContainer databaseContainer = new DatabaseContainer();
+        ApplicationColumnFormatCollection appColumnFormatCollection = databaseContainer.getApplicationColumnFormatCollection();
+        appColumnFormatCollection.addFormat(
+            "boolean",
+            basicFormat
+        );
+        appColumnFormatCollection.addFormat(
+            "char",
+            lengthFormat
+        );
+        appColumnFormatCollection.addFormat(
+            "date",
+            basicFormat
+        );
+        appColumnFormatCollection.addFormat(
+            "datetime",
+            basicFormat
+        );
+        appColumnFormatCollection.addFormat(
+            "decimal",
+            decimalFormat
+        );
+        appColumnFormatCollection.addFormat(
+            "float",
+            decimalFormat
+        );
+        appColumnFormatCollection.addFormat(
+            "integer", 
+            intFormat
+        );
+        appColumnFormatCollection.addFormat(
+            "long",
+            intFormat
+        );
+        appColumnFormatCollection.addFormat(
+            "string",
+            lengthFormat
+        );
+        appColumnFormatCollection.addFormat(
+            "text",
+            basicFormat
+        );
+        appColumnFormatCollection.addFormat(
+            "time",
+            basicFormat
+        );
+        appColumnFormatCollection.addFormat(
+            "timestamp",
+            basicFormat
+        );
+        
+        config.databaseContainerConfig().set(databaseContainer);
+        config.guiContainerConfig().set(
+            new GuiContainer(databaseContainer)
+        );
 
         config.changeCommandRepositoryConfig().set(
             new UniqueRepository<>()

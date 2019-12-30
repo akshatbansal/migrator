@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import migrator.app.code.CodeConfig;
 import migrator.app.code.CodeManager;
+import migrator.app.database.DatabaseContainer;
 import migrator.app.database.driver.DatabaseDriverConfig;
 import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.domain.column.ColumnRepository;
@@ -57,6 +58,7 @@ public class ConfigContainer {
     private ValueConfig<HotkeysService> hotkeyService;
     private ValueConfig<ToastService> toastService;
     private ValueConfig<GuiContainer> guiContainer;
+    private ValueConfig<DatabaseContainer> databaseContainer;
 
     private ValueConfig<ConnectionFactory> connectionFactory;
     private ValueConfig<DatabaseFactory> databaseFactory;
@@ -101,6 +103,7 @@ public class ConfigContainer {
         this.hotkeyFactory = new ValueConfig<>();
         this.hotkeyService = new ValueConfig<>();
         this.guiContainer = new ValueConfig<>();
+        this.databaseContainer = new ValueConfig<>();
 
         this.activeRoute = new ValueConfig<>();
         this.migration = new ValueConfig<>();
@@ -306,5 +309,9 @@ public class ConfigContainer {
 
     public ValueConfig<GuiContainer> guiContainerConfig() {
         return this.guiContainer;
+    }
+
+    public ValueConfig<DatabaseContainer> databaseContainerConfig() {
+        return this.databaseContainer;
     }
 }

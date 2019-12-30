@@ -2,6 +2,7 @@ package migrator.ext.php;
 
 import migrator.app.code.CodeCommand;
 import migrator.app.code.CodeCommandFactory;
+import migrator.app.database.column.format.ApplicationColumnFormatCollection;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.app.migration.model.ColumnChange;
 import migrator.app.migration.model.IndexChange;
@@ -18,6 +19,12 @@ import migrator.ext.php.command.UpdateTable;
 import migrator.ext.php.command.VoidCommand;
 
 public class PhpCommandFactory implements CodeCommandFactory {
+    protected ApplicationColumnFormatCollection applicationColumnFormatCollection;
+
+    public PhpCommandFactory(ApplicationColumnFormatCollection applicationColumnFormatCollection) {
+        this.applicationColumnFormatCollection = applicationColumnFormatCollection;
+    }
+
     public DropTable dropTable(TableChange tableChange) {
         return new DropTable(tableChange);
     }
@@ -70,7 +77,7 @@ public class PhpCommandFactory implements CodeCommandFactory {
     }
 
     public AddColumn addColumn(ColumnChange columnChange) {
-        return new AddColumn(columnChange);
+        return new AddColumn(columnChange, this.applicationColumnFormatCollection);
     }
 
     public RemoveColumn removeColumn(ColumnChange columnChange) {
@@ -78,7 +85,7 @@ public class PhpCommandFactory implements CodeCommandFactory {
     }
 
     public ChangeColumn changeColumn(ColumnChange columnChange) {
-        return new ChangeColumn(columnChange);
+        return new ChangeColumn(columnChange, this.applicationColumnFormatCollection);
     }
 
     public AddIndex addIndex(IndexChange indexChange) {

@@ -1,7 +1,7 @@
 package migrator.app.domain.column.service;
 
 import migrator.app.domain.table.model.Column;
-import migrator.app.gui.column.format.ColumnFormat;
+import migrator.app.gui.column.format.ColumnFormatOption;
 import migrator.app.gui.column.format.ColumnFormatCollection;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.app.migration.model.SimpleColumnProperty;
@@ -28,7 +28,7 @@ public class ColumnFactory {
             new SimpleColumnProperty(this.idGenerator.next(), columnName, format, defaultValue, nullEnabled, length, signed, precision, autoIncrement), // changed
             new ChangeCommand(this.idGenerator.next(), ChangeCommand.CREATE)
         );
-        ColumnFormat columnFormat = this.columnFormatCollection.getFormatByName(column.formatProperty().get());
+        ColumnFormatOption columnFormat = this.columnFormatCollection.getFormatByName(column.formatProperty().get());
         columnFormat.updateModel(column);
 
         return column;
@@ -42,7 +42,7 @@ public class ColumnFactory {
             new SimpleColumnProperty(this.idGenerator.next(), columnName, format, defaultValue, enableNull, length, sign, precision, autoIncrement), // changed
             new ChangeCommand(this.idGenerator.next(), ChangeCommand.NONE)
         );
-        ColumnFormat columnFormat = this.columnFormatCollection.getFormatByName(column.formatProperty().get());
+        ColumnFormatOption columnFormat = this.columnFormatCollection.getFormatByName(column.formatProperty().get());
         columnFormat.updateModel(column);
         return column;
     }
