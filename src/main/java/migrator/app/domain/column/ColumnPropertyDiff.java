@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import migrator.app.database.column.format.ApplicationColumnFormat;
+import migrator.app.domain.table.model.Column;
 import migrator.app.migration.model.ColumnProperty;
 import migrator.lib.diff.Diff;
 import migrator.lib.diff.ListDiff;
@@ -12,17 +13,17 @@ import migrator.lib.diff.ListDiff;
 public class ColumnPropertyDiff {
     protected ColumnProperty original;
     protected ColumnProperty modification;
-    protected ApplicationColumnFormat modificationFormat;
+    protected List<Boolean> formatSettings;
     protected List<String> changes;
 
     public ColumnPropertyDiff(
         ColumnProperty original,
         ColumnProperty modification,
-        ApplicationColumnFormat modificationFormat
+        List<Boolean> formatSettings
     ) {
         this.original = original;
         this.modification = modification;
-        this.modificationFormat = modificationFormat;
+        this.formatSettings = formatSettings;
         this.changes = new LinkedList<>();
         
         this.addChangeId("name", this.nameChanged());
@@ -33,6 +34,28 @@ public class ColumnPropertyDiff {
         this.addChangeId("preciosion", this.precisionChanged());
         this.addChangeId("sign", this.signChanged());
         this.addChangeId("autoIncrement", this.autoIncrementChanged());
+    }
+
+    public ColumnPropertyDiff(
+        ColumnProperty original,
+        ColumnProperty modification,
+        ApplicationColumnFormat modificationFormat
+    ) {
+        this(original, modification, Arrays.asList(
+            modificationFormat.hasLength(),
+            modificationFormat.hasPrecision(),
+            modificationFormat.hasSign(),
+            modificationFormat.hasAutoIncrement()
+        ));
+    }
+
+    public ColumnPropertyDiff(Column column) {
+        this(column.getOriginal(), column, Arrays.asList(
+            column.attribute("length").get(),
+            column.attribute("precision").get(),
+            column.attribute("sign").get(),
+            column.attribute("autoIncrement").get()
+        ));
     }
 
     private boolean nameChanged() {
@@ -60,28 +83,28 @@ public class ColumnPropertyDiff {
     }
 
     private boolean lengthChanged() {
-        return this.modificationFormat.hasLength() && 
+        return this.formatSettings.get(0) && 
         !this.original.getLength().equals(
             this.modification.getLength()
         );
     }
 
     private boolean precisionChanged() {
-        return this.modificationFormat.hasPrecision() && 
+        return this.formatSettings.get(1) && 
         !this.original.getPrecision().equals(
             this.modification.getPrecision()
         );
     }
 
     private boolean signChanged() {
-        return this.modificationFormat.hasSign() && 
+        return this.formatSettings.get(2) && 
         !this.original.isSigned().equals(
             this.modification.isSigned()
         );
     }
 
     private boolean autoIncrementChanged() {
-        return this.modificationFormat.hasAutoIncrement() && 
+        return this.formatSettings.get(3) && 
         !this.original.isAutoIncrement().equals(
             this.modification.isAutoIncrement()
         );

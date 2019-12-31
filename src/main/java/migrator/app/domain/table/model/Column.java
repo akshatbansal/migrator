@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import migrator.app.domain.column.ColumnPropertyDiff;
 import migrator.app.gui.GuiModel;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.app.migration.model.ColumnChange;
@@ -135,11 +136,6 @@ public class Column extends GuiModel implements Changable, ColumnChange, ChangeL
     }
 
     @Override
-    public Boolean hasLengthChanged() {
-        return this.hasLengthAttribute() && !this.getLength().equals(this.getOriginal().getLength());
-    }
-
-    @Override
     public Boolean isSigned() {
         return this.signProperty().getValue();
     }
@@ -147,11 +143,6 @@ public class Column extends GuiModel implements Changable, ColumnChange, ChangeL
     @Override
     public Property<Boolean> signProperty() {
         return this.changedColumn.signProperty();
-    }
-
-    @Override
-    public Boolean hasSignChanged() {
-        return this.hasSignAttribute() && this.isSigned() != this.getOriginal().isSigned();
     }
 
     @Override
@@ -165,16 +156,6 @@ public class Column extends GuiModel implements Changable, ColumnChange, ChangeL
     }
 
     @Override
-    public Boolean hasAutoIncrementAttribute() {
-        return this.attribute("autoIncrement").get();
-    }
-
-    @Override
-    public Boolean hasAutoIncrementChanged() {
-        return this.hasAutoIncrementAttribute() && this.isAutoIncrement() != this.getOriginal().isAutoIncrement();
-    }
-
-    @Override
     public String getPrecision() {
         return this.precisionProperty().getValue();
     }
@@ -182,11 +163,6 @@ public class Column extends GuiModel implements Changable, ColumnChange, ChangeL
     @Override
     public StringProperty precisionProperty() {
         return this.changedColumn.precisionProperty();
-    }
-
-    @Override
-    public Boolean hasPrecisionChanged() {
-        return (this.hasPrecisionAttribute() && !this.getPrecision().equals(this.getOriginal().getPrecision()));
     }
 
     public ColumnChange getChange() {
@@ -239,44 +215,6 @@ public class Column extends GuiModel implements Changable, ColumnChange, ChangeL
     }
 
     @Override
-    public Boolean hasDefaultValueChanged() {
-        if (this.getDefaultValue() == null && this.getOriginal().getDefaultValue() == null) {
-            return false;
-        }
-        return this.getDefaultValue() == null || !this.getDefaultValue().equals(this.getOriginal().getDefaultValue());
-    }
-
-    @Override
-    public Boolean hasFormatChanged() {
-        return !this.getFormat().equals(this.getOriginal().getFormat());
-    }
-
-    @Override
-    public Boolean hasNameChanged() {
-        return !this.getName().equals(this.getOriginal().getName());
-    }
-
-    @Override
-    public Boolean hasNullEnabledChanged() {
-        return this.isNullEnabled() != this.getOriginal().isNullEnabled();
-    }
-
-    @Override
-    public Boolean hasLengthAttribute() {
-        return this.attribute("length").get();
-    }
-
-    @Override
-    public Boolean hasPrecisionAttribute() {
-        return this.attribute("precision").get();
-    }
-
-    @Override
-    public Boolean hasSignAttribute() {
-        return this.attribute("sign").get();
-    }
-
-    @Override
     public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
         this.refreshFullFormat();
         if (this.changeCommand.isType(ChangeCommand.DELETE)) {
@@ -285,8 +223,10 @@ public class Column extends GuiModel implements Changable, ColumnChange, ChangeL
         if (this.changeCommand.isType(ChangeCommand.CREATE)) {
             return;
         }
+
+        ColumnPropertyDiff columnDiff = new ColumnPropertyDiff(this);
         
-        if (this.hasNameChanged() || this.hasFormatChanged() || this.hasDefaultValueChanged() || this.hasNullEnabledChanged() || this.hasLengthChanged() || this.hasPrecisionChanged() || this.hasSignChanged() || this.hasAutoIncrementChanged()) {
+        if (!columnDiff.getChanges().isEmpty()) {
             this.changeCommand.typeProperty().set(ChangeCommand.UPDATE);
             return;
         }
@@ -294,37 +234,39 @@ public class Column extends GuiModel implements Changable, ColumnChange, ChangeL
     }
 
     public void updateOriginal(ColumnProperty columnProperty) {
-        if (!this.hasNameChanged()) {
-            this.nameProperty().setValue(columnProperty.getName());    
+        ColumnPropertyDiff columnDiff = new ColumnPropertyDiff(this);
+
+        if (!columnDiff.hasChanged("name")) {
+            this.nameProperty().setValue(columnProperty.getName());
         }
         this.getOriginal().nameProperty().set(columnProperty.getName());
 
-        if (!this.hasFormatChanged()) {
+        if (!columnDiff.hasChanged("format")) {
             this.formatProperty().setValue(columnProperty.getFormat());
         }
         this.getOriginal().formatProperty().set(columnProperty.getFormat());
 
-        if (!this.hasDefaultValueChanged()) {
+        if (!columnDiff.hasChanged("defaultValue")) {
             this.defaultValueProperty().setValue(columnProperty.getDefaultValue());    
         }
         this.getOriginal().defaultValueProperty().set(columnProperty.getDefaultValue());
 
-        if (!this.hasNullEnabledChanged()) {
+        if (!columnDiff.hasChanged("nullEnabled")) {
             this.nullProperty().setValue(columnProperty.isNullEnabled());    
         }
         this.getOriginal().nullProperty().setValue(columnProperty.isNullEnabled());
 
-        if (!this.hasLengthChanged()) {
+        if (!columnDiff.hasChanged("length")) {
             this.lengthProperty().setValue(columnProperty.getLength());    
         }
         this.getOriginal().lengthProperty().setValue(columnProperty.getLength());
 
-        if (!this.hasSignChanged()) {
+        if (!columnDiff.hasChanged("sign")) {
             this.signProperty().setValue(columnProperty.isSigned());
         }
         this.getOriginal().signProperty().setValue(columnProperty.isSigned());
 
-        if (!this.hasPrecisionChanged()) {
+        if (!columnDiff.hasChanged("precision")) {
             this.precisionProperty().setValue(columnProperty.getPrecision());
         }
         this.getOriginal().precisionProperty().setValue(columnProperty.getPrecision());
