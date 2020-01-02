@@ -1,15 +1,15 @@
-package migrator.ext.mysql.column;
+package migrator.ext.mysql.database.column;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PrecisionFormatType implements FormatType {
+public class LengthFormatType implements FormatType {
     protected String dbName;
     protected String appName;
 
-    public PrecisionFormatType(String dbName, String appName) {
+    public LengthFormatType(String dbName, String appName) {
         this.dbName = dbName;
         this.appName = appName;
     }
@@ -29,13 +29,13 @@ public class PrecisionFormatType implements FormatType {
         List<String> result = new LinkedList<>();
         result.add(this.appName);
         result.add(this.getLength(item));
-        result.add(this.getPrecision(item));
+        result.add("");
         return result;
     }
 
     @Override
     public String generalize(List<String> item) {
-        return this.dbName + "(" + item.get(1) + "," + item.get(2) + ")";
+        return this.dbName + "(" + item.get(1) + ")";
     }
 
     private String getLength(String dbFormat) {
@@ -43,16 +43,6 @@ public class PrecisionFormatType implements FormatType {
         Matcher m = p.matcher(dbFormat);
         if (m.find()) {
             return m.group(0);
-        }
-
-        return "";
-    }
-
-    private String getPrecision(String dbFormat) {
-        Pattern p = Pattern.compile(",(\\d+)");
-        Matcher m = p.matcher(dbFormat);
-        if (m.find()) {
-            return m.group(1);
         }
 
         return "";

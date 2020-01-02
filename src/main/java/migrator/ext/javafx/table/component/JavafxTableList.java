@@ -1,7 +1,5 @@
 package migrator.ext.javafx.table.component;
 
-import java.util.Arrays;
-
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.FlowPane;
@@ -60,7 +58,7 @@ public class JavafxTableList extends ViewComponent implements TableList, TableAc
         this.indexFactory = container.getIndexFactory();
 
         this.breadcrumpsComponent = gui.getBreadcrumps().createBreadcrumps(
-            this.projectService.getOpened().get()
+            this.projectService.getOpened().get().getProject()
         );
 
         this.cardListComponent = new CardListComponent<>(
@@ -114,7 +112,7 @@ public class JavafxTableList extends ViewComponent implements TableList, TableAc
 
     @Override
     @FXML public void addTable() {
-        Table newTable = this.tableFactory.createWithCreateChange(this.projectService.getOpened().get().getId(), "new_table");
+        Table newTable = this.tableFactory.createWithCreateChange(this.projectService.getOpened().get().getProject().getId(), "new_table");
         this.tableActiveState.addAndActivate(newTable);
         
         Column idColumn = this.columnFactory.createWithCreateChange(newTable.getUniqueKey(), "id", "integer", null, false, "11", false, "", true);

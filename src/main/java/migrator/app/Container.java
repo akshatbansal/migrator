@@ -1,7 +1,6 @@
 package migrator.app;
 
 import migrator.app.database.DatabaseContainer;
-import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.domain.column.ColumnRepository;
 import migrator.app.domain.column.service.ColumnActiveState;
 import migrator.app.domain.column.service.ColumnFactory;
@@ -59,10 +58,6 @@ public class Container {
 
     public Migration getMigration() {
         return this.config.migrationConfig().get();
-    }
-
-    public DatabaseDriverManager getDatabaseDriverManager() {
-        return this.config.databaseDriverManagerConfig().get();
     }
 
     public CodeManager getCodeManager() {

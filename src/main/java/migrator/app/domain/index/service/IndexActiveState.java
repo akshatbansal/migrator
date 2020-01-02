@@ -3,7 +3,6 @@ package migrator.app.domain.index.service;
 import javafx.beans.property.ObjectProperty;
 import migrator.app.domain.index.IndexRepository;
 import migrator.app.domain.project.model.Project;
-import migrator.app.domain.project.service.ProjectService;
 import migrator.app.domain.table.model.Index;
 import migrator.app.domain.table.service.TableActiveState;
 import migrator.app.migration.model.ChangeCommand;
@@ -25,8 +24,7 @@ public class IndexActiveState extends SimpleActiveState<Index> {
         UniqueRepository<IndexProperty> indexPropertyRepo,
         UniqueRepository<ChangeCommand> changeCommandRepo,
         TableActiveState tableActiveState,
-        ActiveRoute activeRoute,
-        ProjectService projectService
+        ActiveRoute activeRoute
     ) {
         super();
         this.repository = repository;
@@ -34,7 +32,6 @@ public class IndexActiveState extends SimpleActiveState<Index> {
         this.changeCommandRepo = changeCommandRepo;
         this.tableActiveState = tableActiveState;
         this.activeRoute = activeRoute;
-        this.openedProject = projectService.getOpened();
     }
 
     @Override

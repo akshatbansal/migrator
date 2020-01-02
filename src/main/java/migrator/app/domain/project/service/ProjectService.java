@@ -4,24 +4,28 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import migrator.app.database.driver.DatabaseDriver;
-import migrator.app.database.driver.DatabaseDriverManager;
+import migrator.app.database.ConnectionResult;
+import migrator.app.database.DatabaseContainer;
+import migrator.app.database.DatabaseStructure;
+import migrator.app.database.DatabaseStructureFactory;
+import migrator.app.domain.connection.model.Connection;
+import migrator.app.domain.project.ProjectContainer;
 import migrator.app.domain.project.model.Project;
 import migrator.app.router.ActiveRoute;
 import migrator.app.toast.ToastService;
 
 public class ProjectService {
-    protected DatabaseDriverManager databaseDriverManager;
+    protected DatabaseContainer databaseContainer;
     protected ProjectFactory factory;
     protected ToastService toastService;
     protected ActiveRoute activeRoute;
     protected ObjectProperty<Project> selected;
-    protected ObjectProperty<Project> opened;
+    protected ObjectProperty<ProjectContainer> opened;
     protected ObservableList<Project> list;
 
-    public ProjectService(ProjectFactory factory, DatabaseDriverManager databaseDriverManager, ToastService toastService, ActiveRoute activeRoute) {
+    public ProjectService(ProjectFactory factory, DatabaseContainer databaseContainer, ToastService toastService, ActiveRoute activeRoute) {
         this.factory = factory;
-        this.databaseDriverManager = databaseDriverManager;
+        this.databaseContainer = databaseContainer;
         this.toastService = toastService;
         this.activeRoute = activeRoute;
         this.list = FXCollections.observableArrayList();
@@ -55,24 +59,32 @@ public class ProjectService {
     }
 
     public void open(Project project) {
-        if (project != null) {
-            if (project.disabledProperty().get()) {
-                return;
-            }
-            project.disable();
-            DatabaseDriver databaseDriver = this.databaseDriverManager.createDriver(project.getDatabase());
-            databaseDriver.connect();
-            project.enable();
-            if (!databaseDriver.isConnected()) {
-                this.toastService.error(databaseDriver.getError());
-                return;
-            }
+        if (project == null) {
+            this.opened.set(null);
+            return;
+        }
+
+        if (project.disabledProperty().get()) {
+            return;
+        }
+        project.disable();
+
+        Connection connection = project.getDatabase().getConnection();
+        DatabaseStructureFactory dbStrucutreFactory = this.databaseContainer.getStructureFactoryFor(connection.getDriver());
+        DatabaseStructure dbStrucutre = dbStrucutreFactory.create(
+            project.getDatabase().getUrl(),
+            connection.getUser(),
+            connection.getPassword()
+        );
+        ConnectionResult<?> connectionResult = dbStrucutre.testConnection();
+        project.enable();
+        if (!connectionResult.isOk()) {
+            this.toastService.error(connectionResult.getError());
+            return;
         }
         
-        this.opened.set(project);
-        if (project != null) {
-            this.activeRoute.changeTo("table.index");
-        }
+        this.opened.set(new ProjectContainer(project, dbStrucutre));
+        this.activeRoute.changeTo("table.index");
     }
 
     public void close() {
@@ -80,7 +92,7 @@ public class ProjectService {
         this.activeRoute.changeTo("project.index");
     }
 
-    public ObjectProperty<Project> getOpened() {
+    public ObjectProperty<ProjectContainer> getOpened() {
         return this.opened;
     }
 

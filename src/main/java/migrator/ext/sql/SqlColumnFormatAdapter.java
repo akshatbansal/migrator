@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import migrator.app.migration.model.ColumnProperty;
-import migrator.ext.mysql.column.MysqlFormatAdapter;
+import migrator.ext.mysql.database.column.MysqlFormatAdapter;
 import migrator.lib.adapter.Adapter;
 
 public class SqlColumnFormatAdapter implements Adapter<ColumnProperty, String> {

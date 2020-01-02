@@ -4,6 +4,7 @@ import java.io.File;
 
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -11,7 +12,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import migrator.app.Container;
-import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.domain.project.component.ProjectForm;
 import migrator.app.domain.project.model.Project;
 import migrator.app.domain.project.service.ProjectService;
@@ -22,7 +22,7 @@ import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
 
 public class JavafxProjectForm extends ViewComponent implements ProjectForm {
-    protected DatabaseDriverManager databaseDriverManager;
+    protected ObservableList<String> databaseDrivers;
     protected Migration migration;
     protected Project project;
     protected ProjectService projectService;
@@ -43,7 +43,7 @@ public class JavafxProjectForm extends ViewComponent implements ProjectForm {
 
     public JavafxProjectForm(Project project, ViewLoader viewLoader, Container container, Window window, LoadingIndicator loadingIndicator) {
         super(viewLoader);
-        this.databaseDriverManager = container.getDatabaseDriverManager();
+        this.databaseDrivers = container.getDatanaseContainer().getDrivers();
         this.migration = container.getMigration();
         this.projectService = container.getProjectService();
         this.project = project;
@@ -61,7 +61,7 @@ public class JavafxProjectForm extends ViewComponent implements ProjectForm {
     public void initialize() {
         this.outputType.getItems().setAll(this.migration.getGeneratorNames());
 
-        this.driver.getItems().setAll(this.databaseDriverManager.getDriverNames());
+        this.driver.getItems().setAll(this.databaseDrivers);
 
         this.name.textProperty().bindBidirectional(this.project.nameProperty());
         this.outputType.valueProperty().bindBidirectional(this.project.outputTypeProperty());

@@ -13,7 +13,6 @@ import migrator.app.database.DatabaseContainer;
 import migrator.app.database.column.format.ApplicationColumnFormat;
 import migrator.app.database.column.format.ApplicationColumnFormatCollection;
 import migrator.app.database.column.format.SimpleAppColumnFormat;
-import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.domain.column.ColumnAdapter;
 import migrator.app.domain.column.ColumnRepository;
 import migrator.app.domain.column.service.ColumnActiveState;
@@ -264,9 +263,6 @@ public class Bootstrap {
         config.migrationConfig().set(
             new Migration(config.getMigrationConfig())
         );
-        config.databaseDriverManagerConfig().set(
-            new DatabaseDriverManager(config.getDatabaseDriverConfig())
-        );
         config.codeManagerConfig().set(
             new CodeManager(config.getCodeConfig())
         );
@@ -318,7 +314,7 @@ public class Bootstrap {
         config.projectServiceConfig().set(
             new ProjectService(
                 config.projectFactoryConfig().get(),
-                config.databaseDriverManagerConfig().get(),
+                config.databaseContainerConfig().get(),
                 config.toastServiceConfig().get(),
                 config.activeRouteConfig().get()
             )
@@ -334,7 +330,6 @@ public class Bootstrap {
                 config.tableFactoryConfig().get(),
                 config.tableRepositoryConfig().get(),
                 config.tableActiveStateConfig().get(),
-                config.databaseDriverManagerConfig().get(),
                 config.projectServiceConfig().get(),
                 config.activeRouteConfig().get()
             )
@@ -343,8 +338,7 @@ public class Bootstrap {
             new ColumnActiveState(
                 config.columnRepositoryConfig().get(), 
                 config.tableActiveStateConfig().get(),
-                config.activeRouteConfig().get(),
-                config.projectServiceConfig().get()
+                config.activeRouteConfig().get()
             )
         );
         config.columnServiceConfig().set(
@@ -353,8 +347,7 @@ public class Bootstrap {
                 config.columnActiveStateConfig().get(),   
                 config.columnFactoryConfig().get(),
                 config.tableActiveStateConfig().get(),
-                config.projectServiceConfig().get(),
-                config.databaseDriverManagerConfig().get()
+                config.projectServiceConfig().get()
             )
         );
         config.indexActiveStateConfig().set(
@@ -363,8 +356,7 @@ public class Bootstrap {
                 config.indexPropertyRepositoryConfig().get(),
                 config.changeCommandRepositoryConfig().get(),
                 config.tableActiveStateConfig().get(),
-                config.activeRouteConfig().get(),
-                config.projectServiceConfig().get()
+                config.activeRouteConfig().get()
             )
         );
         config.indexServiceConfig().set(
@@ -374,7 +366,7 @@ public class Bootstrap {
                 config.indexActiveStateConfig().get(),
                 config.tableActiveStateConfig().get(),
                 config.projectServiceConfig().get(),
-                config.databaseDriverManagerConfig().get()
+                config.columnRepositoryConfig().get()
             )
         );
     }

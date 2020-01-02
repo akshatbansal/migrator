@@ -5,8 +5,6 @@ import java.util.Collection;
 import migrator.app.code.CodeConfig;
 import migrator.app.code.CodeManager;
 import migrator.app.database.DatabaseContainer;
-import migrator.app.database.driver.DatabaseDriverConfig;
-import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.domain.column.ColumnRepository;
 import migrator.app.domain.column.service.ColumnActiveState;
 import migrator.app.domain.column.service.ColumnFactory;
@@ -46,12 +44,10 @@ import migrator.lib.storage.Storage;
 
 public class ConfigContainer {
     private MigrationConfig migrationConfig;
-    private DatabaseDriverConfig databaseDriverConfig;
     private CodeConfig codeConfig;
 
     private ValueConfig<ActiveRoute> activeRoute;
     private ValueConfig<Migration> migration;
-    private ValueConfig<DatabaseDriverManager> databaseDriverManager;
     private ValueConfig<CodeManager> codeManager;
     private ValueConfig<Logger> logger;
     private ValueConfig<HotkeyFactory> hotkeyFactory;
@@ -97,7 +93,6 @@ public class ConfigContainer {
 
     public ConfigContainer() {
         this.migrationConfig = new MigrationConfig();
-        this.databaseDriverConfig = new DatabaseDriverConfig();
         this.codeConfig = new CodeConfig();
         this.logger = new ValueConfig<>();
         this.hotkeyFactory = new ValueConfig<>();
@@ -107,7 +102,6 @@ public class ConfigContainer {
 
         this.activeRoute = new ValueConfig<>();
         this.migration = new ValueConfig<>();
-        this.databaseDriverManager = new ValueConfig<>();
         this.codeManager = new ValueConfig<>();
 
         this.connectionFactory = new ValueConfig<>();
@@ -159,10 +153,6 @@ public class ConfigContainer {
         return this.migrationConfig;
     }
 
-    public DatabaseDriverConfig getDatabaseDriverConfig() {
-        return this.databaseDriverConfig;
-    }
-
     public CodeConfig getCodeConfig() {
         return this.codeConfig;
     }
@@ -177,10 +167,6 @@ public class ConfigContainer {
 
     public ValueConfig<Logger> loggerConfig() {
         return this.logger;
-    }
-
-    public ValueConfig<DatabaseDriverManager> databaseDriverManagerConfig() {
-        return this.databaseDriverManager;
     }
 
     public ValueConfig<CodeManager> codeManagerConfig() {
