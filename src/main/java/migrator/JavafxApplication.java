@@ -20,7 +20,6 @@ import migrator.ext.javafx.component.JavafxLayout;
 import migrator.ext.javafx.component.ViewLoader;
 import migrator.ext.javafx.project.route.CommitViewRoute;
 import migrator.ext.javafx.project.route.ProjectIndexRoute;
-import migrator.ext.javafx.project.route.ProjectViewRoute;
 import migrator.ext.javafx.table.route.ColumnViewRoute;
 import migrator.ext.javafx.table.route.IndexViewRoute;
 import migrator.ext.javafx.table.route.TableIndexRoute;
@@ -106,10 +105,6 @@ public class JavafxApplication extends Application {
                 container.getProjectService(),
                 container.getActiveRoute()
             )
-        );
-        router.connect(
-            "project.view",
-            new ProjectViewRoute(layout, gui.getProject())
         );
 
         container.getActiveRoute().changeTo("project.index");

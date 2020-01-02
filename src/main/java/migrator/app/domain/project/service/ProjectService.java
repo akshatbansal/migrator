@@ -45,7 +45,6 @@ public class ProjectService {
         this.selected.set(project);
         if (project != null) {
             this.selected.get().focus();
-            this.activeRoute.changeTo("project.view", project);
         }
     }
 
