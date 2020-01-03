@@ -3,6 +3,8 @@ package migrator.ext.javafx.breadcrumps;
 import java.util.Arrays;
 import java.util.List;
 
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
 import migrator.app.Container;
 import migrator.app.breadcrumps.Breadcrump;
 import migrator.app.breadcrumps.BreadcrumpsComponent;
@@ -25,7 +27,7 @@ public class JavafxBreadcrumpsGuiKit implements BreadcrumpsGuiKit {
 
     @Override
     public BreadcrumpsComponent createBreadcrumps(List<Breadcrump> breadcrumps) {
-        return new JavafxBreadcrumpsComponent(breadcrumps, this.viewLoader);
+        return new JavafxBreadcrumpsComponent(FXCollections.observableArrayList(breadcrumps));
     }
 
     @Override
@@ -33,12 +35,11 @@ public class JavafxBreadcrumpsGuiKit implements BreadcrumpsGuiKit {
         return this.createBreadcrumps(
             Arrays.asList(
                 new ProjectsBreadcrump(
-                    this.container.getProjectService(),
-                    this.container.getTableActiveState()
+                    this.container.getProjectService()
                 ),
                 new SingleProjectBreadcrump(
                     this.container.getProjectService(),
-                    project,
+                    new SimpleObjectProperty<>(project),
                     this.container.getTableActiveState()
                 ),
                 new VoidBreadcrump(table.nameProperty())
@@ -51,8 +52,7 @@ public class JavafxBreadcrumpsGuiKit implements BreadcrumpsGuiKit {
         return this.createBreadcrumps(
             Arrays.asList(
                 new ProjectsBreadcrump(
-                    this.container.getProjectService(),
-                    this.container.getTableActiveState()
+                    this.container.getProjectService()
                 ),
                 new VoidBreadcrump(project.nameProperty())
             )
@@ -64,12 +64,11 @@ public class JavafxBreadcrumpsGuiKit implements BreadcrumpsGuiKit {
         return this.createBreadcrumps(
             Arrays.asList(
                 new ProjectsBreadcrump(
-                    this.container.getProjectService(),
-                    this.container.getTableActiveState()
+                    this.container.getProjectService()
                 ),
                 new SingleProjectBreadcrump(
                     this.container.getProjectService(),
-                    project,
+                    new SimpleObjectProperty<>(project),
                     this.container.getTableActiveState()
                 ),
                 new VoidBreadcrump("commit changes")

@@ -23,8 +23,8 @@ public class JavafxCommitTableChange extends ViewComponent {
     @FXML protected Text title;
     @FXML protected VBox changes;
 
-    public JavafxCommitTableChange(TableChange tableChange, ViewLoader viewLoader) {
-        super(viewLoader);
+    public JavafxCommitTableChange(TableChange tableChange) {
+        super(new ViewLoader());
 
         this.loadView("/layout/project/commit/tablechange.fxml");
 
@@ -59,6 +59,4 @@ public class JavafxCommitTableChange extends ViewComponent {
         }
         changes.getChildren().setAll(nodes);
     }
-
-
 }

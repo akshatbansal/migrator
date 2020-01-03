@@ -2,11 +2,13 @@ package migrator.ext.javafx.project.component;
 
 import java.util.List;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
 import migrator.app.Container;
+import migrator.app.domain.project.ProjectContainer;
 import migrator.app.domain.project.component.CommitForm;
 import migrator.app.domain.project.model.Project;
 import migrator.app.domain.table.TableRepository;
@@ -22,34 +24,36 @@ public class JavafxCommitForm extends ViewComponent implements CommitForm {
 
     protected ActiveRoute activeRoute;
     protected Migration migration;
-    protected Project project;
+    protected ObjectProperty<ProjectContainer> activeProjectContainer;
     protected TableRepository tableRepository;
     protected ToastService toastService;
 
-    public JavafxCommitForm(Project project, ViewLoader viewLoader, Container container) {
-        super(viewLoader);
+    public JavafxCommitForm(ObjectProperty<ProjectContainer> activeProjectContainer, Container container) {
+        super(new ViewLoader());
         this.activeRoute = container.getActiveRoute();
         this.migration = container.getMigration();
         this.tableRepository = container.getTableRepository();
         this.toastService = container.getToastService();
-        this.project = project;
+        this.activeProjectContainer = activeProjectContainer;
         
         this.loadView("/layout/project/commit/form.fxml");
     }
 
     @Override
     @FXML public void commit() {
-        String outputType = this.project.getOutputType();
+        Project project = this.activeProjectContainer.get().getProject();
+
+        String outputType = project.getOutputType();
         if (outputType == null || outputType.isEmpty()) {
             this.toastService.error("Project output type has to be set");
             return;
         }
-        String projectFolder = this.project.getFolder();
+        String projectFolder = project.getFolder();
         if (projectFolder == null || projectFolder.isEmpty()) {
             this.toastService.error("Project folder has to be set");
             return;
         }
-        String commitName = this.name.textProperty().get();
+        String commitName = name.textProperty().get();
         if (commitName == null || commitName.isEmpty()) {
             this.toastService.error("Commit name has to be set");
             return;
@@ -57,9 +61,9 @@ public class JavafxCommitForm extends ViewComponent implements CommitForm {
         MigrationGeneratorFactory generatorFactory = this.migration.getGenerator(outputType);
         MigrationGenerator generator = generatorFactory.create();
 
-        List<? extends TableChange> changes = this.tableRepository.findByProject(this.project.getId());
+        List<? extends TableChange> changes = this.tableRepository.findByProject(project.getId());
         if (generator.generateMigration(
-            this.project.getFolder(),
+            project.getFolder(),
             this.name.textProperty().get(),
             changes
         )) {

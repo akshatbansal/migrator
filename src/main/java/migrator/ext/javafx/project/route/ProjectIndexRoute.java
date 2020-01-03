@@ -23,7 +23,7 @@ public class ProjectIndexRoute extends SimpleConnection<Object> {
         this.activeRoute = activeRoute;
 
         this.projectList = projectGuiKit.createList();
-        this.projectForm = projectGuiKit.createForm(null);
+        this.projectForm = projectGuiKit.createForm();
 
         this.projectService.getSelected().addListener((observable, oldValue, newValue) -> {
             if (!this.isActive()) {

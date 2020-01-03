@@ -21,11 +21,13 @@ public class JavafxBreadcrumpsComponent extends ViewComponent implements Breadcr
 
     @FXML protected FlowPane breadcrumps;
 
-    public JavafxBreadcrumpsComponent(List<Breadcrump> breadcrumpsList, ViewLoader viewLoader) {
-        super(viewLoader);
+    public JavafxBreadcrumpsComponent(List<Breadcrump> breadcrumpsList) {
+        super(new ViewLoader());
         this.breadcrumpsList = breadcrumpsList;
 
         this.loadView("/layout/breadcrumps/index.fxml");
+
+        this.draw();
     }
 
     protected void draw() {
@@ -52,10 +54,5 @@ public class JavafxBreadcrumpsComponent extends ViewComponent implements Breadcr
         if (this.breadcrumps.getChildren().size() > 0) {
             this.breadcrumps.getChildren().get(this.breadcrumps.getChildren().size() - 1).getStyleClass().add("btn-link--active");
         }
-    }
-
-    @FXML 
-    public void initialize() {
-        this.draw();
     }
 }
