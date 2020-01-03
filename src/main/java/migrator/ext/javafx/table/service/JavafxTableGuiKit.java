@@ -35,7 +35,7 @@ public class JavafxTableGuiKit implements TableGuiKit {
 
     @Override
     public TableList createList() {
-        return new JavafxTableList(this.viewLoader, this.container, this.gui);
+        return new JavafxTableList(this.container, this.container.getProjectService().getOpened());
     }
 
     @Override
