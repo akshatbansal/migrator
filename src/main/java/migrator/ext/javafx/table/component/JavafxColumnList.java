@@ -1,8 +1,7 @@
 package migrator.ext.javafx.table.component;
 
-import java.util.List;
-
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.collections.ListChangeListener.Change;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableView;
@@ -27,28 +26,27 @@ public class JavafxColumnList extends ViewComponent implements ColumnList {
 
     @FXML protected TableView<Column> columns;
 
-    public JavafxColumnList(ViewLoader viewLoader, Container container) {
-        super(viewLoader);
+    public JavafxColumnList(Container container) {
+        super(new ViewLoader());
         this.columnActiveState = container.getColumnActiveState();
         this.columnFactory = container.getColumnFactory();
         this.tableActiveState = container.getTableActiveState();
         this.selectEmitter = new EventEmitter<>();
         
-        this.loadView("/layout/table/column/index.fxml");
-
-        this.columnActiveState.getList()
-            .addListener((Change<? extends Column> change) -> {
-                this.draw();
-            });
+        this.loadView("/layout/table/column/index.fxml");        
     }
 
-    protected void draw() {
-        if (this.columns == null) {
-            return;
-        }
-        List<Column> columns = this.columnActiveState.getList();
-        this.columns.setPrefHeight((40) * (columns.size() + 1));
-        this.columns.getItems().setAll(columns);
+    public void bind(ObservableList<Column> columns) {
+        this.columns.setItems(columns);
+        this.columnActiveState.getList()
+            .addListener((Change<? extends Column> change) -> {
+                this.fitSize(columns.size());
+            });
+        this.fitSize(columns.size());
+    }
+
+    private void fitSize(int countRows) {
+        this.columns.setPrefHeight((40) * (countRows + 1));
     }
 
     @FXML
@@ -63,7 +61,6 @@ public class JavafxColumnList extends ViewComponent implements ColumnList {
                 this.selectEmitter.emit("deselect");
             }
         });
-        this.draw();
     }
 
     @FXML

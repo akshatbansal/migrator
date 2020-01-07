@@ -1,6 +1,9 @@
 package migrator.ext.javafx.table.component;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -22,8 +25,10 @@ import migrator.ext.javafx.component.ViewLoader;
 public class JavafxColumnForm extends ViewComponent implements ColumnForm {
     protected ColumnActiveState columnActiveState;
     protected TableActiveState tableActiveState;
-    protected Column column;
+    protected ObjectProperty<Column> columnProperty;
     protected ColumnFormatCollection columnFormatCollection;
+    protected ChangeListener<String> changeCommandListener;
+    protected ChangeListener<String> formatListener;
 
     @FXML protected TextField name;
     @FXML protected ComboBox<ColumnFormatOption> format;
@@ -42,8 +47,15 @@ public class JavafxColumnForm extends ViewComponent implements ColumnForm {
     protected Button removeButton;
     protected Button restoreButton;
 
-    public JavafxColumnForm(Column column, ViewLoader viewLoader, Container container) {
-        super(viewLoader);
+    public JavafxColumnForm(Container container) {
+        super(new ViewLoader());
+        this.changeCommandListener = (ObservableValue<? extends String> obs, String oldValue, String newValue) -> {
+            this.onChangeTypeChange(newValue);
+        };
+        this.formatListener = (obs, ol, ne) -> {
+            this.onFormatChange(ne);
+        };
+
         this.columnActiveState = container.getColumnActiveState();
         this.tableActiveState = container.getTableActiveState();
         this.columnFormatCollection = container.getGuiContainer().getColumnFormatCollection();
@@ -61,48 +73,109 @@ public class JavafxColumnForm extends ViewComponent implements ColumnForm {
         });
 
         this.loadView("/layout/table/column/form.fxml");
-
-        this.format.getItems().setAll(
-            this.columnFormatCollection.getObservable()
-        );
+        
         this.format.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            newValue.updateModel(this.column);
-            this.column.formatProperty().set(newValue.toString());
+            Column column = this.columnProperty.get();
+            if (column == null) {
+                return;
+            }
+            newValue.updateModel(column);
+            column.formatProperty().set(newValue.toString());
         });
-
-        this.setColumn(column);
     }
 
-    public void setColumn(Column column) {
-        this.column = column;
+    public void bind(ObjectProperty<Column> columnProperty) {
+        this.columnProperty = columnProperty;
+        columnProperty.addListener((observable, oldValue, newValue) -> {
+            this.unbindForm(oldValue);
+            this.bindForm(newValue);
+        });
+        this.bindForm(columnProperty.get());
+    }
+
+    public void bindFormats(ObservableList<ColumnFormatOption> formats) {
+        this.format.getItems().setAll(formats);
+    }
+
+    private void unbindForm(Column column) {
         if (column == null) {
             return;
         }
-        this.name.textProperty().bindBidirectional(column.nameProperty());
-        this.defaultText.textProperty().bindBidirectional(column.defaultValueProperty());
-        this.nullCheckbox.selectedProperty().bindBidirectional(column.enableNullProperty());
-        this.length.textProperty().bindBidirectional(column.lengthProperty());
-        this.precision.textProperty().bindBidirectional(column.precisionProperty());
-        this.sign.selectedProperty().bindBidirectional(column.signProperty());
-        this.autoIncrement.selectedProperty().bindBidirectional(column.autoIncrementProperty());
 
-        this.lengthRow.managedProperty().bind(this.column.attribute("length"));
-        this.lengthRow.visibleProperty().bind(this.column.attribute("length"));
-        this.precisionRow.managedProperty().bind(this.column.attribute("precision"));
-        this.precisionRow.visibleProperty().bind(this.column.attribute("precision"));
-        this.signRow.managedProperty().bind(this.column.attribute("sign"));
-        this.signRow.visibleProperty().bind(this.column.attribute("sign"));
-        this.autoIncrementRow.managedProperty().bind(this.column.attribute("autoIncrement"));
-        this.autoIncrementRow.visibleProperty().bind(this.column.attribute("autoIncrement"));
+        this.name.textProperty().unbindBidirectional(
+            column.nameProperty()
+        );
+        this.defaultText.textProperty().unbindBidirectional(
+            column.defaultValueProperty()
+        );
+        this.nullCheckbox.selectedProperty().unbindBidirectional(
+            column.enableNullProperty()
+        );
+        this.length.textProperty().unbindBidirectional(
+            column.lengthProperty()
+        );
+        this.precision.textProperty().unbindBidirectional(
+            column.precisionProperty()
+        );
+        this.sign.selectedProperty().unbindBidirectional(
+            column.signProperty()
+        );
+        this.autoIncrement.selectedProperty().unbindBidirectional(
+            column.autoIncrementProperty()
+        );
 
-        this.column.formatProperty().addListener((obs, ol, ne) -> {
-            this.onFormatChange(ne);
-        });
-        this.onFormatChange(this.column.formatProperty().get());
+        this.lengthRow.managedProperty().unbind();
+        this.lengthRow.visibleProperty().unbind();
+        this.precisionRow.managedProperty().unbind();
+        this.precisionRow.visibleProperty().unbind();
+        this.signRow.managedProperty().unbind();
+        this.signRow.visibleProperty().unbind();
+        this.autoIncrementRow.managedProperty().unbind();
+        this.autoIncrementRow.visibleProperty().unbind();
 
-        this.column.getChangeCommand().typeProperty().addListener((ObservableValue<? extends String> obs, String oldValue, String newValue) -> {
-            this.onChangeTypeChange(newValue);
-        });
+        column.formatProperty().removeListener(this.formatListener);
+        column.getChangeCommand().typeProperty().removeListener(this.changeCommandListener);
+    }
+
+    private void bindForm(Column column) {
+        if (column == null) {
+            return;
+        }
+        this.name.textProperty().bindBidirectional(
+            column.nameProperty()
+        );
+        this.defaultText.textProperty().bindBidirectional(
+            column.defaultValueProperty()
+        );
+        this.nullCheckbox.selectedProperty().bindBidirectional(
+            column.enableNullProperty()
+        );
+        this.length.textProperty().bindBidirectional(
+            column.lengthProperty()
+        );
+        this.precision.textProperty().bindBidirectional(
+            column.precisionProperty()
+        );
+        this.sign.selectedProperty().bindBidirectional(
+            column.signProperty()
+        );
+        this.autoIncrement.selectedProperty().bindBidirectional(
+            column.autoIncrementProperty()
+        );
+
+        this.lengthRow.managedProperty().bind(column.attribute("length"));
+        this.lengthRow.visibleProperty().bind(column.attribute("length"));
+        this.precisionRow.managedProperty().bind(column.attribute("precision"));
+        this.precisionRow.visibleProperty().bind(column.attribute("precision"));
+        this.signRow.managedProperty().bind(column.attribute("sign"));
+        this.signRow.visibleProperty().bind(column.attribute("sign"));
+        this.autoIncrementRow.managedProperty().bind(column.attribute("autoIncrement"));
+        this.autoIncrementRow.visibleProperty().bind(column.attribute("autoIncrement"));
+
+        column.formatProperty().addListener(this.formatListener);
+        this.onFormatChange(column.formatProperty().get());
+
+        column.getChangeCommand().typeProperty().addListener(this.changeCommandListener);
         this.onChangeTypeChange(column.getChangeCommand().getType());
     }
 
@@ -122,15 +195,23 @@ public class JavafxColumnForm extends ViewComponent implements ColumnForm {
     }
 
     public void delete() {
-        if (this.column.getChangeCommand().isType(ChangeCommand.CREATE)) {
-            this.columnActiveState.remove(this.column);
+        Column column = this.columnProperty.get();
+        if (column == null) {
             return;
         }
-        this.column.delete();
+        if (column.getChangeCommand().isType(ChangeCommand.CREATE)) {
+            this.columnActiveState.remove(column);
+            return;
+        }
+        column.delete();
     }
 
     public void restore() {
-        this.column.restore();
+        Column column = this.columnProperty.get();
+        if (column == null) {
+            return;
+        }
+        column.restore();
     }
 
     @FXML public void close() {

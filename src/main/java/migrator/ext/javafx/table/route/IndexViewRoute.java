@@ -8,17 +8,15 @@ import migrator.ext.javafx.component.JavafxLayout;
 
 public class IndexViewRoute extends GuiNodeConnection<Index> {
     protected JavafxLayout layout;
-    protected TableGuiKit tableGuiKit;
+    protected IndexForm indexForm;
 
     public IndexViewRoute(TableGuiKit tableGuiKit, JavafxLayout layout) {
         this.layout = layout;
-        this.tableGuiKit = tableGuiKit;
+        this.indexForm = tableGuiKit.createIndexForm();
     }
 
     @Override
     public void show(Index routeData) {
-        IndexForm indexForm = this.tableGuiKit.createIndexForm(routeData);
-        this.guiNodes.add(indexForm);
-        this.layout.renderSide(indexForm);
+        this.layout.renderSide(this.indexForm);
     }
 }
