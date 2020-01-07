@@ -60,10 +60,7 @@ public class JavafxProjectForm extends ViewComponent implements ProjectForm {
         selected.addListener((observable, oldValue, newValue) -> {
             this.onProjectChange(newValue);
         });
-
-        // project.disabledProperty().addListener((oservable, oldValue, newValue) -> {
-        //     this.openButton.setDisable(newValue);
-        // });
+        this.onProjectChange(project);
     }
 
     private void onProjectChange(Project project) {

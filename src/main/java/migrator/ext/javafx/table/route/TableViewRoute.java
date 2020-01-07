@@ -7,25 +7,31 @@ import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableGuiKit;
 import migrator.app.router.GuiNodeConnection;
 import migrator.ext.javafx.component.JavafxLayout;
+import migrator.lib.factory.Factory;
+import migrator.lib.factory.SingletonCallbackFactory;
 
 public class TableViewRoute extends GuiNodeConnection<Table> {
     protected JavafxLayout layout;
 
-    protected TableForm tableForm;
-    protected TableView tableView;
+    protected Factory<TableForm> tableFormFactory;
+    protected Factory<TableView> tableViewFactory;
 
     public TableViewRoute(TableGuiKit tableGuiKit, JavafxLayout layout) {
         this.layout = layout;
-
-        this.tableForm = tableGuiKit.createForm();
-        this.tableView = tableGuiKit.createView();
+        
+        this.tableFormFactory = new SingletonCallbackFactory<TableForm>(() -> {
+            return tableGuiKit.createForm();
+        });
+        this.tableViewFactory = new SingletonCallbackFactory<TableView>(() -> {
+            return tableGuiKit.createView();
+        });
     }
 
     @Override
     public void show(Table routeData) {
         Platform.runLater(() -> {
-            this.layout.renderBody(this.tableView);
-            this.layout.renderSide(this.tableForm);
+            this.layout.renderBody(this.tableViewFactory.create());
+            this.layout.renderSide(this.tableFormFactory.create());
         });
     }
 }

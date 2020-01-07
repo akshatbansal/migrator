@@ -6,23 +6,30 @@ import migrator.app.domain.project.component.CommitView;
 import migrator.app.domain.project.service.ProjectGuiKit;
 import migrator.app.router.SimpleConnection;
 import migrator.ext.javafx.component.JavafxLayout;
+import migrator.lib.factory.Factory;
+import migrator.lib.factory.SingletonCallbackFactory;
 
 public class CommitViewRoute extends SimpleConnection<ProjectContainer> {
     protected JavafxLayout layout;
+    protected ProjectGuiKit projectGuiKit;
 
-    protected CommitView commitView;
-    protected CommitForm commitForm;
+    protected Factory<CommitView> commitViewFactory;
+    protected Factory<CommitForm> commitFormFactory;
 
     public CommitViewRoute(ProjectGuiKit projectGuiKit, JavafxLayout layout) {
         this.layout = layout;
-
-        this.commitForm = projectGuiKit.createCommitForm();
-        this.commitView = projectGuiKit.createCommitView();
+        
+        this.commitFormFactory = new SingletonCallbackFactory<CommitForm>(() -> {
+            return projectGuiKit.createCommitForm();
+        });
+        this.commitViewFactory = new SingletonCallbackFactory<CommitView>(() -> {
+            return projectGuiKit.createCommitView();
+        });
     }
 
     @Override
     public void show(ProjectContainer routeData) {
-        this.layout.renderBody(this.commitView);
-        this.layout.renderSide(this.commitForm);
+        this.layout.renderBody(this.commitViewFactory.create());
+        this.layout.renderSide(this.commitFormFactory.create());
     }
 }

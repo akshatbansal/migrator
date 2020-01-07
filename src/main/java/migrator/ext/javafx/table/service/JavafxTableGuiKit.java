@@ -10,7 +10,6 @@ import migrator.app.domain.table.component.IndexList;
 import migrator.app.domain.table.component.TableForm;
 import migrator.app.domain.table.component.TableList;
 import migrator.app.domain.table.component.TableView;
-import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.service.TableGuiKit;
 import migrator.app.gui.BindedObservableList;
 import migrator.app.gui.column.ColumnOptionAdapter;
@@ -72,7 +71,7 @@ public class JavafxTableGuiKit implements TableGuiKit {
     }
 
     @Override
-    public ColumnForm createColumnForm(Column column) {
+    public ColumnForm createColumnForm() {
         JavafxColumnForm form = new JavafxColumnForm(this.container);
         form.bind(this.container.getColumnActiveState().getActive());
         form.bindFormats(

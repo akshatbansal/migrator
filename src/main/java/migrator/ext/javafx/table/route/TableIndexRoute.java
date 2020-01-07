@@ -8,23 +8,27 @@ import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableGuiKit;
 import migrator.app.router.SimpleConnection;
 import migrator.ext.javafx.component.JavafxLayout;
+import migrator.lib.factory.Factory;
+import migrator.lib.factory.SingletonCallbackFactory;
 
 public class TableIndexRoute extends SimpleConnection<List<Table>> {
     protected JavafxLayout layout;
-    protected TableGuiKit tableGuiKit;
 
-    protected TableList tableList;
+    protected Factory<TableList> tableListFactory;
     
     public TableIndexRoute(TableGuiKit tableGuiKit, JavafxLayout layout) {
         this.layout = layout;
-        this.tableList = tableGuiKit.createList();
+
+        this.tableListFactory = new SingletonCallbackFactory<TableList>(() -> {
+            return tableGuiKit.createList();
+        });
     }
 
     @Override
     public void show(List<Table> routeData) {
         Platform.runLater(() -> {
             this.layout.clearSide();
-            this.layout.renderBody(this.tableList);
+            this.layout.renderBody(this.tableListFactory.create());
         });
     }
 }

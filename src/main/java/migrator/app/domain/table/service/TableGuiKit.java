@@ -15,6 +15,6 @@ public interface TableGuiKit {
     public TableView createView();
     public ColumnList createColumnList();
     public IndexList createIndexList();
-    public ColumnForm createColumnForm(Column column);
+    public ColumnForm createColumnForm();
     public IndexForm createIndexForm();
 }
