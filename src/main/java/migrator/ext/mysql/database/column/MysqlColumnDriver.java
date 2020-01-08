@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.Map;
 
 import migrator.app.database.ConnectionResult;
+import migrator.app.database.JdbcConnectionDriver;
 import migrator.app.database.column.DatabaseColumnDriver;
-import migrator.ext.mysql.database.MysqlConnection;
 
 public class MysqlColumnDriver implements DatabaseColumnDriver {
-    protected MysqlConnection mysqlConnection;
+    protected JdbcConnectionDriver mysqlConnection;
 
-    public MysqlColumnDriver(MysqlConnection mysqlConnection) {
+    public MysqlColumnDriver(JdbcConnectionDriver mysqlConnection) {
         this.mysqlConnection = mysqlConnection;
     }
 

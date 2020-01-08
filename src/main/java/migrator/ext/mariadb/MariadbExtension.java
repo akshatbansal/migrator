@@ -2,7 +2,7 @@ package migrator.ext.mariadb;
 
 import migrator.app.ConfigContainer;
 import migrator.app.extension.Extension;
-import migrator.ext.mysql.database.MysqlDatabaseStructureFactory;
+import migrator.ext.mysql.database.MysqlStructureFactory;
 
 public class MariadbExtension implements Extension {
     @Override
@@ -10,7 +10,9 @@ public class MariadbExtension implements Extension {
         config.databaseContainerConfig().get()
             .addStrucutreFactory(
                 "mariadb",
-                new MysqlDatabaseStructureFactory()
+                new MysqlStructureFactory(
+                    config.loggerConfig().get()
+                )
             );
     }
 }

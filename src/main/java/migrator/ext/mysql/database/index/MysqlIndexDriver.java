@@ -12,13 +12,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import migrator.app.database.ConnectionResult;
+import migrator.app.database.JdbcConnectionDriver;
 import migrator.app.database.index.DatabaseIndexDriver;
-import migrator.ext.mysql.database.MysqlConnection;
 
 public class MysqlIndexDriver implements DatabaseIndexDriver {
-    protected MysqlConnection mysqlConnection;
+    protected JdbcConnectionDriver mysqlConnection;
 
-    public MysqlIndexDriver(MysqlConnection mysqlConnection) {
+    public MysqlIndexDriver(JdbcConnectionDriver mysqlConnection) {
         this.mysqlConnection = mysqlConnection;
     }
 

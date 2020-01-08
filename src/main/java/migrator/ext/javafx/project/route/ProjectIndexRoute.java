@@ -6,12 +6,13 @@ import migrator.app.domain.project.model.Project;
 import migrator.app.domain.project.service.ProjectGuiKit;
 import migrator.app.domain.project.service.ProjectService;
 import migrator.app.router.ActiveRoute;
-import migrator.app.router.SimpleConnection;
+import migrator.app.router.RouteConnection;
 import migrator.ext.javafx.component.JavafxLayout;
 import migrator.lib.factory.Factory;
 import migrator.lib.factory.SingletonCallbackFactory;
 
-public class ProjectIndexRoute extends SimpleConnection<Object> {
+public class ProjectIndexRoute implements RouteConnection<Object> {
+    private boolean isVisible;
     protected JavafxLayout layout;
     protected ProjectService projectService;
     protected ActiveRoute activeRoute;
@@ -20,6 +21,7 @@ public class ProjectIndexRoute extends SimpleConnection<Object> {
     protected Factory<ProjectForm> projectFormFactory;
 
     public ProjectIndexRoute(JavafxLayout layout, ProjectGuiKit projectGuiKit, ProjectService projectService, ActiveRoute activeRoute) {
+        this.isVisible = false;
         this.layout = layout;
         this.projectService = projectService;
         this.activeRoute = activeRoute;
@@ -32,7 +34,7 @@ public class ProjectIndexRoute extends SimpleConnection<Object> {
         });
 
         this.projectService.getSelected().addListener((observable, oldValue, newValue) -> {
-            if (!this.isActive()) {
+            if (!this.isVisible) {
                 return;
             }
             this.onSelect(newValue);
@@ -41,11 +43,16 @@ public class ProjectIndexRoute extends SimpleConnection<Object> {
 
     @Override
     public void show(Object routeData) {
-        super.show(routeData);
+        this.isVisible = true;
         this.layout.renderBody(this.projectListFactory.create());
         this.onSelect(
             this.projectService.getSelected().get()
         );
+    }
+
+    @Override
+    public void hide() {
+        this.isVisible = false;
     }
 
     private void onSelect(Project project) {

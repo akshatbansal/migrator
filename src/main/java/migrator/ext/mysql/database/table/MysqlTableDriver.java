@@ -8,13 +8,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 import migrator.app.database.ConnectionResult;
+import migrator.app.database.JdbcConnectionDriver;
 import migrator.app.database.table.DatabaseTableDriver;
-import migrator.ext.mysql.database.MysqlConnection;
 
 public class MysqlTableDriver implements DatabaseTableDriver {
-    private MysqlConnection mysqlConnection;
+    private JdbcConnectionDriver mysqlConnection;
 
-    public MysqlTableDriver(MysqlConnection mysqlConnection) {
+    public MysqlTableDriver(JdbcConnectionDriver mysqlConnection) {
         this.mysqlConnection = mysqlConnection;
     }
 

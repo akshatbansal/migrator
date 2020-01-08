@@ -6,12 +6,12 @@ import javafx.application.Platform;
 import migrator.app.domain.table.component.TableList;
 import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableGuiKit;
-import migrator.app.router.SimpleConnection;
+import migrator.app.router.RouteConnection;
 import migrator.ext.javafx.component.JavafxLayout;
 import migrator.lib.factory.Factory;
 import migrator.lib.factory.SingletonCallbackFactory;
 
-public class TableIndexRoute extends SimpleConnection<List<Table>> {
+public class TableIndexRoute implements RouteConnection<List<Table>> {
     protected JavafxLayout layout;
 
     protected Factory<TableList> tableListFactory;
@@ -31,4 +31,7 @@ public class TableIndexRoute extends SimpleConnection<List<Table>> {
             this.layout.renderBody(this.tableListFactory.create());
         });
     }
+
+    @Override
+    public void hide() {}
 }
