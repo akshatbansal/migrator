@@ -1,6 +1,5 @@
 package migrator.app.domain.column.service;
 
-import migrator.app.database.format.ColumnFormatManager;
 import migrator.app.domain.table.model.Column;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.app.migration.model.ColumnProperty;
@@ -12,10 +11,8 @@ public class ColumnBuilder {
     protected ColumnProperty original;
     protected ColumnProperty change;
     protected ChangeCommand changeCommand;
-    protected ColumnFormatManager columnFormatManager;
 
-    public ColumnBuilder(ColumnFormatManager columnFormatManager) {
-        this.columnFormatManager = columnFormatManager;
+    public ColumnBuilder() {
         this.id = "1";
         this.tableId = "1";
         this.original = new SimpleColumnProperty("1", "", "", "", false, "", false, "", false);
@@ -110,7 +107,6 @@ public class ColumnBuilder {
 
     public Column build() {
         return new Column(
-            this.columnFormatManager,
             this.id,
             this.tableId,
             this.original,

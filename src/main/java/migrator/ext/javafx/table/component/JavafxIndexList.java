@@ -1,6 +1,7 @@
 package migrator.ext.javafx.table.component;
 
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.collections.ListChangeListener.Change;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableView;
@@ -25,29 +26,26 @@ public class JavafxIndexList extends ViewComponent implements IndexList {
 
     @FXML protected TableView<Index> indexes;
 
-    public JavafxIndexList(ViewLoader viewLoader, Container container) {
-        super(viewLoader);
+    public JavafxIndexList(Container container) {
+        super(new ViewLoader());
         this.indexActiveState = container.getIndexActiveState();
         this.indexFactory = container.getIndexFactory();
         this.tableActiveState = container.getTableActiveState();
         this.emitter = new EventEmitter<>();
 
         this.loadView("/layout/table/index/index.fxml");
-
-        this.indexActiveState.getList()
-            .addListener((Change<? extends Index> change) -> {
-                this.draw();
-            });
     }
 
-    protected void draw() {
-        if (this.indexes == null) {
-            return;
-        }
-        this.indexes.getItems().setAll(
-            this.indexActiveState.getList()
-        );
-        this.indexes.setPrefHeight(40 * (this.indexes.getItems().size() + 1));
+    public void bind(ObservableList<Index> indexes) {
+        this.indexes.setItems(indexes);
+        indexes.addListener((Change<? extends Index> change) -> {
+            this.fitSize(indexes.size());
+        });
+        this.fitSize(indexes.size());
+    }
+
+    private void fitSize(int indexRows) {
+        this.indexes.setPrefHeight(40 * (indexRows + 1));
     }
 
     @FXML
@@ -62,7 +60,6 @@ public class JavafxIndexList extends ViewComponent implements IndexList {
                 this.emitter.emit("deselect");
             }
         });
-        this.draw();
     }
 
     @FXML

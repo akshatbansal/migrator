@@ -1,17 +1,18 @@
 package migrator.app.domain.table.service;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
-import migrator.app.database.driver.DatabaseDriver;
-import migrator.app.database.driver.DatabaseDriverManager;
+import migrator.app.domain.project.ProjectContainer;
 import migrator.app.domain.project.model.Project;
 import migrator.app.domain.project.service.ProjectService;
 import migrator.app.domain.table.TableRepository;
 import migrator.app.domain.table.model.Table;
 import migrator.app.migration.model.ChangeCommand;
+import migrator.app.migration.model.TableProperty;
 import migrator.app.router.ActiveRoute;
 import migrator.lib.modelstorage.ActiveState;
 import migrator.lib.diff.CompareListDiff;
@@ -21,45 +22,46 @@ public class SimpleTableService implements TableService {
     protected TableFactory tableFactory;
     protected ActiveState<Table> activeState;
     protected TableRepository tableRepository;
-    protected DatabaseDriverManager databaseDriverManager;
     protected ProjectService projectService;
     protected ActiveRoute activeRoute;
     
-    protected ChangeListener<Project> changeProjectListener;
+    protected ChangeListener<ProjectContainer> changeProjectListener;
 
     public SimpleTableService(
         TableFactory tableFactory,
         TableRepository tableRepository,
         ActiveState<Table> activeState,
-        DatabaseDriverManager databaseDriverManager,
         ProjectService projectService,
         ActiveRoute activeRoute
     ) {
         this.tableFactory = tableFactory;
         this.activeState = activeState;
         this.tableRepository = tableRepository;
-        this.databaseDriverManager = databaseDriverManager;
         this.projectService = projectService;
         this.activeRoute = activeRoute;
 
-        this.changeProjectListener = (ObservableValue<? extends Project> observable, Project oldValue, Project newValue) -> {
+        this.changeProjectListener = (ObservableValue<? extends ProjectContainer> observable, ProjectContainer oldValue, ProjectContainer newValue) -> {
             this.onProjectActivate(newValue);
         };
     }
 
-    protected void onProjectActivate(Project project) {
-        if (project == null) {
+    protected void onProjectActivate(ProjectContainer projectContainer) {
+        if (projectContainer == null) {
             this.activeState.deactivate();
             return;
         }
 
-        DatabaseDriver databaseDriver  = this.databaseDriverManager
-            .createDriver(project.getDatabase());
-        databaseDriver.connect();
+        Project project = projectContainer.getProject();
 
-        List<Table> dbList = databaseDriver.getTables();
-        for (Table t : dbList) {
-            t.setProjectId(project.getId());
+        List<TableProperty> tables = projectContainer.getDatabaseStructure().getTables();
+        List<Table> dbList = new LinkedList<>();
+        for (TableProperty t : tables) {
+            dbList.add(
+                this.tableFactory.createNotChanged(
+                    project.getId(),
+                    t.getName()
+                )
+            );
         }
 
         this.merge(

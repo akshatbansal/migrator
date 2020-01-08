@@ -1,18 +1,19 @@
 package migrator.app.domain.column.service;
 
-import migrator.app.database.format.ColumnFormatManager;
 import migrator.app.domain.table.model.Column;
+import migrator.app.gui.column.format.ColumnFormatOption;
+import migrator.app.gui.column.format.ColumnFormatCollection;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.app.migration.model.SimpleColumnProperty;
 import migrator.lib.uid.Generator;
 
 public class ColumnFactory {
-    protected ColumnFormatManager columnFormatManager;
     protected Generator idGenerator;
+    protected ColumnFormatCollection columnFormatCollection;
 
-    public ColumnFactory(ColumnFormatManager columnFormatManager, Generator idGenerator) {
-        this.columnFormatManager = columnFormatManager;
+    public ColumnFactory(Generator idGenerator, ColumnFormatCollection columnFormatCollection) {
         this.idGenerator = idGenerator;
+        this.columnFormatCollection = columnFormatCollection;
     }
 
     public Column createWithCreateChange(String tableId, String columnName) {
@@ -20,24 +21,29 @@ public class ColumnFactory {
     }
 
     public Column createWithCreateChange(String tableId, String columnName, String format, String defaultValue, Boolean nullEnabled, String length, Boolean signed, String precision, Boolean autoIncrement) {
-        return new Column(
-            this.columnFormatManager,
+        Column column = new Column(
             this.idGenerator.next(),
             tableId,
             new SimpleColumnProperty(this.idGenerator.next(), columnName, format, defaultValue, nullEnabled, length, signed, precision, autoIncrement), // original
             new SimpleColumnProperty(this.idGenerator.next(), columnName, format, defaultValue, nullEnabled, length, signed, precision, autoIncrement), // changed
             new ChangeCommand(this.idGenerator.next(), ChangeCommand.CREATE)
         );
+        ColumnFormatOption columnFormat = this.columnFormatCollection.getFormatByName(column.formatProperty().get());
+        columnFormat.updateModel(column);
+
+        return column;
     }
 
     public Column createNotChanged(String tableId, String columnName, String format, String defaultValue, Boolean enableNull, String length, Boolean sign, String precision, Boolean autoIncrement) {
-        return new Column(
-            this.columnFormatManager,
+        Column column = new Column(
             this.idGenerator.next(),
             tableId,
             new SimpleColumnProperty(this.idGenerator.next(), columnName, format, defaultValue, enableNull, length, sign, precision, autoIncrement), // original
             new SimpleColumnProperty(this.idGenerator.next(), columnName, format, defaultValue, enableNull, length, sign, precision, autoIncrement), // changed
             new ChangeCommand(this.idGenerator.next(), ChangeCommand.NONE)
         );
+        ColumnFormatOption columnFormat = this.columnFormatCollection.getFormatByName(column.formatProperty().get());
+        columnFormat.updateModel(column);
+        return column;
     }
 }

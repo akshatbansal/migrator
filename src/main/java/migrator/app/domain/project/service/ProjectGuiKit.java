@@ -4,11 +4,10 @@ import migrator.app.domain.project.component.CommitForm;
 import migrator.app.domain.project.component.CommitView;
 import migrator.app.domain.project.component.ProjectForm;
 import migrator.app.domain.project.component.ProjectList;
-import migrator.app.domain.project.model.Project;
 
 public interface ProjectGuiKit {
-    public ProjectForm createForm(Project project);
+    public ProjectForm createForm();
     public ProjectList createList();
-    public CommitForm createCommitForm(Project project);
-    public CommitView createCommitView(Project project);
+    public CommitForm createCommitForm();
+    public CommitView createCommitView();
 }

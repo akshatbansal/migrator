@@ -1,19 +1,19 @@
 package migrator.app.domain.column.service;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
-import migrator.app.database.driver.DatabaseDriver;
-import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.domain.column.ColumnRepository;
-import migrator.app.domain.project.model.Project;
+import migrator.app.domain.project.ProjectContainer;
 import migrator.app.domain.project.service.ProjectService;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableActiveState;
 import migrator.app.migration.model.ChangeCommand;
+import migrator.app.migration.model.ColumnProperty;
 import migrator.lib.modelstorage.ActiveState;
 import migrator.lib.diff.CompareListDiff;
 import migrator.lib.diff.ListDiff;
@@ -23,7 +23,6 @@ public class SimpleColumnService implements ColumnService {
     protected ColumnRepository columnRepository;
     protected ActiveState<Column> columnActiveState;
     protected ColumnFactory columnFactory;
-    protected DatabaseDriverManager databaseDriverManager;
     protected ChangeListener<Table> onTableChangeListener;
     protected ProjectService projectService;
 
@@ -32,14 +31,12 @@ public class SimpleColumnService implements ColumnService {
         ActiveState<Column> columnActiveState,
         ColumnFactory columnFactory,
         TableActiveState tableActiveState,
-        ProjectService projectService,
-        DatabaseDriverManager databaseDriverManager
+        ProjectService projectService
     ) {
         this.tableActiveState = tableActiveState;
         this.columnRepository = columnRepository;
         this.columnActiveState = columnActiveState;
         this.columnFactory = columnFactory;
-        this.databaseDriverManager = databaseDriverManager;
         this.projectService = projectService;
         
         this.onTableChangeListener = (ObservableValue<? extends Table> observable, Table oldValue, Table newValue) -> {
@@ -61,16 +58,27 @@ public class SimpleColumnService implements ColumnService {
         if (activeTable == null) {
             return;
         }
-        Project project = this.projectService.getOpened().get();
+        ProjectContainer projectContainer = this.projectService.getOpened().get();
 
-        DatabaseDriver databaseDriver  = this.databaseDriverManager
-            .createDriver(project.getDatabase());
-        databaseDriver.connect();
+        List<ColumnProperty> columns = projectContainer.getDatabaseStructure().getColumns(activeTable.getOriginal().getName());
 
-        List<Column> dbList = databaseDriver.getColumns(activeTable);
-        for (Column c : dbList) {
-            c.setTableId(activeTable.getUniqueKey());
+        List<Column> dbList = new LinkedList<>();
+        for (ColumnProperty column : columns) {
+            dbList.add(
+                this.columnFactory.createNotChanged(
+                    activeTable.getUniqueKey(),
+                    column.getName(),
+                    column.getFormat(),
+                    column.getDefaultValue(),
+                    column.isNullEnabled(),
+                    column.getLength(),
+                    column.isSigned(),
+                    column.getPrecision(),
+                    column.isAutoIncrement()
+                )
+            );
         }
+        
         this.merge(
             dbList,
             this.columnRepository.findByTable(activeTable.getUniqueKey())

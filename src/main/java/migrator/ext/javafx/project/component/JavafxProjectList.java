@@ -6,7 +6,6 @@ import javafx.scene.layout.VBox;
 import migrator.app.Container;
 import migrator.app.domain.project.component.ProjectList;
 import migrator.app.domain.project.model.Project;
-import migrator.app.domain.project.service.ProjectGuiKit;
 import migrator.app.domain.project.service.ProjectOpener;
 import migrator.app.domain.project.service.ProjectSelector;
 import migrator.app.domain.project.service.ProjectService;
@@ -18,16 +17,14 @@ import migrator.ext.javafx.component.ViewLoader;
 
 public class JavafxProjectList extends ViewComponent implements ProjectList, ProjectOpener, ProjectSelector {
     protected ProjectService projectService;
-    protected ProjectGuiKit projectGuiKit;
     protected CardListComponent<Project> cardList;
     protected LoadingIndicator loadingIndicator;
 
     @FXML protected VBox projectCards;
 
-    public JavafxProjectList(ViewLoader viewLoader, Container container, ProjectGuiKit projectGuiKit, LoadingIndicator loadingIndicator) {
-        super(viewLoader);
+    public JavafxProjectList(Container container, LoadingIndicator loadingIndicator) {
+        super(new ViewLoader());
         this.projectService = container.getProjectService();
-        this.projectGuiKit = projectGuiKit;
         this.loadingIndicator = loadingIndicator;
 
         this.cardList = new CardListComponent<>(

@@ -4,6 +4,8 @@ import java.io.File;
 
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
+import javafx.beans.property.ObjectProperty;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -11,7 +13,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import migrator.app.Container;
-import migrator.app.database.driver.DatabaseDriverManager;
 import migrator.app.domain.project.component.ProjectForm;
 import migrator.app.domain.project.model.Project;
 import migrator.app.domain.project.service.ProjectService;
@@ -22,7 +23,7 @@ import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
 
 public class JavafxProjectForm extends ViewComponent implements ProjectForm {
-    protected DatabaseDriverManager databaseDriverManager;
+    protected ObservableList<String> databaseDrivers;
     protected Migration migration;
     protected Project project;
     protected ProjectService projectService;
@@ -41,28 +42,37 @@ public class JavafxProjectForm extends ViewComponent implements ProjectForm {
     @FXML protected HBox buttonsBox;
     @FXML protected Button openButton;
 
-    public JavafxProjectForm(Project project, ViewLoader viewLoader, Container container, Window window, LoadingIndicator loadingIndicator) {
-        super(viewLoader);
-        this.databaseDriverManager = container.getDatabaseDriverManager();
+    public JavafxProjectForm(ObjectProperty<Project> selected, Container container, Window window, LoadingIndicator loadingIndicator) {
+        super(new ViewLoader());
+        this.databaseDrivers = container.getDatanaseContainer().getDrivers();
         this.migration = container.getMigration();
         this.projectService = container.getProjectService();
-        this.project = project;
+        this.project = selected.get();
         this.window = window;
         this.loadingIndicator = loadingIndicator;
 
         this.loadView("/layout/project/form.fxml");
 
-        project.disabledProperty().addListener((oservable, oldValue, newValue) -> {
-            this.openButton.setDisable(newValue);
-        });
-    }
-
-    @FXML
-    public void initialize() {
         this.outputType.getItems().setAll(this.migration.getGeneratorNames());
 
-        this.driver.getItems().setAll(this.databaseDriverManager.getDriverNames());
+        this.driver.getItems().setAll(this.databaseDrivers);
 
+        selected.addListener((observable, oldValue, newValue) -> {
+            this.onProjectChange(newValue);
+        });
+        this.onProjectChange(project);
+    }
+
+    private void onProjectChange(Project project) {
+        if (this.project != null) {
+            this.unbind(this.project);
+        }
+
+        this.project = project;
+        if (this.project == null) {
+            return;
+        }
+        
         this.name.textProperty().bindBidirectional(this.project.nameProperty());
         this.outputType.valueProperty().bindBidirectional(this.project.outputTypeProperty());
         this.folder.textProperty().bindBidirectional(this.project.folderProperty());
@@ -73,7 +83,27 @@ public class JavafxProjectForm extends ViewComponent implements ProjectForm {
         this.database.textProperty().bindBidirectional(this.project.getDatabase().databaseProperty());
         this.user.textProperty().bindBidirectional(this.project.getDatabase().getConnection().userProperty());
         this.password.textProperty().bindBidirectional(this.project.getDatabase().getConnection().passwordProperty());
+
+        this.openButton.disableProperty().bind(
+            this.project.disabledProperty()
+        );
     }
+
+    private void unbind(Project project) {
+        this.name.textProperty().unbindBidirectional(project.nameProperty());
+        this.outputType.valueProperty().unbindBidirectional(project.outputTypeProperty());
+        this.folder.textProperty().unbindBidirectional(project.folderProperty());
+
+        this.host.textProperty().unbindBidirectional(project.getDatabase().getConnection().hostProperty());
+        this.driver.valueProperty().unbindBidirectional(project.getDatabase().getConnection().driverProperty());
+        this.port.textProperty().unbindBidirectional(project.getDatabase().getConnection().portProperty());
+        this.database.textProperty().unbindBidirectional(project.getDatabase().databaseProperty());
+        this.user.textProperty().unbindBidirectional(project.getDatabase().getConnection().userProperty());
+        this.password.textProperty().unbindBidirectional(project.getDatabase().getConnection().passwordProperty());
+
+        this.openButton.disableProperty().unbind();
+    }
+    
 
     @Override
     @FXML public void close() {

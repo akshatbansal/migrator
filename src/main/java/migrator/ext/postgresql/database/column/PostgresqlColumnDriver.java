@@ -1,0 +1,59 @@
+package migrator.ext.postgresql.database.column;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import migrator.app.database.ConnectionResult;
+import migrator.app.database.JdbcConnectionDriver;
+import migrator.app.database.column.DatabaseColumnDriver;
+
+public class PostgresqlColumnDriver implements DatabaseColumnDriver {
+    protected JdbcConnectionDriver connectionDriver;
+
+    public PostgresqlColumnDriver(JdbcConnectionDriver connectionDriver) {
+        this.connectionDriver = connectionDriver;
+    }
+
+    @Override
+    public List<Map<String, String>> getColumns(String tableName) {
+        List<Map<String, String>> columns = new LinkedList<>();
+        ConnectionResult<Connection> connectionResult = this.connectionDriver.connect();
+        if (!connectionResult.isOk()) {
+            return columns;
+        }
+
+        if (tableName.isEmpty()) {
+            return columns;
+        }
+
+        Connection connection = connectionResult.getConnection();
+
+        try {
+            Statement statement = connection.createStatement();
+            String sql = "SELECT column_name, column_default, is_nullable, data_type, character_maximum_length, numeric_precision, numeric_scale FROM information_schema.COLUMNS WHERE TABLE_NAME = '" + tableName + "'";
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                Map<String, String> column = new Hashtable<>();
+                column.put("name", rs.getString(1));
+                column.put("format", rs.getString(4));
+                column.put("length", rs.getString(6));
+                column.put("precision", rs.getString(7));
+                column.put("defaultValue", rs.getString(2) == null ? "" : rs.getString(5));
+                column.put("nullEnabled", rs.getString(3).equals("Yes") ? "true" : "false");
+
+                columns.add(column);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        this.connectionDriver.disconnect(connection);
+
+        return columns;
+    }
+}

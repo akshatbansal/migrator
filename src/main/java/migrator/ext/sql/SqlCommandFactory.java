@@ -6,6 +6,7 @@ import java.util.List;
 import migrator.app.code.CodeCommand;
 import migrator.app.code.CodeCommandFactory;
 import migrator.app.code.CommandSequence;
+import migrator.app.database.column.format.ApplicationColumnFormatCollection;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.app.migration.model.ColumnChange;
 import migrator.app.migration.model.IndexChange;
@@ -21,14 +22,20 @@ import migrator.ext.sql.command.RenameTableCommand;
 import migrator.ext.sql.command.VoidCommand;
 
 public class SqlCommandFactory implements CodeCommandFactory {
+    protected ApplicationColumnFormatCollection applicationColumnFormatCollection;
+
+    public SqlCommandFactory(ApplicationColumnFormatCollection applicationColumnFormatCollection) {
+        this.applicationColumnFormatCollection = applicationColumnFormatCollection;
+    }
+
     @Override
     public CodeCommand column(ColumnChange columnChange, TableChange tableChange) {
         if (columnChange.getCommand().isType(ChangeCommand.CREATE)) {
-            return new AddColumnCommand(tableChange.getName(), columnChange);
+            return new AddColumnCommand(tableChange.getName(), columnChange, this.applicationColumnFormatCollection);
         } else if (columnChange.getCommand().isType(ChangeCommand.DELETE)) {
             return new RemoveColumnCommand(tableChange.getName(), columnChange.getName());
         } else if (columnChange.getCommand().isType(ChangeCommand.UPDATE)) {
-            return new ChangeColumnCommand(tableChange.getName(), columnChange);
+            return new ChangeColumnCommand(tableChange.getName(), columnChange, this.applicationColumnFormatCollection);
         }
         return new VoidCommand();
     }
@@ -48,7 +55,7 @@ public class SqlCommandFactory implements CodeCommandFactory {
         if (tableChange.getCommand().isType(ChangeCommand.UPDATE)) {
             return new RenameTableCommand(tableChange);
         } else if (tableChange.getCommand().isType(ChangeCommand.CREATE)) {
-            return new CreateTableCommand(tableChange);
+            return new CreateTableCommand(tableChange, this.applicationColumnFormatCollection);
         } else if (tableChange.getCommand().isType(ChangeCommand.DELETE)) {
             return new DropTableCommand(tableChange);
         }

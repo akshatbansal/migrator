@@ -8,7 +8,7 @@ public class SqlExtension implements Extension {
     public void load(ConfigContainer config) {
         config.getCodeConfig().addCommandFactory(
             "sql",
-            new SqlCommandFactory()
+            new SqlCommandFactory(config.databaseContainerConfig().get().getApplicationColumnFormatCollection())
         );
     }
 }

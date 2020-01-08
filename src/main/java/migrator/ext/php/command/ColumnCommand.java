@@ -3,18 +3,23 @@ package migrator.ext.php.command;
 import java.util.ArrayList;
 import java.util.List;
 
+import migrator.app.database.column.format.ApplicationColumnFormat;
+import migrator.app.database.column.format.ApplicationColumnFormatCollection;
 import migrator.app.migration.model.ColumnChange;
 
 public class ColumnCommand {
     protected ColumnChange columnChange;
+    protected ApplicationColumnFormatCollection applicationColumnFormatCollection;
 
-    public ColumnCommand(ColumnChange columnChange) {
+    public ColumnCommand(ColumnChange columnChange, ApplicationColumnFormatCollection applicationColumnFormatCollection) {
         this.columnChange = columnChange;
+        this.applicationColumnFormatCollection = applicationColumnFormatCollection;
     }
 
     protected String getOptions() {
         // TODO: after
         // TODO: comment
+        ApplicationColumnFormat format = this.applicationColumnFormatCollection.getFormatByName(this.columnChange.getFormat());
         List<String> options = new ArrayList<>();
         if (this.columnChange.isNullEnabled() != null) {
             options.add(
@@ -26,18 +31,18 @@ public class ColumnCommand {
                 "'default' => '" + this.columnChange.getDefaultValue() + "'"
             );
         }
-        if (this.columnChange.hasPrecisionAttribute()) {
+        if (format.hasPrecision()) {
             options.add("'precision' => " + this.columnChange.getLength());
             options.add("'scale' => " + this.columnChange.getPrecision());
-        } else if (this.columnChange.hasLengthAttribute()) {
+        } else if (format.hasLength()) {
             options.add("'length' => " + this.columnChange.getLength());
         }
 
-        if (this.columnChange.hasSignAttribute() && this.columnChange.isSigned() != null) {
+        if (format.hasSign()) {
             options.add("'signed' => " + this.columnChange.isSigned());
         }
 
-        if (this.columnChange.hasAutoIncrementAttribute() && this.columnChange.isAutoIncrement() != null) {
+        if (format.hasAutoIncrement() && this.columnChange.isAutoIncrement()) {
             options.add("'identity' => " + this.columnChange.isAutoIncrement());
         }
 

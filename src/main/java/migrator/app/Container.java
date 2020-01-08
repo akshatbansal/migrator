@@ -1,7 +1,6 @@
 package migrator.app;
 
-import migrator.app.database.driver.DatabaseDriverManager;
-import migrator.app.database.format.ColumnFormatManager;
+import migrator.app.database.DatabaseContainer;
 import migrator.app.domain.column.ColumnRepository;
 import migrator.app.domain.column.service.ColumnActiveState;
 import migrator.app.domain.column.service.ColumnFactory;
@@ -18,6 +17,7 @@ import migrator.app.domain.project.service.ProjectFactory;
 import migrator.app.domain.project.service.ProjectService;
 import migrator.app.domain.table.service.TableFactory;
 import migrator.app.domain.table.service.TableService;
+import migrator.app.gui.GuiContainer;
 import migrator.app.domain.table.TableRepository;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Index;
@@ -58,14 +58,6 @@ public class Container {
 
     public Migration getMigration() {
         return this.config.migrationConfig().get();
-    }
-
-    public ColumnFormatManager getColumnFormatManager() {
-        return this.config.columnFormatManagerConfig().get();
-    }
-
-    public DatabaseDriverManager getDatabaseDriverManager() {
-        return this.config.databaseDriverManagerConfig().get();
     }
 
     public CodeManager getCodeManager() {
@@ -198,5 +190,13 @@ public class Container {
 
     public Storage<Collection<TableProperty>> getTablePropertyStorage() {
         return this.config.tablePropertyStorageConfig().get();
+    }
+
+    public GuiContainer getGuiContainer() {
+        return this.config.guiContainerConfig().get();
+    }
+
+    public DatabaseContainer getDatanaseContainer() {
+        return this.config.databaseContainerConfig().get();
     }
 }

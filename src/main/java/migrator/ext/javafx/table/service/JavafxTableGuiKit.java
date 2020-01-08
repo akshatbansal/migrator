@@ -1,5 +1,6 @@
 package migrator.ext.javafx.table.service;
 
+import javafx.collections.ObservableList;
 import migrator.app.Container;
 import migrator.app.Gui;
 import migrator.app.domain.table.component.ColumnForm;
@@ -9,10 +10,10 @@ import migrator.app.domain.table.component.IndexList;
 import migrator.app.domain.table.component.TableForm;
 import migrator.app.domain.table.component.TableList;
 import migrator.app.domain.table.component.TableView;
-import migrator.app.domain.table.model.Column;
-import migrator.app.domain.table.model.Index;
-import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableGuiKit;
+import migrator.app.gui.BindedObservableList;
+import migrator.app.gui.column.ColumnOptionAdapter;
+import migrator.app.migration.model.ColumnProperty;
 import migrator.ext.javafx.component.ViewLoader;
 import migrator.ext.javafx.table.component.JavafxColumnForm;
 import migrator.ext.javafx.table.component.JavafxColumnList;
@@ -35,36 +36,61 @@ public class JavafxTableGuiKit implements TableGuiKit {
 
     @Override
     public TableList createList() {
-        return new JavafxTableList(this.viewLoader, this.container, this.gui);
+        return new JavafxTableList(this.container, this.container.getProjectService().getOpened());
     }
 
     @Override
-    public TableForm createForm(Table table) {
-        return new JavafxTableForm(table, this.viewLoader, this.container);
+    public TableForm createForm() {
+        JavafxTableForm form = new JavafxTableForm(this.container);
+        form.bind(this.container.getTableActiveState().getActive());
+        return form;
     }
 
     @Override
-    public TableView createView(Table table) {
-        return new JavafxTableView(table, this.viewLoader, this.container, this.gui);
+    public TableView createView() {
+        return new JavafxTableView(
+            this.container,
+            this.gui,
+            this.container.getProjectService().getOpened(),
+            this.container.getTableActiveState().getActive()
+        );
     }
 
     @Override
     public ColumnList createColumnList() {
-        return new JavafxColumnList(this.viewLoader, this.container);
+        JavafxColumnList list = new JavafxColumnList(this.container);
+        list.bind(this.container.getColumnActiveState().getList());
+        return list;
     }
 
     @Override
     public IndexList createIndexList() {
-        return new JavafxIndexList(this.viewLoader, this.container);
+        JavafxIndexList list = new JavafxIndexList(this.container);
+        list.bind(this.container.getIndexActiveState().getList());
+        return list;
     }
 
     @Override
-    public ColumnForm createColumnForm(Column column) {
-        return new JavafxColumnForm(column, this.viewLoader, this.container);
+    public ColumnForm createColumnForm() {
+        JavafxColumnForm form = new JavafxColumnForm(this.container);
+        form.bind(this.container.getColumnActiveState().getActive());
+        form.bindFormats(
+            this.container.getGuiContainer().getColumnFormatCollection().getObservable()
+        );
+        return form;
     }
 
     @Override
-    public IndexForm createIndexForm(Index index) {
-        return new JavafxIndexForm(index, this.viewLoader, this.container);
+    public IndexForm createIndexForm() {
+        JavafxIndexForm form = new JavafxIndexForm(this.container);
+        form.bind(this.container.getIndexActiveState().getActive());
+
+        ObservableList<ColumnProperty> columns = new BindedObservableList<>(
+            this.container.getColumnActiveState().getList(),
+            new ColumnOptionAdapter()
+        );
+
+        form.bindColumns(columns);
+        return form;
     }
 }

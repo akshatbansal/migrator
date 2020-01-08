@@ -6,25 +6,32 @@ import javafx.application.Platform;
 import migrator.app.domain.table.component.TableList;
 import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableGuiKit;
-import migrator.app.router.GuiNodeConnection;
+import migrator.app.router.RouteConnection;
 import migrator.ext.javafx.component.JavafxLayout;
+import migrator.lib.factory.Factory;
+import migrator.lib.factory.SingletonCallbackFactory;
 
-public class TableIndexRoute extends GuiNodeConnection<List<Table>> {
+public class TableIndexRoute implements RouteConnection<List<Table>> {
     protected JavafxLayout layout;
-    protected TableGuiKit tableGuiKit;
+
+    protected Factory<TableList> tableListFactory;
     
     public TableIndexRoute(TableGuiKit tableGuiKit, JavafxLayout layout) {
         this.layout = layout;
-        this.tableGuiKit = tableGuiKit;
+
+        this.tableListFactory = new SingletonCallbackFactory<TableList>(() -> {
+            return tableGuiKit.createList();
+        });
     }
 
     @Override
     public void show(List<Table> routeData) {
         Platform.runLater(() -> {
-            TableList tableList = this.tableGuiKit.createList();
             this.layout.clearSide();
-            this.guiNodes.add(tableList);
-            this.layout.renderBody(tableList);
+            this.layout.renderBody(this.tableListFactory.create());
         });
     }
+
+    @Override
+    public void hide() {}
 }

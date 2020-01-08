@@ -4,10 +4,7 @@ import java.util.Collection;
 
 import migrator.app.code.CodeConfig;
 import migrator.app.code.CodeManager;
-import migrator.app.database.driver.DatabaseDriverConfig;
-import migrator.app.database.driver.DatabaseDriverManager;
-import migrator.app.database.format.ColumnFormat;
-import migrator.app.database.format.ColumnFormatManager;
+import migrator.app.database.DatabaseContainer;
 import migrator.app.domain.column.ColumnRepository;
 import migrator.app.domain.column.service.ColumnActiveState;
 import migrator.app.domain.column.service.ColumnFactory;
@@ -24,6 +21,7 @@ import migrator.app.domain.project.service.ProjectFactory;
 import migrator.app.domain.project.service.ProjectService;
 import migrator.app.domain.table.service.TableFactory;
 import migrator.app.domain.table.service.TableService;
+import migrator.app.gui.GuiContainer;
 import migrator.app.domain.table.TableRepository;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Index;
@@ -37,7 +35,6 @@ import migrator.app.migration.model.IndexProperty;
 import migrator.app.migration.model.TableProperty;
 import migrator.app.router.ActiveRoute;
 import migrator.app.toast.ToastService;
-import migrator.lib.config.MapConfig;
 import migrator.lib.config.ValueConfig;
 import migrator.lib.hotkyes.HotkeyFactory;
 import migrator.lib.hotkyes.HotkeysService;
@@ -47,19 +44,17 @@ import migrator.lib.storage.Storage;
 
 public class ConfigContainer {
     private MigrationConfig migrationConfig;
-    private DatabaseDriverConfig databaseDriverConfig;
     private CodeConfig codeConfig;
-    private MapConfig<ColumnFormat> columnFormatConfig;
 
     private ValueConfig<ActiveRoute> activeRoute;
     private ValueConfig<Migration> migration;
-    private ValueConfig<DatabaseDriverManager> databaseDriverManager;
     private ValueConfig<CodeManager> codeManager;
-    private ValueConfig<ColumnFormatManager> columnFormatManager;
     private ValueConfig<Logger> logger;
     private ValueConfig<HotkeyFactory> hotkeyFactory;
     private ValueConfig<HotkeysService> hotkeyService;
     private ValueConfig<ToastService> toastService;
+    private ValueConfig<GuiContainer> guiContainer;
+    private ValueConfig<DatabaseContainer> databaseContainer;
 
     private ValueConfig<ConnectionFactory> connectionFactory;
     private ValueConfig<DatabaseFactory> databaseFactory;
@@ -98,18 +93,16 @@ public class ConfigContainer {
 
     public ConfigContainer() {
         this.migrationConfig = new MigrationConfig();
-        this.databaseDriverConfig = new DatabaseDriverConfig();
         this.codeConfig = new CodeConfig();
-        this.columnFormatConfig = new MapConfig<>();
         this.logger = new ValueConfig<>();
         this.hotkeyFactory = new ValueConfig<>();
         this.hotkeyService = new ValueConfig<>();
+        this.guiContainer = new ValueConfig<>();
+        this.databaseContainer = new ValueConfig<>();
 
         this.activeRoute = new ValueConfig<>();
         this.migration = new ValueConfig<>();
-        this.databaseDriverManager = new ValueConfig<>();
         this.codeManager = new ValueConfig<>();
-        this.columnFormatManager = new ValueConfig<>();
 
         this.connectionFactory = new ValueConfig<>();
         this.databaseFactory = new ValueConfig<>();
@@ -156,16 +149,8 @@ public class ConfigContainer {
         return this.hotkeyService;
     }
 
-    public MapConfig<ColumnFormat> getColumnFormatConfig() {
-        return this.columnFormatConfig;
-    }
-
     public MigrationConfig getMigrationConfig() {
         return this.migrationConfig;
-    }
-
-    public DatabaseDriverConfig getDatabaseDriverConfig() {
-        return this.databaseDriverConfig;
     }
 
     public CodeConfig getCodeConfig() {
@@ -182,14 +167,6 @@ public class ConfigContainer {
 
     public ValueConfig<Logger> loggerConfig() {
         return this.logger;
-    }
-
-    public ValueConfig<ColumnFormatManager> columnFormatManagerConfig() {
-        return this.columnFormatManager;
-    }
-
-    public ValueConfig<DatabaseDriverManager> databaseDriverManagerConfig() {
-        return this.databaseDriverManager;
     }
 
     public ValueConfig<CodeManager> codeManagerConfig() {
@@ -314,5 +291,13 @@ public class ConfigContainer {
 
     public ValueConfig<Storage<Collection<Table>>> tableStorageConfig() {
         return this.tableStorage;
+    }
+
+    public ValueConfig<GuiContainer> guiContainerConfig() {
+        return this.guiContainer;
+    }
+
+    public ValueConfig<DatabaseContainer> databaseContainerConfig() {
+        return this.databaseContainer;
     }
 }

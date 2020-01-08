@@ -1,11 +1,12 @@
 package migrator.ext.php.command;
 
 import migrator.app.code.CodeCommand;
+import migrator.app.database.column.format.ApplicationColumnFormatCollection;
 import migrator.app.migration.model.ColumnChange;
 
 public class AddColumn extends ColumnCommand implements CodeCommand {
-    public AddColumn(ColumnChange columnChange) {
-        super(columnChange);
+    public AddColumn(ColumnChange columnChange, ApplicationColumnFormatCollection applicationColumnFormatCollection) {
+        super(columnChange, applicationColumnFormatCollection);
     }
 
     @Override

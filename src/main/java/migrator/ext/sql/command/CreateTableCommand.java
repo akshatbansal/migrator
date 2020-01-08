@@ -7,6 +7,7 @@ import java.util.Map;
 
 import migrator.app.code.CodeCommand;
 import migrator.app.code.CommandSequence;
+import migrator.app.database.column.format.ApplicationColumnFormatCollection;
 import migrator.app.migration.model.ColumnChange;
 import migrator.app.migration.model.IndexChange;
 import migrator.app.migration.model.TableChange;
@@ -15,9 +16,11 @@ import migrator.lib.stringtemplate.StringTemplate;
 
 public class CreateTableCommand implements CodeCommand {
     protected TableChange change;
+    protected ApplicationColumnFormatCollection applicationColumnFormatCollection;
 
-    public CreateTableCommand(TableChange change) {
+    public CreateTableCommand(TableChange change, ApplicationColumnFormatCollection applicationColumnFormatCollection) {
         this.change = change;
+        this.applicationColumnFormatCollection = applicationColumnFormatCollection;
     }
 
     @Override
@@ -48,7 +51,7 @@ public class CreateTableCommand implements CodeCommand {
     }
 
     protected String columnChangeCode(ColumnChange columnChange) {
-        StringTemplate template = new ColumnTemplate(columnChange);
+        StringTemplate template = new ColumnTemplate(columnChange, this.applicationColumnFormatCollection.getFormatByName(columnChange.getFormat()));
         return template.render();
     }
 }

@@ -7,7 +7,6 @@ import migrator.app.domain.project.component.CommitForm;
 import migrator.app.domain.project.component.CommitView;
 import migrator.app.domain.project.component.ProjectForm;
 import migrator.app.domain.project.component.ProjectList;
-import migrator.app.domain.project.model.Project;
 import migrator.app.domain.project.service.ProjectGuiKit;
 import migrator.ext.javafx.component.ViewLoader;
 import migrator.ext.javafx.project.component.JavafxCommitForm;
@@ -29,22 +28,27 @@ public class JavafxProjectGuiKit implements ProjectGuiKit {
     }
 
     @Override
-    public ProjectForm createForm(Project project) {
-        return new JavafxProjectForm(project, this.viewLoader, this.container, this.window, this.gui.getLoadingIndicator());
+    public ProjectForm createForm() {
+        return new JavafxProjectForm(
+            this.container.getProjectService().getSelected(),
+            this.container,
+            this.window,
+            this.gui.getLoadingIndicator()
+        );
     }
 
     @Override
     public ProjectList createList() {
-        return new JavafxProjectList(this.viewLoader, this.container, this, this.gui.getLoadingIndicator());
+        return new JavafxProjectList(this.container, this.gui.getLoadingIndicator());
     }
 
     @Override
-    public CommitForm createCommitForm(Project project) {
-        return new JavafxCommitForm(project, this.viewLoader, this.container);
+    public CommitForm createCommitForm() {
+        return new JavafxCommitForm(this.container.getProjectService().getOpened(), this.container);
     }
 
     @Override
-    public CommitView createCommitView(Project project) {
-        return new JavafxCommitView(this.container, project, this.viewLoader, this.gui);
+    public CommitView createCommitView() {
+        return new JavafxCommitView(this.container.getProjectService().getOpened(), this.container);
     }
 }

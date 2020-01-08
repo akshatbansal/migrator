@@ -9,19 +9,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import migrator.app.code.CodeManager;
-import migrator.app.database.driver.DatabaseDriverManager;
-import migrator.app.database.format.ColumnFormat;
-import migrator.app.database.format.ColumnFormatManager;
-import migrator.app.database.format.SimpleColumnFormat;
-import migrator.app.database.format.columns.BooleanFormat;
-import migrator.app.database.format.columns.CharFormat;
-import migrator.app.database.format.columns.DateFormat;
-import migrator.app.database.format.columns.DatetimeFormat;
-import migrator.app.database.format.columns.DecimalFormat;
-import migrator.app.database.format.columns.FloatFormat;
-import migrator.app.database.format.columns.IntegerFormat;
-import migrator.app.database.format.columns.LongFormat;
-import migrator.app.database.format.columns.StringFormat;
+import migrator.app.database.DatabaseContainer;
+import migrator.app.database.column.format.ApplicationColumnFormat;
+import migrator.app.database.column.format.ApplicationColumnFormatCollection;
+import migrator.app.database.column.format.SimpleAppColumnFormat;
 import migrator.app.domain.column.ColumnAdapter;
 import migrator.app.domain.column.ColumnRepository;
 import migrator.app.domain.column.service.ColumnActiveState;
@@ -45,6 +36,7 @@ import migrator.app.domain.table.service.TableActiveState;
 import migrator.app.domain.table.service.TableFactory;
 import migrator.app.ConfigContainer;
 import migrator.app.extension.Extension;
+import migrator.app.gui.GuiContainer;
 import migrator.app.migration.Migration;
 import migrator.app.migration.model.change.ChangeCommandAdapter;
 import migrator.app.migration.model.column.ColumnPropertyAdapter;
@@ -53,7 +45,6 @@ import migrator.app.migration.model.table.TablePropertyAdapter;
 import migrator.app.router.ActiveRoute;
 import migrator.app.toast.PermanentToastService;
 import migrator.lib.adapter.SimpleJsonListAdapter;
-import migrator.lib.config.MapConfig;
 import migrator.lib.hotkyes.HotkeyFactory;
 import migrator.lib.hotkyes.SimpleHotkeysService;
 import migrator.lib.logger.SystemLogger;
@@ -86,20 +77,6 @@ public class Bootstrap {
     }
 
     protected void initialize(ConfigContainer config) {
-        MapConfig<ColumnFormat>  columnFormatsConfig = config.getColumnFormatConfig();
-        columnFormatsConfig.add("boolean", new BooleanFormat());
-        columnFormatsConfig.add("char", new CharFormat());
-        columnFormatsConfig.add("date", new DateFormat());
-        columnFormatsConfig.add("datetime", new DatetimeFormat());
-        columnFormatsConfig.add("decimal", new DecimalFormat());
-        columnFormatsConfig.add("float", new FloatFormat());
-        columnFormatsConfig.add("integer", new IntegerFormat());
-        columnFormatsConfig.add("long", new LongFormat());
-        columnFormatsConfig.add("string", new StringFormat());
-        columnFormatsConfig.add("text", new SimpleColumnFormat("text"));
-        columnFormatsConfig.add("time", new SimpleColumnFormat("time"));
-        columnFormatsConfig.add("timestamp", new SimpleColumnFormat("timestamp"));
-
         Path storageFoldePath = Paths.get(System.getProperty("user.home"), ".migrator");
         if (Files.notExists(storageFoldePath)) {
             storageFoldePath.toFile().mkdirs();
@@ -110,11 +87,65 @@ public class Bootstrap {
         config.loggerConfig().set(
             new SystemLogger()
         );
-        config.columnFormatManagerConfig().set(
-            new ColumnFormatManager(
-                config.getColumnFormatConfig(),
-                config.loggerConfig()
-            )
+
+        ApplicationColumnFormat basicFormat = new SimpleAppColumnFormat(false, false, false, false);
+        ApplicationColumnFormat lengthFormat = new SimpleAppColumnFormat(true, false, false, false);
+        ApplicationColumnFormat intFormat = new SimpleAppColumnFormat(true, false, true, true);
+        ApplicationColumnFormat decimalFormat = new SimpleAppColumnFormat(true, true, true, false);
+        DatabaseContainer databaseContainer = new DatabaseContainer();
+        ApplicationColumnFormatCollection appColumnFormatCollection = databaseContainer.getApplicationColumnFormatCollection();
+        appColumnFormatCollection.addFormat(
+            "boolean",
+            basicFormat
+        );
+        appColumnFormatCollection.addFormat(
+            "char",
+            lengthFormat
+        );
+        appColumnFormatCollection.addFormat(
+            "date",
+            basicFormat
+        );
+        appColumnFormatCollection.addFormat(
+            "datetime",
+            basicFormat
+        );
+        appColumnFormatCollection.addFormat(
+            "decimal",
+            decimalFormat
+        );
+        appColumnFormatCollection.addFormat(
+            "float",
+            decimalFormat
+        );
+        appColumnFormatCollection.addFormat(
+            "integer", 
+            intFormat
+        );
+        appColumnFormatCollection.addFormat(
+            "long",
+            intFormat
+        );
+        appColumnFormatCollection.addFormat(
+            "string",
+            lengthFormat
+        );
+        appColumnFormatCollection.addFormat(
+            "text",
+            basicFormat
+        );
+        appColumnFormatCollection.addFormat(
+            "time",
+            basicFormat
+        );
+        appColumnFormatCollection.addFormat(
+            "timestamp",
+            basicFormat
+        );
+        
+        config.databaseContainerConfig().set(databaseContainer);
+        config.guiContainerConfig().set(
+            new GuiContainer(databaseContainer)
         );
 
         config.changeCommandRepositoryConfig().set(
@@ -187,9 +218,9 @@ public class Bootstrap {
                 new File(storageFoldePath.toString(), "column.json"),
                 new SimpleJsonListAdapter<>(
                     new ColumnAdapter(
-                        config.columnFormatManagerConfig().get(),
                         config.columnPropertyRepositoryConfig().get(),
-                        config.changeCommandRepositoryConfig().get()
+                        config.changeCommandRepositoryConfig().get(),
+                        config.guiContainerConfig().get().getColumnFormatCollection()
                     )
                 )
             )
@@ -232,9 +263,6 @@ public class Bootstrap {
         config.migrationConfig().set(
             new Migration(config.getMigrationConfig())
         );
-        config.databaseDriverManagerConfig().set(
-            new DatabaseDriverManager(config.getDatabaseDriverConfig())
-        );
         config.codeManagerConfig().set(
             new CodeManager(config.getCodeConfig())
         );
@@ -256,8 +284,8 @@ public class Bootstrap {
         );
         config.columnFactoryConfig().set(
             new ColumnFactory(
-                config.columnFormatManagerConfig().get(),
-                idGenerator
+                idGenerator,
+                config.guiContainerConfig().get().getColumnFormatCollection()
             )
         );
         config.indexFactoryConfig().set(
@@ -286,7 +314,7 @@ public class Bootstrap {
         config.projectServiceConfig().set(
             new ProjectService(
                 config.projectFactoryConfig().get(),
-                config.databaseDriverManagerConfig().get(),
+                config.databaseContainerConfig().get(),
                 config.toastServiceConfig().get(),
                 config.activeRouteConfig().get()
             )
@@ -302,7 +330,6 @@ public class Bootstrap {
                 config.tableFactoryConfig().get(),
                 config.tableRepositoryConfig().get(),
                 config.tableActiveStateConfig().get(),
-                config.databaseDriverManagerConfig().get(),
                 config.projectServiceConfig().get(),
                 config.activeRouteConfig().get()
             )
@@ -311,8 +338,7 @@ public class Bootstrap {
             new ColumnActiveState(
                 config.columnRepositoryConfig().get(), 
                 config.tableActiveStateConfig().get(),
-                config.activeRouteConfig().get(),
-                config.projectServiceConfig().get()
+                config.activeRouteConfig().get()
             )
         );
         config.columnServiceConfig().set(
@@ -321,8 +347,7 @@ public class Bootstrap {
                 config.columnActiveStateConfig().get(),   
                 config.columnFactoryConfig().get(),
                 config.tableActiveStateConfig().get(),
-                config.projectServiceConfig().get(),
-                config.databaseDriverManagerConfig().get()
+                config.projectServiceConfig().get()
             )
         );
         config.indexActiveStateConfig().set(
@@ -331,8 +356,7 @@ public class Bootstrap {
                 config.indexPropertyRepositoryConfig().get(),
                 config.changeCommandRepositoryConfig().get(),
                 config.tableActiveStateConfig().get(),
-                config.activeRouteConfig().get(),
-                config.projectServiceConfig().get()
+                config.activeRouteConfig().get()
             )
         );
         config.indexServiceConfig().set(
@@ -342,7 +366,7 @@ public class Bootstrap {
                 config.indexActiveStateConfig().get(),
                 config.tableActiveStateConfig().get(),
                 config.projectServiceConfig().get(),
-                config.databaseDriverManagerConfig().get()
+                config.columnRepositoryConfig().get()
             )
         );
     }
