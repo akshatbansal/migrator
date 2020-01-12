@@ -7,16 +7,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
-import migrator.app.Container;
 import migrator.app.domain.table.component.TableForm;
 import migrator.app.domain.table.model.Table;
-import migrator.app.domain.table.service.TableService;
 import migrator.app.migration.model.ChangeCommand;
+import migrator.app.service.SimpleStore;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
 
 public class JavafxTableForm extends ViewComponent implements TableForm {
-    protected TableService tableService;
+    protected SimpleStore<Table> tableService;
     protected ObjectProperty<Table> tableBinded;
     protected ChangeListener<String> changeCommandListener;
 
@@ -25,9 +24,9 @@ public class JavafxTableForm extends ViewComponent implements TableForm {
     protected Button removeButton;
     protected Button restoreButton;
 
-    public JavafxTableForm(Container container) {
+    public JavafxTableForm() {
         super(new ViewLoader());
-        this.tableService = container.getTableService();
+        // this.tableService = container.getTableService();
         this.changeCommandListener = (ObservableValue<? extends String> obs, String oldValue, String newValue) -> {
             this.onChangeTypeChange(newValue);
         };
@@ -89,7 +88,7 @@ public class JavafxTableForm extends ViewComponent implements TableForm {
         }
         Table table = this.tableBinded.get();
         if (table.getChange().getCommand().isType(ChangeCommand.CREATE)) {
-            this.tableService.remove(table);
+            // this.tableService.remove(table);
             return;
         }
         table.getChange().getCommand().setType(ChangeCommand.DELETE);

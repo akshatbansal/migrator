@@ -1,41 +1,40 @@
 package migrator.ext.javafx;
 
-import java.net.URL;
-import java.util.ResourceBundle;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.fxml.Initializable;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import migrator.app.Container;
-import migrator.ext.javafx.toast.ToastListComponent;
+import migrator.app.gui.component.toast.ToastListComponent;
+import migrator.app.gui.service.toast.Toast;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
+import migrator.lib.dispatcher.EventDispatcher;
 
-public class MainController extends ViewComponent implements Initializable {
+public class MainController extends ViewComponent {
     protected ToastListComponent toastListComponent;
 
     @FXML protected VBox centerPane;
     @FXML protected VBox leftPane;
     @FXML protected VBox toastPane;
 
-    public MainController(ViewLoader viewLoader, Container container) {
-        super(viewLoader);
+    public MainController(EventDispatcher dispatcher) {
+        super(new ViewLoader());
 
-        this.toastListComponent = new ToastListComponent(
-            container.getToastService(),
-            viewLoader
-        );
+        this.toastListComponent = new ToastListComponent();
+        this.toastListComponent.outputs().addListener((observable, oldValue, newValue) -> {
+            dispatcher.dispatch(newValue);
+        });
 
         this.loadView("/layout/main.fxml");
+
+        this.toastPane.getChildren().setAll(
+            this.toastListComponent.getNode()
+        );
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        this.toastPane.getChildren().setAll(
-            (Node) this.toastListComponent.getContent()
-        );
+    public void bindToasts(ObservableList<Toast> toasts) {
+        this.toastListComponent.bind(toasts);
     }
 
     public Pane getBodyPane() {

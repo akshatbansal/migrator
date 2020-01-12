@@ -11,7 +11,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
-import migrator.app.Container;
 import migrator.app.domain.column.service.ColumnActiveState;
 import migrator.app.domain.index.service.IndexActiveState;
 import migrator.app.domain.table.component.IndexForm;
@@ -38,15 +37,15 @@ public class JavafxIndexForm extends ViewComponent implements IndexForm {
     protected Button removeButton;
     protected Button restoreButton;
 
-    public JavafxIndexForm(Container container) {
+    public JavafxIndexForm() {
         super(new ViewLoader());
         this.changeCommandListener = (ObservableValue<? extends String> obs, String oldValue, String newValue) -> {
             this.onChangeTypeChange(newValue);
         };
         this.formDisabled = new SimpleBooleanProperty(true);
-        this.columnActiveState = container.getColumnActiveState();
-        this.tableActiveState = container.getTableActiveState();
-        this.indexActiveState = container.getIndexActiveState();
+        // this.columnActiveState = container.getColumnActiveState();
+        // this.tableActiveState = container.getTableActiveState();
+        // this.indexActiveState = container.getIndexActiveState();
 
         this.removeButton = new Button("Remove");
         this.removeButton.getStyleClass().addAll("btn-danger");

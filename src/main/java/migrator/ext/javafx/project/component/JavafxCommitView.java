@@ -9,12 +9,10 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.VBox;
-import migrator.app.Container;
 import migrator.app.breadcrumps.VoidBreadcrump;
 import migrator.app.domain.project.ProjectContainer;
 import migrator.app.domain.project.breadcrumps.ProjectsBreadcrump;
 import migrator.app.domain.project.breadcrumps.SingleProjectBreadcrump;
-import migrator.app.domain.project.component.CommitView;
 import migrator.app.domain.project.model.Project;
 import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableActiveState;
@@ -26,7 +24,7 @@ import migrator.ext.javafx.breadcrumps.JavafxBreadcrumpsComponent;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
 
-public class JavafxCommitView extends ViewComponent implements CommitView {
+public class JavafxCommitView extends ViewComponent {
     protected ObjectProperty<ProjectContainer> activeProjectContainer;
     protected ObjectProperty<Project> breadcrumpProject;
     protected TableActiveState tableActiveState;
@@ -34,26 +32,26 @@ public class JavafxCommitView extends ViewComponent implements CommitView {
     @FXML protected VBox breadcrumpsContainer;
     @FXML protected VBox body;
 
-    public JavafxCommitView(ObjectProperty<ProjectContainer> activeProjectContainer, Container container) {
+    public JavafxCommitView(ObjectProperty<ProjectContainer> activeProjectContainer) {
         super(new ViewLoader());
-        this.tableActiveState = container.getTableActiveState();
+        // this.tableActiveState = container.getTableActiveState();
         this.activeProjectContainer = activeProjectContainer;
         this.breadcrumpProject = new SimpleObjectProperty<>();
 
         this.loadView("/layout/project/commit/view.fxml");
 
-        JavafxBreadcrumpsComponent breadcrumpComponent = new JavafxBreadcrumpsComponent(Arrays.asList(
-            new ProjectsBreadcrump(container.getProjectService()),
-            new SingleProjectBreadcrump(
-                    container.getProjectService(),
-                    this.breadcrumpProject,
-                    container.getTableActiveState()
-                ),
-            new VoidBreadcrump("commit changes")
-        ));
-        this.breadcrumpsContainer.getChildren().add(
-            (Node) breadcrumpComponent.getContent()
-        );
+        // JavafxBreadcrumpsComponent breadcrumpComponent = new JavafxBreadcrumpsComponent(Arrays.asList(
+        //     new ProjectsBreadcrump(container.getProjectService()),
+        //     new SingleProjectBreadcrump(
+        //             container.getProjectService(),
+        //             this.breadcrumpProject,
+        //             container.getTableActiveState()
+        //         ),
+        //     new VoidBreadcrump("commit changes")
+        // ));
+        // this.breadcrumpsContainer.getChildren().add(
+        //     (Node) breadcrumpComponent.getContent()
+        // );
 
         this.activeProjectContainer.addListener((observable, oldValue, newValue) -> {
             this.onProjectChange(newValue);

@@ -47,6 +47,6 @@ public class SingleProjectBreadcrump implements Breadcrump {
     @Override
     public void link() {
         this.tableActiveState.deactivate();
-        this.projectService.open(this.project.get());
+        // this.projectService.open(this.project.get());
     }
 }

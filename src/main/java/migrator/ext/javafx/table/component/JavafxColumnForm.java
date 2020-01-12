@@ -11,7 +11,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import migrator.app.Container;
 import migrator.app.domain.column.service.ColumnActiveState;
 import migrator.app.domain.table.component.ColumnForm;
 import migrator.app.domain.table.model.Column;
@@ -47,7 +46,7 @@ public class JavafxColumnForm extends ViewComponent implements ColumnForm {
     protected Button removeButton;
     protected Button restoreButton;
 
-    public JavafxColumnForm(Container container) {
+    public JavafxColumnForm() {
         super(new ViewLoader());
         this.changeCommandListener = (ObservableValue<? extends String> obs, String oldValue, String newValue) -> {
             this.onChangeTypeChange(newValue);
@@ -56,9 +55,9 @@ public class JavafxColumnForm extends ViewComponent implements ColumnForm {
             this.onFormatChange(ne);
         };
 
-        this.columnActiveState = container.getColumnActiveState();
-        this.tableActiveState = container.getTableActiveState();
-        this.columnFormatCollection = container.getGuiContainer().getColumnFormatCollection();
+        // this.columnActiveState = container.getColumnActiveState();
+        // this.tableActiveState = container.getTableActiveState();
+        // this.columnFormatCollection = container.getGuiContainer().getColumnFormatCollection();
 
         this.removeButton = new Button("Remove");
         this.removeButton.getStyleClass().addAll("btn-danger");

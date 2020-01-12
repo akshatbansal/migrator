@@ -26,6 +26,6 @@ public class ProjectsBreadcrump implements Breadcrump {
 
     @Override
     public void link() {
-        this.projectService.close();
+        // this.projectService.close();
     }
 }

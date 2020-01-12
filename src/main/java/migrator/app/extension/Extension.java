@@ -1,7 +1,7 @@
 package migrator.app.extension;
 
-import migrator.app.ConfigContainer;
+import migrator.app.boot.Container;
 
 public interface Extension {
-    public void load(ConfigContainer config);
+    public void load(Container container);
 }

@@ -15,19 +15,18 @@ import migrator.ext.mysql.database.table.MysqlTableAdapter;
 import migrator.ext.postgresql.database.column.PostgresqlColumnDriver;
 import migrator.ext.postgresql.database.index.PostgresqlIndexDriver;
 import migrator.ext.postgresql.database.table.PostgresqlTableDriver;
-import migrator.lib.config.ValueConfig;
 import migrator.lib.logger.Logger;
 
 public class PostgresqlStructureFactory implements DatabaseStructureFactory {
-    protected ValueConfig<Logger> logger;
+    protected Logger logger;
 
-    public PostgresqlStructureFactory(ValueConfig<Logger> logger) {
+    public PostgresqlStructureFactory(Logger logger) {
         this.logger = logger;
     }
 
     @Override
     public DatabaseStructure create(String url, String user, String password) {
-        JdbcConnectionDriver connectionDriver = new JdbcConnectionDriver("", url, user, password, this.logger.get());
+        JdbcConnectionDriver connectionDriver = new JdbcConnectionDriver("", url, user, password, this.logger);
         return new SimpleDatabaseStructure(
             connectionDriver,
             new TableStructure(

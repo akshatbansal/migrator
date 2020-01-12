@@ -9,8 +9,6 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import migrator.app.Container;
-import migrator.app.Gui;
 import migrator.app.breadcrumps.BreadcrumpsComponent;
 import migrator.app.breadcrumps.VoidBreadcrump;
 import migrator.app.domain.project.ProjectContainer;
@@ -41,27 +39,27 @@ public class JavafxTableView extends ViewComponent implements TableView {
     @FXML protected VBox body;
     @FXML protected Text title;
 
-    public JavafxTableView(Container container, Gui gui, ObjectProperty<ProjectContainer> activeProject, ObjectProperty<Table> activeTable) {
+    public JavafxTableView(ObjectProperty<ProjectContainer> activeProject, ObjectProperty<Table> activeTable) {
         super(new ViewLoader());
         this.activeProject = activeProject;
         this.activeTable = activeTable;
         this.breadcrumpProjectName = new SimpleStringProperty("");
         this.breadcrumpTableName = new SimpleStringProperty("");
 
-        this.breadcrumpsComponent = new JavafxBreadcrumpsComponent(Arrays.asList(
-            new RouteBreadcrump(
-                new SimpleStringProperty("Projects"),
-                container.getActiveRoute(),
-                "project.index"
-            ),
-            new RouteBreadcrump(
-                this.breadcrumpProjectName,
-                container.getActiveRoute(),
-                "table.index"
-            ),
-            new VoidBreadcrump(this.breadcrumpTableName)
-        ));
-        this.tableGuiKit = gui.getTableKit();
+        // this.breadcrumpsComponent = new JavafxBreadcrumpsComponent(Arrays.asList(
+        //     new RouteBreadcrump(
+        //         new SimpleStringProperty("Projects"),
+        //         container.getActiveRoute(),
+        //         "project.index"
+        //     ),
+        //     new RouteBreadcrump(
+        //         this.breadcrumpProjectName,
+        //         container.getActiveRoute(),
+        //         "table.index"
+        //     ),
+        //     new VoidBreadcrump(this.breadcrumpTableName)
+        // ));
+        // this.tableGuiKit = gui.getTableKit();
 
         this.loadView("/layout/table/view.fxml");
 

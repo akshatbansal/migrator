@@ -3,7 +3,7 @@ package migrator.ext.sentry;
 import java.util.Properties;
 
 import io.sentry.Sentry;
-import migrator.app.ConfigContainer;
+import migrator.app.boot.Container;
 import migrator.app.extension.Extension;
 
 public class SentryExtension implements Extension {
@@ -14,8 +14,8 @@ public class SentryExtension implements Extension {
     }
 
     @Override
-    public void load(ConfigContainer config) {
-        config.loggerConfig().set(
+    public void load(Container container) {
+        container.logger().setLogger(
             new SentryLogger()
         );
 

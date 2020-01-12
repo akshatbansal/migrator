@@ -5,7 +5,6 @@ import javafx.collections.ObservableList;
 import javafx.collections.ListChangeListener.Change;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableView;
-import migrator.app.Container;
 import migrator.app.domain.column.service.ColumnActiveState;
 import migrator.app.domain.column.service.ColumnFactory;
 import migrator.app.domain.table.component.ColumnList;
@@ -26,11 +25,11 @@ public class JavafxColumnList extends ViewComponent implements ColumnList {
 
     @FXML protected TableView<Column> columns;
 
-    public JavafxColumnList(Container container) {
+    public JavafxColumnList() {
         super(new ViewLoader());
-        this.columnActiveState = container.getColumnActiveState();
-        this.columnFactory = container.getColumnFactory();
-        this.tableActiveState = container.getTableActiveState();
+        // this.columnActiveState = container.getColumnActiveState();
+        // this.columnFactory = container.getColumnFactory();
+        // this.tableActiveState = container.getTableActiveState();
         this.selectEmitter = new EventEmitter<>();
         
         this.loadView("/layout/table/column/index.fxml");        

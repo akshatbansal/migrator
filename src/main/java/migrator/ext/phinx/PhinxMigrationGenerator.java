@@ -13,7 +13,6 @@ import migrator.app.code.CodeCommandFactory;
 import migrator.app.migration.FileStorageFactory;
 import migrator.app.migration.MigrationGenerator;
 import migrator.app.migration.model.TableChange;
-import migrator.app.toast.ToastService;
 
 public class PhinxMigrationGenerator implements MigrationGenerator {
     protected FileStorageFactory fileStorageFactory;
@@ -21,19 +20,16 @@ public class PhinxMigrationGenerator implements MigrationGenerator {
     protected StringFormatter classNameFormatter;
     protected StringFormatter fileNameFormatter;
     protected StringFormatter timestampFormatter;
-    protected ToastService toastService;
 
     public PhinxMigrationGenerator(
         FileStorageFactory fileStorageFactory,
-        CodeCommandFactory commandFactory,
-        ToastService toastService
+        CodeCommandFactory commandFactory
     ) {
         this.fileStorageFactory = fileStorageFactory;
         this.commandFactory = commandFactory;
         this.classNameFormatter = new PascalCaseFormatter();
         this.fileNameFormatter = new UnderscoreFormatter();
         this.timestampFormatter = new TimestampFileNameFormatter();
-        this.toastService = toastService;
     }
 
     public Boolean generateMigration(String projectFolder, String name, List<? extends TableChange> changes) {
@@ -43,7 +39,7 @@ public class PhinxMigrationGenerator implements MigrationGenerator {
             return fileInFolderName.endsWith(formattedFileName);
         });
         if (sameNameFiles != null && sameNameFiles.length > 0) {
-            this.toastService.error("Commit name is the same as '" + sameNameFiles[0].getName() + "'. Change commit name.");
+            // this.toastService.error("Commit name is the same as '" + sameNameFiles[0].getName() + "'. Change commit name.");
             return false;
         }
         String phinxContent = "";

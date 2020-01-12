@@ -1,18 +1,15 @@
 package migrator.ext.phinx;
 
-import migrator.app.ConfigContainer;
+import migrator.app.boot.Container;
 import migrator.app.extension.Extension;
-import migrator.app.migration.MigrationConfig;
 
 public class PhinxExtension implements Extension {
     @Override
-    public void load(ConfigContainer config) {
-        MigrationConfig migrationConfig = config.getMigrationConfig();
-        migrationConfig.addGeneraotrFactory(
+    public void load(Container container) {
+        container.migrationContainer().addGeneratorFactory(
             "phinx",
             new PhinxMigrationGeneratorFactory(
-                config.codeManagerConfig().get(),
-                config.toastServiceConfig().get()
+                container.codeContainer()
             )
         );
     }

@@ -3,13 +3,13 @@ package migrator.app.domain.index.service;
 import java.util.LinkedList;
 import java.util.List;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import migrator.app.domain.column.ColumnRepository;
 import migrator.app.domain.index.IndexRepository;
 import migrator.app.domain.project.ProjectContainer;
-import migrator.app.domain.project.service.ProjectService;
 import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Index;
 import migrator.app.domain.table.model.Table;
@@ -27,7 +27,7 @@ public class SimpleIndexService implements IndexService {
     protected ColumnRepository columnRepository;
     protected ActiveState<Index> activeState;
     protected TableActiveState tableActiveState;
-    protected ProjectService projectService;
+    protected ObjectProperty<ProjectContainer> projectContainer;
 
     protected ChangeListener<Table> changeTableListener;
 
@@ -36,7 +36,7 @@ public class SimpleIndexService implements IndexService {
         IndexRepository indexRepository,
         ActiveState<Index> activeState,
         TableActiveState tableActiveState,
-        ProjectService projectService,
+        ObjectProperty<ProjectContainer> projectContainer,
         ColumnRepository columnRepository
     ) {
         this.activeState = activeState;
@@ -44,7 +44,7 @@ public class SimpleIndexService implements IndexService {
         this.indexFactory = indexFactory;
         this.indexRepository = indexRepository;
         this.tableActiveState = tableActiveState;
-        this.projectService = projectService;
+        this.projectContainer = projectContainer;
 
         this.changeTableListener = (ObservableValue<? extends Table> observable, Table oldValue, Table newValue) -> {
             this.onTableChange(newValue);
@@ -67,7 +67,7 @@ public class SimpleIndexService implements IndexService {
         if (activeTable == null) {
             return;
         }
-        ProjectContainer projectContainer = this.projectService.getOpened().get();
+        ProjectContainer projectContainer = this.projectContainer.get();
 
         List<IndexProperty> indexes = projectContainer.getDatabaseStructure().getIndexes(activeTable.getOriginal().getName());
 

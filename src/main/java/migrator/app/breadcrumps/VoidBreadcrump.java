@@ -2,7 +2,7 @@ package migrator.app.breadcrumps;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-
+// TODO: remove
 public class VoidBreadcrump implements Breadcrump {
     protected StringProperty name;
 

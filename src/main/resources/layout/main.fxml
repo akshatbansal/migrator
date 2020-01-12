@@ -14,14 +14,9 @@
             </VBox>
         </left>
         <center>
-            <BorderPane>
-                <left>
-                    <VBox styleClass="left-pane, background-medium" fx:id="leftPane"></VBox>
-                </left>
-                <center>
-                    <VBox fx:id="centerPane"></VBox>
-                </center>
-            </BorderPane>
+            <VBox fx:id="routerPane">
+                
+            </VBox>
         </center>
     </BorderPane>
     <VBox fx:id="toastPane" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">

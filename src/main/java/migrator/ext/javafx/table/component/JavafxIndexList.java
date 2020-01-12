@@ -5,7 +5,6 @@ import javafx.collections.ObservableList;
 import javafx.collections.ListChangeListener.Change;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableView;
-import migrator.app.Container;
 import migrator.app.domain.index.service.IndexActiveState;
 import migrator.app.domain.index.service.IndexFactory;
 import migrator.app.domain.table.component.IndexList;
@@ -26,11 +25,11 @@ public class JavafxIndexList extends ViewComponent implements IndexList {
 
     @FXML protected TableView<Index> indexes;
 
-    public JavafxIndexList(Container container) {
+    public JavafxIndexList() {
         super(new ViewLoader());
-        this.indexActiveState = container.getIndexActiveState();
-        this.indexFactory = container.getIndexFactory();
-        this.tableActiveState = container.getTableActiveState();
+        // this.indexActiveState = container.getIndexActiveState();
+        // this.indexFactory = container.getIndexFactory();
+        // this.tableActiveState = container.getTableActiveState();
         this.emitter = new EventEmitter<>();
 
         this.loadView("/layout/table/index/index.fxml");

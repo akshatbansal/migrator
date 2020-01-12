@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" VBox.vgrow="ALWAYS">
+    <left>
+        <VBox styleClass="left-pane, background-medium" fx:id="leftPane"></VBox>
+    </left>
+    <center>
+        <VBox fx:id="centerPane"></VBox>
+    </center>
+</BorderPane>
