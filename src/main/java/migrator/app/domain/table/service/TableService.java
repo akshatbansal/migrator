@@ -1,16 +1,16 @@
 package migrator.app.domain.table.service;
 
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import migrator.app.boot.Container;
-import migrator.app.domain.project.ProjectContainer;
+import migrator.app.domain.table.action.TableDeselectHandler;
 import migrator.app.domain.table.action.TableNewHandler;
 import migrator.app.domain.table.action.TableRefreshHandler;
+import migrator.app.domain.table.action.TableRemoveHandler;
 import migrator.app.domain.table.action.TableSelectHandler;
 import migrator.app.domain.table.model.Table;
 import migrator.app.migration.model.TableProperty;
 import migrator.app.service.PersistanceService;
+import migrator.app.service.SelectableStore;
 import migrator.app.service.Service;
 import migrator.lib.dispatcher.EventDispatcher;
 import migrator.lib.dispatcher.EventHandler;
@@ -18,18 +18,20 @@ import migrator.lib.dispatcher.SimpleEvent;
 
 public class TableService implements Service {
     private EventDispatcher dispatcher;
-    private ObjectProperty<ProjectContainer> projectContainerProperty;
-    private ChangeListener<ProjectContainer> projectContainerListener;
     private PersistanceService<Table> tablePersistanceService;
     private PersistanceService<TableProperty> tablePropertyPersistanceService;
+    private SelectableStore<Table> tableStore;
 
     private EventHandler tableNewHandler;
     private EventHandler tableSelectHandler;
     private EventHandler tableRefreshHandler;
+    private EventHandler tableDeselectHandler;
+    private EventHandler tableRemoveHandler;
+    private ChangeListener<Table> selectedTableListener;
     
     public TableService(Container container) {
         this.dispatcher = container.dispatcher();
-        this.projectContainerProperty = container.projectStore().getOpened();
+        this.tableStore = container.tableContainer().tableStore();
         this.tablePersistanceService = new PersistanceService<>(
             container.tableContainer().tableRepository(),
             container.tableContainer().tableStorage()
@@ -45,14 +47,27 @@ public class TableService implements Service {
             container.dispatcher()
         );
         this.tableRefreshHandler = new TableRefreshHandler(
-            container.tableContainer()
+            container.projectStore().getOpened(),
+            container.columnContainer(),
+            container.indexContainer()
         );
         this.tableSelectHandler = new TableSelectHandler(
             container.tableContainer().tableStore()
         );
+        this.tableDeselectHandler = new TableDeselectHandler(
+            container.tableContainer().tableStore()
+        );
+        this.tableRemoveHandler = new TableRemoveHandler(
+            container.tableContainer().tableStore()
+        );
 
-        this.projectContainerListener = (ObservableValue<? extends ProjectContainer> observable, ProjectContainer oldValue, ProjectContainer newValue) -> {
-            this.onProjectActivate(newValue);
+        this.selectedTableListener = (observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                return;
+            }
+            this.dispatcher.dispatch(
+                new SimpleEvent<>("table.refresh", newValue)
+            );
         };
     }
 
@@ -60,8 +75,10 @@ public class TableService implements Service {
     public void start() {
         this.dispatcher.register("table.new", this.tableNewHandler);
         this.dispatcher.register("table.select", this.tableSelectHandler);
-        this.dispatcher.register("db.table.load", this.tableRefreshHandler);
-        this.projectContainerProperty.addListener(this.projectContainerListener);
+        this.dispatcher.register("table.deselect", this.tableDeselectHandler);
+        this.dispatcher.register("table.refresh", this.tableRefreshHandler);
+        this.dispatcher.register("table.remove", this.tableRemoveHandler);
+        this.tableStore.getSelected().addListener(this.selectedTableListener);
 
         this.tablePropertyPersistanceService.start();
         this.tablePersistanceService.start();
@@ -71,16 +88,12 @@ public class TableService implements Service {
     public void stop() {
         this.dispatcher.unregister("table.new", this.tableNewHandler);
         this.dispatcher.unregister("table.select", this.tableSelectHandler);
-        this.dispatcher.unregister("db.table.load", this.tableRefreshHandler);
-        this.projectContainerProperty.removeListener(this.projectContainerListener);
+        this.dispatcher.unregister("table.deselect", this.tableDeselectHandler);
+        this.dispatcher.unregister("table.refresh", this.tableRefreshHandler);
+        this.dispatcher.unregister("table.remove", this.tableRemoveHandler);
+        this.tableStore.getSelected().removeListener(this.selectedTableListener);
 
         this.tablePropertyPersistanceService.stop();
         this.tablePersistanceService.stop();
-    }
-
-    protected void onProjectActivate(ProjectContainer projectContainer) {
-        this.dispatcher.dispatch(
-            new SimpleEvent<>("db.table.load", projectContainer)
-        );
     }
 }

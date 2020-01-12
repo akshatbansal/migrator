@@ -23,9 +23,12 @@ public class TableView extends SimpleView implements View {
         TableDetailView detailView = viewFactories.createTableDetail();
         detailView.bind(table);
         detailView.bindProject(projectContainer);
+
+        TableFormView tableFormView = viewFactories.createTableForm();
+        tableFormView.bind(table);
         
         this.layout.renderBody(detailView);
-        this.layout.clearSide();
+        this.layout.renderSide(tableFormView);
     }
 
     @Override

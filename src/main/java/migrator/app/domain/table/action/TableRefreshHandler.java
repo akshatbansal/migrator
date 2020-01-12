@@ -3,85 +3,105 @@ package migrator.app.domain.table.action;
 import java.util.LinkedList;
 import java.util.List;
 
+import javafx.beans.property.ObjectProperty;
+import migrator.app.domain.column.ColumnContainer;
+import migrator.app.domain.column.ColumnRepository;
+import migrator.app.domain.index.IndexContainer;
 import migrator.app.domain.project.ProjectContainer;
-import migrator.app.domain.project.model.Project;
-import migrator.app.domain.table.TableContainer;
-import migrator.app.domain.table.TableRepository;
+import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Table;
 import migrator.app.migration.model.ChangeCommand;
-import migrator.app.migration.model.TableProperty;
+import migrator.app.migration.model.ColumnProperty;
 import migrator.lib.diff.CompareListDiff;
 import migrator.lib.diff.ListDiff;
 import migrator.lib.dispatcher.Event;
 import migrator.lib.dispatcher.EventHandler;
 
 public class TableRefreshHandler implements EventHandler {
-    private TableContainer tableContainer;
+    private ObjectProperty<ProjectContainer> projectContainerProperty;
+    private ColumnContainer columnContainer;
+    private IndexContainer indexContainer;
 
-    public TableRefreshHandler(TableContainer tableContainer) {
-        this.tableContainer = tableContainer;
+    public TableRefreshHandler(
+        ObjectProperty<ProjectContainer> projectContainerProperty,
+        ColumnContainer columnContainer,
+        IndexContainer indexContainer
+    ) {
+        this.projectContainerProperty = projectContainerProperty;
+        this.columnContainer = columnContainer;
+        this.indexContainer = indexContainer;
     }
 
     @Override
     public void handle(Event<?> event) {
-        ProjectContainer projectContainer = (ProjectContainer) event.getValue();
-        if (projectContainer == null) {
-            return;
-        }
+        Table table = (Table) event.getValue();
+        ProjectContainer projectContainer = this.projectContainerProperty.get();
 
-        Project project = projectContainer.getProject();
+        this.refreshColumns(projectContainer, table);
+    }
 
-        List<TableProperty> tables = projectContainer.getDatabaseStructure().getTables();
-        List<Table> dbList = new LinkedList<>();
-        for (TableProperty t : tables) {
+    private void refreshColumns(ProjectContainer projectContainer, Table activeTable) {
+        List<ColumnProperty> columns = projectContainer.getDatabaseStructure().getColumns(activeTable.getOriginal().getName());
+
+        List<Column> dbList = new LinkedList<>();
+        for (ColumnProperty column : columns) {
             dbList.add(
-                this.tableContainer.tableFactory().createNotChanged(
-                    project.getId(),
-                    t.getName()
+                this.columnContainer.columnFactory().createNotChanged(
+                    activeTable.getUniqueKey(),
+                    column.getName(),
+                    column.getFormat(),
+                    column.getDefaultValue(),
+                    column.isNullEnabled(),
+                    column.getLength(),
+                    column.isSigned(),
+                    column.getPrecision(),
+                    column.isAutoIncrement()
                 )
             );
         }
-
+        
         this.merge(
             dbList,
-            this.tableContainer.tableRepository().findByProject(project.getId())
+            this.columnContainer.columnRepository().findByTable(activeTable.getUniqueKey())
         );
 
-        this.tableContainer.tableStore().getList().setAll(
-            this.tableContainer.tableRepository().findByProject(project.getId())
+        this.columnContainer.columnStore().getList().setAll(
+            this.columnContainer.columnRepository().findByTable(activeTable.getUniqueKey())
         );
     }
 
-    protected void merge(List<Table> dbList, List<Table> repoList) {
-        TableRepository tableRepo = this.tableContainer.tableRepository();
-        ListDiff<Table> diff = new CompareListDiff<>(dbList, repoList, (Table a, Table b) -> {
+    protected void merge(List<Column> dbList, List<Column> repoList) {
+        ListDiff<Column> diff = new CompareListDiff<>(dbList, repoList, (Column a, Column b) -> {
             if (a.getChangeCommand().isType(ChangeCommand.CREATE)) {
                 return a.getChange().getName().equals(
                     b.getChange().getName()
                 );
+
             }
             return a.getOriginal().getName().equals(
                 b.getOriginal().getName()
             );
         });
-        for (List<Table> tablePair : diff.getCommon()) {
-            if (tablePair.get(1).getChangeCommand().isType(ChangeCommand.CREATE)) {
-                tableRepo.removeWith(tablePair.get(1));
-                tableRepo.addWith(tablePair.get(0));
+
+        ColumnRepository columnRepository = this.columnContainer.columnRepository();
+        for (List<Column> columnPair : diff.getCommon()) {
+            if (columnPair.get(1).getChangeCommand().isType(ChangeCommand.CREATE)) {
+                columnRepository.removeWith(columnPair.get(1));
+                columnRepository.addWith(columnPair.get(0));
             } else {
-                tablePair.get(1).updateOriginal(
-                    tablePair.get(0).getOriginal()
+                columnPair.get(1).updateOriginal(
+                    columnPair.get(0).getOriginal()
                 );
             }
         }
-        for (Table table : diff.getLeftMissing()) {
-            if (table.getChangeCommand().isType(ChangeCommand.CREATE)) {
+        for (Column column : diff.getLeftMissing()) {
+            if (column.getChangeCommand().isType(ChangeCommand.CREATE)) {
                 continue;
             }
-            tableRepo.removeWith(table);
+            columnRepository.removeWith(column);
         }
-        for (Table table : diff.getRightMissing()) {
-            tableRepo.addWith(table);
+        for (Column column : diff.getRightMissing()) {
+            columnRepository.addWith(column);
         }
     }
 }

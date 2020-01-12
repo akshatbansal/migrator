@@ -14,6 +14,7 @@ import migrator.app.gui.view.project.ProjectListView;
 import migrator.app.gui.view.project.ProjectView;
 import migrator.app.gui.view.project.ProjectsView;
 import migrator.app.gui.view.table.TableDetailView;
+import migrator.app.gui.view.table.TableFormView;
 import migrator.app.gui.view.table.TableListView;
 import migrator.app.gui.view.table.TableView;
 
@@ -93,6 +94,12 @@ public class ViewFactories {
             this,
             this.container.tableContainer().tableStore().getSelected(),
             this.container.projectStore().getOpened()
+        );
+    }
+
+    public TableFormView createTableForm() {
+        return new TableFormView(
+            container.dispatcher()
         );
     }
 }

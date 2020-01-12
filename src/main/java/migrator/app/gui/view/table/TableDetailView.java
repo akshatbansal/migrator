@@ -15,7 +15,7 @@ import migrator.app.domain.table.model.Table;
 import migrator.app.gui.component.ComponentFactories;
 import migrator.app.gui.component.breadcrump.Breadcrump;
 import migrator.app.gui.component.breadcrump.BreadcrumpsComponent;
-import migrator.app.gui.component.breadcrump.RouteBreadcrump;
+import migrator.app.gui.component.breadcrump.EventBreadcrump;
 import migrator.app.gui.component.breadcrump.VoidBreadcrump;
 import migrator.app.gui.component.column.ColumnListComponent;
 import migrator.app.gui.view.SimpleView;
@@ -53,10 +53,10 @@ public class TableDetailView extends SimpleView implements View {
 
         ObservableList<Breadcrump> breadcrumps = FXCollections.observableArrayList();
         breadcrumps.add(
-            new RouteBreadcrump("Projects", dispatcher, "projects")
+            new EventBreadcrump("Projects", dispatcher, "project.close")
         );
         breadcrumps.add(
-            new RouteBreadcrump(this.breadcrumpProjectName, dispatcher, "project")
+            new EventBreadcrump(this.breadcrumpProjectName, dispatcher, "table.deselect")
         );
         breadcrumps.add(
             new VoidBreadcrump(this.breadcrumpTableName)

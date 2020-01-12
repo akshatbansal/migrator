@@ -1,0 +1,23 @@
+package migrator.app.domain.table.action;
+
+import migrator.app.domain.table.model.Table;
+import migrator.app.service.SelectableStore;
+import migrator.lib.dispatcher.Event;
+import migrator.lib.dispatcher.EventHandler;
+
+public class TableRemoveHandler implements EventHandler {
+    private SelectableStore<Table> tableStore;
+
+    public TableRemoveHandler(SelectableStore<Table> tableStore) {
+        this.tableStore = tableStore;
+    }
+
+    @Override
+    public void handle(Event<?> event) {
+        if (event.getValue() == null) {
+            return;
+        }
+        Table table = (Table) event.getValue();
+        this.tableStore.remove(table);
+    }
+}

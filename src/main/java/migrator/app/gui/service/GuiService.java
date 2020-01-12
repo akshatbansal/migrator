@@ -9,7 +9,9 @@ import migrator.app.gui.service.route.SimpleRouteStore;
 import migrator.app.gui.service.toast.PermanentToastStore;
 import migrator.app.gui.service.toast.ToastStore;
 import migrator.app.service.Service;
+import migrator.lib.dispatcher.Event;
 import migrator.lib.dispatcher.EventDispatcher;
+import migrator.lib.dispatcher.SimpleEvent;
 
 public class GuiService implements Service {
     private ToastService toastService;
@@ -40,17 +42,24 @@ public class GuiService implements Service {
         routeStore.addRoute("table", guiContainer.viewFactories().createTable());
 
         container.projectStore().getOpened().addListener((observable, oldValue, newValue) -> {
-            dispatcher.dispatch(
-                new RouteChangeEvent("project")
-            );
-        });
-        container.tableContainer().tableStore().getSelected().addListener((observable, oldValue, newValue) -> {
             if (newValue == null) {
+                dispatcher.dispatch(new RouteChangeEvent("projects"));
+                dispatcher.dispatch(new SimpleEvent<>("table.deselect"));
                 return;
             }
-            dispatcher.dispatch(
-                new RouteChangeEvent("table")
-            );
+            dispatcher.dispatch(new RouteChangeEvent("project"));
+        });
+        container.tableContainer().tableStore().getSelected().addListener((observable, oldValue, newValue) -> {
+            if (container.projectStore().getOpened().get() == null) {
+                return;
+            }
+            Event<?> event = null;
+            if (newValue == null) {
+                event = new RouteChangeEvent("project");
+            } else {
+                event = new RouteChangeEvent("table");
+            }
+            dispatcher.dispatch(event);
         });
     }
 
