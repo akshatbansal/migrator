@@ -39,5 +39,9 @@ public class TableNewHandler implements EventHandler {
         this.dispatcher.dispatch(
             new SimpleEvent<>("column.create.modified_at", newTable.getUniqueKey())
         );
+
+        this.dispatcher.dispatch(
+            new SimpleEvent<>("table.select", newTable)
+        );
     }
 }

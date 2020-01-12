@@ -1,15 +1,15 @@
 package migrator.app.domain.table.action;
 
+import migrator.app.domain.table.TableContainer;
 import migrator.app.domain.table.model.Table;
-import migrator.app.service.SelectableStore;
 import migrator.lib.dispatcher.Event;
 import migrator.lib.dispatcher.EventHandler;
 
 public class TableRemoveHandler implements EventHandler {
-    private SelectableStore<Table> tableStore;
+    private TableContainer tableContainer;
 
-    public TableRemoveHandler(SelectableStore<Table> tableStore) {
-        this.tableStore = tableStore;
+    public TableRemoveHandler(TableContainer tableContainer) {
+        this.tableContainer = tableContainer;
     }
 
     @Override
@@ -18,6 +18,7 @@ public class TableRemoveHandler implements EventHandler {
             return;
         }
         Table table = (Table) event.getValue();
-        this.tableStore.remove(table);
+        this.tableContainer.tableStore().remove(table);
+        this.tableContainer.tableRepository().removeWith(table);
     }
 }

@@ -14,7 +14,7 @@
      <VBox styleClass="card__header">
           <Text styleClass="card__header-title," text="Indexes" />
      </VBox>
-     <TableView fx:id="indexes" editable="false">
+     <TableView fx:id="indexesTable" editable="false">
           <columns>
                <TableColumn text="" maxWidth="1.0">
                     <cellFactory>
@@ -24,10 +24,10 @@
                          <PropertyValueFactory property="changeType" />
                     </cellValueFactory>
                </TableColumn>
-               <TableColumn text="Name" prefWidth="${(indexes.width-4)*0.5}">
+               <TableColumn text="Name" prefWidth="${(indexesTable.width-4)*0.5}">
                     <cellValueFactory><PropertyValueFactory property="name" /></cellValueFactory>
                </TableColumn>
-               <TableColumn text="Columns" prefWidth="${(indexes.width-4)*0.5}">
+               <TableColumn text="Columns" prefWidth="${(indexesTable.width-4)*0.5}">
                     <cellValueFactory><PropertyValueFactory property="columnsString" /></cellValueFactory>
                </TableColumn>
           </columns>

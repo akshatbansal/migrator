@@ -58,7 +58,7 @@ public class TableService implements Service {
             container.tableContainer().tableStore()
         );
         this.tableRemoveHandler = new TableRemoveHandler(
-            container.tableContainer().tableStore()
+            container.tableContainer()
         );
 
         this.selectedTableListener = (observable, oldValue, newValue) -> {

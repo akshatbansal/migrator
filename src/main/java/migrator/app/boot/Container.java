@@ -8,6 +8,7 @@ import java.util.Collection;
 
 import migrator.app.ProxyLogger;
 import migrator.app.code.CodeContainer;
+import migrator.app.config.ConfigContainer;
 import migrator.app.database.DatabaseContainer;
 import migrator.app.domain.column.ColumnContainer;
 import migrator.app.domain.connection.service.ConnectionFactory;
@@ -48,6 +49,7 @@ public class Container {
     private MigrationContainer migrationContainerValue;
     private CodeContainer codeContainerValue;
     private ProxyLogger loggerValue;
+    private ConfigContainer configContainerValue;
 
     public Container() {
         Path storageFoldePath = Paths.get(System.getProperty("user.home"), ".migrator");
@@ -57,6 +59,7 @@ public class Container {
         String session = Long.toString(System.currentTimeMillis());
         this.generatorValue = new SessionIncrementalGenerator(session);
 
+        this.configContainerValue = new ConfigContainer();
         this.modificationContainerValue = new ModificationContainer(storageFoldePath);
         this.dispatcherValue = new EventDispatcher();
         this.databaseContainerValue = new DatabaseContainer();
@@ -76,6 +79,7 @@ public class Container {
         );
 
         this.indexContainerValue = new IndexContainer(
+            generatorValue,
             storageFoldePath,
             this.columnContainer().columnPropertyRepository(),
             this.modificationContainer().repository()
@@ -125,6 +129,10 @@ public class Container {
 
     public ProxyLogger logger() {
         return this.loggerValue;
+    }
+
+    public ConfigContainer configContainer() {
+        return this.configContainerValue;
     }
 
     public ProjectFactory projectFactory() {

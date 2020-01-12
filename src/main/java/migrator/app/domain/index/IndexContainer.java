@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.Collection;
 
+import migrator.app.domain.index.service.IndexFactory;
 import migrator.app.domain.index.service.IndexStore;
 import migrator.app.domain.table.model.Index;
 import migrator.app.migration.model.ChangeCommand;
@@ -15,16 +16,19 @@ import migrator.lib.adapter.SimpleJsonListAdapter;
 import migrator.lib.repository.UniqueRepository;
 import migrator.lib.storage.Storage;
 import migrator.lib.storage.Storages;
+import migrator.lib.uid.Generator;
 
 public class IndexContainer {
     private SelectableStore<Index> indexStoreValue;
     private IndexRepository indexRepositoryValue;
     private Storage<Collection<Index>> indexStorageValue;
+    private IndexFactory indexFactoryValue;
 
     private UniqueRepository<IndexProperty> indexPropertyRepositoryValue;
     private Storage<Collection<IndexProperty>> indexPropertyStorageValue;
 
     public IndexContainer(
+        Generator generator,
         Path storagePath,
         UniqueRepository<ColumnProperty> columnPropertyRepo,
         UniqueRepository<ChangeCommand> changeCommandRepo
@@ -37,6 +41,7 @@ public class IndexContainer {
             )
         );
 
+        this.indexFactoryValue = new IndexFactory(generator);
         this.indexStoreValue = new IndexStore();
         this.indexStorageValue = Storages.getFileStorage(
             new File(storagePath.toString(), "index.json"),
@@ -58,6 +63,10 @@ public class IndexContainer {
 
     public Storage<Collection<Index>> indexStorage() {
         return this.indexStorageValue;
+    }
+
+    public IndexFactory indexFactory() {
+        return this.indexFactoryValue;
     }
 
     public UniqueRepository<IndexProperty> indexPropertyRepository() {

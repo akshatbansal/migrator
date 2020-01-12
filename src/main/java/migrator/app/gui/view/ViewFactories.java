@@ -84,7 +84,8 @@ public class ViewFactories {
             container.dispatcher(),
             this,
             this.componentFactories,
-            container.columnContainer().columnStore().getList()
+            container.columnContainer().columnStore().getList(),
+            container.indexContainer().indexStore().getList()
         );
     }
 

@@ -17,7 +17,6 @@ import migrator.ext.sentry.SentryExtension;
 import migrator.ext.sql.SqlExtension;
 import migrator.lib.persistance.ListPersistance;
 import migrator.lib.persistance.Persistance;
-import migrator.app.EnviromentConfig;
 
 public class JavafxApplication extends Application {
     protected Persistance<List<Project>> projectsPersistance;
@@ -26,12 +25,6 @@ public class JavafxApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.projectsPersistance = new ListPersistance<>("project.list");
-
-        String env = "production";
-        if (System.getenv("MIGRATOR_ENV") != null) {
-            env = System.getenv("MIGRATOR_ENV");
-        }
-        EnviromentConfig enviromentConfig = new EnviromentConfig(env);
 
         // Bootstrap bootstrap = new Bootstrap(
         //     Arrays.asList(

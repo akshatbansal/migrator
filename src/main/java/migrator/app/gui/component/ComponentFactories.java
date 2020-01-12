@@ -4,6 +4,7 @@ import migrator.app.gui.component.breadcrump.BreadcrumpsComponent;
 import migrator.app.gui.component.card.CardComponentFactory;
 import migrator.app.gui.component.card.CardListComponent;
 import migrator.app.gui.component.column.ColumnListComponent;
+import migrator.app.gui.component.index.IndexListComponent;
 import migrator.app.gui.component.toast.ToastListComponent;
 
 public class ComponentFactories {
@@ -21,5 +22,9 @@ public class ComponentFactories {
 
     public BreadcrumpsComponent createBreadcrumps() {
         return new BreadcrumpsComponent();
+    }
+
+    public IndexListComponent createIndexList() {
+        return new IndexListComponent();
     }
 }

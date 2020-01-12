@@ -9,10 +9,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.VBox;
-import migrator.app.breadcrumps.VoidBreadcrump;
 import migrator.app.domain.project.ProjectContainer;
-import migrator.app.domain.project.breadcrumps.ProjectsBreadcrump;
-import migrator.app.domain.project.breadcrumps.SingleProjectBreadcrump;
 import migrator.app.domain.project.model.Project;
 import migrator.app.domain.table.model.Table;
 import migrator.app.domain.table.service.TableActiveState;
@@ -20,7 +17,6 @@ import migrator.app.migration.model.ChangeCommand;
 import migrator.app.migration.model.ColumnChange;
 import migrator.app.migration.model.IndexChange;
 import migrator.app.migration.model.TableChange;
-import migrator.ext.javafx.breadcrumps.JavafxBreadcrumpsComponent;
 import migrator.ext.javafx.component.ViewComponent;
 import migrator.ext.javafx.component.ViewLoader;
 

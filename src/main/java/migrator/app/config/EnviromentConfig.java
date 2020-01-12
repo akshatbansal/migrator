@@ -1,4 +1,4 @@
-package migrator.app;
+package migrator.app.config;
 
 import java.io.File;
 import java.io.IOException;

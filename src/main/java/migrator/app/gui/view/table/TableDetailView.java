@@ -9,8 +9,8 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import migrator.app.domain.project.ProjectContainer;
-import migrator.app.domain.table.component.IndexList;
 import migrator.app.domain.table.model.Column;
+import migrator.app.domain.table.model.Index;
 import migrator.app.domain.table.model.Table;
 import migrator.app.gui.component.ComponentFactories;
 import migrator.app.gui.component.breadcrump.Breadcrump;
@@ -18,6 +18,7 @@ import migrator.app.gui.component.breadcrump.BreadcrumpsComponent;
 import migrator.app.gui.component.breadcrump.EventBreadcrump;
 import migrator.app.gui.component.breadcrump.VoidBreadcrump;
 import migrator.app.gui.component.column.ColumnListComponent;
+import migrator.app.gui.component.index.IndexListComponent;
 import migrator.app.gui.view.SimpleView;
 import migrator.app.gui.view.View;
 import migrator.app.gui.view.ViewFactories;
@@ -32,7 +33,7 @@ public class TableDetailView extends SimpleView implements View {
 
     protected BreadcrumpsComponent breadcrumpsComponent;
     protected ColumnListComponent columnListComponent;
-    protected IndexList indexList;
+    protected IndexListComponent indexListComponent;
 
     private EventDispatcher dispatcher;
 
@@ -44,7 +45,8 @@ public class TableDetailView extends SimpleView implements View {
         EventDispatcher dispatcher,
         ViewFactories viewFactories,
         ComponentFactories componentFactories,
-        ObservableList<Column> columns
+        ObservableList<Column> columns,
+        ObservableList<Index> indexes
     ) {
         super();
         this.dispatcher = dispatcher;
@@ -64,15 +66,8 @@ public class TableDetailView extends SimpleView implements View {
         this.breadcrumpsComponent = componentFactories.createBreadcrumps();
         this.breadcrumpsComponent.bind(breadcrumps);
 
-        this.columnListComponent = componentFactories.createColumnList();
-        this.columnListComponent.bind(columns);
-        this.columnListComponent.outputs().addListener((observable, oldValue, newValue) -> {
-            if (newValue.getName().equals("select")) {
-                this.onColumnSelect((Column) newValue.getValue());
-            } else if (newValue.getName().equals("add")) {
-                this.createColumn();
-            }
-        });
+        this.columnListComponent = this.createColumnList(componentFactories, columns);
+        this.indexListComponent = this.createIndexList(componentFactories, indexes);
 
         this.loadFxml("/layout/table/view.fxml");
 
@@ -80,15 +75,37 @@ public class TableDetailView extends SimpleView implements View {
             this.breadcrumpsComponent.getNode()
         );
 
-        // this.indexList = this.tableGuiKit.createIndexList();
-        // this.indexList.onSelect((Index selectedIndex) -> {
-        //     this.columnList.deselect();
-        // });
-
         this.body.getChildren()
             .setAll(
-                this.columnListComponent.getNode()
+                this.columnListComponent.getNode(),
+                this.indexListComponent.getNode()
             );
+    }
+
+    private ColumnListComponent createColumnList(ComponentFactories componentFactories, ObservableList<Column> columns) {
+        ColumnListComponent component = componentFactories.createColumnList();
+        component.bind(columns);
+        component.outputs().addListener((observable, oldValue, newValue) -> {
+            if (newValue.getName().equals("select")) {
+                this.onColumnSelect((Column) newValue.getValue());
+            } else if (newValue.getName().equals("add")) {
+                this.createColumn();
+            }
+        });
+        return component;
+    }
+
+    private IndexListComponent createIndexList(ComponentFactories componentFactories, ObservableList<Index> indexes) {
+        IndexListComponent component = componentFactories.createIndexList();
+        component.bind(indexes);
+        component.outputs().addListener((observable, oldValue, newValue) -> {
+            if (newValue.getName().equals("select")) {
+                this.onIndexSelect((Index) newValue.getValue());
+            } else if (newValue.getName().equals("create")) {
+                this.createIndex();
+            }
+        });
+        return component;
     }
 
     public void bind(ObjectProperty<Table> table) {
@@ -126,6 +143,7 @@ public class TableDetailView extends SimpleView implements View {
     }
 
     private void onColumnSelect(Column column) {
+        this.indexListComponent.deselect();
         this.dispatcher.dispatch(
             new SimpleEvent<>("column.select", column)
         );
@@ -134,6 +152,19 @@ public class TableDetailView extends SimpleView implements View {
     private void createColumn() {
         this.dispatcher.dispatch(
             new SimpleEvent<>("column.create")
+        );
+    }
+
+    private void onIndexSelect(Index index) {
+        this.columnListComponent.deselect();
+        this.dispatcher.dispatch(
+            new SimpleEvent<>("index.create", index)
+        );
+    }
+
+    private void createIndex() {
+        this.dispatcher.dispatch(
+            new SimpleEvent<>("index.create")
         );
     }
 }
