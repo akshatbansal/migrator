@@ -46,7 +46,9 @@ public class TableDetailView extends SimpleView implements View {
         ViewFactories viewFactories,
         ComponentFactories componentFactories,
         ObservableList<Column> columns,
-        ObservableList<Index> indexes
+        ObjectProperty<Column> selectedColumns,
+        ObservableList<Index> indexes,
+        ObjectProperty<Index> selectedIndex
     ) {
         super();
         this.dispatcher = dispatcher;
@@ -68,6 +70,17 @@ public class TableDetailView extends SimpleView implements View {
 
         this.columnListComponent = this.createColumnList(componentFactories, columns);
         this.indexListComponent = this.createIndexList(componentFactories, indexes);
+
+        selectedColumns.addListener((observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                this.columnListComponent.deselect();
+            }
+        });
+        selectedIndex.addListener((observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                this.indexListComponent.deselect();
+            }
+        });
 
         this.loadFxml("/layout/table/view.fxml");
 
@@ -145,26 +158,40 @@ public class TableDetailView extends SimpleView implements View {
     private void onColumnSelect(Column column) {
         this.indexListComponent.deselect();
         this.dispatcher.dispatch(
+            new SimpleEvent<>("index.deselect")
+        );
+        this.dispatcher.dispatch(
             new SimpleEvent<>("column.select", column)
         );
     }
 
     private void createColumn() {
+        Table table = this.activeTable.get();
+        if (table == null) {
+            return;
+        }
         this.dispatcher.dispatch(
-            new SimpleEvent<>("column.create")
+            new SimpleEvent<>("column.create", table.getUniqueKey())
         );
     }
 
     private void onIndexSelect(Index index) {
         this.columnListComponent.deselect();
         this.dispatcher.dispatch(
-            new SimpleEvent<>("index.create", index)
+            new SimpleEvent<>("column.deselect")
+        );
+        this.dispatcher.dispatch(
+            new SimpleEvent<>("index.select", index)
         );
     }
 
     private void createIndex() {
+        Table table = this.activeTable.get();
+        if (table == null) {
+            return;
+        }
         this.dispatcher.dispatch(
-            new SimpleEvent<>("index.create")
+            new SimpleEvent<>("index.create", table.getUniqueKey())
         );
     }
 }

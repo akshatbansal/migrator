@@ -1,4 +1,4 @@
-package migrator.ext.javafx.table.component;
+package migrator.app.gui.view.index;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
@@ -11,20 +11,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
-import migrator.app.domain.column.service.ColumnActiveState;
-import migrator.app.domain.index.service.IndexActiveState;
-import migrator.app.domain.table.component.IndexForm;
 import migrator.app.domain.table.model.Index;
-import migrator.app.domain.table.service.TableActiveState;
+import migrator.app.gui.view.SimpleView;
+import migrator.app.gui.view.View;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.app.migration.model.ColumnProperty;
-import migrator.ext.javafx.component.ViewComponent;
-import migrator.ext.javafx.component.ViewLoader;
+import migrator.lib.dispatcher.EventDispatcher;
+import migrator.lib.dispatcher.SimpleEvent;
 
-public class JavafxIndexForm extends ViewComponent implements IndexForm {
-    protected ColumnActiveState columnActiveState;
-    protected TableActiveState tableActiveState;
-    protected IndexActiveState indexActiveState;
+public class IndexFormView extends SimpleView implements View {
+    private EventDispatcher dispatcher;
     protected ObjectProperty<Index> indexProperty;
     protected ChangeListener<String> changeCommandListener;
     protected BooleanProperty formDisabled;
@@ -37,15 +33,15 @@ public class JavafxIndexForm extends ViewComponent implements IndexForm {
     protected Button removeButton;
     protected Button restoreButton;
 
-    public JavafxIndexForm() {
-        super(new ViewLoader());
+    public IndexFormView(
+        EventDispatcher dispatcher
+    ) {
+        super();
+        this.dispatcher = dispatcher;
         this.changeCommandListener = (ObservableValue<? extends String> obs, String oldValue, String newValue) -> {
             this.onChangeTypeChange(newValue);
         };
         this.formDisabled = new SimpleBooleanProperty(true);
-        // this.columnActiveState = container.getColumnActiveState();
-        // this.tableActiveState = container.getTableActiveState();
-        // this.indexActiveState = container.getIndexActiveState();
 
         this.removeButton = new Button("Remove");
         this.removeButton.getStyleClass().addAll("btn-danger");
@@ -59,7 +55,7 @@ public class JavafxIndexForm extends ViewComponent implements IndexForm {
             this.restore();
         });
 
-        this.loadView("/layout/table/index/form.fxml");
+        this.loadFxml("/layout/table/index/form.fxml");
     }
 
     public void bind(ObjectProperty<Index> indexProperty) {
@@ -143,15 +139,15 @@ public class JavafxIndexForm extends ViewComponent implements IndexForm {
         if (index == null) {
             return;
         }
-        if (index.getChangeCommand().isType(ChangeCommand.CREATE)) {
-            this.indexActiveState.remove(index);
-            return;
-        }
-        index.delete();
+        this.dispatcher.dispatch(
+            new SimpleEvent<>("index.remove", index)
+        );
     }
 
     @FXML public void close() {
-        this.indexActiveState.deactivate();
+        this.dispatcher.dispatch(
+            new SimpleEvent<>("index.deselect")
+        );
     }
 
     @FXML public void restore() {
@@ -159,6 +155,8 @@ public class JavafxIndexForm extends ViewComponent implements IndexForm {
         if (index == null) {
             return;
         }
-        index.restore();
+        this.dispatcher.dispatch(
+            new SimpleEvent<>("index.restore", index)
+        );
     }
 }

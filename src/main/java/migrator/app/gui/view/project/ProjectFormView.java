@@ -20,7 +20,6 @@ import migrator.app.gui.validation.ProjectConnectionValidator;
 import migrator.app.gui.validation.ValidationResult;
 import migrator.app.gui.view.SimpleView;
 import migrator.app.gui.view.View;
-import migrator.app.migration.Migration;
 import migrator.ext.javafx.UseCase;
 import migrator.lib.dispatcher.EventDispatcher;
 import migrator.lib.dispatcher.SimpleEvent;
@@ -29,7 +28,6 @@ public class ProjectFormView extends SimpleView implements View {
     protected EventDispatcher dispatcher;
     protected ObservableList<String> databaseDrivers;
     protected ObservableList<String> outputDrivers;
-    protected Migration migration;
     protected Project project;
     protected ProjectService projectService;
     protected Window window;

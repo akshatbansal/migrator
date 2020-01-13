@@ -3,6 +3,7 @@ package migrator.app.gui;
 import javafx.stage.Window;
 import migrator.app.boot.Container;
 import migrator.app.database.DatabaseContainer;
+import migrator.app.gui.column.ColumnChangePropertyAdapter;
 import migrator.app.gui.column.format.ColumnFormatCollection;
 import migrator.app.gui.component.ComponentFactories;
 import migrator.app.gui.view.ViewFactories;
@@ -25,7 +26,12 @@ public class GuiContainer {
         this.viewFactoriesValue = new ViewFactories(
             container,
             this.componentFactories(),
-            window
+            window,
+            this.getColumnFormatCollection(),
+            new BindedObservableList<>(
+                container.columnContainer().columnStore().getList(),
+                new ColumnChangePropertyAdapter()
+            )
         );
     }
 

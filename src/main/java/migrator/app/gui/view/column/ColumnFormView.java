@@ -1,4 +1,4 @@
-package migrator.ext.javafx.table.component;
+package migrator.app.gui.view.column;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -11,23 +11,21 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import migrator.app.domain.column.service.ColumnActiveState;
-import migrator.app.domain.table.component.ColumnForm;
 import migrator.app.domain.table.model.Column;
-import migrator.app.domain.table.service.TableActiveState;
-import migrator.app.gui.column.format.ColumnFormatOption;
 import migrator.app.gui.column.format.ColumnFormatCollection;
+import migrator.app.gui.column.format.ColumnFormatOption;
+import migrator.app.gui.view.SimpleView;
+import migrator.app.gui.view.View;
 import migrator.app.migration.model.ChangeCommand;
-import migrator.ext.javafx.component.ViewComponent;
-import migrator.ext.javafx.component.ViewLoader;
+import migrator.lib.dispatcher.EventDispatcher;
+import migrator.lib.dispatcher.SimpleEvent;
 
-public class JavafxColumnForm extends ViewComponent implements ColumnForm {
-    protected ColumnActiveState columnActiveState;
-    protected TableActiveState tableActiveState;
+public class ColumnFormView extends SimpleView implements View {
     protected ObjectProperty<Column> columnProperty;
     protected ColumnFormatCollection columnFormatCollection;
     protected ChangeListener<String> changeCommandListener;
     protected ChangeListener<String> formatListener;
+    private EventDispatcher dispatcher;
 
     @FXML protected TextField name;
     @FXML protected ComboBox<ColumnFormatOption> format;
@@ -46,18 +44,19 @@ public class JavafxColumnForm extends ViewComponent implements ColumnForm {
     protected Button removeButton;
     protected Button restoreButton;
 
-    public JavafxColumnForm() {
-        super(new ViewLoader());
+    public ColumnFormView(
+        EventDispatcher dispatcher,
+        ColumnFormatCollection columnFormatCollection
+    ) {
+        super();
+        this.dispatcher = dispatcher;
+        this.columnFormatCollection = columnFormatCollection;
         this.changeCommandListener = (ObservableValue<? extends String> obs, String oldValue, String newValue) -> {
             this.onChangeTypeChange(newValue);
         };
         this.formatListener = (obs, ol, ne) -> {
             this.onFormatChange(ne);
         };
-
-        // this.columnActiveState = container.getColumnActiveState();
-        // this.tableActiveState = container.getTableActiveState();
-        // this.columnFormatCollection = container.getGuiContainer().getColumnFormatCollection();
 
         this.removeButton = new Button("Remove");
         this.removeButton.getStyleClass().addAll("btn-danger");
@@ -71,7 +70,7 @@ public class JavafxColumnForm extends ViewComponent implements ColumnForm {
             this.restore();
         });
 
-        this.loadView("/layout/table/column/form.fxml");
+        this.loadFxml("/layout/table/column/form.fxml");
         
         this.format.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             Column column = this.columnProperty.get();
@@ -198,11 +197,9 @@ public class JavafxColumnForm extends ViewComponent implements ColumnForm {
         if (column == null) {
             return;
         }
-        if (column.getChangeCommand().isType(ChangeCommand.CREATE)) {
-            this.columnActiveState.remove(column);
-            return;
-        }
-        column.delete();
+        this.dispatcher.dispatch(
+            new SimpleEvent<>("column.remove", column)
+        );
     }
 
     public void restore() {
@@ -210,10 +207,14 @@ public class JavafxColumnForm extends ViewComponent implements ColumnForm {
         if (column == null) {
             return;
         }
-        column.restore();
+        this.dispatcher.dispatch(
+            new SimpleEvent<>("column.restore", column)
+        );
     }
 
     @FXML public void close() {
-        this.columnActiveState.deactivate();
+        this.dispatcher.dispatch(
+            new SimpleEvent<>("column.deselect")
+        );
     }
 }

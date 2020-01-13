@@ -10,7 +10,6 @@ import migrator.ext.javafx.component.ViewLoader;
 import migrator.app.domain.project.ProjectContainer;
 import migrator.app.domain.project.model.Project;
 import migrator.app.domain.table.TableRepository;
-import migrator.app.migration.Migration;
 import migrator.app.migration.MigrationGenerator;
 import migrator.app.migration.MigrationGeneratorFactory;
 import migrator.app.migration.model.TableChange;
@@ -20,7 +19,6 @@ public class JavafxCommitForm extends ViewComponent {
     @FXML protected TextField name;
 
     protected ActiveRoute activeRoute;
-    protected Migration migration;
     protected ObjectProperty<ProjectContainer> activeProjectContainer;
     protected TableRepository tableRepository;
 
@@ -52,17 +50,17 @@ public class JavafxCommitForm extends ViewComponent {
             // this.toastService.error("Commit name has to be set");
             return;
         }
-        MigrationGeneratorFactory generatorFactory = this.migration.getGenerator(outputType);
-        MigrationGenerator generator = generatorFactory.create();
+        // MigrationGeneratorFactory generatorFactory = this.migration.getGenerator(outputType);
+        // MigrationGenerator generator = generatorFactory.create();
 
-        List<? extends TableChange> changes = this.tableRepository.findByProject(project.getId());
-        if (generator.generateMigration(
-            project.getFolder(),
-            this.name.textProperty().get(),
-            changes
-        )) {
+        // List<? extends TableChange> changes = this.tableRepository.findByProject(project.getId());
+        // if (generator.generateMigration(
+        //     project.getFolder(),
+        //     this.name.textProperty().get(),
+        //     changes
+        // )) {
             // this.toastService.success("Migration file crated.");
-        }
+        // }
     }
 
     @FXML public void close() {

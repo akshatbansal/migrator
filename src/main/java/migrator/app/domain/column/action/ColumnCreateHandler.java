@@ -7,11 +7,11 @@ import migrator.lib.dispatcher.EventDispatcher;
 import migrator.lib.dispatcher.EventHandler;
 import migrator.lib.dispatcher.SimpleEvent;
 
-public class ColumnCreateIdHandler implements EventHandler {
+public class ColumnCreateHandler implements EventHandler {
     private ColumnContainer columnContainer;
     private ColumnAddHandler columnAddHandler;
 
-    public ColumnCreateIdHandler(ColumnContainer columnContainer, EventDispatcher dispatcher) {
+    public ColumnCreateHandler(ColumnContainer columnContainer, EventDispatcher dispatcher) {
         this.columnContainer = columnContainer;
         this.columnAddHandler = new ColumnAddHandler(columnContainer, dispatcher);
     }
@@ -19,7 +19,7 @@ public class ColumnCreateIdHandler implements EventHandler {
     @Override
     public void handle(Event<?> event) {
         String tableId = (String) event.getValue();
-        Column column = this.columnContainer.columnFactory().createWithCreateChange(tableId, "id", "integer", null, false, "11", false, "", true);
+        Column column = this.columnContainer.columnFactory().createWithCreateChange(tableId, "new_column", "string", "", false, "255", false, "", false);
         this.columnAddHandler.handle(
             new SimpleEvent<>("column.add", column)
         );

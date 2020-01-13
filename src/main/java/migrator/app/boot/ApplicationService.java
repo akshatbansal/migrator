@@ -5,6 +5,7 @@ import java.util.List;
 
 import javafx.stage.Stage;
 import migrator.app.domain.column.service.ColumnService;
+import migrator.app.domain.index.service.IndexService;
 import migrator.app.domain.modification.ModificationService;
 import migrator.app.domain.project.service.ProjectService;
 import migrator.app.domain.table.service.TableService;
@@ -33,6 +34,9 @@ public class ApplicationService implements Service {
         );
         this.services.add(
             new ColumnService(container)
+        );
+        this.services.add(
+            new IndexService(container)
         );
         this.services.add(
             new TableService(container)
