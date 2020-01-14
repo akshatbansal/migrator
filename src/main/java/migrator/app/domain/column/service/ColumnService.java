@@ -7,6 +7,7 @@ import migrator.app.domain.column.action.ColumnCreateIdHandler;
 import migrator.app.domain.column.action.ColumnCreateModifiedAtHandler;
 import migrator.app.domain.column.action.ColumnDeselectHandler;
 import migrator.app.domain.column.action.ColumnRemoveHandler;
+import migrator.app.domain.column.action.ColumnRestoreHandler;
 import migrator.app.domain.column.action.ColumnSelectHandler;
 import migrator.app.domain.table.model.Column;
 import migrator.app.migration.model.ColumnProperty;
@@ -27,6 +28,7 @@ public class ColumnService implements Service {
     private EventHandler columnSelectHandler;
     private EventHandler columnDeselectHandler;
     private EventHandler columnRemoveHandler;
+    private EventHandler columnRestoreHandler;
 
     public ColumnService(Container container) {
         this.dispatcher = container.dispatcher();
@@ -41,6 +43,7 @@ public class ColumnService implements Service {
         this.columnSelectHandler = new ColumnSelectHandler(container.columnContainer().columnStore());
         this.columnDeselectHandler = new ColumnDeselectHandler(container.columnContainer().columnStore());
         this.columnRemoveHandler = new ColumnRemoveHandler(container.columnContainer());
+        this.columnRestoreHandler = new ColumnRestoreHandler();
     }
 
     @Override
@@ -52,6 +55,7 @@ public class ColumnService implements Service {
         this.dispatcher.register("column.select", this.columnSelectHandler);
         this.dispatcher.register("column.deselect", this.columnDeselectHandler);
         this.dispatcher.register("column.remove", this.columnRemoveHandler);
+        this.dispatcher.register("column.restore", this.columnRestoreHandler);
 
         this.columnPropertyPersistanceService.start();
         this.columnPersistanceService.start();
@@ -69,5 +73,6 @@ public class ColumnService implements Service {
         this.dispatcher.unregister("column.select", this.columnSelectHandler);
         this.dispatcher.unregister("column.deselect", this.columnDeselectHandler);
         this.dispatcher.unregister("column.remove", this.columnRemoveHandler);
+        this.dispatcher.unregister("column.restore", this.columnRestoreHandler);
     }
 }

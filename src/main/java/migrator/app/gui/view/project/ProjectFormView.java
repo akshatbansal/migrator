@@ -63,8 +63,8 @@ public class ProjectFormView extends SimpleView implements View {
 
         this.loadFxml("/layout/project/form.fxml");
 
-        this.outputType.getItems().setAll(this.outputDrivers);
-        this.driver.getItems().setAll(this.databaseDrivers);
+        this.outputType.setItems(outputDrivers);
+        this.driver.setItems(this.databaseDrivers);
 
         selected.addListener((observable, oldValue, newValue) -> {
             this.onProjectChange(newValue);

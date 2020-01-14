@@ -6,6 +6,7 @@ import migrator.app.domain.table.action.TableDeselectHandler;
 import migrator.app.domain.table.action.TableNewHandler;
 import migrator.app.domain.table.action.TableRefreshHandler;
 import migrator.app.domain.table.action.TableRemoveHandler;
+import migrator.app.domain.table.action.TableRestoreHandler;
 import migrator.app.domain.table.action.TableSelectHandler;
 import migrator.app.domain.table.model.Table;
 import migrator.app.migration.model.TableProperty;
@@ -27,6 +28,7 @@ public class TableService implements Service {
     private EventHandler tableRefreshHandler;
     private EventHandler tableDeselectHandler;
     private EventHandler tableRemoveHandler;
+    private EventHandler tableRestoreHandler;
     private ChangeListener<Table> selectedTableListener;
     
     public TableService(Container container) {
@@ -55,11 +57,13 @@ public class TableService implements Service {
             container.tableContainer().tableStore()
         );
         this.tableDeselectHandler = new TableDeselectHandler(
-            container.tableContainer().tableStore()
+            container.tableContainer().tableStore(),
+            container.dispatcher()
         );
         this.tableRemoveHandler = new TableRemoveHandler(
             container.tableContainer()
         );
+        this.tableRestoreHandler = new TableRestoreHandler();
 
         this.selectedTableListener = (observable, oldValue, newValue) -> {
             if (newValue == null) {
@@ -78,6 +82,8 @@ public class TableService implements Service {
         this.dispatcher.register("table.deselect", this.tableDeselectHandler);
         this.dispatcher.register("table.refresh", this.tableRefreshHandler);
         this.dispatcher.register("table.remove", this.tableRemoveHandler);
+        this.dispatcher.register("table.restore", this.tableRestoreHandler);
+
         this.tableStore.getSelected().addListener(this.selectedTableListener);
 
         this.tablePropertyPersistanceService.start();
@@ -91,6 +97,8 @@ public class TableService implements Service {
         this.dispatcher.unregister("table.deselect", this.tableDeselectHandler);
         this.dispatcher.unregister("table.refresh", this.tableRefreshHandler);
         this.dispatcher.unregister("table.remove", this.tableRemoveHandler);
+        this.dispatcher.unregister("table.restore", this.tableRestoreHandler);
+
         this.tableStore.getSelected().removeListener(this.selectedTableListener);
 
         this.tablePropertyPersistanceService.stop();

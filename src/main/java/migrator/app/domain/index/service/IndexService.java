@@ -4,6 +4,7 @@ import migrator.app.boot.Container;
 import migrator.app.domain.index.action.IndexCreateHandler;
 import migrator.app.domain.index.action.IndexDeselectHandler;
 import migrator.app.domain.index.action.IndexRemoveHandler;
+import migrator.app.domain.index.action.IndexRestoreHandler;
 import migrator.app.domain.index.action.IndexSelectHandler;
 import migrator.app.domain.table.model.Index;
 import migrator.app.migration.model.IndexProperty;
@@ -21,6 +22,7 @@ public class IndexService implements Service {
     private EventHandler indexRemoveHandler;
     private EventHandler indexSelectHandler;
     private EventHandler indexDeselectHandler;
+    private EventHandler indexRestoreHandler;
 
     public IndexService(Container container) {
         this.dispatcher = container.dispatcher();
@@ -47,6 +49,7 @@ public class IndexService implements Service {
         this.indexDeselectHandler = new IndexDeselectHandler(
             container.indexContainer().indexStore()
         );
+        this.indexRestoreHandler = new IndexRestoreHandler();
     }
 
     @Override
@@ -55,6 +58,7 @@ public class IndexService implements Service {
         this.dispatcher.register("index.create", this.indexCreateHandler);
         this.dispatcher.register("index.select", this.indexSelectHandler);
         this.dispatcher.register("index.deselect", this.indexDeselectHandler);
+        this.dispatcher.register("index.restore", this.indexRestoreHandler);
 
         this.indexPropertyPersistanceService.start();
         this.indexPersistanceService.start();
@@ -66,6 +70,7 @@ public class IndexService implements Service {
         this.dispatcher.unregister("index.create", this.indexCreateHandler);
         this.dispatcher.unregister("index.select", this.indexSelectHandler);
         this.dispatcher.unregister("index.deselect", this.indexDeselectHandler);
+        this.dispatcher.unregister("index.restore", this.indexRestoreHandler);
 
         this.indexPropertyPersistanceService.stop();
         this.indexPersistanceService.stop();

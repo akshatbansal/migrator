@@ -4,17 +4,19 @@ import java.util.Properties;
 
 import io.sentry.Sentry;
 import migrator.app.boot.Container;
-import migrator.app.extension.Extension;
+import migrator.app.service.Service;
 
-public class SentryExtension implements Extension {
+public class SentryExtension implements Service {
     protected Properties properties;
+    private Container container;
 
-    public SentryExtension(Properties properties) {
+    public SentryExtension(Container container, Properties properties) {
         this.properties = properties;
+        this.container = container;
     }
 
     @Override
-    public void load(Container container) {
+    public void start() {
         container.logger().setLogger(
             new SentryLogger()
         );
@@ -25,5 +27,10 @@ public class SentryExtension implements Extension {
         Thread.setDefaultUncaughtExceptionHandler(
             new ExceptionHandler()
         );
+    }
+
+    @Override
+    public void stop() {
+        
     }
 }

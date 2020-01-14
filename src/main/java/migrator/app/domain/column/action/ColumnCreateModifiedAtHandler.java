@@ -19,7 +19,7 @@ public class ColumnCreateModifiedAtHandler implements EventHandler {
     @Override
     public void handle(Event<?> event) {
         String tableId = (String) event.getValue();
-        Column column = this.columnContainer.columnFactory().createWithCreateChange(tableId, "modified_at", "timestamp", "CURRENT_TIMESTAMP", false, "", false, "", false);
+        Column column = this.columnContainer.columnFactory().createWithCreateChange(tableId, "modified_at", "timestamp", "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP", false, "", false, "", false);
         this.columnAddHandler.handle(
             new SimpleEvent<>("column.add", column)
         );

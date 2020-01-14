@@ -188,23 +188,6 @@ public class Column extends GuiModel implements Changable, ColumnChange, ChangeL
     }
 
     @Override
-    public void restore() {
-        this.changedColumn.nameProperty().set(this.originalColumn.getName());
-        this.changedColumn.formatProperty().set(this.originalColumn.getFormat());
-        this.changedColumn.defaultValueProperty().set(this.originalColumn.getDefaultValue());
-        this.changedColumn.nullProperty().setValue(this.originalColumn.isNullEnabled());
-        this.changedColumn.lengthProperty().set(this.originalColumn.getLength());
-        this.changedColumn.precisionProperty().set(this.originalColumn.getPrecision());
-        this.changedColumn.signProperty().setValue(this.originalColumn.isSigned());
-        this.changedColumn.autoIncrementProperty().setValue(
-            this.originalColumn.isAutoIncrement()
-        );
-
-        this.changeCommand.setType(ChangeCommand.NONE);
-        
-    }
-
-    @Override
     public ChangeCommand getCommand() {
         return this.getChangeCommand();
     }
