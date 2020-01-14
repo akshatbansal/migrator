@@ -4,12 +4,13 @@ import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import migrator.app.domain.project.model.Project;
+import migrator.app.gui.route.RouteView;
 import migrator.app.gui.view.SimpleView;
 import migrator.app.gui.view.View;
 import migrator.app.gui.view.ViewFactories;
 import migrator.app.gui.view.main.Layout;
 
-public class ProjectsView extends SimpleView implements View {
+public class ProjectsView extends SimpleView implements View, RouteView {
     protected Layout layout;
 
     protected ProjectFormView projectFormView;
@@ -50,4 +51,15 @@ public class ProjectsView extends SimpleView implements View {
     public Node getNode() {
         return this.layout.getNode();
     }
+
+    @Override
+    public void activate() {}
+
+    @Override
+    public View getView() {
+        return this;
+    }
+
+    @Override
+    public void suspend() {}
 }

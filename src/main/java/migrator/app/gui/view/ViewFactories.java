@@ -10,6 +10,9 @@ import migrator.app.gui.column.format.ColumnFormatCollection;
 import migrator.app.gui.component.ComponentFactories;
 import migrator.app.gui.validation.ProjectConnectionValidator;
 import migrator.app.gui.view.column.ColumnFormView;
+import migrator.app.gui.view.commit.CommitFormView;
+import migrator.app.gui.view.commit.CommitOverviewView;
+import migrator.app.gui.view.commit.CommitView;
 import migrator.app.gui.view.index.IndexFormView;
 import migrator.app.gui.view.main.Layout;
 import migrator.app.gui.view.project.ProjectFormView;
@@ -134,6 +137,28 @@ public class ViewFactories {
     public IndexFormView createIndexForm() {
         return new IndexFormView(
             this.container.dispatcher()
+        );
+    }
+
+    public CommitFormView createCommitForm() {
+        return new CommitFormView(
+            this.container.dispatcher()
+        );
+    }
+
+    public CommitOverviewView createCommitOverview() {
+        return new CommitOverviewView(
+            this.componentFactories,
+            this.container.dispatcher()
+        );
+    }
+
+    public CommitView createCommit() {
+        return new CommitView(
+            new Layout(),
+            this,
+            this.container.projectStore().getOpened(),
+            this.container.tableContainer().tableStore().getList()
         );
     }
 }

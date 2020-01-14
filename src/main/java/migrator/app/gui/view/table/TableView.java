@@ -8,6 +8,7 @@ import migrator.app.domain.table.model.Column;
 import migrator.app.domain.table.model.Index;
 import migrator.app.domain.table.model.Table;
 import migrator.app.gui.column.format.ColumnFormatOption;
+import migrator.app.gui.route.RouteView;
 import migrator.app.gui.view.SimpleView;
 import migrator.app.gui.view.View;
 import migrator.app.gui.view.ViewFactories;
@@ -16,7 +17,7 @@ import migrator.app.gui.view.index.IndexFormView;
 import migrator.app.gui.view.main.Layout;
 import migrator.app.migration.model.ColumnProperty;
 
-public class TableView extends SimpleView implements View {
+public class TableView extends SimpleView implements View, RouteView {
     private Layout layout;
     
     public TableView(
@@ -67,4 +68,15 @@ public class TableView extends SimpleView implements View {
     public Node getNode() {
         return this.layout.getNode();
     }
+
+    @Override
+    public void activate() {}
+
+    @Override
+    public View getView() {
+        return this;
+    }
+
+    @Override
+    public void suspend() {}
 }

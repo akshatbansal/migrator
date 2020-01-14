@@ -6,10 +6,11 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import migrator.app.gui.component.Component;
 import migrator.app.gui.component.SimpleComponent;
+import migrator.app.gui.route.RouteView;
 import migrator.app.gui.view.View;
 
 public class RouterComponent extends SimpleComponent implements Component {
-    private ObjectProperty<View> activeView;
+    private ObjectProperty<RouteView> activeView;
     private VBox pane;
 
     public RouterComponent() {
@@ -18,12 +19,15 @@ public class RouterComponent extends SimpleComponent implements Component {
         VBox.setVgrow(this.pane, Priority.ALWAYS);
     }
 
-    public void bind(ObjectProperty<View> activeView) {
+    public void bind(ObjectProperty<RouteView> activeView) {
         this.activeView = activeView;
         this.activeView.addListener((observable, oldValue, newValue) -> {
-            this.onViewChange(newValue);
+            this.onViewChange(newValue.getView());
         });
-        this.onViewChange(this.activeView.get());
+        if (this.activeView.get() == null) {
+            return;
+        }
+        this.onViewChange(this.activeView.get().getView());
     }
 
     protected void onViewChange(View view) {

@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 import migrator.app.gui.component.route.RouterComponent;
 import migrator.app.gui.component.toast.ToastListComponent;
+import migrator.app.gui.route.RouteView;
 import migrator.app.gui.service.toast.Toast;
 import migrator.app.gui.view.SimpleView;
 import migrator.app.gui.view.View;
@@ -18,7 +19,7 @@ public class MainView extends SimpleView implements View {
     @FXML protected VBox routerPane;
     @FXML protected VBox toastPane;
 
-    public MainView(EventDispatcher dispatcher, ObjectProperty<View> routerView) {
+    public MainView(EventDispatcher dispatcher, ObjectProperty<RouteView> routerView) {
         super();
 
         this.toastListComponent = new ToastListComponent();

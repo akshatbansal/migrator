@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import migrator.app.gui.route.RouteView;
 import migrator.app.gui.service.toast.Toast;
 import migrator.app.gui.view.View;
 import migrator.app.gui.view.main.MainView;
@@ -20,7 +21,7 @@ public class WindowService implements Service {
         EventDispatcher dispatcher,
         Stage primaryStage,
         ObservableList<Toast> toasts,
-        ObjectProperty<View> routerView
+        ObjectProperty<RouteView> routerView
     ) {
         this.primaryStage = primaryStage;
         this.mainView = new MainView(dispatcher, routerView);

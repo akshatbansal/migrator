@@ -4,6 +4,7 @@ import javafx.stage.Stage;
 import migrator.app.boot.Container;
 import migrator.app.gui.GuiContainer;
 import migrator.app.gui.route.RouteChangeEvent;
+import migrator.app.gui.route.RouteView;
 import migrator.app.gui.service.route.RouteStore;
 import migrator.app.gui.service.route.SimpleRouteStore;
 import migrator.app.gui.service.toast.PermanentToastStore;
@@ -37,9 +38,10 @@ public class GuiService implements Service {
         );
         this.routeService = new RouteService(dispatcher, routeStore);
 
-        routeStore.addRoute("projects", guiContainer.viewFactories().createProjects());
-        routeStore.addRoute("project", guiContainer.viewFactories().createProject());
-        routeStore.addRoute("table", guiContainer.viewFactories().createTable());
+        routeStore.addRoute("projects", (RouteView) guiContainer.viewFactories().createProjects());
+        routeStore.addRoute("project", (RouteView) guiContainer.viewFactories().createProject());
+        routeStore.addRoute("table", (RouteView) guiContainer.viewFactories().createTable());
+        routeStore.addRoute("commit", (RouteView) guiContainer.viewFactories().createCommit());
 
         container.projectStore().getOpened().addListener((observable, oldValue, newValue) -> {
             if (newValue == null) {
