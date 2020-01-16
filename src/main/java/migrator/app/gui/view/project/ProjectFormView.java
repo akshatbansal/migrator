@@ -15,12 +15,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import migrator.app.domain.project.model.Project;
 import migrator.app.domain.project.service.ProjectService;
+import migrator.app.gui.UseCase;
 import migrator.app.gui.service.toast.Toast;
 import migrator.app.gui.validation.ProjectConnectionValidator;
 import migrator.app.gui.validation.ValidationResult;
 import migrator.app.gui.view.SimpleView;
 import migrator.app.gui.view.View;
-import migrator.ext.javafx.UseCase;
 import migrator.lib.dispatcher.EventDispatcher;
 import migrator.lib.dispatcher.SimpleEvent;
 

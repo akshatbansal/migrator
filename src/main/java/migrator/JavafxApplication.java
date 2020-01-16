@@ -21,10 +21,6 @@ public class JavafxApplication extends Application {
         Container bootContainer = new Container();
         this.applicationService = new ApplicationService(bootContainer, primaryStage);
         this.applicationService.start();
-
-        
-        // container.getHotkeyService().connectKeyboard("find", "CTRL+F");
-        // container.getHotkeyService().connectKeyboard("cancel", "ESCAPE");
     }
 
     public static void main(String[] args) {

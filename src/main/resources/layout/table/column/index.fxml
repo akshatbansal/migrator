@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.image.*?>
-<?import migrator.ext.javafx.component.ChangeCellFactory?>
+<?import migrator.app.gui.component.ChangeCellFactory?>
 
 <VBox styleClass="card" xmlns:fx="http://javafx.com/fxml">
      <VBox styleClass="card__header">

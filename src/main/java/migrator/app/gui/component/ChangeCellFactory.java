@@ -1,4 +1,4 @@
-package migrator.ext.javafx.component;
+package migrator.app.gui.component;
 
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;

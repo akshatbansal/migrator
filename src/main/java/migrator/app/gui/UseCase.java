@@ -1,4 +1,4 @@
-package migrator.ext.javafx;
+package migrator.app.gui;
 
 public class UseCase {
     public static void runOnThread(Runnable runnable) {
