@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import migrator.lib.result.BooleanResult;
 import migrator.lib.storage.Storage;
 import migrator.lib.stringformatter.PascalCaseFormatter;
 import migrator.lib.stringformatter.StringFormatter;
@@ -32,22 +33,21 @@ public class PhinxMigrationGenerator implements MigrationGenerator {
         this.timestampFormatter = new TimestampFileNameFormatter();
     }
 
-    public Boolean generateMigration(String projectFolder, String name, List<? extends TableChange> changes) {
+    public BooleanResult generateMigration(String projectFolder, String name, List<? extends TableChange> changes) {
         String formattedFileName = this.fileNameFormatter.format(name) + ".php";
         File projectFolderFile = new File(projectFolder);
         File[] sameNameFiles = projectFolderFile.listFiles((File dir, String fileInFolderName) -> {
             return fileInFolderName.endsWith(formattedFileName);
         });
         if (sameNameFiles != null && sameNameFiles.length > 0) {
-            // this.toastService.error("Commit name is the same as '" + sameNameFiles[0].getName() + "'. Change commit name.");
-            return false;
+            return new BooleanResult("Commit name is the same as '" + sameNameFiles[0].getName() + "'. Change commit name.");
         }
         String phinxContent = "";
         for (TableChange tableChange : changes) {
             phinxContent += this.toPhinxFormat(tableChange);
         }
         if (phinxContent.isEmpty()) {
-            return true;
+            return new BooleanResult();
         }
 
         Storage<String> storage = this.fileStorageFactory.create(
@@ -58,10 +58,10 @@ public class PhinxMigrationGenerator implements MigrationGenerator {
             this.wrapToPhinxClass(className, phinxContent)
         );
 
-        return true;
+        return new BooleanResult();
     }
 
-    public Boolean generateMigration(String projectFolder, String name, TableChange ... changes) {
+    public BooleanResult generateMigration(String projectFolder, String name, TableChange ... changes) {
         return this.generateMigration(projectFolder, name, Arrays.asList(changes));
     }
 

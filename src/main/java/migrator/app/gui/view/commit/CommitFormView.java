@@ -3,6 +3,7 @@ package migrator.app.gui.view.commit;
 import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import migrator.app.domain.modification.action.CommitEventData;
 import migrator.app.domain.project.ProjectContainer;
 import migrator.app.domain.project.model.Project;
 import migrator.app.gui.route.RouteChangeEvent;
@@ -61,7 +62,7 @@ public class CommitFormView extends SimpleView implements View {
         }
 
         this.dispatcher.dispatch(
-            new SimpleEvent<>("commit", projectContainer)
+            new SimpleEvent<>("commit.generate", new CommitEventData(projectContainer.getProject(), commitName))
         );
     }
 

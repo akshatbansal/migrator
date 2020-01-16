@@ -12,12 +12,14 @@ public class GuiContainer {
     protected ColumnFormatCollection columnFormatCollection;
     protected ViewFactories viewFactoriesValue;
     protected ComponentFactories componentFactoriesValue;
+    protected HotkeyContainer hotkeyContainerValue;
 
     public GuiContainer(
         Container container,
         Window window
     ) {
         DatabaseContainer databaseContainer = container.databaseContainer();
+        this.hotkeyContainerValue = new HotkeyContainer();
 
         this.columnFormatCollection = new ColumnFormatCollection(
             databaseContainer.getApplicationColumnFormatCollection().getObservable()
@@ -31,7 +33,8 @@ public class GuiContainer {
             new BindedObservableList<>(
                 container.columnContainer().columnStore().getList(),
                 new ColumnChangePropertyAdapter()
-            )
+            ),
+            this.hotkeyContainer().hotkeysService()
         );
     }
 
@@ -45,5 +48,9 @@ public class GuiContainer {
 
     public ComponentFactories componentFactories() {
         return this.componentFactoriesValue;
+    }
+
+    public HotkeyContainer hotkeyContainer() {
+        return this.hotkeyContainerValue;
     }
 }

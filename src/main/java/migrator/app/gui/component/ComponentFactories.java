@@ -5,6 +5,7 @@ import migrator.app.gui.component.card.CardComponentFactory;
 import migrator.app.gui.component.card.CardListComponent;
 import migrator.app.gui.component.column.ColumnListComponent;
 import migrator.app.gui.component.index.IndexListComponent;
+import migrator.app.gui.component.list.SearchComponent;
 import migrator.app.gui.component.list.VerticalListComponent;
 import migrator.app.gui.component.toast.ToastListComponent;
 
@@ -31,5 +32,9 @@ public class ComponentFactories {
 
     public <T extends Component> VerticalListComponent<T> createVerticalList() {
         return new VerticalListComponent<T>();
+    }
+
+    public SearchComponent createSearch() {
+        return new SearchComponent();
     }
 }

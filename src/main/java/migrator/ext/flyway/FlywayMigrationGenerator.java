@@ -9,6 +9,7 @@ import migrator.app.code.CodeCommandFactory;
 import migrator.app.migration.FileStorageFactory;
 import migrator.app.migration.MigrationGenerator;
 import migrator.app.migration.model.TableChange;
+import migrator.lib.result.BooleanResult;
 import migrator.lib.storage.Storage;
 
 public class FlywayMigrationGenerator implements MigrationGenerator {
@@ -24,13 +25,13 @@ public class FlywayMigrationGenerator implements MigrationGenerator {
     }
 
     @Override
-    public Boolean generateMigration(String projectFolder, String name, List<? extends TableChange> changes) {
+    public BooleanResult generateMigration(String projectFolder, String name, List<? extends TableChange> changes) {
         String flywayContent = "";
         for (TableChange tableChange : changes) {
             flywayContent += this.toFlywayFormat(tableChange);
         }
         if (flywayContent.isEmpty()) {
-            return true;
+            return new BooleanResult();
         }
 
         Storage<String> storage = this.storageFactory.create(
@@ -38,11 +39,11 @@ public class FlywayMigrationGenerator implements MigrationGenerator {
         );
         storage.store(flywayContent);
 
-        return true;
+        return new BooleanResult();
     }
 
     @Override
-    public Boolean generateMigration(String projectFolder, String name, TableChange... changes) {
+    public BooleanResult generateMigration(String projectFolder, String name, TableChange... changes) {
         return this.generateMigration(projectFolder, name, Arrays.asList(changes));
     }
 

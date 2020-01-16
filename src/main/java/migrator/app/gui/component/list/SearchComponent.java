@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import migrator.app.gui.component.Component;
 import migrator.app.gui.component.SimpleComponent;
+import migrator.lib.dispatcher.SimpleEvent;
 
 public class SearchComponent extends SimpleComponent implements Component {
     protected StringProperty searchString;
@@ -24,7 +25,9 @@ public class SearchComponent extends SimpleComponent implements Component {
 
     @FXML
     public void close() {
-        this.searchString.set("");
+        this.output(
+            new SimpleEvent<>("close")
+        );
     }
 
     public void focus() {

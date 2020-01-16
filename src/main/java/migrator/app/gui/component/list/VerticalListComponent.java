@@ -30,6 +30,10 @@ public class VerticalListComponent<T extends Component> extends SimpleComponent 
         this.render();
     }
 
+    public void clearSpacing() {
+        this.pane.setSpacing(0);
+    }
+
     private void render() {
         List<Node> nodes = new LinkedList<>();
         for (T component : this.list) {

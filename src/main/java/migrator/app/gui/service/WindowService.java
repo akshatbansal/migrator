@@ -8,7 +8,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import migrator.app.gui.route.RouteView;
 import migrator.app.gui.service.toast.Toast;
-import migrator.app.gui.view.View;
 import migrator.app.gui.view.main.MainView;
 import migrator.app.service.Service;
 import migrator.lib.dispatcher.EventDispatcher;
@@ -46,13 +45,6 @@ public class WindowService implements Service {
             getClass().getResource("/styles/scroll.css").toExternalForm(),
             getClass().getResource("/styles/main.css").toExternalForm()
         );
-
-        // scene.getRoot().setOnKeyPressed((e) -> {
-        //     this.container.getHotkeyService()
-        //         .keyPressed(
-        //             container.getHotkeyFactory().create(e.getCode().getCode(), e.isControlDown(), e.isShiftDown())
-        //         );
-        // });
         
         this.primaryStage.setTitle("Migrator");
         this.primaryStage.getIcons().add(

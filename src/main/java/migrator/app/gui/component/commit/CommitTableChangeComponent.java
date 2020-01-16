@@ -31,6 +31,7 @@ public class CommitTableChangeComponent extends SimpleComponent implements Compo
         this.loadFxml("/layout/project/commit/tablechange.fxml");
 
         VerticalListComponent<Component> verticalListComponent = componentFactories.createVerticalList();
+        verticalListComponent.clearSpacing();
         verticalListComponent.bind(changeLines);
 
         this.changes.getChildren().setAll(

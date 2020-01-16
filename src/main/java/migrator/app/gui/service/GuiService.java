@@ -18,6 +18,7 @@ public class GuiService implements Service {
     private ToastService toastService;
     private WindowService windowService;
     private RouteService routeService;
+    private HotkeyService hotkeyService;
 
     public GuiService(Container container, Stage primaryStage) {
         GuiContainer guiContainer = new GuiContainer(
@@ -36,8 +37,13 @@ public class GuiService implements Service {
             toastStore.getList(),
             routeStore.getActive()
         );
-        this.routeService = new RouteService(dispatcher, routeStore);
+        this.hotkeyService = new HotkeyService(guiContainer, primaryStage);
+        guiContainer.hotkeyContainer().hotkeysService()
+            .connectKeyboard("find", "CTRL+F");
+        guiContainer.hotkeyContainer().hotkeysService()
+            .connectKeyboard("cancel", "ESCAPE");
 
+        this.routeService = new RouteService(dispatcher, routeStore);
         routeStore.addRoute("projects", (RouteView) guiContainer.viewFactories().createProjects());
         routeStore.addRoute("project", (RouteView) guiContainer.viewFactories().createProject());
         routeStore.addRoute("table", (RouteView) guiContainer.viewFactories().createTable());
@@ -70,6 +76,7 @@ public class GuiService implements Service {
         this.toastService.start();
         this.routeService.start();
         this.windowService.start();
+        this.hotkeyService.start();
     }
 
     @Override
@@ -77,5 +84,6 @@ public class GuiService implements Service {
         this.toastService.stop();
         this.routeService.stop();
         this.windowService.stop();
+        this.hotkeyService.stop();
     }
 }

@@ -24,6 +24,7 @@ import migrator.app.gui.view.table.TableFormView;
 import migrator.app.gui.view.table.TableListView;
 import migrator.app.gui.view.table.TableView;
 import migrator.app.migration.model.ColumnProperty;
+import migrator.lib.hotkyes.HotkeysService;
 
 public class ViewFactories {
     private Container container;
@@ -31,19 +32,22 @@ public class ViewFactories {
     private ComponentFactories componentFactories;
     private ColumnFormatCollection columnFormatCollection;
     private ObservableList<ColumnProperty> activeColumns;
+    private HotkeysService hotkeysService;
 
     public ViewFactories(
         Container container,
         ComponentFactories componentFactories,
         Window window,
         ColumnFormatCollection columnFormatCollection,
-        ObservableList<ColumnProperty> activeColumns
+        ObservableList<ColumnProperty> activeColumns,
+        HotkeysService hotkeysService
     ) {
         this.window = window;
         this.container = container;
         this.componentFactories = componentFactories;
         this.columnFormatCollection = columnFormatCollection;
         this.activeColumns = activeColumns;
+        this.hotkeysService = hotkeysService;
     }
 
     public ProjectFormView createProjectForm(ObjectProperty<Project> selectedProject, ObservableList<String> dbDrivers, ObservableList<String> outputDrivers) {
@@ -72,6 +76,8 @@ public class ViewFactories {
     public TableListView createTableList(ObservableList<Table> tables) {
         return new TableListView(
             this.container.dispatcher(),
+            this.componentFactories,
+            this.hotkeysService,
             tables,
             this.container.projectStore().getOpened()
         );
