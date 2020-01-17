@@ -1,4 +1,4 @@
-package migrator.ext.mysql.database.index;
+package migrator.ext.sql.database.index;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,10 +8,10 @@ import migrator.app.migration.model.IndexProperty;
 import migrator.app.migration.model.SimpleIndexProperty;
 import migrator.lib.adapter.Adapter;
 
-public class MysqlIndexAdapter implements Adapter<List<String>, IndexProperty> {
+public class SqlIndexAdapter implements Adapter<List<String>, IndexProperty> {
     protected List<ColumnProperty> columns;
 
-    public MysqlIndexAdapter(List<ColumnProperty> columns) {
+    public SqlIndexAdapter(List<ColumnProperty> columns) {
         this.columns = columns;
     }
 

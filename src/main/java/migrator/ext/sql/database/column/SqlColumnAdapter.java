@@ -1,4 +1,4 @@
-package migrator.ext.mysql.database.column;
+package migrator.ext.sql.database.column;
 
 import java.util.Hashtable;
 import java.util.Map;
@@ -7,11 +7,11 @@ import migrator.app.migration.model.ColumnProperty;
 import migrator.app.migration.model.SimpleColumnProperty;
 import migrator.lib.adapter.Adapter;
 
-public class MysqlColumnAdapter implements Adapter<ColumnProperty, Map<String, String>> {
+public class SqlColumnAdapter implements Adapter<ColumnProperty, Map<String, String>> {
     protected Adapter<Map<String, String>, String> formatAdapter;
 
-    public MysqlColumnAdapter() {
-        this.formatAdapter = new MysqlFormatAdapter();
+    public SqlColumnAdapter() {
+        this.formatAdapter = new SqlFormatAdapter();
     }
 
     @Override

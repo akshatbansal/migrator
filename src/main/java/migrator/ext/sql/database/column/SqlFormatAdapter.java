@@ -1,4 +1,4 @@
-package migrator.ext.mysql.database.column;
+package migrator.ext.sql.database.column;
 
 import java.util.Hashtable;
 import java.util.LinkedList;
@@ -7,10 +7,10 @@ import java.util.Map;
 
 import migrator.lib.adapter.Adapter;
 
-public class MysqlFormatAdapter implements Adapter<Map<String, String>, String> {
+public class SqlFormatAdapter implements Adapter<Map<String, String>, String> {
     private List<FormatType> formatTypes;
 
-    public MysqlFormatAdapter() {
+    public SqlFormatAdapter() {
         this.formatTypes = new LinkedList<>();
         this.formatTypes.add(new SimpleFormatType("time", "time"));
         this.formatTypes.add(new SimpleFormatType("datetime", "datetime"));

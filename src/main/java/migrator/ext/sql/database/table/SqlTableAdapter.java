@@ -1,10 +1,10 @@
-package migrator.ext.mysql.database.table;
+package migrator.ext.sql.database.table;
 
 import migrator.app.migration.model.SimpleTableProperty;
 import migrator.app.migration.model.TableProperty;
 import migrator.lib.adapter.Adapter;
 
-public class MysqlTableAdapter implements Adapter<String, TableProperty> {
+public class SqlTableAdapter implements Adapter<String, TableProperty> {
     @Override
     public String concretize(TableProperty item) {
         if (item == null) {

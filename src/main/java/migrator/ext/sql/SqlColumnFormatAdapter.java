@@ -4,14 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import migrator.app.migration.model.ColumnProperty;
-import migrator.ext.mysql.database.column.MysqlFormatAdapter;
+import migrator.ext.sql.database.column.SqlFormatAdapter;
 import migrator.lib.adapter.Adapter;
 
 public class SqlColumnFormatAdapter implements Adapter<ColumnProperty, String> {
-    protected MysqlFormatAdapter mysqlFormatAdapter;
+    protected SqlFormatAdapter sqlFormatAdapter;
 
     public SqlColumnFormatAdapter() {
-        this.mysqlFormatAdapter = new MysqlFormatAdapter();
+        this.sqlFormatAdapter = new SqlFormatAdapter();
     }
 
     @Override
@@ -26,6 +26,6 @@ public class SqlColumnFormatAdapter implements Adapter<ColumnProperty, String> {
         formatMap.put("length", item.getLength());
         formatMap.put("precision", item.getPrecision());
 
-        return this.mysqlFormatAdapter.generalize(formatMap);
+        return this.sqlFormatAdapter.generalize(formatMap);
     }
 }
