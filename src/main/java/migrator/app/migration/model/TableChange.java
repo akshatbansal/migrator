@@ -9,5 +9,4 @@ public interface TableChange extends TableProperty {
     public ObservableList<? extends IndexChange> getIndexesChanges();
     public ChangeCommand getCommand();
     public Boolean hasNameChanged();
-    public void restore();
 }

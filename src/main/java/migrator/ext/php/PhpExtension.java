@@ -1,14 +1,27 @@
 package migrator.ext.php;
 
-import migrator.app.code.CodeConfig;
-import migrator.app.ConfigContainer;
-import migrator.app.extension.Extension;
+import migrator.app.boot.Container;
+import migrator.app.service.Service;
 
-public class PhpExtension implements Extension {
+public class PhpExtension implements Service {
+    private Container container;
+
+    public PhpExtension(Container container) {
+        this.container = container;
+    }
+
     @Override
-    public void load(ConfigContainer config) {
-        CodeConfig codeConfig = config.getCodeConfig();
+    public void start() {
+        container.codeContainer().addCommandFactory(
+            "php",
+            new PhpCommandFactory(
+                container.databaseContainer().getApplicationColumnFormatCollection()
+            )
+        );
+    }
 
-        codeConfig.addCommandFactory("php", new PhpCommandFactory(config.databaseContainerConfig().get().getApplicationColumnFormatCollection()));
+    @Override
+    public void stop() {
+        
     }
 }

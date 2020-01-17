@@ -1,18 +1,28 @@
 package migrator.ext.postgresql;
 
-import migrator.app.ConfigContainer;
-import migrator.app.extension.Extension;
+import migrator.app.boot.Container;
+import migrator.app.service.Service;
 import migrator.ext.postgresql.database.PostgresqlStructureFactory;
 
-public class PostgresqlExtension implements Extension {
+public class PostgresqlExtension implements Service {
+    private Container container;
+
+    public PostgresqlExtension(Container container) {
+        this.container = container;
+    }
+
     @Override
-    public void load(ConfigContainer config) {
-        config.databaseContainerConfig().get()
-            .addStrucutreFactory(
-                "postgresql",
+    public void start() {
+        container.databaseContainer().addStrucutreFactory(
+            "postgresql",
                 new PostgresqlStructureFactory(
-                    config.loggerConfig()
+                    container.logger()
                 )
-            );
+        );
+    }
+
+    @Override
+    public void stop() {
+        
     }
 }

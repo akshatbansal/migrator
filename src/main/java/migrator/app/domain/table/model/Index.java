@@ -107,12 +107,6 @@ public class Index implements Changable, IndexChange, Modification<IndexProperty
         this.getChangeCommand().setType(ChangeCommand.DELETE);
     }
 
-    public void restore() {
-        this.changedIndex.nameProperty().set(this.originalIndex.getName());
-        this.changedIndex.columnsProperty().setAll(this.originalColumnsProperty());
-        this.changeCommand.setType(ChangeCommand.NONE);
-    }
-
     public StringProperty changeTypeProperty() {
         return this.getChangeCommand().typeProperty();
     }

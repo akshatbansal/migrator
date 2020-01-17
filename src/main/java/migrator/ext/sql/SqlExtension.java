@@ -1,14 +1,27 @@
 package migrator.ext.sql;
 
-import migrator.app.ConfigContainer;
-import migrator.app.extension.Extension;
+import migrator.app.boot.Container;
+import migrator.app.service.Service;
 
-public class SqlExtension implements Extension {
+public class SqlExtension implements Service {
+    private Container container;
+
+    public SqlExtension(Container container) {
+        this.container = container;
+    }
+
     @Override
-    public void load(ConfigContainer config) {
-        config.getCodeConfig().addCommandFactory(
+    public void start() {
+        container.codeContainer().addCommandFactory(
             "sql",
-            new SqlCommandFactory(config.databaseContainerConfig().get().getApplicationColumnFormatCollection())
+            new SqlCommandFactory(
+                container.databaseContainer().getApplicationColumnFormatCollection()
+            )
         );
+    }
+
+    @Override
+    public void stop() {
+        
     }
 }

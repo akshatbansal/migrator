@@ -1,109 +1,103 @@
 package migrator.app.domain.project.service;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import migrator.app.database.ConnectionResult;
-import migrator.app.database.DatabaseContainer;
-import migrator.app.database.DatabaseStructure;
-import migrator.app.database.DatabaseStructureFactory;
-import migrator.app.domain.connection.model.Connection;
+import java.util.Collection;
+
+import javafx.beans.value.ChangeListener;
+import migrator.app.boot.Container;
 import migrator.app.domain.project.ProjectContainer;
+import migrator.app.domain.project.action.ProjectCloseHandler;
+import migrator.app.domain.project.action.ProjectDeselectHandler;
+import migrator.app.domain.project.action.ProjectNewHandler;
+import migrator.app.domain.project.action.ProjectOpenHandler;
+import migrator.app.domain.project.action.ProjectRefreshHandler;
+import migrator.app.domain.project.action.ProjectRemoveHandler;
+import migrator.app.domain.project.action.ProjectSelectHandler;
 import migrator.app.domain.project.model.Project;
-import migrator.app.router.ActiveRoute;
-import migrator.app.toast.ToastService;
+import migrator.app.service.Service;
+import migrator.lib.dispatcher.EventDispatcher;
+import migrator.lib.dispatcher.EventHandler;
+import migrator.lib.dispatcher.SimpleEvent;
+import migrator.lib.storage.Storage;
 
-public class ProjectService {
-    protected DatabaseContainer databaseContainer;
-    protected ProjectFactory factory;
-    protected ToastService toastService;
-    protected ActiveRoute activeRoute;
-    protected ObjectProperty<Project> selected;
-    protected ObjectProperty<ProjectContainer> opened;
-    protected ObservableList<Project> list;
+public class ProjectService implements Service {
+    private EventDispatcher dispatcher;
+    private Storage<Collection<Project>> projectStorage;
+    private ProjectStore projectStore;
 
-    public ProjectService(ProjectFactory factory, DatabaseContainer databaseContainer, ToastService toastService, ActiveRoute activeRoute) {
-        this.factory = factory;
-        this.databaseContainer = databaseContainer;
-        this.toastService = toastService;
-        this.activeRoute = activeRoute;
-        this.list = FXCollections.observableArrayList();
-        this.selected = new SimpleObjectProperty<>();
-        this.opened = new SimpleObjectProperty<>();
-    }
+    private EventHandler projectNewHandler;
+    private EventHandler projectSelectHandler;
+    private EventHandler projectDeselectHandler;
+    private EventHandler projectRemoveHandler;
+    private EventHandler projectOpenHandler;
+    private EventHandler projectCloseHandler;
+    private EventHandler projectRefreshHandler;
+    private ChangeListener<ProjectContainer> openedProjectListener;
 
-    public ProjectFactory getFactory() {
-        return this.factory;
-    }
+    public ProjectService(Container container) {
+        this.dispatcher = container.dispatcher();
+        this.projectStorage = container.projectStorage();
+        this.projectStore = container.projectStore();
 
-    public void select(Project project) {
-        if (this.selected.get() != null) {
-            this.selected.get().blur();
-        }
-
-        this.selected.set(project);
-        if (project != null) {
-            this.selected.get().focus();
-        }
-    }
-
-    public void deselect() {
-        this.select(null);
-        this.activeRoute.changeTo("project.index");
-    }
-
-    public ObjectProperty<Project> getSelected() {
-        return this.selected;
-    }
-
-    public void open(Project project) {
-        if (project == null) {
-            this.opened.set(null);
-            return;
-        }
-
-        if (project.disabledProperty().get()) {
-            return;
-        }
-        project.disable();
-
-        Connection connection = project.getDatabase().getConnection();
-        DatabaseStructureFactory dbStrucutreFactory = this.databaseContainer.getStructureFactoryFor(connection.getDriver());
-        DatabaseStructure dbStrucutre = dbStrucutreFactory.create(
-            project.getDatabase().getUrl(),
-            connection.getUser(),
-            connection.getPassword()
+        this.projectNewHandler = new ProjectNewHandler(
+            container.projectStore(),
+            container.projectFactory()
         );
-        ConnectionResult<?> connectionResult = dbStrucutre.testConnection();
-        project.enable();
-        if (!connectionResult.isOk()) {
-            this.toastService.error(connectionResult.getError());
-            return;
-        }
+        this.projectSelectHandler = new ProjectSelectHandler(
+            container.projectStore()
+        );
+        this.projectDeselectHandler = new ProjectDeselectHandler(
+            container.projectStore()
+        );
+        this.projectRemoveHandler = new ProjectRemoveHandler(
+            container.projectStore()
+        );
+        this.projectOpenHandler = new ProjectOpenHandler(
+            container.projectStore()
+        );
+        this.projectCloseHandler = new ProjectCloseHandler(
+            container.projectStore()
+        );
+        this.projectRefreshHandler = new ProjectRefreshHandler(
+            container.tableContainer()
+        );
+
+        this.openedProjectListener = (observablr, oldValue, newValue) -> {
+            this.dispatcher.dispatch(
+                new SimpleEvent<>("project.refresh", newValue)
+            );
+        };
+    }
+
+    @Override
+    public void start() {
+        this.dispatcher.register("project.new", this.projectNewHandler);
+        this.dispatcher.register("project.select", this.projectSelectHandler);
+        this.dispatcher.register("project.remove", this.projectRemoveHandler);
+        this.dispatcher.register("project.deselect", this.projectDeselectHandler);
+        this.dispatcher.register("project.open", this.projectOpenHandler);
+        this.dispatcher.register("project.close", this.projectCloseHandler);
+        this.dispatcher.register("project.refresh", this.projectRefreshHandler);
+        this.projectStore.getOpened().addListener(this.openedProjectListener);
+
+        this.projectStore.addAll(
+            this.projectStorage.load()
+        );
         
-        this.opened.set(new ProjectContainer(project, dbStrucutre));
-        this.activeRoute.changeTo("table.index");
     }
 
-    public void close() {
-        this.open(null);
-        this.activeRoute.changeTo("project.index");
-    }
+    @Override
+    public void stop() {
+        dispatcher.unregister("project.new", this.projectNewHandler);
+        dispatcher.unregister("project.select", this.projectSelectHandler);
+        this.dispatcher.unregister("project.remove", this.projectRemoveHandler);
+        this.dispatcher.unregister("project.deselect", this.projectDeselectHandler);
+        this.dispatcher.unregister("project.open", this.projectOpenHandler);
+        this.dispatcher.unregister("project.close", this.projectCloseHandler);
+        this.dispatcher.unregister("project.refresh", this.projectRefreshHandler);
+        this.projectStore.getOpened().removeListener(this.openedProjectListener);
 
-    public ObjectProperty<ProjectContainer> getOpened() {
-        return this.opened;
-    }
-
-    public ObservableList<Project> getList() {
-        return this.list;
-    }
-
-    public void remove(Project project) {
-        this.list.remove(project);
-    }
-
-    public void add(Project project) {
-        this.list.add(project);
+        this.projectStorage.store(
+            this.projectStore.getList()
+        );
     }
 }

@@ -94,12 +94,6 @@ public class Table implements TableChange, ChangeListener<Object>, Modification<
     }
 
     @Override
-    public void restore() {
-        this.changedTable.nameProperty().set(this.originalTable.getName());
-        this.changeCommand.setType(ChangeCommand.NONE);
-    }
-
-    @Override
     public ObservableList<? extends ColumnChange> getColumnsChanges() {
         return this.columns;
     }

@@ -8,13 +8,13 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.image.*?>
-<?import migrator.ext.javafx.component.ChangeCellFactory?>
+<?import migrator.app.gui.component.ChangeCellFactory?>
 
 <VBox styleClass="card" xmlns:fx="http://javafx.com/fxml">
      <VBox styleClass="card__header">
           <Text styleClass="card__header-title," text="Columns" />
      </VBox>
-     <TableView fx:id="columns" editable="false">
+     <TableView fx:id="columnsTable" editable="false">
           <columns>
                <TableColumn text="" maxWidth="1.0">
                     <cellFactory>
@@ -24,16 +24,16 @@
                          <PropertyValueFactory property="changeType" />
                     </cellValueFactory>
                </TableColumn>
-               <TableColumn text="Name" prefWidth="${(columns.width-4)*0.55}">
+               <TableColumn text="Name" prefWidth="${(columnsTable.width-4)*0.55}">
                     <cellValueFactory><PropertyValueFactory property="name" /></cellValueFactory>
                </TableColumn>
-               <TableColumn styleClass="column--align-right" text="Format" prefWidth="${(columns.width-4)*0.15}">
+               <TableColumn styleClass="column--align-right" text="Format" prefWidth="${(columnsTable.width-4)*0.15}">
                     <cellValueFactory><PropertyValueFactory property="fullFormat" /></cellValueFactory>
                </TableColumn>
-               <TableColumn styleClass="column--align-right" text="Default" prefWidth="${(columns.width-4)*0.15}">
+               <TableColumn styleClass="column--align-right" text="Default" prefWidth="${(columnsTable.width-4)*0.15}">
                     <cellValueFactory><PropertyValueFactory property="defaultValue" /></cellValueFactory>
                </TableColumn>
-               <TableColumn styleClass="column--align-right" text="NULL" prefWidth="${(columns.width-4)*0.15}">
+               <TableColumn styleClass="column--align-right" text="NULL" prefWidth="${(columnsTable.width-4)*0.15}">
                     <cellValueFactory><PropertyValueFactory property="enableNull" /></cellValueFactory>
                </TableColumn>
           </columns>

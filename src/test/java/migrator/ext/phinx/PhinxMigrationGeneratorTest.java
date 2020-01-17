@@ -20,7 +20,6 @@ import migrator.app.migration.model.SimpleColumnProperty;
 import migrator.app.migration.model.SimpleIndexProperty;
 import migrator.app.migration.model.SimpleTableProperty;
 import migrator.app.migration.model.TableChange;
-import migrator.app.toast.PermanentToastService;
 import migrator.ext.phinx.PhinxMigrationGenerator;
 import migrator.ext.phinx.mock.FileStorage;
 import migrator.ext.phinx.mock.FakeFileStorageFactory;
@@ -41,8 +40,7 @@ public class PhinxMigrationGeneratorTest {
         this.storage = new FileStorage();
         this.migrator = new PhinxMigrationGenerator(
             new FakeFileStorageFactory(this.storage),
-            new PhpCommandFactory(this.appColumnFormatCollection),
-            new PermanentToastService()
+            new PhpCommandFactory(this.appColumnFormatCollection)
         );
     }
 
