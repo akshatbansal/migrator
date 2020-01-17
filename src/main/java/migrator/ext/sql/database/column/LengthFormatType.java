@@ -1,4 +1,4 @@
-package migrator.ext.mysql.database.column;
+package migrator.ext.sql.database.column;
 
 import java.util.LinkedList;
 import java.util.List;

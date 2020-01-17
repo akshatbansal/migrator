@@ -1,4 +1,4 @@
-package migrator.ext.mysql.database.table;
+package migrator.ext.sql.database.table;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Test;
 import migrator.app.migration.model.SimpleTableProperty;
 import migrator.app.migration.model.TableProperty;
 
-public class MysqlTableAdapterTest {
+public class SqlTableAdapterTest {
     @Test public void generalize_null_isNull() {
-        MysqlTableAdapter adapter = new MysqlTableAdapter();
+        SqlTableAdapter adapter = new SqlTableAdapter();
 
         TableProperty result = adapter.generalize(null);
 
@@ -18,7 +18,7 @@ public class MysqlTableAdapterTest {
     }
 
     @Test public void generalize_emptyString_isNull() {
-        MysqlTableAdapter adapter = new MysqlTableAdapter();
+        SqlTableAdapter adapter = new SqlTableAdapter();
 
         TableProperty result = adapter.generalize("");
 
@@ -26,7 +26,7 @@ public class MysqlTableAdapterTest {
     }
 
     @Test public void generalize_string_hasName() {
-        MysqlTableAdapter adapter = new MysqlTableAdapter();
+        SqlTableAdapter adapter = new SqlTableAdapter();
 
         TableProperty result = adapter.generalize("table_name");
 
@@ -34,7 +34,7 @@ public class MysqlTableAdapterTest {
     }
 
     @Test public void concretize_null_isEmptyString() {
-        MysqlTableAdapter adapter = new MysqlTableAdapter();
+        SqlTableAdapter adapter = new SqlTableAdapter();
 
         String result = adapter.concretize(null);
 
@@ -42,7 +42,7 @@ public class MysqlTableAdapterTest {
     }
 
     @Test public void concretize_tableProperty_equalsName() {
-        MysqlTableAdapter adapter = new MysqlTableAdapter();
+        SqlTableAdapter adapter = new SqlTableAdapter();
 
         String result = adapter.concretize(new SimpleTableProperty("", "table_name"));
 

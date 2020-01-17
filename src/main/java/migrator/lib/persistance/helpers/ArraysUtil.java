@@ -1,4 +1,4 @@
-package migrator.common;
+package migrator.lib.persistance.helpers;
 
 import java.util.Arrays;
 

@@ -2,8 +2,8 @@ package migrator.lib.persistance;
 
 import java.util.prefs.Preferences;
 
-import migrator.common.ArraysUtil;
-import migrator.common.Serialize;;
+import migrator.lib.persistance.helpers.ArraysUtil;
+import migrator.lib.persistance.helpers.Serialize;
 
 public class ObjectPersistance implements Persistance<Object>  {
     Preferences userPreferences;

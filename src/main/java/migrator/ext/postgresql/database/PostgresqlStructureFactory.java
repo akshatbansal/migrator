@@ -9,12 +9,12 @@ import migrator.app.database.column.ColumnStructure;
 import migrator.app.database.index.IndexStructure;
 import migrator.app.database.table.TableStructure;
 import migrator.app.migration.model.ColumnProperty;
-import migrator.ext.mysql.database.column.MysqlColumnAdapter;
-import migrator.ext.mysql.database.index.MysqlIndexAdapter;
-import migrator.ext.mysql.database.table.MysqlTableAdapter;
 import migrator.ext.postgresql.database.column.PostgresqlColumnDriver;
 import migrator.ext.postgresql.database.index.PostgresqlIndexDriver;
 import migrator.ext.postgresql.database.table.PostgresqlTableDriver;
+import migrator.ext.sql.database.column.SqlColumnAdapter;
+import migrator.ext.sql.database.index.SqlIndexAdapter;
+import migrator.ext.sql.database.table.SqlTableAdapter;
 import migrator.lib.logger.Logger;
 
 public class PostgresqlStructureFactory implements DatabaseStructureFactory {
@@ -31,16 +31,16 @@ public class PostgresqlStructureFactory implements DatabaseStructureFactory {
             connectionDriver,
             new TableStructure(
                 new PostgresqlTableDriver(connectionDriver),
-                new MysqlTableAdapter()
+                new SqlTableAdapter()
             ),
             new ColumnStructure(
                 new PostgresqlColumnDriver(connectionDriver),
-                new MysqlColumnAdapter()    
+                new SqlColumnAdapter()    
             ),
             (ObservableList<ColumnProperty> columns)-> {
                 return new IndexStructure(
                     new PostgresqlIndexDriver(connectionDriver), 
-                    new MysqlIndexAdapter(columns)
+                    new SqlIndexAdapter(columns)
                 );
             }    
         );

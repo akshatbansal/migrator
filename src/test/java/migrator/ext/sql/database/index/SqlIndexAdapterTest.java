@@ -1,4 +1,4 @@
-package migrator.ext.mysql.database.index;
+package migrator.ext.sql.database.index;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -15,9 +15,9 @@ import migrator.app.migration.model.SimpleColumnProperty;
 import migrator.app.migration.model.SimpleIndexProperty;
 import migrator.lib.adapter.Adapter;
 
-public class MysqlIndexAdapterTest {
+public class SqlIndexAdapterTest {
     private Adapter<List<String>, IndexProperty> createAdapter(List<ColumnProperty> availableColumns) {
-        return new MysqlIndexAdapter(availableColumns);
+        return new SqlIndexAdapter(availableColumns);
     }
 
     @Test public void generalize_null_isNull() {

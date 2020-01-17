@@ -9,12 +9,12 @@ import migrator.app.database.column.ColumnStructure;
 import migrator.app.database.index.IndexStructure;
 import migrator.app.database.table.TableStructure;
 import migrator.app.migration.model.ColumnProperty;
-import migrator.ext.mysql.database.column.MysqlColumnAdapter;
 import migrator.ext.mysql.database.column.MysqlColumnDriver;
-import migrator.ext.mysql.database.index.MysqlIndexAdapter;
 import migrator.ext.mysql.database.index.MysqlIndexDriver;
-import migrator.ext.mysql.database.table.MysqlTableAdapter;
 import migrator.ext.mysql.database.table.MysqlTableDriver;
+import migrator.ext.sql.database.column.SqlColumnAdapter;
+import migrator.ext.sql.database.index.SqlIndexAdapter;
+import migrator.ext.sql.database.table.SqlTableAdapter;
 import migrator.lib.logger.Logger;
 
 public class MysqlStructureFactory implements DatabaseStructureFactory {
@@ -32,16 +32,16 @@ public class MysqlStructureFactory implements DatabaseStructureFactory {
             mysqlConnection,
             new TableStructure(
                 new MysqlTableDriver(mysqlConnection),
-                new MysqlTableAdapter()
+                new SqlTableAdapter()
             ),
             new ColumnStructure(
                 new MysqlColumnDriver(mysqlConnection),
-                new MysqlColumnAdapter()
+                new SqlColumnAdapter()
             ),
             (ObservableList<ColumnProperty> columns) -> {
                 return new IndexStructure(
                     new MysqlIndexDriver(mysqlConnection),
-                    new MysqlIndexAdapter(columns)
+                    new SqlIndexAdapter(columns)
                 );
             }
         );

@@ -1,4 +1,4 @@
-package migrator.ext.mysql.database.column;
+package migrator.ext.sql.database.column;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import migrator.app.migration.model.ColumnProperty;
 import migrator.lib.adapter.Adapter;
 
-public class MysqlColumnAdapterTest {
+public class SqlColumnAdapterTest {
     private Map<String, String> createDbColumn(
         String name,
         String format,
@@ -27,7 +27,7 @@ public class MysqlColumnAdapterTest {
     }
 
     @Test public void concretize_null_isNull() {
-        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
+        Adapter<ColumnProperty, Map<String, String>> adapter = new SqlColumnAdapter();
 
         ColumnProperty result = adapter.concretize(null);
 
@@ -35,7 +35,7 @@ public class MysqlColumnAdapterTest {
     }
 
     @Test public void concretize_column_hasName() {
-        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
+        Adapter<ColumnProperty, Map<String, String>> adapter = new SqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "varchar(10)", "YES");
         ColumnProperty result = adapter.concretize(dbColumn);
@@ -44,7 +44,7 @@ public class MysqlColumnAdapterTest {
     }
 
     @Test public void concretize_column_hasNullEnabled() {
-        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
+        Adapter<ColumnProperty, Map<String, String>> adapter = new SqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "varchar(10)", "YES");        
         ColumnProperty result = adapter.concretize(dbColumn);
@@ -53,7 +53,7 @@ public class MysqlColumnAdapterTest {
     }
 
     @Test public void concretize_columnVarchar_hasFormatInApplicationForm() {
-        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
+        Adapter<ColumnProperty, Map<String, String>> adapter = new SqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "varchar(10)", "YES");
         ColumnProperty result = adapter.concretize(dbColumn);
@@ -62,7 +62,7 @@ public class MysqlColumnAdapterTest {
     }
 
     @Test public void concretize_columnInt_hasFormatInApplicationForm() {
-        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
+        Adapter<ColumnProperty, Map<String, String>> adapter = new SqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "int(11)", "YES");
         ColumnProperty result = adapter.concretize(dbColumn);
@@ -71,7 +71,7 @@ public class MysqlColumnAdapterTest {
     }
 
     @Test public void concretize_columnTinyint_hasFormatInApplicationForm() {
-        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
+        Adapter<ColumnProperty, Map<String, String>> adapter = new SqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "tinyint(11)", "YES");
         ColumnProperty result = adapter.concretize(dbColumn);
@@ -80,7 +80,7 @@ public class MysqlColumnAdapterTest {
     }
 
     @Test public void concretize_columnDouble_hasFormatInApplicationForm() {
-        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
+        Adapter<ColumnProperty, Map<String, String>> adapter = new SqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "double(11,2)", "YES");
         ColumnProperty result = adapter.concretize(dbColumn);
@@ -89,7 +89,7 @@ public class MysqlColumnAdapterTest {
     }
 
     @Test public void concretize_columnChar_hasFormatInApplicationForm() {
-        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
+        Adapter<ColumnProperty, Map<String, String>> adapter = new SqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "char(50)", "YES");
         ColumnProperty result = adapter.concretize(dbColumn);
@@ -98,7 +98,7 @@ public class MysqlColumnAdapterTest {
     }
 
     @Test public void concretize_columnBigint_hasFormatInApplicationForm() {
-        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
+        Adapter<ColumnProperty, Map<String, String>> adapter = new SqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "bigint(20)", "YES");
         ColumnProperty result = adapter.concretize(dbColumn);
@@ -107,7 +107,7 @@ public class MysqlColumnAdapterTest {
     }
 
     @Test public void concretize_columnTimestamp_hasFormatInApplicationForm() {
-        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
+        Adapter<ColumnProperty, Map<String, String>> adapter = new SqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "timestamp", "YES");
         ColumnProperty result = adapter.concretize(dbColumn);
@@ -116,7 +116,7 @@ public class MysqlColumnAdapterTest {
     }
 
     @Test public void concretize_columnDate_hasFormatInApplicationForm() {
-        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
+        Adapter<ColumnProperty, Map<String, String>> adapter = new SqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "date", "YES");
         ColumnProperty result = adapter.concretize(dbColumn);
@@ -125,7 +125,7 @@ public class MysqlColumnAdapterTest {
     }
 
     @Test public void concretize_columnDatetime_hasFormatInApplicationForm() {
-        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
+        Adapter<ColumnProperty, Map<String, String>> adapter = new SqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "datetime", "YES");
         ColumnProperty result = adapter.concretize(dbColumn);
@@ -134,7 +134,7 @@ public class MysqlColumnAdapterTest {
     }
 
     @Test public void concretize_columnTime_hasFormatInApplicationForm() {
-        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
+        Adapter<ColumnProperty, Map<String, String>> adapter = new SqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "time", "YES");
         ColumnProperty result = adapter.concretize(dbColumn);
@@ -143,7 +143,7 @@ public class MysqlColumnAdapterTest {
     }
 
     @Test public void concretize_columnText_hasFormatInApplicationForm() {
-        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
+        Adapter<ColumnProperty, Map<String, String>> adapter = new SqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "text", "YES");
         ColumnProperty result = adapter.concretize(dbColumn);
@@ -152,7 +152,7 @@ public class MysqlColumnAdapterTest {
     }
 
     @Test public void concretize_columnFloat_hasFormatInApplicationForm() {
-        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
+        Adapter<ColumnProperty, Map<String, String>> adapter = new SqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "float(8, 4)", "YES");
         ColumnProperty result = adapter.concretize(dbColumn);
@@ -161,7 +161,7 @@ public class MysqlColumnAdapterTest {
     }
 
     @Test public void concretize_columnUnknown_hasEmptyFormat() {
-        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
+        Adapter<ColumnProperty, Map<String, String>> adapter = new SqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "unknown(8, 4)", "YES");
         ColumnProperty result = adapter.concretize(dbColumn);
@@ -170,7 +170,7 @@ public class MysqlColumnAdapterTest {
     }
 
     @Test public void concretize_columnVarchar_hasFormatLength() {
-        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
+        Adapter<ColumnProperty, Map<String, String>> adapter = new SqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "varchar(11)", "YES");
         ColumnProperty result = adapter.concretize(dbColumn);
@@ -179,7 +179,7 @@ public class MysqlColumnAdapterTest {
     }
 
     @Test public void concretize_columnChar_hasFormatLength() {
-        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
+        Adapter<ColumnProperty, Map<String, String>> adapter = new SqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "char(50)", "YES");
         ColumnProperty result = adapter.concretize(dbColumn);
@@ -188,7 +188,7 @@ public class MysqlColumnAdapterTest {
     }
 
     @Test public void concretize_columnBigint_hasFormatLength() {
-        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
+        Adapter<ColumnProperty, Map<String, String>> adapter = new SqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "bigint(20)", "YES");
         ColumnProperty result = adapter.concretize(dbColumn);
@@ -197,7 +197,7 @@ public class MysqlColumnAdapterTest {
     }
 
     @Test public void concretize_columnDouble_hasFormatLength() {
-        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
+        Adapter<ColumnProperty, Map<String, String>> adapter = new SqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "double(11,2)", "YES");
         ColumnProperty result = adapter.concretize(dbColumn);
@@ -206,7 +206,7 @@ public class MysqlColumnAdapterTest {
     }
 
     @Test public void concretize_columnFloat_hasFormatLength() {
-        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
+        Adapter<ColumnProperty, Map<String, String>> adapter = new SqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "float(8,4)", "YES");
         ColumnProperty result = adapter.concretize(dbColumn);
@@ -215,7 +215,7 @@ public class MysqlColumnAdapterTest {
     }
 
     @Test public void concretize_columnDouble_hasFormatPrecision() {
-        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
+        Adapter<ColumnProperty, Map<String, String>> adapter = new SqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "double(11,2)", "YES");
         ColumnProperty result = adapter.concretize(dbColumn);
@@ -224,7 +224,7 @@ public class MysqlColumnAdapterTest {
     }
 
     @Test public void concretize_columnFloat_hasFormatPrecision() {
-        Adapter<ColumnProperty, Map<String, String>> adapter = new MysqlColumnAdapter();
+        Adapter<ColumnProperty, Map<String, String>> adapter = new SqlColumnAdapter();
 
         Map<String, String> dbColumn = this.createDbColumn("column_name", "float(8,4)", "YES");
         ColumnProperty result = adapter.concretize(dbColumn);
