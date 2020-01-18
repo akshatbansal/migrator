@@ -88,6 +88,9 @@ public class SimpleProjectStore implements ProjectStore {
 
     @Override
     public void addAll(Collection<Project> projects) {
+        if (projects == null) {
+            return;
+        }
         this.list.addAll(projects);
     }
 }

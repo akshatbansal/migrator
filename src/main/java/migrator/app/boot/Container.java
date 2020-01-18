@@ -1,9 +1,6 @@
 package migrator.app.boot;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collection;
 
 import migrator.app.ProxyLogger;
@@ -52,15 +49,11 @@ public class Container {
     private ConfigContainer configContainerValue;
 
     public Container() {
-        Path storageFoldePath = Paths.get(System.getProperty("user.home"), ".migrator");
-        if (Files.notExists(storageFoldePath)) {
-            storageFoldePath.toFile().mkdirs();
-        }
         String session = Long.toString(System.currentTimeMillis());
         this.generatorValue = new SessionIncrementalGenerator(session);
 
         this.configContainerValue = new ConfigContainer();
-        this.modificationContainerValue = new ModificationContainer(storageFoldePath);
+        this.modificationContainerValue = new ModificationContainer(this.configContainer().storagePath());
         this.dispatcherValue = new EventDispatcher();
         this.databaseContainerValue = new DatabaseContainer();
         this.migrationContainerValue = new MigrationContainer();
@@ -75,18 +68,18 @@ public class Container {
                 this.databaseContainerValue.getApplicationColumnFormatCollection().getObservable()
             ),
             this.modificationContainerValue.repository(),
-            storageFoldePath
+            this.configContainer().storagePath()
         );
 
         this.indexContainerValue = new IndexContainer(
             generatorValue,
-            storageFoldePath,
+            this.configContainer().storagePath(),
             this.columnContainer().columnPropertyRepository(),
             this.modificationContainer().repository()
         );
         this.tableContainerValue = new TableContainer(
             generatorValue,
-            storageFoldePath,
+            this.configContainer().storagePath(),
             this.modificationContainer(),
             this.columnContainer(),
             this.indexContainer()
@@ -100,7 +93,7 @@ public class Container {
             generatorValue
         );
         this.projectStorageValue = Storages.getFileStorage(
-            new File(storageFoldePath.toString(), "project.json"),
+            new File(this.configContainer().storagePath().toString(), "project.json"),
             new SimpleJsonListAdapter<>(
                 new ProjectAdapter()
             )
