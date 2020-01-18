@@ -58,7 +58,8 @@ public class TableService implements Service {
         );
         this.tableDeselectHandler = new TableDeselectHandler(
             container.tableContainer().tableStore(),
-            container.dispatcher()
+            container.dispatcher(),
+            container.projectStore()
         );
         this.tableRemoveHandler = new TableRemoveHandler(
             container.tableContainer()
