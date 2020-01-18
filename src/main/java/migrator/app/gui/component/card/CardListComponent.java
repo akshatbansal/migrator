@@ -2,6 +2,7 @@ package migrator.app.gui.component.card;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import javafx.collections.ObservableList;
@@ -16,11 +17,13 @@ import migrator.lib.dispatcher.Event;
 public class CardListComponent<T> extends SimpleComponent implements Component {
     protected ObservableList<T> list;
     protected CardComponentFactory<T> cardComponentFactory;
+    private List<CardComponent<T>> cardComponents;
 
     @FXML protected FlowPane pane;
 
     public CardListComponent(CardComponentFactory<T> cardComponentFactory) {
         super();
+        this.cardComponents = new LinkedList<>();
         this.cardComponentFactory = cardComponentFactory;
 
         this.loadFxml("/layout/component/cardlist.fxml");
@@ -35,6 +38,10 @@ public class CardListComponent<T> extends SimpleComponent implements Component {
     }
 
     protected void render() {
+        for (CardComponent<T> component : this.cardComponents) {
+            component.destroy();
+        }
+        this.cardComponents.clear();
         List<Node> childrens = new ArrayList<>();
         this.pane.getChildren().clear();
         Iterator<T> iterator = this.list.iterator();
@@ -44,6 +51,7 @@ public class CardListComponent<T> extends SimpleComponent implements Component {
             cardComponent.outputs().addListener((observable, oldValue, newValue) -> {
                 this.forwardOutput(newValue);
             });
+            this.cardComponents.add(cardComponent);
             childrens.add(cardComponent.getNode());
         }
         this.pane.getChildren().setAll(childrens);

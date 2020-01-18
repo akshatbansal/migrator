@@ -1,5 +1,6 @@
 package migrator.app.domain.table.action;
 
+import migrator.app.domain.project.service.ProjectStore;
 import migrator.app.domain.table.model.Table;
 import migrator.app.service.SelectableStore;
 import migrator.lib.dispatcher.Event;
@@ -10,10 +11,12 @@ import migrator.lib.dispatcher.SimpleEvent;
 public class TableDeselectHandler implements EventHandler {
     private SelectableStore<Table> tableStore;
     private EventDispatcher dispatcher;
+    private ProjectStore projectStore;
 
-    public TableDeselectHandler(SelectableStore<Table> tableStore, EventDispatcher dispatcher) {
+    public TableDeselectHandler(SelectableStore<Table> tableStore, EventDispatcher dispatcher, ProjectStore projectStore) {
         this.tableStore = tableStore;
         this.dispatcher = dispatcher;
+        this.projectStore = projectStore;
     }
 
     @Override
@@ -24,6 +27,9 @@ public class TableDeselectHandler implements EventHandler {
         );
         this.dispatcher.dispatch(
             new SimpleEvent<>("index.deselect")
+        );
+        this.dispatcher.dispatch(
+            new SimpleEvent<>("project.refresh", this.projectStore.getOpened().get())
         );
     }
 }

@@ -1,6 +1,9 @@
 package migrator.app.gui.component.table;
 
+import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
 import javafx.fxml.FXML;
 import javafx.scene.layout.HBox;
@@ -20,6 +23,9 @@ public class TableCardComponent extends SimpleComponent implements CardComponent
     protected static final Integer MARKS_LINE_LIMIT = 8;
 
     protected Table table;
+    private ChangeListener<String> changeCommandLIstener;
+    private ListChangeListener<IndexChange> indexListListener;
+    private ListChangeListener<ColumnChange> columnListListener;
     
     @FXML protected Text name;
     @FXML protected HBox buttonBox;
@@ -30,6 +36,16 @@ public class TableCardComponent extends SimpleComponent implements CardComponent
     public TableCardComponent() {
         super();
 
+        this.changeCommandLIstener = (observable, oldValue, newValue) -> {
+            this.onInnerChange();
+        };
+        this.indexListListener = (Change<? extends IndexChange> change) -> {
+            this.onInnerChange();
+        };
+        this.columnListListener = (Change<? extends ColumnChange> change) -> {
+            this.onInnerChange();
+        };
+
         this.loadFxml("/layout/table/card.fxml");
     }
 
@@ -39,17 +55,17 @@ public class TableCardComponent extends SimpleComponent implements CardComponent
 
         this.name.textProperty().bind(this.table.nameProperty());
 
-        this.table.getColumnsChanges().addListener((Change<? extends ColumnChange> change) -> {
-            this.onInnerChange();
-        });
-        this.table.getIndexesChanges().addListener((Change<? extends IndexChange> change) -> {
-            this.onInnerChange();
-        });
-        this.onInnerChange();
+        this.table.getColumnsChanges().addListener(this.columnListListener);
+        for (ColumnChange columnChange : this.table.getColumnsChanges()) {
+            columnChange.getCommand().typeProperty().addListener(this.changeCommandLIstener);
+        }
+        this.table.getIndexesChanges().addListener(this.indexListListener);
+        for (IndexChange indexChange : this.table.getIndexesChanges()) {
+            indexChange.getCommand().typeProperty().addListener(this.changeCommandLIstener);
+        }
 
-        this.table.getChangeCommand().typeProperty().addListener((obs, oldValue, newValue) -> {
-            this.setChanged(oldValue, newValue);
-        });
+        this.table.getChangeCommand().typeProperty().addListener(this.changeCommandLIstener);
+        this.onInnerChange();
 
         this.setChanged("", this.table.getChangeCommand().getType());
     }
@@ -89,23 +105,39 @@ public class TableCardComponent extends SimpleComponent implements CardComponent
     }
 
     private void onInnerChange() {
-        this.marksTop.getChildren().clear();
-        this.marksBottom.getChildren().clear();
+        Platform.runLater(() -> {
+            this.marksTop.getChildren().clear();
+            this.marksBottom.getChildren().clear();
+            for (ColumnChange columnChange : this.table.getColumnsChanges()) {
+                if (columnChange.getCommand().isType(ChangeCommand.NONE)) {
+                    continue;
+                }
+                this.addMark(
+                    new MarkComponent(columnChange.getCommand().getType())
+                );
+            }
+            for (IndexChange IndexChange : this.table.getIndexesChanges()) {
+                if (IndexChange.getCommand().isType(ChangeCommand.NONE)) {
+                    continue;
+                }
+                this.addMark(
+                    new MarkComponent(IndexChange.getCommand().getType())
+                );
+            }
+        });
+    }
+
+    @Override
+    public void destroy() {
+        this.table.getColumnsChanges().removeListener(this.columnListListener);
         for (ColumnChange columnChange : this.table.getColumnsChanges()) {
-            if (columnChange.getCommand().isType(ChangeCommand.NONE)) {
-                continue;
-            }
-            this.addMark(
-                new MarkComponent(columnChange.getCommand().getType())
-            );
+            columnChange.getCommand().typeProperty().removeListener(this.changeCommandLIstener);
         }
-        for (IndexChange IndexChange : this.table.getIndexesChanges()) {
-            if (IndexChange.getCommand().isType(ChangeCommand.NONE)) {
-                continue;
-            }
-            this.addMark(
-                new MarkComponent(IndexChange.getCommand().getType())
-            );
+        this.table.getIndexesChanges().removeListener(this.indexListListener);
+        for (IndexChange indexChange : this.table.getIndexesChanges()) {
+            indexChange.getCommand().typeProperty().removeListener(this.changeCommandLIstener);
         }
+
+        this.table.getChangeCommand().typeProperty().removeListener(this.changeCommandLIstener);
     }
 }
