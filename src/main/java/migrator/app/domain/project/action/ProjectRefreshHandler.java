@@ -8,18 +8,23 @@ import migrator.app.domain.project.model.Project;
 import migrator.app.domain.table.TableContainer;
 import migrator.app.domain.table.TableRepository;
 import migrator.app.domain.table.model.Table;
+import migrator.app.gui.UseCase;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.app.migration.model.TableProperty;
 import migrator.lib.diff.CompareListDiff;
 import migrator.lib.diff.ListDiff;
 import migrator.lib.dispatcher.Event;
+import migrator.lib.dispatcher.EventDispatcher;
 import migrator.lib.dispatcher.EventHandler;
+import migrator.lib.dispatcher.SimpleEvent;
 
 public class ProjectRefreshHandler implements EventHandler {
     private TableContainer tableContainer;
+    private EventDispatcher dispatcher;
 
-    public ProjectRefreshHandler(TableContainer tableContainer) {
+    public ProjectRefreshHandler(TableContainer tableContainer, EventDispatcher dispatcher) {
         this.tableContainer = tableContainer;
+        this.dispatcher = dispatcher;
     }
 
     @Override
@@ -50,6 +55,15 @@ public class ProjectRefreshHandler implements EventHandler {
         this.tableContainer.tableStore().getList().setAll(
             this.tableContainer.tableRepository().findByProject(project.getId())
         );
+
+        UseCase.runOnThread(() -> {
+            List<Table> tablesList = this.tableContainer.tableRepository().findByProject(project.getId());
+            for (Table table : tablesList) {
+                this.dispatcher.dispatch(
+                    new SimpleEvent<>("table.refresh", table)
+                );
+            }
+        });
     }
 
     protected void merge(List<Table> dbList, List<Table> repoList) {

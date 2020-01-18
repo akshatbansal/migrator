@@ -58,7 +58,8 @@ public class ProjectService implements Service {
             container.projectStore()
         );
         this.projectRefreshHandler = new ProjectRefreshHandler(
-            container.tableContainer()
+            container.tableContainer(),
+            container.dispatcher()
         );
 
         this.openedProjectListener = (observablr, oldValue, newValue) -> {

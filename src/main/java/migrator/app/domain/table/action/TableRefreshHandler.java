@@ -3,6 +3,7 @@ package migrator.app.domain.table.action;
 import java.util.LinkedList;
 import java.util.List;
 
+import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import migrator.app.domain.column.ColumnContainer;
 import migrator.app.domain.column.ColumnRepository;
@@ -75,9 +76,11 @@ public class TableRefreshHandler implements EventHandler {
             this.indexContainer.indexRepository().findByTable(activeTable.getUniqueKey())
         );
 
-        this.indexContainer.indexStore().getList().setAll(
-            this.indexContainer.indexRepository().findByTable(activeTable.getUniqueKey())
-        );
+        Platform.runLater(() -> {
+            this.indexContainer.indexStore().getList().setAll(
+                this.indexContainer.indexRepository().findByTable(activeTable.getUniqueKey())
+            );
+        });
     }
 
     private void refreshColumns(ProjectContainer projectContainer, Table activeTable) {
@@ -105,9 +108,11 @@ public class TableRefreshHandler implements EventHandler {
             this.columnContainer.columnRepository().findByTable(activeTable.getUniqueKey())
         );
 
-        this.columnContainer.columnStore().getList().setAll(
-            this.columnContainer.columnRepository().findByTable(activeTable.getUniqueKey())
-        );
+        Platform.runLater(() -> {
+            this.columnContainer.columnStore().getList().setAll(
+                this.columnContainer.columnRepository().findByTable(activeTable.getUniqueKey())
+            );
+        });
     }
 
     protected void mergeColumn(List<Column> dbList, List<Column> repoList) {

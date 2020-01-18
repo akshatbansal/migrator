@@ -1,6 +1,7 @@
 package migrator.app.gui.component.project;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
@@ -16,9 +17,19 @@ public class ProjectCardComponent extends SimpleComponent implements CardCompone
     @FXML protected Button openButton;
 
     protected Project project;
+    private ChangeListener<Boolean> focusListener;
+    private ChangeListener<Boolean> disabledListener;
 
     public ProjectCardComponent() {
         super();
+
+        this.focusListener = (observable, oldValue, newValue) -> {
+            this.setFocus(newValue);
+        };
+        this.disabledListener = (observable, oldValue, newValue) -> {
+            this.setDisabled(newValue);
+        };
+
         this.loadFxml("/layout/project/card.fxml");
     }
 
@@ -41,12 +52,8 @@ public class ProjectCardComponent extends SimpleComponent implements CardCompone
         
         this.name.textProperty().bind(project.nameProperty());
 
-        project.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            this.setFocus(newValue);
-        });
-        project.disabledProperty().addListener((observable, oldValue, newValue) -> {
-            this.setDisabled(newValue);
-        });
+        project.focusedProperty().addListener(this.focusListener);
+        project.disabledProperty().addListener(this.disabledListener);
 
         this.setFocus(project.focusedProperty().getValue());
         this.setDisabled(project.disabledProperty().getValue());    
@@ -62,5 +69,11 @@ public class ProjectCardComponent extends SimpleComponent implements CardCompone
 
     protected void setDisabled(Boolean disabled) {
         this.openButton.setDisable(disabled);
+    }
+
+    @Override
+    public void destroy() {
+        this.project.focusedProperty().removeListener(this.focusListener);
+        this.project.disabledProperty().removeListener(this.disabledListener);
     }
 }
