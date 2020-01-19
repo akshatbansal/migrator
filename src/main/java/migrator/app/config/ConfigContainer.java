@@ -4,9 +4,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import migrator.lib.version.Version;
+
 public class ConfigContainer {
     private EnviromentConfig enviromentConfig;
     private Path storagePathValue;
+    private Version currentVersionValue;
 
     public ConfigContainer() {
         String env = "production";
@@ -20,6 +23,8 @@ public class ConfigContainer {
         if (Files.notExists(this.storagePathValue)) {
             this.storagePathValue.toFile().mkdirs();
         }
+
+        this.currentVersionValue = new Version("0.5.0");
     }
 
     public EnviromentConfig enviroment() {
@@ -28,5 +33,9 @@ public class ConfigContainer {
 
     public Path storagePath() {
         return this.storagePathValue;
+    }
+
+    public Version currentVersion() {
+        return this.currentVersionValue;
     }
 }

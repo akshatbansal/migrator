@@ -9,12 +9,14 @@ import migrator.app.domain.column.service.ColumnService;
 import migrator.app.domain.index.service.IndexService;
 import migrator.app.domain.modification.ModificationService;
 import migrator.app.domain.project.service.ProjectService;
+import migrator.app.domain.project.versionmigration.DatabasePasswordEncrypt;
 import migrator.app.domain.table.service.TableService;
 import migrator.app.extension.ExtensionService;
 import migrator.app.gui.route.Route;
 import migrator.app.gui.route.SimpleRoute;
 import migrator.app.gui.service.GuiService;
 import migrator.app.service.Service;
+import migrator.app.version.VersionService;
 import migrator.ext.flyway.FlywayExtension;
 import migrator.ext.mariadb.MariadbExtension;
 import migrator.ext.mysql.MysqlExtension;
@@ -24,6 +26,7 @@ import migrator.ext.postgresql.PostgresqlExtension;
 import migrator.ext.sentry.SentryExtension;
 import migrator.ext.sql.SqlExtension;
 import migrator.lib.dispatcher.SimpleEvent;
+import migrator.lib.version.Version;
 
 public class ApplicationService implements Service {
     private List<Service> services;
@@ -33,6 +36,12 @@ public class ApplicationService implements Service {
         this.container = container;
         this.services = new LinkedList<>();
 
+        this.container.versionContainer()
+            .addVersionMigration(new Version("0.5.0"), new DatabasePasswordEncrypt());
+
+        this.services.add(
+            new VersionService(container)
+        );
         this.services.add(
             new ModificationService(container)
         );
