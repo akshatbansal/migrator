@@ -15,6 +15,8 @@ Migrations are used to change database structure when application evolves and yo
 
 Download the latest [release](https://github.com/pipan/migrator/releases/download/v0.4.3/migrator.jar)
 
+Then run this command
+
 ```sh
 java -jar migrator.jar
 ```
@@ -157,10 +159,6 @@ Do you wan to share your ideas how to improve this application?
 Are you looking for some little thing to code?
 
 Look at the [contribution manual](CONTRIBUTING.md)
-
-### Deploy
-
-release: https://github.com/aktau/github-release
 
 ## TODO
 

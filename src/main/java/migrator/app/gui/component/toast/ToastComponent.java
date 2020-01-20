@@ -2,7 +2,7 @@ package migrator.app.gui.component.toast;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import migrator.app.gui.component.Component;
 import migrator.app.gui.component.SimpleComponent;
 import migrator.app.gui.service.toast.Toast;
@@ -12,7 +12,7 @@ public class ToastComponent extends SimpleComponent implements Component {
     protected Toast toast;
 
     @FXML protected Label message;
-    @FXML protected HBox pane;
+    @FXML protected VBox pane;
 
     public ToastComponent() {
         super();
