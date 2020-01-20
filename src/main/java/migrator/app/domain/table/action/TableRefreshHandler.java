@@ -3,7 +3,6 @@ package migrator.app.domain.table.action;
 import java.util.LinkedList;
 import java.util.List;
 
-import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import migrator.app.domain.column.ColumnContainer;
 import migrator.app.domain.column.ColumnRepository;
@@ -76,11 +75,9 @@ public class TableRefreshHandler implements EventHandler {
             this.indexContainer.indexRepository().findByTable(activeTable.getUniqueKey())
         );
 
-        Platform.runLater(() -> {
-            this.indexContainer.indexStore().getList().setAll(
-                this.indexContainer.indexRepository().findByTable(activeTable.getUniqueKey())
-            );
-        });
+        this.indexContainer.indexStore().getList().setAll(
+            this.indexContainer.indexRepository().findByTable(activeTable.getUniqueKey())
+        );
     }
 
     private void refreshColumns(ProjectContainer projectContainer, Table activeTable) {
@@ -108,11 +105,9 @@ public class TableRefreshHandler implements EventHandler {
             this.columnContainer.columnRepository().findByTable(activeTable.getUniqueKey())
         );
 
-        Platform.runLater(() -> {
-            this.columnContainer.columnStore().getList().setAll(
-                this.columnContainer.columnRepository().findByTable(activeTable.getUniqueKey())
-            );
-        });
+        this.columnContainer.columnStore().getList().setAll(
+            this.columnContainer.columnRepository().findByTable(activeTable.getUniqueKey())
+        );
     }
 
     protected void mergeColumn(List<Column> dbList, List<Column> repoList) {
@@ -128,11 +123,12 @@ public class TableRefreshHandler implements EventHandler {
             );
         });
 
-        ColumnRepository columnRepository = this.columnContainer.columnRepository();
+        List<Column> toRemove = new LinkedList<>();
+        List<Column> toAdd = new LinkedList<>();
         for (List<Column> columnPair : diff.getCommon()) {
             if (columnPair.get(1).getChangeCommand().isType(ChangeCommand.CREATE)) {
-                columnRepository.removeWith(columnPair.get(1));
-                columnRepository.addWith(columnPair.get(0));
+                toRemove.add(columnPair.get(1));
+                toAdd.add(columnPair.get(0));
             } else {
                 columnPair.get(1).updateOriginal(
                     columnPair.get(0).getOriginal()
@@ -143,11 +139,16 @@ public class TableRefreshHandler implements EventHandler {
             if (column.getChangeCommand().isType(ChangeCommand.CREATE)) {
                 continue;
             }
-            columnRepository.removeWith(column);
+            toRemove.add(column);
         }
         for (Column column : diff.getRightMissing()) {
-            columnRepository.addWith(column);
+            toAdd.add(column);
         }
+
+        ColumnRepository columnRepository = this.columnContainer.columnRepository();
+        columnRepository.removeAllWith(toRemove);
+        columnRepository.addAllWith(toAdd);
+
     }
 
     protected void mergeIndex(List<Index> dbList, List<Index> repoList) {
@@ -162,11 +163,12 @@ public class TableRefreshHandler implements EventHandler {
             );
         });
 
-        IndexRepository indexRepository = this.indexContainer.indexRepository();
+        List<Index> toRemove = new LinkedList<>();
+        List<Index> toAdd = new LinkedList<>();
         for (List<Index> indexPair : diff.getCommon()) {
             if (indexPair.get(1).getChangeCommand().isType(ChangeCommand.CREATE)) {
-                indexRepository.removeWith(indexPair.get(1));
-                indexRepository.addWith(indexPair.get(0));
+                toRemove.add(indexPair.get(1));
+                toAdd.add(indexPair.get(1));
             } else {
                 indexPair.get(1).updateOriginal(
                     indexPair.get(0).getOriginal()
@@ -177,10 +179,14 @@ public class TableRefreshHandler implements EventHandler {
             if (index.getChangeCommand().isType(ChangeCommand.CREATE)) {
                 continue;
             }
-            indexRepository.removeWith(index);
+            toRemove.add(index);
         }
         for (Index index : diff.getRightMissing()) {
-            indexRepository.addWith(index);
+            toAdd.add(index);
         }
+
+        IndexRepository indexRepository = this.indexContainer.indexRepository();
+        indexRepository.removeAllWith(toRemove);
+        indexRepository.addAllWith(toAdd);
     }
 }
