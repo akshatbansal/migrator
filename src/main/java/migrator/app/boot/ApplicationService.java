@@ -37,7 +37,12 @@ public class ApplicationService implements Service {
         this.services = new LinkedList<>();
 
         this.container.versionContainer()
-            .addVersionMigration(new Version("0.5.0"), new DatabasePasswordEncrypt());
+            .addVersionMigration(
+                new Version("0.5.0"),
+                new DatabasePasswordEncrypt(
+                    container.securityContainer().encryption()
+                )
+            );
 
         this.services.add(
             new VersionService(container)

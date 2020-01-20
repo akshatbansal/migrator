@@ -8,6 +8,12 @@ import migrator.lib.adapter.Adapter;
 import migrator.lib.encryption.Encryption;
 
 public class EncryptedProjectAdapter implements Adapter<Project, JSONObject> {
+    private Encryption encryption;
+
+    public EncryptedProjectAdapter(Encryption encryption) {
+        this.encryption = encryption;
+    }
+
     @Override
     public Project concretize(JSONObject item) {
         if (item == null) {
@@ -18,7 +24,7 @@ public class EncryptedProjectAdapter implements Adapter<Project, JSONObject> {
                 new Connection(
                     item.getString("connection.name"),
                     item.getString("user"),
-                    Encryption.decrypt(item.getString("password")),
+                    this.encryption.decrypt(item.getString("password")),
                     item.getString("host"),
                     item.getString("port"),
                     item.getString("driver")
@@ -51,7 +57,7 @@ public class EncryptedProjectAdapter implements Adapter<Project, JSONObject> {
         json.put("connection.name", connection.getName());
         json.put("port", connection.getPort());
         json.put("user", connection.getUser());
-        json.put("password", Encryption.encrypt(connection.getPassword()));
+        json.put("password", this.encryption.encrypt(connection.getPassword()));
 
         return json;
     }

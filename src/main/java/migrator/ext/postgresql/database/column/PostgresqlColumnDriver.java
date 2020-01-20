@@ -41,10 +41,8 @@ public class PostgresqlColumnDriver implements DatabaseColumnDriver {
             while (rs.next()) {
                 Map<String, String> column = new Hashtable<>();
                 column.put("name", rs.getString(1));
-                column.put("format", rs.getString(4));
-                column.put("length", rs.getString(6));
-                column.put("precision", rs.getString(7));
-                column.put("defaultValue", rs.getString(2) == null ? "" : rs.getString(5));
+                column.put("format", this.getMysqlFormat(rs));
+                column.put("defaultValue", rs.getString(2) == null ? "" : rs.getString(2));
                 column.put("nullEnabled", rs.getString(3).equals("Yes") ? "true" : "false");
 
                 columns.add(column);
@@ -55,5 +53,41 @@ public class PostgresqlColumnDriver implements DatabaseColumnDriver {
         this.connectionDriver.disconnect(connection);
 
         return columns;
+    }
+
+    private String getLength(ResultSet rs) throws SQLException {
+        String lengthInt = rs.getString(5);
+        String lengthStr = rs.getString(6);
+        if (lengthStr == null && lengthInt == null) {
+            return "";
+        }
+        int stringLength = 0;
+        if (lengthStr != null) {
+            stringLength = Integer.parseInt(lengthStr);
+        }
+        int intLength = 0;
+        if (lengthInt != null) {
+            intLength = Integer.parseInt(lengthInt);
+        }
+        return Integer.toString(Math.max(stringLength, intLength));
+    }
+
+    private String getPrecision(ResultSet rs) throws SQLException {
+        return rs.getString(7) == null ? "" : rs.getString(7);
+    }
+
+    private String getMysqlFormat(ResultSet rs) throws SQLException {
+        String length = this.getLength(rs);
+        String precision = this.getPrecision(rs);
+        String result = rs.getString(4);
+        if (!length.isEmpty()) {
+            if (precision.isEmpty()) {
+                result += "(" + length + "," + precision + ")";
+            } else {
+                result += "(" + length + ")";
+            }
+        }
+
+        return result;
     }
 }

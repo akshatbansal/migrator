@@ -20,6 +20,7 @@ import migrator.app.domain.project.service.SimpleProjectStore;
 import migrator.app.domain.table.TableContainer;
 import migrator.app.gui.column.format.ColumnFormatCollection;
 import migrator.app.migration.MigrationContainer;
+import migrator.app.security.SecurityContainer;
 import migrator.app.version.VersionContainer;
 import migrator.lib.adapter.SimpleJsonListAdapter;
 import migrator.lib.dispatcher.EventDispatcher;
@@ -31,6 +32,7 @@ import migrator.lib.uid.SessionIncrementalGenerator;
 
 public class Container {
     private Generator generatorValue;
+    private SecurityContainer securityContainerValue;
 
     private ModificationContainer modificationContainerValue;
 
@@ -52,7 +54,10 @@ public class Container {
 
     public Container() {
         String session = Long.toString(System.currentTimeMillis());
+
         this.generatorValue = new SessionIncrementalGenerator(session);
+        
+        this.securityContainerValue = new SecurityContainer();
 
         this.configContainerValue = new ConfigContainer();
         this.versionContainerValue = new VersionContainer();
@@ -98,7 +103,9 @@ public class Container {
         this.projectStorageValue = Storages.getFileStorage(
             new File(this.configContainer().storagePath().toString(), "project.json"),
             new SimpleJsonListAdapter<>(
-                new EncryptedProjectAdapter()
+                new EncryptedProjectAdapter(
+                    this.securityContainer().encryption()
+                )
             )
         );
     }
@@ -157,5 +164,9 @@ public class Container {
 
     public VersionContainer versionContainer() {
         return this.versionContainerValue;
+    }
+
+    public SecurityContainer securityContainer() {
+        return this.securityContainerValue;
     }
 }
