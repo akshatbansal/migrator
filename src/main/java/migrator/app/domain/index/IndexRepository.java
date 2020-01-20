@@ -1,5 +1,6 @@
 package migrator.app.domain.index;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import javafx.collections.ObservableList;
@@ -44,5 +45,31 @@ public class IndexRepository extends UniqueRepository<Index> {
         this.indexPropertyRepo.remove(item.getOriginal());
         this.indexPropertyRepo.remove(item.getChange());
         this.remove(item);
+    }
+
+    public void addAllWith(List<Index> items) {
+        List<IndexProperty> properties = new LinkedList<>();
+        List<ChangeCommand> commands = new LinkedList<>();
+        for (Index column : items) {
+            properties.add(column.getChange());
+            properties.add(column.getOriginal());
+            commands.add(column.getChangeCommand());
+        }
+        this.indexPropertyRepo.addAll(properties);
+        this.changeCommandRepo.addAll(commands);
+        this.addAll(items);
+    }
+
+    public void removeAllWith(List<Index> items) {
+        List<IndexProperty> properties = new LinkedList<>();
+        List<ChangeCommand> commands = new LinkedList<>();
+        for (Index column : items) {
+            properties.add(column.getChange());
+            properties.add(column.getOriginal());
+            commands.add(column.getChangeCommand());
+        }
+        this.indexPropertyRepo.removeAll(properties);
+        this.changeCommandRepo.removeAll(commands);
+        this.removeAll(items);
     }
 }

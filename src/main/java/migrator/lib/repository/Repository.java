@@ -7,5 +7,6 @@ public interface Repository<T> {
     public void add(T item);
     public void addAll(Collection<T> items);
     public void remove(T item);
+    public void removeAll(Collection<T> items);
     public Collection<T> getAll();
 }

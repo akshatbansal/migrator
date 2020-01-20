@@ -1,5 +1,6 @@
 package migrator.app.domain.column;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import javafx.collections.ObservableList;
@@ -44,5 +45,31 @@ public class ColumnRepository extends UniqueRepository<Column> {
         this.columnPropertyRepo.remove(item.getChange());
         this.changeCommandRepo.remove(item.getChangeCommand());
         this.remove(item);
+    }
+
+    public void addAllWith(List<Column> items) {
+        List<ColumnProperty> properties = new LinkedList<>();
+        List<ChangeCommand> commands = new LinkedList<>();
+        for (Column column : items) {
+            properties.add(column.getChange());
+            properties.add(column.getOriginal());
+            commands.add(column.getChangeCommand());
+        }
+        this.columnPropertyRepo.addAll(properties);
+        this.changeCommandRepo.addAll(commands);
+        this.addAll(items);
+    }
+
+    public void removeAllWith(List<Column> items) {
+        List<ColumnProperty> properties = new LinkedList<>();
+        List<ChangeCommand> commands = new LinkedList<>();
+        for (Column column : items) {
+            properties.add(column.getChange());
+            properties.add(column.getOriginal());
+            commands.add(column.getChangeCommand());
+        }
+        this.columnPropertyRepo.removeAll(properties);
+        this.changeCommandRepo.removeAll(commands);
+        this.removeAll(items);
     }
 }

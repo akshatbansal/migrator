@@ -37,15 +37,12 @@ public class TableCardComponent extends SimpleComponent implements CardComponent
         super();
 
         this.changeCommandListener = (observable, oldValue, newValue) -> {
-            System.out.println("command");
             this.onInnerChange();
         };
         this.indexListListener = (Change<? extends IndexChange> change) -> {
-            System.out.println("index");
             this.onInnerChange();
         };
         this.columnListListener = (Change<? extends ColumnChange> change) -> {
-            System.out.println("column");
             this.onInnerChange();
         };
 

@@ -50,6 +50,19 @@ public class UniqueRepository<T extends UniqueItem> implements Repository<T> {
     }
 
     @Override
+    public void removeAll(Collection<T> items) {
+        if (items == null) {
+            return;
+        }
+        for (T item : items) {
+            this.table.remove(item.getUniqueKey());
+        }
+        for (RepositoryIndex<T> index : this.indexes) {
+            index.removeAll(items);
+        }
+    }
+
+    @Override
     public Collection<T> getAll() {
         return this.table.values();
     }
