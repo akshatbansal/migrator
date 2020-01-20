@@ -12,14 +12,16 @@ import migrator.app.domain.connection.service.ConnectionFactory;
 import migrator.app.domain.database.service.DatabaseFactory;
 import migrator.app.domain.index.IndexContainer;
 import migrator.app.domain.modification.ModificationContainer;
+import migrator.app.domain.project.model.EncryptedProjectAdapter;
 import migrator.app.domain.project.model.Project;
-import migrator.app.domain.project.model.ProjectAdapter;
 import migrator.app.domain.project.service.ProjectFactory;
 import migrator.app.domain.project.service.ProjectStore;
 import migrator.app.domain.project.service.SimpleProjectStore;
 import migrator.app.domain.table.TableContainer;
 import migrator.app.gui.column.format.ColumnFormatCollection;
 import migrator.app.migration.MigrationContainer;
+import migrator.app.security.SecurityContainer;
+import migrator.app.version.VersionContainer;
 import migrator.lib.adapter.SimpleJsonListAdapter;
 import migrator.lib.dispatcher.EventDispatcher;
 import migrator.lib.logger.SystemLogger;
@@ -30,6 +32,7 @@ import migrator.lib.uid.SessionIncrementalGenerator;
 
 public class Container {
     private Generator generatorValue;
+    private SecurityContainer securityContainerValue;
 
     private ModificationContainer modificationContainerValue;
 
@@ -47,12 +50,17 @@ public class Container {
     private CodeContainer codeContainerValue;
     private ProxyLogger loggerValue;
     private ConfigContainer configContainerValue;
+    private VersionContainer versionContainerValue;
 
     public Container() {
         String session = Long.toString(System.currentTimeMillis());
+
         this.generatorValue = new SessionIncrementalGenerator(session);
+        
+        this.securityContainerValue = new SecurityContainer();
 
         this.configContainerValue = new ConfigContainer();
+        this.versionContainerValue = new VersionContainer();
         this.modificationContainerValue = new ModificationContainer(this.configContainer().storagePath());
         this.dispatcherValue = new EventDispatcher();
         this.databaseContainerValue = new DatabaseContainer();
@@ -95,7 +103,9 @@ public class Container {
         this.projectStorageValue = Storages.getFileStorage(
             new File(this.configContainer().storagePath().toString(), "project.json"),
             new SimpleJsonListAdapter<>(
-                new ProjectAdapter()
+                new EncryptedProjectAdapter(
+                    this.securityContainer().encryption()
+                )
             )
         );
     }
@@ -150,5 +160,13 @@ public class Container {
 
     public IndexContainer indexContainer() {
         return this.indexContainerValue;
+    }
+
+    public VersionContainer versionContainer() {
+        return this.versionContainerValue;
+    }
+
+    public SecurityContainer securityContainer() {
+        return this.securityContainerValue;
     }
 }

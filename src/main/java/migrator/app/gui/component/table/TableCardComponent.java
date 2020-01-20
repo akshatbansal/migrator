@@ -23,7 +23,7 @@ public class TableCardComponent extends SimpleComponent implements CardComponent
     protected static final Integer MARKS_LINE_LIMIT = 8;
 
     protected Table table;
-    private ChangeListener<String> changeCommandLIstener;
+    private ChangeListener<String> changeCommandListener;
     private ListChangeListener<IndexChange> indexListListener;
     private ListChangeListener<ColumnChange> columnListListener;
     
@@ -36,13 +36,16 @@ public class TableCardComponent extends SimpleComponent implements CardComponent
     public TableCardComponent() {
         super();
 
-        this.changeCommandLIstener = (observable, oldValue, newValue) -> {
+        this.changeCommandListener = (observable, oldValue, newValue) -> {
+            System.out.println("command");
             this.onInnerChange();
         };
         this.indexListListener = (Change<? extends IndexChange> change) -> {
+            System.out.println("index");
             this.onInnerChange();
         };
         this.columnListListener = (Change<? extends ColumnChange> change) -> {
+            System.out.println("column");
             this.onInnerChange();
         };
 
@@ -57,14 +60,14 @@ public class TableCardComponent extends SimpleComponent implements CardComponent
 
         this.table.getColumnsChanges().addListener(this.columnListListener);
         for (ColumnChange columnChange : this.table.getColumnsChanges()) {
-            columnChange.getCommand().typeProperty().addListener(this.changeCommandLIstener);
+            columnChange.getCommand().typeProperty().addListener(this.changeCommandListener);
         }
         this.table.getIndexesChanges().addListener(this.indexListListener);
         for (IndexChange indexChange : this.table.getIndexesChanges()) {
-            indexChange.getCommand().typeProperty().addListener(this.changeCommandLIstener);
+            indexChange.getCommand().typeProperty().addListener(this.changeCommandListener);
         }
 
-        this.table.getChangeCommand().typeProperty().addListener(this.changeCommandLIstener);
+        this.table.getChangeCommand().typeProperty().addListener(this.changeCommandListener);
         this.onInnerChange();
 
         this.setChanged("", this.table.getChangeCommand().getType());
@@ -131,13 +134,13 @@ public class TableCardComponent extends SimpleComponent implements CardComponent
     public void destroy() {
         this.table.getColumnsChanges().removeListener(this.columnListListener);
         for (ColumnChange columnChange : this.table.getColumnsChanges()) {
-            columnChange.getCommand().typeProperty().removeListener(this.changeCommandLIstener);
+            columnChange.getCommand().typeProperty().removeListener(this.changeCommandListener);
         }
         this.table.getIndexesChanges().removeListener(this.indexListListener);
         for (IndexChange indexChange : this.table.getIndexesChanges()) {
-            indexChange.getCommand().typeProperty().removeListener(this.changeCommandLIstener);
+            indexChange.getCommand().typeProperty().removeListener(this.changeCommandListener);
         }
 
-        this.table.getChangeCommand().typeProperty().removeListener(this.changeCommandLIstener);
+        this.table.getChangeCommand().typeProperty().removeListener(this.changeCommandListener);
     }
 }
