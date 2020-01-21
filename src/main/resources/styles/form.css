@@ -3,6 +3,11 @@
     padding: 10 20 10 20;
 }
 
+.form__delimeter {
+    -fx-padding: 10 0;
+    padding: 10 0;
+}
+
 .background-medium .form__row-label {
     -fx-pref-width: 120pt;
 }

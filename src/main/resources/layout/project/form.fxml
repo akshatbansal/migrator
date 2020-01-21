@@ -34,7 +34,7 @@
                 </HBox>
             </HBox>
 
-            <HBox alignment="center">
+            <HBox alignment="center" styleClass="form__delimeter">
                 <Text styleClass="foreground-dark" text="DB Connection" />
             </HBox>
 
@@ -63,7 +63,7 @@
                 <TextField fx:id="database" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
             </HBox>
 
-            <HBox alignment="center">
+            <HBox alignment="center" styleClass="form__delimeter">
                 <Text styleClass="foreground-dark" text="User" />
             </HBox>
 
@@ -80,7 +80,7 @@
                 <PasswordField fx:id="password" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
             </HBox>
 
-            <HBox alignment="center">
+            <HBox alignment="center" styleClass="form__delimeter">
                 <Text styleClass="foreground-dark" text="Manage" />
             </HBox>
 

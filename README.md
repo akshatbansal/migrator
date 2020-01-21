@@ -13,7 +13,7 @@ Migrations are used to change database structure when application evolves and yo
 
 ## Installation
 
-Download the latest [release](https://github.com/pipan/migrator/releases/download/v0.4.3/migrator.jar)
+Download the latest [release](https://github.com/pipan/migrator/releases/download/v0.5.0/migrator.jar)
 
 Then run this command
 
@@ -57,6 +57,19 @@ Select project by clicking on `open` button of a project card.
 ![craete migration file](https://media.giphy.com/media/dY0y5gabkE5wKijvyr/giphy.gif)
 
 ## Release History
+
+* 0.5.0
+  * Features
+    * Securely store database passwords by encrpting it
+    * Remember last commit message
+    * Performance optimalization - less events fired when updating data from real database.
+    * Performance optimalization - gui is not regenerated all the time. It's created once and then updated.
+    * When creating new table, added `CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP` for modified_at columns
+    * Toast visual redesign
+  * Bugfixes
+    * Refresh columns and indexes when viewing tables. It will refresh internal table changes without needing to open table detail.
+
+![toast visual redesign](https://media.giphy.com/media/QBFUeLhS0oROAp5ZRD/giphy.gif)
 
 * 0.4.3
   * Features
