@@ -13,7 +13,7 @@ Migrations are used to change database structure when application evolves and yo
 
 ## Installation
 
-Download the latest [release](https://github.com/pipan/migrator/releases/download/v0.5.0/migrator.jar)
+Download the latest [release](https://github.com/pipan/migrator/releases/download/v0.5.1/migrator.jar)
 
 Then run this command
 
@@ -57,6 +57,10 @@ Select project by clicking on `open` button of a project card.
 ![craete migration file](https://media.giphy.com/media/dY0y5gabkE5wKijvyr/giphy.gif)
 
 ## Release History
+
+* 0.5.1
+  * Features
+    * Performance optimalization - database connection resource management
 
 * 0.5.0
   * Features
