@@ -96,4 +96,9 @@ public class SimpleDatabaseStructure implements DatabaseStructure {
     public ConnectionResult<?> testConnection() {
         return this.connectDriver.connect();
     }
+
+    @Override
+    public void close() throws Exception {
+        this.connectDriver.close();
+    }
 }

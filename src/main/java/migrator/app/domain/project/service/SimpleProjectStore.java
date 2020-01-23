@@ -53,17 +53,22 @@ public class SimpleProjectStore implements ProjectStore {
         }
 
         Connection connection = project.getDatabase().getConnection();
-        DatabaseStructureFactory dbStrucutreFactory = this.databaseContainer.getStructureFactoryFor(connection.getDriver());
-        DatabaseStructure dbStrucutre = dbStrucutreFactory.create(
-            project.getDatabase().getUrl(),
-            connection.getUser(),
-            connection.getPassword()
-        );
-        
+        DatabaseStructureFactory dbStrucutreFactory = this.databaseContainer
+                .getStructureFactoryFor(connection.getDriver());
+        DatabaseStructure dbStrucutre = dbStrucutreFactory.create(project.getDatabase().getUrl(), connection.getUser(),
+                connection.getPassword());
+
         this.opened.set(new ProjectContainer(project, dbStrucutre));
     }
 
     public void close() {
+        if (this.opened.get() != null) {
+            try {
+                this.opened.get().getDatabaseStructure().close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         this.open(null);
     }
 

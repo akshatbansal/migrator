@@ -5,8 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -34,13 +34,13 @@ public class MysqlIndexDriver implements DatabaseIndexDriver {
             return indexes;
         }
 
+        String sql = "SHOW INDEX from " + tableName;
         Connection connection = connectionResult.getConnection();
-
-        try {
+        try (
             Statement statement = connection.createStatement();
-            String sql = "SHOW INDEX from " + tableName;
-            ResultSet rs = statement.executeQuery(sql);
-            Map<String, List<String>> indexColumnsMap = new LinkedHashMap<>();
+            ResultSet rs = statement.executeQuery(sql)
+        ) {
+            Map<String, List<String>> indexColumnsMap = new Hashtable<>();
             while (rs.next()) {
                 String indexName = rs.getString(3);
                 if (!indexColumnsMap.containsKey(indexName)) {

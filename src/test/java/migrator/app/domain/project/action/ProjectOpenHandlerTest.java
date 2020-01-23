@@ -174,5 +174,8 @@ public class ProjectOpenHandlerTest {
         public ConnectionResult<?> testConnection() {
             return this.connectionResult;
         }
+
+        @Override
+        public void close() throws Exception {}
     }
 }

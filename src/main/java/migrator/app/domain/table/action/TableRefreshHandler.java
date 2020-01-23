@@ -45,6 +45,9 @@ public class TableRefreshHandler implements EventHandler {
     }
 
     private void refreshIndexes(ProjectContainer projectContainer, Table activeTable) {
+        if (projectContainer == null) {
+            return;
+        }
         List<IndexProperty> indexes = projectContainer.getDatabaseStructure().getIndexes(activeTable.getOriginal().getName());
 
         List<Column> columns = this.columnContainer.columnRepository().byTableProperty(activeTable.getUniqueKey());
@@ -81,6 +84,9 @@ public class TableRefreshHandler implements EventHandler {
     }
 
     private void refreshColumns(ProjectContainer projectContainer, Table activeTable) {
+        if (projectContainer == null) {
+            return;
+        }
         List<ColumnProperty> columns = projectContainer.getDatabaseStructure().getColumns(activeTable.getOriginal().getName());
 
         List<Column> dbList = new LinkedList<>();

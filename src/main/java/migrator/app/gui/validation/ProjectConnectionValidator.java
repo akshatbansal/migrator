@@ -23,7 +23,6 @@ public class ProjectConnectionValidator {
             connection.getPassword()
         );
         ConnectionResult<?> connectionResult = dbStrucutre.testConnection();
-        project.enable();
         if (connectionResult.isOk()) {
             return new ValidationResult("");
         }

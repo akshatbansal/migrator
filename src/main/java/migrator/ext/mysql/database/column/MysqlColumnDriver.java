@@ -32,12 +32,12 @@ public class MysqlColumnDriver implements DatabaseColumnDriver {
             return columns;
         }
 
+        String sql = "DESCRIBE " + tableName;
         Connection connection = connectionResult.getConnection();
-
-        try {
+        try (
             Statement statement = connection.createStatement();
-            String sql = "DESCRIBE " + tableName;
-            ResultSet rs = statement.executeQuery(sql);
+            ResultSet rs = statement.executeQuery(sql)
+        ) {
             while (rs.next()) {
                 Map<String, String> column = new Hashtable<>();
                 column.put("name", rs.getString(1));
@@ -50,7 +50,6 @@ public class MysqlColumnDriver implements DatabaseColumnDriver {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        this.mysqlConnection.disconnect(connection);
 
         return columns;
     }
