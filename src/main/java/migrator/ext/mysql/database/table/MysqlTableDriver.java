@@ -26,12 +26,12 @@ public class MysqlTableDriver implements DatabaseTableDriver {
             return tables;
         }
 
+        String sql = "SHOW TABLES";
         Connection connection = connectionResult.getConnection();
-
-        try {
+        try (
             Statement statement = connection.createStatement();
-            String sql = "SHOW TABLES";
-            ResultSet rs = statement.executeQuery(sql);
+            ResultSet rs = statement.executeQuery(sql)
+        ) {
             while (rs.next()) {
                 tables.add(rs.getString(1));
             }
@@ -41,4 +41,4 @@ public class MysqlTableDriver implements DatabaseTableDriver {
 
         return tables;
     }
-} 
+}

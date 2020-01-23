@@ -13,6 +13,6 @@ public class ProjectCloseHandler implements EventHandler {
 
     @Override
     public void handle(Event<?> event) {
-        this.projectStore.close();    
+        this.projectStore.close();
     }
 }

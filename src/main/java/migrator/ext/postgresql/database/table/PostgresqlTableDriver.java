@@ -26,19 +26,18 @@ public class PostgresqlTableDriver implements DatabaseTableDriver {
             return tables;
         }
 
+        String sql = "SELECT * FROM pg_catalog.pg_tables WHERE schemaname != 'pg_catalog' AND schemaname != 'information_schema';";
         Connection connection = connectionResult.getConnection();
-
-        try {
+        try (
             Statement statement = connection.createStatement();
-            String sql = "SELECT * FROM pg_catalog.pg_tables WHERE schemaname != 'pg_catalog' AND schemaname != 'information_schema';";
-            ResultSet rs = statement.executeQuery(sql);
+            ResultSet rs = statement.executeQuery(sql)
+        ) {
             while (rs.next()) {
                 tables.add(rs.getString(2));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        this.connectionDriver.disconnect(connection);
 
         return tables;
     }

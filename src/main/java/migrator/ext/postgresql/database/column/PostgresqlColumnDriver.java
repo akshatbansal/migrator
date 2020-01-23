@@ -32,12 +32,12 @@ public class PostgresqlColumnDriver implements DatabaseColumnDriver {
             return columns;
         }
 
+        String sql = "SELECT column_name, column_default, is_nullable, data_type, character_maximum_length, numeric_precision, numeric_scale FROM information_schema.COLUMNS WHERE TABLE_NAME = '" + tableName + "'";
         Connection connection = connectionResult.getConnection();
-
-        try {
+        try (
             Statement statement = connection.createStatement();
-            String sql = "SELECT column_name, column_default, is_nullable, data_type, character_maximum_length, numeric_precision, numeric_scale FROM information_schema.COLUMNS WHERE TABLE_NAME = '" + tableName + "'";
-            ResultSet rs = statement.executeQuery(sql);
+            ResultSet rs = statement.executeQuery(sql)
+        ) {
             while (rs.next()) {
                 Map<String, String> column = new Hashtable<>();
                 column.put("name", rs.getString(1));
@@ -50,7 +50,6 @@ public class PostgresqlColumnDriver implements DatabaseColumnDriver {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        this.connectionDriver.disconnect(connection);
 
         return columns;
     }

@@ -12,6 +12,7 @@ public class JdbcConnectionDriver implements DatabaseConnectDriver<Connection> {
     protected String password;
     protected String className;
     protected Logger logger;
+    private Connection connection;
 
     public JdbcConnectionDriver(String className, String url, String user, String password, Logger logger) {
         this.className = className;
@@ -22,28 +23,33 @@ public class JdbcConnectionDriver implements DatabaseConnectDriver<Connection> {
     }
 
     public ConnectionResult<Connection> connect() {
+        if (this.connection != null) {
+            return new ConnectionResult<Connection>(this.connection);
+        }
         String error = "";
-        try {
-            if (!this.className.isEmpty()) {
+        if (!this.className.isEmpty()) {
+            try {
                 Class.forName(this.className);
+            } catch (ClassNotFoundException ex) {
+                error = "Cannot connect to " + this.url + ". Reason: " + ex.getMessage();
             }
-            Connection connection = DriverManager.getConnection("jdbc:" + this.url, this.user, this.password);
+        }
+        try  {
+            this.connection = DriverManager.getConnection("jdbc:" + this.url, this.user, this.password);
             return new ConnectionResult<>(connection);
-
         } catch (SQLException ex) {
             error = "Cannot connect to " + this.url + ". Reason: " + ex.getMessage();
-        } catch (ClassNotFoundException ex) {
-            error = "Cannot connect to " + this.url + ". Reason: " + ex.getMessage();
-        }
+        } 
         return new ConnectionResult<>(error);
     }
 
-    public void disconnect(Connection connection) {
-        if (connection == null) {
+    @Override
+    public void close() throws Exception {
+        if (this.connection == null) {
             return;
         }
         try {
-            connection.close();
+            this.connection.close();
         } catch (SQLException ex) {
             this.logger.error(ex);
         }
