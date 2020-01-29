@@ -46,7 +46,7 @@ public class TableDetailView extends SimpleView implements View {
         ViewFactories viewFactories,
         ComponentFactories componentFactories,
         ObservableList<Column> columns,
-        ObjectProperty<Column> selectedColumns,
+        ObjectProperty<Column> selectedColumn,
         ObservableList<Index> indexes,
         ObjectProperty<Index> selectedIndex
     ) {
@@ -68,10 +68,10 @@ public class TableDetailView extends SimpleView implements View {
         this.breadcrumpsComponent = componentFactories.createBreadcrumps();
         this.breadcrumpsComponent.bind(breadcrumps);
 
-        this.columnListComponent = this.createColumnList(componentFactories, columns);
-        this.indexListComponent = this.createIndexList(componentFactories, indexes);
+        this.columnListComponent = this.createColumnList(componentFactories, columns, selectedColumn);
+        this.indexListComponent = this.createIndexList(componentFactories, indexes, selectedIndex);
 
-        selectedColumns.addListener((observable, oldValue, newValue) -> {
+        selectedColumn.addListener((observable, oldValue, newValue) -> {
             if (newValue == null) {
                 this.columnListComponent.deselect();
             }
@@ -95,9 +95,14 @@ public class TableDetailView extends SimpleView implements View {
             );
     }
 
-    private ColumnListComponent createColumnList(ComponentFactories componentFactories, ObservableList<Column> columns) {
+    private ColumnListComponent createColumnList(
+        ComponentFactories componentFactories,
+        ObservableList<Column> columns,
+        ObjectProperty<Column> selectedColumn
+    ) {
         ColumnListComponent component = componentFactories.createColumnList();
         component.bind(columns);
+        component.bindSelected(selectedColumn);
         component.outputs().addListener((observable, oldValue, newValue) -> {
             if (newValue.getName().equals("select")) {
                 this.onColumnSelect((Column) newValue.getValue());
@@ -108,9 +113,14 @@ public class TableDetailView extends SimpleView implements View {
         return component;
     }
 
-    private IndexListComponent createIndexList(ComponentFactories componentFactories, ObservableList<Index> indexes) {
+    private IndexListComponent createIndexList(
+        ComponentFactories componentFactories,
+        ObservableList<Index> indexes,
+        ObjectProperty<Index> selectedIndex
+    ) {
         IndexListComponent component = componentFactories.createIndexList();
         component.bind(indexes);
+        component.bindSelected(selectedIndex);
         component.outputs().addListener((observable, oldValue, newValue) -> {
             if (newValue.getName().equals("select")) {
                 this.onIndexSelect((Index) newValue.getValue());

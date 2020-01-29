@@ -1,5 +1,6 @@
 package migrator.app.gui.component.column;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.collections.ListChangeListener.Change;
@@ -12,6 +13,7 @@ import migrator.lib.dispatcher.SimpleEvent;
 
 public class ColumnListComponent extends SimpleComponent implements Component {
     protected ObservableList<Column> columns;
+    protected ObjectProperty<Column> selected;
 
     @FXML protected TableView<Column> columnsTable;
 
@@ -36,6 +38,16 @@ public class ColumnListComponent extends SimpleComponent implements Component {
             this.fitSize(columns.size());
         });
         this.fitSize(columns.size());
+    }
+
+    public void bindSelected(ObjectProperty<Column> selected) {
+        this.selected = selected;
+        this.selected.addListener((observable, oldValue, newValue) -> {
+            if (this.columnsTable.getSelectionModel().getSelectedItem() == newValue) {
+                return;
+            }
+            this.columnsTable.getSelectionModel().select(newValue);
+        });
     }
 
     private void fitSize(int countRows) {

@@ -54,7 +54,7 @@ Select project by clicking on `open` button of a project card.
 2. Name this migration. This name will be used to generate migration file name.
 3. Click on the commit button
 
-![craete migration file](https://media.giphy.com/media/dY0y5gabkE5wKijvyr/giphy.gif)
+![create migration file](https://media.giphy.com/media/dY0y5gabkE5wKijvyr/giphy.gif)
 
 ## Release History
 

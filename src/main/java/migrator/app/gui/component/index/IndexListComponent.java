@@ -1,5 +1,6 @@
 package migrator.app.gui.component.index;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.collections.ListChangeListener.Change;
@@ -12,6 +13,7 @@ import migrator.lib.dispatcher.SimpleEvent;
 
 public class IndexListComponent extends SimpleComponent implements Component {
     protected ObservableList<Index> indexes;
+    protected ObjectProperty<Index> selected;
 
     @FXML protected TableView<Index> indexesTable;
 
@@ -38,6 +40,16 @@ public class IndexListComponent extends SimpleComponent implements Component {
             this.fitSize(indexes.size());
         });
         this.fitSize(indexes.size());
+    }
+
+    public void bindSelected(ObjectProperty<Index> selected) {
+        this.selected = selected;
+        this.selected.addListener((observable, oldValue, newValue) -> {
+            if (this.indexesTable.getSelectionModel().getSelectedItem() == newValue) {
+                return;
+            }
+            this.indexesTable.getSelectionModel().select(newValue);
+        });
     }
 
     private void fitSize(int indexRows) {

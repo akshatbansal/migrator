@@ -10,10 +10,12 @@ import migrator.lib.dispatcher.SimpleEvent;
 public class ColumnCreateHandler implements EventHandler {
     private ColumnContainer columnContainer;
     private ColumnAddHandler columnAddHandler;
+    private EventDispatcher dispatcher;
 
     public ColumnCreateHandler(ColumnContainer columnContainer, EventDispatcher dispatcher) {
+        this.dispatcher = dispatcher;
         this.columnContainer = columnContainer;
-        this.columnAddHandler = new ColumnAddHandler(columnContainer, dispatcher);
+        this.columnAddHandler = new ColumnAddHandler(columnContainer);
     }
 
     @Override
@@ -22,6 +24,9 @@ public class ColumnCreateHandler implements EventHandler {
         Column column = this.columnContainer.columnFactory().createWithCreateChange(tableId, "new_column", "string", "", false, "255", false, "", false);
         this.columnAddHandler.handle(
             new SimpleEvent<>("column.add", column)
+        );
+        this.dispatcher.dispatch(
+            new SimpleEvent<>("column.select", column)
         );
     }
 }

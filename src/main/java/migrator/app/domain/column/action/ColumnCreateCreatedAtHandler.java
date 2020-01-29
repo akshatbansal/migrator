@@ -3,7 +3,6 @@ package migrator.app.domain.column.action;
 import migrator.app.domain.column.ColumnContainer;
 import migrator.app.domain.table.model.Column;
 import migrator.lib.dispatcher.Event;
-import migrator.lib.dispatcher.EventDispatcher;
 import migrator.lib.dispatcher.EventHandler;
 import migrator.lib.dispatcher.SimpleEvent;
 
@@ -11,9 +10,9 @@ public class ColumnCreateCreatedAtHandler implements EventHandler {
     private ColumnContainer columnContainer;
     private ColumnAddHandler columnAddHandler;
 
-    public ColumnCreateCreatedAtHandler(ColumnContainer columnContainer, EventDispatcher dispatcher) {
+    public ColumnCreateCreatedAtHandler(ColumnContainer columnContainer) {
         this.columnContainer = columnContainer;
-        this.columnAddHandler = new ColumnAddHandler(columnContainer, dispatcher);
+        this.columnAddHandler = new ColumnAddHandler(columnContainer);
     }
 
     @Override
