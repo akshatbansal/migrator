@@ -36,9 +36,9 @@ public class ColumnService implements Service {
         this.columnPropertyPersistanceService = new PersistanceService<>(container.columnContainer().columnPropertyRepository(), container.columnContainer().columnPropertyStorage());
         this.columnPersistanceService = new PersistanceService<>(container.columnContainer().columnRepository(), container.columnContainer().columnStorage());
 
-        this.columnCreateIdHandler = new ColumnCreateIdHandler(container.columnContainer(), this.dispatcher);
-        this.columnCreateCreatedAtHandler = new ColumnCreateCreatedAtHandler(container.columnContainer(), this.dispatcher);
-        this.columnCreateModifiedAtHandler = new ColumnCreateModifiedAtHandler(container.columnContainer(), this.dispatcher);
+        this.columnCreateIdHandler = new ColumnCreateIdHandler(container.columnContainer());
+        this.columnCreateCreatedAtHandler = new ColumnCreateCreatedAtHandler(container.columnContainer());
+        this.columnCreateModifiedAtHandler = new ColumnCreateModifiedAtHandler(container.columnContainer());
         this.columnCreateHandler = new ColumnCreateHandler(container.columnContainer(), this.dispatcher);
         this.columnSelectHandler = new ColumnSelectHandler(container.columnContainer().columnStore());
         this.columnDeselectHandler = new ColumnDeselectHandler(container.columnContainer().columnStore());
