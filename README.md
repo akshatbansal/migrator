@@ -13,7 +13,7 @@ Migrations are used to change database structure when application evolves and yo
 
 ## Installation
 
-Download the latest [release](https://github.com/pipan/migrator/releases/download/v0.5.1/migrator.jar)
+Download the latest [release](https://github.com/pipan/migrator/releases/download/v0.5.2/migrator.jar)
 
 Then run this command
 
@@ -57,6 +57,12 @@ Select project by clicking on `open` button of a project card.
 ![create migration file](https://media.giphy.com/media/dY0y5gabkE5wKijvyr/giphy.gif)
 
 ## Release History
+
+* 0.5.2
+  * Features
+    * Save windows settings. If you close application in full screen, it will open next time in full screen mode.
+  * Bugfix
+    * Selecting columns and indexes in table. When you create new column (or index) by clicking on "+" button, it will show edit formu **and select this new column (or index) in table**.
 
 * 0.5.1
   * Features
@@ -188,3 +194,5 @@ Look at the [contribution manual](CONTRIBUTING.md)
   * db-migrate (nodejs)
 * allow data seeding
 * set database connection info from project (phinx config, ...)
+* running migrations
+* check if there are any not migarted files in project
