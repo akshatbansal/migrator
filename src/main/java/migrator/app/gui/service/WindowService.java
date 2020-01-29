@@ -1,5 +1,7 @@
 package migrator.app.gui.service;
 
+import java.util.prefs.Preferences;
+
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
@@ -28,11 +30,33 @@ public class WindowService implements Service {
     }
 
     @Override
-    public void stop() {}
+    public void stop() {
+        Preferences.userRoot().putDouble("window.width", this.primaryStage.getWidth());
+        Preferences.userRoot().putDouble("window.height", this.primaryStage.getHeight());
+        Preferences.userRoot().putDouble("window.x", this.primaryStage.getX());
+        Preferences.userRoot().putDouble("window.y", this.primaryStage.getY());
+        Preferences.userRoot().putBoolean("window.fullScreen", this.primaryStage.isFullScreen());
+    }
 
     @Override
     public void start() {
-        Scene scene = new Scene((Pane) this.mainView.getNode(), 1280, 720);
+        Scene scene = new Scene((Pane) this.mainView.getNode());
+
+        this.primaryStage.setWidth(
+            Preferences.userRoot().getDouble("window.width", 1280)
+        );
+        this.primaryStage.setHeight(
+            Preferences.userRoot().getDouble("window.height", 720)
+        );
+        this.primaryStage.setX(
+            Preferences.userRoot().getDouble("window.x", 100)
+        );
+        this.primaryStage.setY(
+            Preferences.userRoot().getDouble("window.y", 100)
+        );
+        this.primaryStage.setFullScreen(
+            Preferences.userRoot().getBoolean("window.fullScreen", false)
+        );
 
         scene.getStylesheets().addAll(
             getClass().getResource("/styles/layout.css").toExternalForm(),
