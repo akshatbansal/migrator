@@ -1,7 +1,5 @@
 package migrator.app.gui.service;
 
-import java.util.prefs.Preferences;
-
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
@@ -13,29 +11,33 @@ import migrator.app.gui.service.toast.Toast;
 import migrator.app.gui.view.main.MainView;
 import migrator.app.service.Service;
 import migrator.lib.dispatcher.EventDispatcher;
+import migrator.lib.persistantsystem.Persistantsystem;
 
 public class WindowService implements Service {
     private Stage primaryStage;
     private MainView mainView;
+    private Persistantsystem persistantsystem;
 
     public WindowService(
         EventDispatcher dispatcher,
         Stage primaryStage,
         ObservableList<Toast> toasts,
-        ObjectProperty<RouteView> routerView
+        ObjectProperty<RouteView> routerView,
+        Persistantsystem persistantsystem
     ) {
         this.primaryStage = primaryStage;
         this.mainView = new MainView(dispatcher, routerView);
         this.mainView.bindToasts(toasts);
+        this.persistantsystem = persistantsystem;
     }
 
     @Override
     public void stop() {
-        Preferences.userRoot().putDouble("window.width", this.primaryStage.getWidth());
-        Preferences.userRoot().putDouble("window.height", this.primaryStage.getHeight());
-        Preferences.userRoot().putDouble("window.x", this.primaryStage.getX());
-        Preferences.userRoot().putDouble("window.y", this.primaryStage.getY());
-        Preferences.userRoot().putBoolean("window.fullScreen", this.primaryStage.isFullScreen());
+        this.persistantsystem.putDouble("window.width", this.primaryStage.getWidth());
+        this.persistantsystem.putDouble("window.height", this.primaryStage.getHeight());
+        this.persistantsystem.putDouble("window.x", this.primaryStage.getX());
+        this.persistantsystem.putDouble("window.y", this.primaryStage.getY());
+        this.persistantsystem.putBoolean("window.fullScreen", this.primaryStage.isFullScreen());
     }
 
     @Override
@@ -43,19 +45,19 @@ public class WindowService implements Service {
         Scene scene = new Scene((Pane) this.mainView.getNode());
 
         this.primaryStage.setWidth(
-            Preferences.userRoot().getDouble("window.width", 1280)
+            this.persistantsystem.getDouble("window.width", 1280)
         );
         this.primaryStage.setHeight(
-            Preferences.userRoot().getDouble("window.height", 720)
+            this.persistantsystem.getDouble("window.height", 720)
         );
         this.primaryStage.setX(
-            Preferences.userRoot().getDouble("window.x", 100)
+            this.persistantsystem.getDouble("window.x", 100)
         );
         this.primaryStage.setY(
-            Preferences.userRoot().getDouble("window.y", 100)
+            this.persistantsystem.getDouble("window.y", 100)
         );
         this.primaryStage.setFullScreen(
-            Preferences.userRoot().getBoolean("window.fullScreen", false)
+            this.persistantsystem.getBoolean("window.fullScreen", false)
         );
 
         scene.getStylesheets().addAll(

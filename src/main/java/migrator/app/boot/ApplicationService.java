@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import javafx.stage.Stage;
 import migrator.app.domain.column.service.ColumnService;
 import migrator.app.domain.index.service.IndexService;
 import migrator.app.domain.modification.ModificationService;
@@ -14,7 +13,6 @@ import migrator.app.domain.table.service.TableService;
 import migrator.app.extension.ExtensionService;
 import migrator.app.gui.route.Route;
 import migrator.app.gui.route.SimpleRoute;
-import migrator.app.gui.service.GuiService;
 import migrator.app.service.Service;
 import migrator.app.version.VersionService;
 import migrator.ext.flyway.FlywayExtension;
@@ -31,8 +29,9 @@ import migrator.lib.version.Version;
 public class ApplicationService implements Service {
     private List<Service> services;
     private Container container;
+    private Service userInterface;
 
-    public ApplicationService(Container container, Stage primaryStage) {
+    public ApplicationService(Container container) {
         this.container = container;
         this.services = new LinkedList<>();
 
@@ -40,7 +39,8 @@ public class ApplicationService implements Service {
             .addVersionMigration(
                 new Version("0.5.0"),
                 new DatabasePasswordEncrypt(
-                    container.securityContainer().encryption()
+                    container.securityContainer().encryption(),
+                    container.filesystem()
                 )
             );
 
@@ -78,16 +78,20 @@ public class ApplicationService implements Service {
                 )
             ))
         );
+    }
 
-        this.services.add(
-            new GuiService(container, primaryStage)
-        );
+    public void bindUserInterface(Service userInterface) {
+        this.userInterface = userInterface;
     }
 
     @Override
     public void start() {
         for (Service service : this.services) {
             service.start();
+        }
+
+        if (this.userInterface != null) {
+            this.userInterface.start();
         }
 
         this.container.dispatcher().dispatch(
@@ -99,6 +103,10 @@ public class ApplicationService implements Service {
     public void stop() {
         for (Service service : this.services) {
             service.stop();
+        }
+
+        if (this.userInterface != null) {
+            this.userInterface.stop();
         }
     }
 }

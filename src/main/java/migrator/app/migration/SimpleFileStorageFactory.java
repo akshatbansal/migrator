@@ -2,12 +2,22 @@ package migrator.app.migration;
 
 import java.io.File;
 
+import migrator.lib.filesystem.Filesystem;
+import migrator.lib.storage.SimpleFileStorage;
 import migrator.lib.storage.Storage;
-import migrator.lib.storage.Storages;
 
 public class SimpleFileStorageFactory implements FileStorageFactory {
+    private Filesystem filesystem;
+
+    public SimpleFileStorageFactory(Filesystem filesystem) {
+        this.filesystem = filesystem;
+    }
+
     @Override
     public Storage<String> create(File file) {
-        return Storages.getSimpleFileStorage(file);
+        return new SimpleFileStorage(
+            this.filesystem,
+            file
+        );
     }
 }

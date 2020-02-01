@@ -13,9 +13,11 @@ import migrator.app.migration.model.IndexProperty;
 import migrator.app.migration.model.index.IndexPropertyAdapter;
 import migrator.app.service.SelectableStore;
 import migrator.lib.adapter.SimpleJsonListAdapter;
+import migrator.lib.filesystem.Filesystem;
 import migrator.lib.repository.UniqueRepository;
+import migrator.lib.storage.AdapterStorage;
+import migrator.lib.storage.SimpleFileStorage;
 import migrator.lib.storage.Storage;
-import migrator.lib.storage.Storages;
 import migrator.lib.uid.Generator;
 
 public class IndexContainer {
@@ -31,11 +33,15 @@ public class IndexContainer {
         Generator generator,
         Path storagePath,
         UniqueRepository<ColumnProperty> columnPropertyRepo,
-        UniqueRepository<ChangeCommand> changeCommandRepo
+        UniqueRepository<ChangeCommand> changeCommandRepo,
+        Filesystem filesystem
     ) {
         this.indexPropertyRepositoryValue = new UniqueRepository<>();
-        this.indexPropertyStorageValue = Storages.getFileStorage(
-            new File(storagePath.toString(), "index_property.json"),
+        this.indexPropertyStorageValue = new AdapterStorage<>(
+            new SimpleFileStorage(
+                filesystem,
+                new File(storagePath.toString(), "index_property.json")
+            ),
             new SimpleJsonListAdapter<>(
                 new IndexPropertyAdapter(columnPropertyRepo)
             )
@@ -43,8 +49,11 @@ public class IndexContainer {
 
         this.indexFactoryValue = new IndexFactory(generator);
         this.indexStoreValue = new IndexStore();
-        this.indexStorageValue = Storages.getFileStorage(
-            new File(storagePath.toString(), "index.json"),
+        this.indexStorageValue = new AdapterStorage<>(
+            new SimpleFileStorage(
+                filesystem,
+                new File(storagePath.toString(), "index.json")
+            ),
             new SimpleJsonListAdapter<>(
                 new IndexAdapter(this.indexPropertyRepositoryValue, changeCommandRepo)
             )

@@ -3,24 +3,26 @@ package migrator.app.version;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.prefs.Preferences;
 
 import migrator.app.boot.Container;
 import migrator.app.service.Service;
+import migrator.lib.persistantsystem.Persistantsystem;
 import migrator.lib.version.Version;
 
 public class VersionService implements Service {
     private VersionContainer versionContainer;
     private Version lastMigrationVersion;
+    private Persistantsystem persistantsystem;
 
     public VersionService(Container container) {
+        this.persistantsystem = container.persistantsystem();
         Path storagePathValue = Paths.get(System.getProperty("user.home"), ".migrator");
         String defaultVersion = container.configContainer().currentVersion().toString();
         if (storagePathValue.toFile().exists()) {
             defaultVersion = "0.4.0";
         }
 
-        String lastMigrationVersionString = Preferences.userRoot().get("lastMigrationVersion", defaultVersion);
+        String lastMigrationVersionString = persistantsystem.getString("lastMigrationVersion", defaultVersion);
          this.lastMigrationVersion = new Version(lastMigrationVersionString);
         this.versionContainer = container.versionContainer();
     }
@@ -34,7 +36,7 @@ public class VersionService implements Service {
         for (VersionMigration migration : migrations) {
             migration.migrate();
         }
-        Preferences.userRoot().put("lastMigrationVersion", this.versionContainer.getLastVersion().toString());
+        this.persistantsystem.putString("lastMigrationVersion", this.versionContainer.getLastVersion().toString());
     }
 
     @Override
