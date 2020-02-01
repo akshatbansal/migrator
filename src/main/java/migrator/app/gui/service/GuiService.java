@@ -35,7 +35,8 @@ public class GuiService implements Service {
             dispatcher,
             primaryStage,
             toastStore.getList(),
-            routeStore.getActive()
+            routeStore.getActive(),
+            container.persistantsystem()
         );
         this.hotkeyService = new HotkeyService(guiContainer, primaryStage);
         guiContainer.hotkeyContainer().hotkeysService()

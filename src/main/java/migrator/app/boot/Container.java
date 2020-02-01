@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import migrator.app.ProxyFilesystem;
 import migrator.app.ProxyLogger;
+import migrator.app.ProxyPersistantsystem;
 import migrator.app.code.CodeContainer;
 import migrator.app.config.ConfigContainer;
 import migrator.app.database.DatabaseContainer;
@@ -27,6 +28,7 @@ import migrator.lib.adapter.SimpleJsonListAdapter;
 import migrator.lib.dispatcher.EventDispatcher;
 import migrator.lib.filesystem.JavaFilesystem;
 import migrator.lib.logger.SystemLogger;
+import migrator.lib.persistantsystem.JavaPersistantsystem;
 import migrator.lib.storage.AdapterStorage;
 import migrator.lib.storage.SimpleFileStorage;
 import migrator.lib.storage.Storage;
@@ -37,6 +39,7 @@ public class Container {
     private Generator generatorValue;
     private SecurityContainer securityContainerValue;
     private ProxyFilesystem filesystemValue;
+    private ProxyPersistantsystem persistantsystemValue;
 
     private ModificationContainer modificationContainerValue;
 
@@ -58,13 +61,18 @@ public class Container {
 
     public Container() {
         String session = Long.toString(System.currentTimeMillis());
-
         this.generatorValue = new SessionIncrementalGenerator(session);
         
-        this.securityContainerValue = new SecurityContainer();
 
         this.filesystemValue = new ProxyFilesystem(
             new JavaFilesystem()
+        );
+        this.persistantsystemValue = new ProxyPersistantsystem(
+            new JavaPersistantsystem()
+        );
+
+        this.securityContainerValue = new SecurityContainer(
+            this.persistantsystem()
         );
 
         this.configContainerValue = new ConfigContainer();
@@ -186,5 +194,9 @@ public class Container {
 
     public ProxyFilesystem filesystem() {
         return this.filesystemValue;
+    }
+
+    public ProxyPersistantsystem persistantsystem() {
+        return this.persistantsystemValue;
     }
 }
