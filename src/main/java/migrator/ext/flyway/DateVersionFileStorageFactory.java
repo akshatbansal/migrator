@@ -5,14 +5,17 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import migrator.app.migration.FileStorageFactory;
+import migrator.lib.filesystem.Filesystem;
+import migrator.lib.storage.SimpleFileStorage;
 import migrator.lib.storage.Storage;
-import migrator.lib.storage.Storages;
 import migrator.lib.stringformatter.StringFormatter;
 
 public class DateVersionFileStorageFactory implements FileStorageFactory {
     protected StringFormatter fileNameFormatter;
+    private Filesystem filesystem;
 
-    public DateVersionFileStorageFactory(StringFormatter fileNameFormatter) {
+    public DateVersionFileStorageFactory(Filesystem filesystem, StringFormatter fileNameFormatter) {
+        this.filesystem = filesystem;
         this.fileNameFormatter = fileNameFormatter;
     }
 
@@ -29,7 +32,7 @@ public class DateVersionFileStorageFactory implements FileStorageFactory {
         file = file.toPath()
             .resolveSibling(dateVersion + "__" + fileName)
             .toFile();
-        return Storages.getSimpleFileStorage(file);
+        return new SimpleFileStorage(this.filesystem, file);
     }
 
     private String getCurrentVersion(File file) {

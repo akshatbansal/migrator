@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import migrator.app.boot.ApplicationService;
 import migrator.app.boot.Container;
 import migrator.app.domain.project.model.Project;
+import migrator.app.gui.service.GuiService;
 import migrator.lib.persistance.ListPersistance;
 import migrator.lib.persistance.Persistance;
 
@@ -19,7 +20,10 @@ public class JavafxApplication extends Application {
         this.projectsPersistance = new ListPersistance<>("project.list");
 
         Container bootContainer = new Container();
-        this.applicationService = new ApplicationService(bootContainer, primaryStage);
+        this.applicationService = new ApplicationService(bootContainer);
+        this.applicationService.bindUserInterface(
+            new GuiService(bootContainer, primaryStage)
+        );
         this.applicationService.start();
     }
 

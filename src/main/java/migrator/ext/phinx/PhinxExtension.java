@@ -15,7 +15,8 @@ public class PhinxExtension implements Service {
         container.migrationContainer().addGeneratorFactory(
             "phinx",
             new PhinxMigrationGeneratorFactory(
-                container.codeContainer()
+                container.codeContainer(),
+                container.filesystem()
             )
         );
     }

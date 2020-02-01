@@ -13,9 +13,11 @@ import migrator.app.migration.model.ColumnProperty;
 import migrator.app.migration.model.column.ColumnPropertyAdapter;
 import migrator.app.service.SimpleStore;
 import migrator.lib.adapter.SimpleJsonListAdapter;
+import migrator.lib.filesystem.Filesystem;
 import migrator.lib.repository.UniqueRepository;
+import migrator.lib.storage.AdapterStorage;
+import migrator.lib.storage.SimpleFileStorage;
 import migrator.lib.storage.Storage;
-import migrator.lib.storage.Storages;
 import migrator.lib.uid.Generator;
 
 public class ColumnContainer {
@@ -30,20 +32,27 @@ public class ColumnContainer {
         Generator generator,
         ColumnFormatCollection columnFormatCollection,
         UniqueRepository<ChangeCommand> changeCommandRepo,
-        Path storagePath
+        Path storagePath,
+        Filesystem filesystem
     ) {
         this.columnFactoryValue = new ColumnFactory(generator, columnFormatCollection);
         this.columnStoreValue = new SimpleColumnStore();
         this.columnPropertyRepositoryValue = new UniqueRepository<>();
         this.columnRepositoryValue = new ColumnRepository(columnPropertyRepositoryValue, changeCommandRepo);
-        this.columnStorageValue = Storages.getFileStorage(
-            new File(storagePath.toString(), "column.json"),
+        this.columnStorageValue = new AdapterStorage<>(
+            new SimpleFileStorage(
+                filesystem,
+                new File(storagePath.toString(), "column.json")
+            ),
             new SimpleJsonListAdapter<>(
                 new ColumnAdapter(this.columnPropertyRepositoryValue, changeCommandRepo, columnFormatCollection)
             )
         );
-        this.columnPropertyStorageValue = Storages.getFileStorage(
-            new File(storagePath.toString(), "column_property.json"),
+        this.columnPropertyStorageValue = new AdapterStorage<>(
+            new SimpleFileStorage(
+                filesystem,
+                new File(storagePath.toString(), "column_property.json")
+            ),
             new SimpleJsonListAdapter<>(
                 new ColumnPropertyAdapter()
             )

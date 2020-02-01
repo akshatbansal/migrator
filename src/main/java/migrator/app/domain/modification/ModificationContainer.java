@@ -7,18 +7,26 @@ import java.util.Collection;
 import migrator.app.migration.model.ChangeCommand;
 import migrator.app.migration.model.change.ChangeCommandAdapter;
 import migrator.lib.adapter.SimpleJsonListAdapter;
+import migrator.lib.filesystem.Filesystem;
 import migrator.lib.repository.UniqueRepository;
+import migrator.lib.storage.AdapterStorage;
+import migrator.lib.storage.SimpleFileStorage;
 import migrator.lib.storage.Storage;
-import migrator.lib.storage.Storages;
 
 public class ModificationContainer {
     private UniqueRepository<ChangeCommand> repositoryValue;
     private Storage<Collection<ChangeCommand>> storageValue;
 
-    public ModificationContainer(Path storagePath) {
+    public ModificationContainer(
+        Path storagePath,
+        Filesystem filesystem
+    ) {
         this.repositoryValue = new UniqueRepository<>();
-        this.storageValue = Storages.getFileStorage(
-            new File(storagePath.toString(), "change_command.json"),
+        this.storageValue = new AdapterStorage<>(
+            new SimpleFileStorage(
+                filesystem,
+                new File(storagePath.toString(), "change_command.json")
+            ),
             new SimpleJsonListAdapter<>(
                 new ChangeCommandAdapter()
             )

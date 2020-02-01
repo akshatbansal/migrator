@@ -1,16 +1,17 @@
 package migrator.lib.storage;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
+
+import migrator.lib.filesystem.Filesystem;
 
 public class SimpleFileStorage implements Storage<String> {
     protected File file;
+    private Filesystem filesystem;
 
-    public SimpleFileStorage(File file) {
+    public SimpleFileStorage(Filesystem filesystem, File file) {
         this.file = file;
-        if (!Files.exists(file.toPath())) {
+        this.filesystem = filesystem;
+        if (!this.filesystem.exists(file)) {
             this.clear();
         }
     }
@@ -24,8 +25,8 @@ public class SimpleFileStorage implements Storage<String> {
     public String load() {
         String contents = null;
         try {
-            contents = new String(Files.readAllBytes(this.file.toPath()));
-        } catch (IOException e) {
+            contents = this.filesystem.read(this.file);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return contents;
@@ -34,10 +35,8 @@ public class SimpleFileStorage implements Storage<String> {
     @Override
     public void store(String data) {
         try {
-            FileWriter fileWriter = new FileWriter(this.file);
-            fileWriter.write(data);
-            fileWriter.close();
-        } catch (IOException ex) {
+            this.filesystem.write(this.file, data);
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }

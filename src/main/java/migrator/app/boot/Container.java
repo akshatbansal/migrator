@@ -3,6 +3,7 @@ package migrator.app.boot;
 import java.io.File;
 import java.util.Collection;
 
+import migrator.app.ProxyFilesystem;
 import migrator.app.ProxyLogger;
 import migrator.app.code.CodeContainer;
 import migrator.app.config.ConfigContainer;
@@ -24,15 +25,18 @@ import migrator.app.security.SecurityContainer;
 import migrator.app.version.VersionContainer;
 import migrator.lib.adapter.SimpleJsonListAdapter;
 import migrator.lib.dispatcher.EventDispatcher;
+import migrator.lib.filesystem.JavaFilesystem;
 import migrator.lib.logger.SystemLogger;
+import migrator.lib.storage.AdapterStorage;
+import migrator.lib.storage.SimpleFileStorage;
 import migrator.lib.storage.Storage;
-import migrator.lib.storage.Storages;
 import migrator.lib.uid.Generator;
 import migrator.lib.uid.SessionIncrementalGenerator;
 
 public class Container {
     private Generator generatorValue;
     private SecurityContainer securityContainerValue;
+    private ProxyFilesystem filesystemValue;
 
     private ModificationContainer modificationContainerValue;
 
@@ -59,9 +63,13 @@ public class Container {
         
         this.securityContainerValue = new SecurityContainer();
 
+        this.filesystemValue = new ProxyFilesystem(
+            new JavaFilesystem()
+        );
+
         this.configContainerValue = new ConfigContainer();
         this.versionContainerValue = new VersionContainer();
-        this.modificationContainerValue = new ModificationContainer(this.configContainer().storagePath());
+        this.modificationContainerValue = new ModificationContainer(this.configContainer().storagePath(), this.filesystem());
         this.dispatcherValue = new EventDispatcher();
         this.databaseContainerValue = new DatabaseContainer();
         this.migrationContainerValue = new MigrationContainer();
@@ -76,21 +84,24 @@ public class Container {
                 this.databaseContainerValue.getApplicationColumnFormatCollection().getObservable()
             ),
             this.modificationContainerValue.repository(),
-            this.configContainer().storagePath()
+            this.configContainer().storagePath(),
+            this.filesystem()
         );
 
         this.indexContainerValue = new IndexContainer(
             generatorValue,
             this.configContainer().storagePath(),
             this.columnContainer().columnPropertyRepository(),
-            this.modificationContainer().repository()
+            this.modificationContainer().repository(),
+            this.filesystem()
         );
         this.tableContainerValue = new TableContainer(
             generatorValue,
             this.configContainer().storagePath(),
             this.modificationContainer(),
             this.columnContainer(),
-            this.indexContainer()
+            this.indexContainer(),
+            this.filesystem()
         );
 
         this.projectStoreValue = new SimpleProjectStore(this.databaseContainerValue);
@@ -100,8 +111,11 @@ public class Container {
             ),
             generatorValue
         );
-        this.projectStorageValue = Storages.getFileStorage(
-            new File(this.configContainer().storagePath().toString(), "project.json"),
+        this.projectStorageValue = new AdapterStorage<>(
+            new SimpleFileStorage(
+                this.filesystem(),
+                new File(this.configContainer().storagePath().toString(), "project.json")
+            ),
             new SimpleJsonListAdapter<>(
                 new EncryptedProjectAdapter(
                     this.securityContainer().encryption()
@@ -168,5 +182,9 @@ public class Container {
 
     public SecurityContainer securityContainer() {
         return this.securityContainerValue;
+    }
+
+    public ProxyFilesystem filesystem() {
+        return this.filesystemValue;
     }
 }

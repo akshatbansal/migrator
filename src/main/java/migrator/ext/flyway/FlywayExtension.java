@@ -15,7 +15,8 @@ public class FlywayExtension implements Service {
         container.migrationContainer().addGeneratorFactory(
             "flyway",
             new FlywayMigrationGeneratorFactory(
-                container.codeContainer()
+                container.codeContainer(),
+                container.filesystem()
             )
         );
     }

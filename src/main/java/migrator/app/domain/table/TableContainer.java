@@ -14,10 +14,12 @@ import migrator.app.migration.model.TableProperty;
 import migrator.app.migration.model.table.TablePropertyAdapter;
 import migrator.app.service.SimpleStore;
 import migrator.lib.adapter.SimpleJsonListAdapter;
+import migrator.lib.filesystem.Filesystem;
 import migrator.lib.repository.Repository;
 import migrator.lib.repository.UniqueRepository;
+import migrator.lib.storage.AdapterStorage;
+import migrator.lib.storage.SimpleFileStorage;
 import migrator.lib.storage.Storage;
-import migrator.lib.storage.Storages;
 import migrator.lib.uid.Generator;
 
 public class TableContainer {
@@ -34,11 +36,15 @@ public class TableContainer {
         Path storagePath,
         ModificationContainer modificationContainer,
         ColumnContainer columnContainer,
-        IndexContainer indexContainer
+        IndexContainer indexContainer,
+        Filesystem filesystem
     ) {
         this.tablePropertyRepositoryValue = new UniqueRepository<>();
-        this.tablePropertyStorageValue = Storages.getFileStorage(
-            new File(storagePath.toString(), "table_property.json"),
+        this.tablePropertyStorageValue = new AdapterStorage<>(
+            new SimpleFileStorage(
+                filesystem,
+                new File(storagePath.toString(), "table_property.json")
+            ),
             new SimpleJsonListAdapter<>(
                 new TablePropertyAdapter()
             )
@@ -53,8 +59,11 @@ public class TableContainer {
         this.tableRepositoryValue = new TableRepository(
             this.tablePropertyRepositoryValue, modificationContainer.repository()
         );
-        this.tableStorageValue = Storages.getFileStorage(
-            new File(storagePath.toString(), "table.json"),
+        this.tableStorageValue = new AdapterStorage<>(
+            new SimpleFileStorage(
+                filesystem,
+                new File(storagePath.toString(), "table.json")
+            ),
             new SimpleJsonListAdapter<>(
                 new TableAdapter(
                     this.tablePropertyRepositoryValue,

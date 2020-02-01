@@ -11,25 +11,33 @@ import migrator.app.domain.project.model.ProjectAdapter;
 import migrator.app.version.VersionMigration;
 import migrator.lib.adapter.SimpleJsonListAdapter;
 import migrator.lib.encryption.Encryption;
+import migrator.lib.filesystem.Filesystem;
+import migrator.lib.storage.AdapterStorage;
+import migrator.lib.storage.SimpleFileStorage;
 import migrator.lib.storage.Storage;
-import migrator.lib.storage.Storages;
 
 public class DatabasePasswordEncrypt implements VersionMigration {
     private Storage<Collection<Project>> oldJsonStorage;
     private Storage<Collection<Project>> newJsonStorage;
 
-    public DatabasePasswordEncrypt(Encryption encryption) {
+    public DatabasePasswordEncrypt(Encryption encryption, Filesystem filesystem) {
         Path storagePathValue = Paths.get(System.getProperty("user.home"), ".migrator");
 
-        this.oldJsonStorage = Storages.getFileStorage(
-            new File(storagePathValue.toString(), "project.json"),
+        this.oldJsonStorage = new AdapterStorage<>(
+            new SimpleFileStorage(
+                filesystem,
+                new File(storagePathValue.toString(), "project.json")
+            ),
             new SimpleJsonListAdapter<>(
                 new ProjectAdapter()
             )
         );
 
-        this.newJsonStorage = Storages.getFileStorage(
-            new File(storagePathValue.toString(), "project.json"),
+        this.newJsonStorage = new AdapterStorage<>(
+            new SimpleFileStorage(
+                filesystem,
+                new File(storagePathValue.toString(), "project.json")
+            ),
             new SimpleJsonListAdapter<>(
                 new EncryptedProjectAdapter(encryption)
             )
