@@ -56,7 +56,7 @@ public class ProjectShutdownTest {
 
         Path path = Paths.get(System.getProperty("user.home"), ".migrator");
         assertEquals(
-            "[{\"output\":\"phinx\",\"database\":\"database\",\"connection.name\":\"name\",\"password\":\"uzz+oGoGCd8jNMcVW43epQ==\",\"folder\":\"folder\",\"driver\":\"mysql\",\"port\":\"3306\",\"name\":\"project-name\",\"host\":\"localhost\",\"id\":\"1\",\"user\":\"user\"}]",
+            "[{\"output\":\"phinx\",\"database\":\"database\",\"connection.name\":\"name\",\"password\":\"\",\"folder\":\"folder\",\"driver\":\"mysql\",\"port\":\"3306\",\"name\":\"project-name\",\"host\":\"localhost\",\"id\":\"1\",\"user\":\"user\"}]",
             this.container.filesystem().read(new File(path.toString(), "project.json"))
         );
     }

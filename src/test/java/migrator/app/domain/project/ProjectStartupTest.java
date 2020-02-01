@@ -34,7 +34,7 @@ public class ProjectStartupTest {
         Path path = Paths.get(System.getProperty("user.home"), ".migrator");
         this.container.filesystem().write(
             new File(path.toString(), "project.json"),
-            "[{\"output\":\"phinx\",\"database\":\"migrator\",\"connection.name\":\"new_project\",\"password\":\"uzz+oGoGCd8jNMcVW43epQ==\",\"folder\":\"/home/arksys/Downloads/ovaldo/migrations\",\"driver\":\"mysql\",\"port\":\"3306\",\"name\":\"mysql-test\",\"host\":\"localhost\",\"id\":\"1579549535795-1\",\"user\":\"user\"}]"
+            "[{\"output\":\"phinx\",\"database\":\"migrator\",\"connection.name\":\"new_project\",\"password\":\"\",\"folder\":\"/home/arksys/Downloads/ovaldo/migrations\",\"driver\":\"mysql\",\"port\":\"3306\",\"name\":\"mysql-test\",\"host\":\"localhost\",\"id\":\"1579549535795-1\",\"user\":\"user\"}]"
         );
         this.applicationTest.getAppService().start();
 

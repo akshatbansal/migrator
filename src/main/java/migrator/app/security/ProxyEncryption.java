@@ -5,7 +5,7 @@ import migrator.lib.encryption.Encryption;
 public class ProxyEncryption implements Encryption {
     private Encryption encryption;
 
-    public void setEncryption(Encryption encryption) {
+    public void setProxy(Encryption encryption) {
         this.encryption = encryption;
     }
 

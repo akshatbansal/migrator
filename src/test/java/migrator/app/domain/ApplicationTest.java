@@ -19,6 +19,9 @@ public class ApplicationTest {
         this.container.persistantsystem().setProxy(
             new MockPersistantsystem()
         );
+        this.container.securityContainer().encryption().setProxy(
+            new MockEncryption()
+        );
         this.appService = new ApplicationService(this.container);
         this.container.databaseContainer()
             .addStrucutreFactory("mysql", this.mockDatabaseStructureFactory);
