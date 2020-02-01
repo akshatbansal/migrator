@@ -13,6 +13,12 @@ public class ApplicationTest {
     public ApplicationTest() {
         this.mockDatabaseStructureFactory = new MockDatabaseStructureFactory();
         this.container = new Container();
+        this.container.filesystem().setProxy(
+            new MockFilesystem()
+        );
+        this.container.persistantsystem().setProxy(
+            new MockPersistantsystem()
+        );
         this.appService = new ApplicationService(this.container);
         this.container.databaseContainer()
             .addStrucutreFactory("mysql", this.mockDatabaseStructureFactory);
