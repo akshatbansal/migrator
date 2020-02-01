@@ -1,11 +1,16 @@
 package migrator.app.domain;
 
+import java.util.Hashtable;
 import java.util.Map;
 
 import migrator.lib.persistantsystem.Persistantsystem;
 
 public class MockPersistantsystem implements Persistantsystem {
     private Map<String, Object> data;
+
+    public MockPersistantsystem() {
+        this.data = new Hashtable<>();
+    }
 
     @Override
     public boolean getBoolean(String key, boolean def) {

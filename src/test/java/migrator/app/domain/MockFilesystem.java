@@ -2,12 +2,17 @@ package migrator.app.domain;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Hashtable;
 import java.util.Map;
 
 import migrator.lib.filesystem.Filesystem;
 
 public class MockFilesystem implements Filesystem {
     private Map<String, String> files;
+
+    public MockFilesystem() {
+        this.files = new Hashtable<>();
+    }
 
     @Override
     public Boolean exists(File file) {
