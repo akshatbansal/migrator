@@ -22,7 +22,7 @@ public class SecurityContainer {
             persistantsystem.putString("encryptionKey", key);
         }
 
-        this.encryptionValue.setEncryption(
+        this.encryptionValue.setProxy(
             new SimpleEncryption(encryptionKeyAdapter.generalize(key))
         );
     }
